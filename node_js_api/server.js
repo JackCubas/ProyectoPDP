@@ -1,29 +1,20 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 
-app.use(express.json());
+app.listen(3000);
 
-app.get('/users', (req, res) => {
-    res.json({ message: 'Returning list of users' });
-});
+app.get('/', (req, res) => {
+    res.sendFile('./views/index.html', {root: __dirname});
+})
 
-app.post('/users', (req, res) => {
-    const newUser = req.body;
-    res.json({ message: 'User created', user: newUser });
-});
+app.get('/about', (req, res) => {
+    res.sendFile('./views/about.html', {root: __dirname});
+})
 
-app.put('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    const updatedUser = req.body;
-    res.json({ message: `User with ID ${userId} updated`, updatedUser });
-});
+app.get('/about-us', (req, res) => {
+    res.redirect('/about');
+})
 
-app.delete('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    res.json({ message: `User with ID ${userId} deleted` });
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+app.use((req, res) =>{
+    res.sendFile('./views/404.html', {root: __dirname});
+})
