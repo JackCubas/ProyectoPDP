@@ -4,8 +4,11 @@ const { MongoClient } = require('mongodb');
 const mongoose = require('mongoose');
 const app = express();
 
-const dbURI = 'mongodb://localhost:27017/nodejs'
+const Movie = require('./models/movies');
 
+const dbURI = 'mongodb://localhost:27017/test_movies'
+
+//-------------------------------------------------
 const client = new MongoClient(dbURI);
 async function runDBTest() {
   try {
@@ -22,19 +25,33 @@ async function runDBTest() {
   }
 }
 runDBTest().catch(console.error);
-
-
-
+//---------------------------------------------------
 
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
-    .then((result) => console.log('connected to db'))
+    .then((result) => app.listen(3000))
     .catch((err) => console.log(err));
 
+//---------------------------------------------------    
+
 app.set('view engine','ejs');
-app.listen(3000);
 
 //app.use(express.static('public'));
 app.use(morgan('dev'));
+
+app.get('/add-movie', (req, res) => {
+    const movie = new Movie({
+        prodId : 104,
+        price : 70,
+        quantity : 240
+    });
+    movie.save()
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
 
 app.use((req, res, next) => {
     console.log('new request made:');
@@ -64,8 +81,8 @@ app.get('/about-us', (req, res) => {
     res.redirect('/about');
 })
 
-app.get('/blogs/create',(req, res) => {
-    res.render('create', {title: 'Create a new Blog'});
+app.get('/movies/create',(req, res) => {
+    res.render('create', {title: 'Create a new Movie'});
 })
 
 app.use((req, res) =>{
