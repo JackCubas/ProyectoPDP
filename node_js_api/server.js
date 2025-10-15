@@ -38,11 +38,21 @@ app.set('view engine','ejs');
 //app.use(express.static('public'));
 app.use(morgan('dev'));
 
+
+//---------------------------------------------------
+app.use((req, res, next) => {
+    console.log('new request made:');
+    //console.log('host: ', req.hostname);
+    //console.log('path: ', req.path);
+    //console.log('method: ', req.method);
+    next();
+});
+
 app.get('/add-movie', (req, res) => {
     const movie = new Movie({
-        prodId : 104,
+        prodId : 105,
         price : 70,
-        quantity : 240
+        quantity : 250
     });
     movie.save()
     .then((result) => {
@@ -53,14 +63,26 @@ app.get('/add-movie', (req, res) => {
     });
 })
 
-app.use((req, res, next) => {
-    console.log('new request made:');
-    //console.log('host: ', req.hostname);
-    //console.log('path: ', req.path);
-    //console.log('method: ', req.method);
-    next();
-});
+app.get('/all-movies', (req, res) => {
+    Movie.find()
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
 
+app.get('/one-movie', (req, res) => {
+    Movie.findById('68efdbf0c5dbea5e7f52c06c')
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+//---------------------------------------------------------
 app.get('/', (req, res) => {
     //res.sendFile('./views/index.html', {root: __dirname});
     const blogs = [
@@ -79,6 +101,16 @@ app.get('/about', (req, res) => {
 
 app.get('/about-us', (req, res) => {
     res.redirect('/about');
+})
+
+app.get('/movies', (req, res) => {
+    Movie.find()
+    .then((result) => {
+        res.render('indexMovies', {title: "All movies", movies: result})
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
 })
 
 app.get('/movies/create',(req, res) => {
