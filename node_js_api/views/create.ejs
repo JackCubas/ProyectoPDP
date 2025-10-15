@@ -9,13 +9,13 @@
             This is the create page. - ejs
         </h1>
         <div class="create-blog content">
-            <form>
-                <lable for="prodID">ProdID:</lable>
-                <input type="text" id="prodID" required>
+            <form action="/moviesCreate" method="POST">
+                <lable for="prodId">ProdId:</lable>
+                <input type="number" id="prodId" name="prodId" required>
                 <lable for="price">Price:</lable>
-                <input type="text" id="price" required>
+                <input type="number" id="price" name="price" required>
                 <lable for="quantity">Quantity:</lable>
-                <textarea id="quantity" required></textarea>
+                <input type="number" id="quantity" name="quantity" required>
                 <button>Submit</button>
             </form>
         </div>

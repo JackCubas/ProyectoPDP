@@ -37,6 +37,7 @@ app.set('view engine','ejs');
 
 //app.use(express.static('public'));
 app.use(morgan('dev'));
+app.use(express.urlencoded({extended: true}));
 
 
 //---------------------------------------------------
@@ -107,6 +108,19 @@ app.get('/movies', (req, res) => {
     Movie.find()
     .then((result) => {
         res.render('indexMovies', {title: "All movies", movies: result})
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
+app.post('/moviesCreate', (req, res) => {
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    console.log(req.body);
+    const movie = new Movie(req.body);
+    movie.save()
+    .then((result) => {
+        res.redirect('/movies');
     })
     .catch((err) =>{
         console.log(err)
