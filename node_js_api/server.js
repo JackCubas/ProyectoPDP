@@ -1,6 +1,34 @@
 const express = require('express');
 const morgan = require('morgan');
+const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 const app = express();
+
+const dbURI = 'mongodb://localhost:27017/nodejs'
+
+const client = new MongoClient(dbURI);
+async function runDBTest() {
+  try {
+    await client.connect();
+    const db = client.db('test_movies');
+    const collection = db.collection('movies');
+
+    // Find the first document in the collection
+    const first = await collection.findOne();
+    console.log(first);
+  } finally {
+    // Close the database connection when finished or an error occurs
+    await client.close();
+  }
+}
+runDBTest().catch(console.error);
+
+
+
+
+mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
+    .then((result) => console.log('connected to db'))
+    .catch((err) => console.log(err));
 
 app.set('view engine','ejs');
 app.listen(3000);
