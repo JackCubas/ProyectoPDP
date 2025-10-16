@@ -16,34 +16,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const mysql = require('mysql');
-let connection;
-
-try {
-    connection = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-    });
-
-    connection.connect(function(err) {
-        if (err) throw err;
-        connection.query("SELECT * FROM movies", function (err, result, fields) {
-            if (err) throw err;
-            console.log(result);
-            console.log(fields);
-
-            let resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-            resultRows.forEach((v) => console.log(v));
-        });
-    });
-
-} catch (error) {
-    console.log("Error al conectar con la base de datos");
-}
-
-module.exports = {connection};
 
 //---------------------------------------------------
 
@@ -68,6 +40,47 @@ app.use((req, res, next) => {
 
 app.get("/", (req, res) => {
   res.json({ message: "ok" });
+});
+
+app.get("/movies", (req, res) => {
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+          connection.query("SELECT * FROM movies", function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+              //console.log(fields);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              //resultRows.forEach((v) => console.log(v));
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+  //module.exports = {connection};
+  //resultRows = emptyOrRows(resultRows);
+  //connection.end();
+  //res.json(resultRows);
+  //res.json({ message: "ok" });
 });
 
 app.listen(APIPORT, () => {
