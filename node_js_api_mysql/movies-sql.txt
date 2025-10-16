@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS `Movies`;
+
+CREATE TABLE `Movies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `prodId` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `Movies` (prodId, price, quantity) VALUES
+	(100,20,125),
+	(101,10,234),
+	(102,15,432),
+	(103,17,320),
+	(104,70,240);
