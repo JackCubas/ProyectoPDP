@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-var cors = require('cors')
+var cors = require('cors');
 const app = express();
 
 const DBPORT=3306
@@ -87,7 +87,7 @@ app.get("/movies", cors(), (req, res) => {
 app.post('/moviesCreate', (req, res) => {
     console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
     console.log(req.body);
-})
+});
 
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
