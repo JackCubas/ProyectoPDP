@@ -5,8 +5,8 @@ function checkUserHosting() {
         .then((response) => { 
             return response.json().then((data) => {
                 console.log(data);
-                return data;
-                //return appendData(data);
+                //return data;
+                return appendData(data);
             }).catch((err) => {
                 console.log(err);
             }) 
