@@ -1,11 +1,37 @@
 const URLSERVER = "http://localhost:3000/movies";
 
+function checkUserHosting() {
+    return fetch(URLSERVER)
+        .then((response) => { 
+            return response.json().then((data) => {
+                console.log(data);
+                return data;
+                //return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+}
+
+function appendData(data){
+        var con=document.getElementById("main-container")
+        for(let i=0;i<data.length;i++){
+            var d=document.createElement("div")
+            d.textContent="ProdID: "+data[i].prodId
+            //add the data in whatever html element you want and then append it to the container
+            con.appendChild(d);
+        }
+}
+
 const llamandoAPI = async () => {
   try {
     const respuesta = await fetch(URLSERVER)
 
-    const data =  respuesta.json()
-    console.log(data)
+    const dataDevuelto =  respuesta.json()
+                          .then((data) => {
+                              console.log(data);
+                              return data;
+                          });
 
   } catch (error) {
     console.log(error);
@@ -30,5 +56,7 @@ const llamandoConsole = () => {
 }
 
 //llamandoConsole();
-llamandoAPI()
+checkUserHosting();
+//llamandoAPI();
 //fetchMovies();
+
