@@ -11,6 +11,7 @@ function checkUserHosting() {
                 console.log(err);
             }) 
         });
+
 }
 
 function appendData(data){
@@ -56,7 +57,11 @@ const llamandoConsole = () => {
 }
 
 //llamandoConsole();
-checkUserHosting();
+dataHosting = checkUserHosting();
+console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+//console.log(dataHosting);
+console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+
 //llamandoAPI();
 //fetchMovies();
 

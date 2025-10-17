@@ -84,6 +84,11 @@ app.get("/movies", cors(), (req, res) => {
   //res.json({ message: "ok" });
 });
 
+app.post('/moviesCreate', (req, res) => {
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    console.log(req.body);
+})
+
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
 });
