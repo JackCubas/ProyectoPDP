@@ -1,12 +1,12 @@
 const URLSERVERCreate = "http://localhost:3000/moviesCreate";
 
-function sendData2(){
-
-    const newMovie = {
+const newMovie = {
     prodId: 1017,
     price: 433,
     quantity: 555
     }
+
+function sendData2(){
 
     fetch(URLSERVERCreate, {
         method: "POST",
@@ -17,6 +17,20 @@ function sendData2(){
         body: JSON.stringify(newMovie)
     })
 
+}
+
+async function sendData(){
+
+    // a POST request
+    const response = await fetch(URLSERVERCreate, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(newMovie)
+    })
+
+    console.log('status:', response.status)
 }
 
 
@@ -36,24 +50,6 @@ httpGetAsync(URLSERVERCreate, function(response) {
   console.log("recieved ... ", response);
 });
 
-async function sendData(){
-    const newMovie = {
-    prodId: 1017,
-    price: 433,
-    quantity: 555
-    }
-
-    // a POST request
-    const response = await fetch(URLSERVERCreate, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: JSON.stringify(newMovie)
-    })
-
-    console.log('status:', response.status)
-}
 
 //sendData();
 //httpGetAsync(URLSERVERCreate);
