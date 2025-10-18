@@ -9,6 +9,7 @@ Navigate to the server directory:
 Install dependencies using npm:
    ```bash
    npm install
+   npm install express
    ```
 
 
