@@ -9,7 +9,8 @@
             This is the create page.
         </h1>
         <div class="create-blog content">
-            <form action="/moviesCreate" method="POST">
+            <form id="form" onsubmit="sendData()">
+                <!-- action="/moviesCreate" method="POST"  -->
                 <lable for="prodId">ProdId:</lable>
                 <input type="number" id="prodId" name="prodId" required>
                 <lable for="price">Price:</lable>

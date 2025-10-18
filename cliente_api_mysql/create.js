@@ -1,12 +1,16 @@
 const URLSERVERCreate = "http://localhost:3000/moviesCreate";
 
-const newMovie = {
-    prodId: 1017,
-    price: 433,
-    quantity: 555
-    }
+function sendData(){
 
-function sendData2(){
+    var prodIdHTML = document.getElementById("prodId").value;
+    var priceHTML = document.getElementById("price").value;
+    var quantityHTML = document.getElementById("quantity").value;
+
+    const nuevoMovie = {
+        prodId: prodIdHTML,
+        price: priceHTML,
+        quantity: quantityHTML
+    }
 
     fetch(URLSERVERCreate, {
         method: "POST",
@@ -14,12 +18,18 @@ function sendData2(){
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify(newMovie)
+        body: JSON.stringify(nuevoMovie)
     })
 
 }
 
-async function sendData(){
+async function sendData2(){
+
+    const newMovie = {
+        prodId: 555,
+        price: 555,
+        quantity: 555
+    }
 
     // a POST request
     const response = await fetch(URLSERVERCreate, {
@@ -46,11 +56,11 @@ function httpGetAsync(theUrl, callback)
 }
 
 
-httpGetAsync(URLSERVERCreate, function(response) {
+/*httpGetAsync(URLSERVERCreate, function(response) {
   console.log("recieved ... ", response);
-});
+});*/
 
 
 //sendData();
 //httpGetAsync(URLSERVERCreate);
-sendData2();
+//sendData();
