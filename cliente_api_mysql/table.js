@@ -18,14 +18,29 @@ function appendData(data){
         var con=document.getElementById("main-container")
         for(let i=0;i<data.length;i++){
             var d=document.createElement("div")
-            d.textContent="ProdID: "+data[i].prodId
+            d.textContent="ProdID: " + data[i].prodId
             //add the data in whatever html element you want and then append it to the container
-
-            d.innerHTML = d.innerHTML + '<button>Edit</button>';
-            d.innerHTML = d.innerHTML + '<button>Delete</button>';
+            d.innerHTML = d.innerHTML + " ";
+            d.innerHTML = d.innerHTML + '<a onclick="edit('+ data[i] +')" class="btn btn-primary">Edit</a>';
+            d.innerHTML = d.innerHTML + " ";
+            d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i] +')" class="btn btn-primary">Delete</a>';
             
             con.appendChild(d);
         }
+}
+
+function edit(data){
+  console.log("EDIT");
+  console.log(data);
+
+  //window.location.href = "modify.html";
+}
+
+function del(data){
+  console.log("DELETE");
+  console.log(data);
+
+  //window.location.href = "delete.html";
 }
 
 
