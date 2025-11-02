@@ -1,4 +1,4 @@
-const URLSERVERCreate = "http://localhost:3000/moviesCreate";
+const URLSERVERCreate = "http://localhost:3000/create-movie";
 
 function sendData(){
 
@@ -22,6 +22,14 @@ function sendData(){
     })
 
 }
+
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+
+//WIP
+
 
 async function sendData2(){
 

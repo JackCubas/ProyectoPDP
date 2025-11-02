@@ -84,14 +84,78 @@ app.get("/movies", cors(), (req, res) => {
   //res.json({ message: "ok" });
 });
 
-app.post('/moviesCreate', (req, res) => {
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-    console.log(req.body);
+app.post('/create-movie', (req, res) => {
+
+    let con;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "INSERT INTO movies (prodId, price, quantity) VALUES ?";
+
+    let values = [
+      [req.body.prodId, req.body.price, req.body.quantity]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record inserted");
+    });
+    
+  });
 });
 
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
 });
+
+//------------------------------------------------------
+//------------------------------------------------------
+//-----------------------------------------------------
+//------------------------------------------------------
+
+/*app.get('/add-movie', (req, res) => {
+    
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
+app.get('/all-movies', (req, res) => {
+
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
+app.get('/one-movie', (req, res) => {
+    
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})*/
+
+//---------------------------------------------------
+//----------------------------------------------------
+//----------------------------------------------------
 
 function emptyOrRows(rows) {
   if (!rows) {
