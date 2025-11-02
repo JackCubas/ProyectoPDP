@@ -4,7 +4,7 @@ function checkUserHosting() {
     return fetch(URLSERVER)
         .then((response) => { 
             return response.json().then((data) => {
-                console.log(data);
+                //console.log(data);
                 //return data;
                 return appendData(data);
             }).catch((err) => {
@@ -18,20 +18,25 @@ function appendData(data){
         var con=document.getElementById("main-container")
         for(let i=0;i<data.length;i++){
             var d=document.createElement("div")
+
+            console.log(data[i]);
+            console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+
             d.textContent="ProdID: " + data[i].prodId
             //add the data in whatever html element you want and then append it to the container
             d.innerHTML = d.innerHTML + " ";
-            d.innerHTML = d.innerHTML + '<a onclick="edit()" class="btn btn-primary">Edit</a>';
+            d.innerHTML = d.innerHTML + '<a onclick="edit("+data[i].json+")" class="btn btn-primary">Edit</a>';
+            //d.innerHTML = d.innerHTML + '<a onclick="RoomIsReadyFunc("+data[i]+","+data[i].json+",\""+YourString+"\");" class="btn btn-primary">Edit</a>';
             d.innerHTML = d.innerHTML + " ";
-            d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i] +')" class="btn btn-primary">Delete</a>';
+            d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i].json + ')" class="btn btn-primary">Delete</a>';
             
             con.appendChild(d);
         }
 }
 
-function edit(){
+function edit(data){
   console.log("EDIT");
-  console.log("data");
+  console.log(data);
 
   //window.location.href = "modify.html";
 }
@@ -43,6 +48,13 @@ function del(){
   //window.location.href = "delete.html";
 }
 
+function RoomIsReadyFunc(ID, RefId, YourString)
+{
+  alert(ID);
+  alert(RefId);
+  alert(YourString);
+}
+
 
 //-------------------------------------------------------------
 //-------------------------------------------------------------
@@ -51,7 +63,7 @@ function del(){
 
 //WIP
 
-const llamandoAPI = async () => {
+/*const llamandoAPI = async () => {
   try {
     const respuesta = await fetch(URLSERVER)
 
@@ -64,9 +76,9 @@ const llamandoAPI = async () => {
   } catch (error) {
     console.log(error);
   } 
-}
+}*/
 
-const fetchMovies = async () => {
+/*const fetchMovies = async () => {
   try {
     const response = await fetch(URLSERVER);
     if (!response.ok) {
@@ -77,17 +89,17 @@ const fetchMovies = async () => {
   } catch (error) {
     console.error('Error fetching movies:', movies);
   }
-};
+};*/
 
-const llamandoConsole = () => {
+/*const llamandoConsole = () => {
   console.log('Hello World')
-}
+}*/
 
 //llamandoConsole();
 dataHosting = checkUserHosting();
-console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+//console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
 //console.log(dataHosting);
-console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+//console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
 
 //llamandoAPI();
 //fetchMovies();

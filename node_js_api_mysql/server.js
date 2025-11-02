@@ -45,6 +45,8 @@ app.get("/", (req, res) => {
 
 app.get("/movies", cors(), (req, res) => {
 
+   console.log("get all movie!");
+
   let connection;
   var resultRows;
 
@@ -78,6 +80,8 @@ app.get("/movies", cors(), (req, res) => {
 });
 
 app.get("/get-movie/:id", async(req, res) => {
+
+  console.log("get movie!");
 
   let con;
   var resultRows;
