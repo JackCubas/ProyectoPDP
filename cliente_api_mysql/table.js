@@ -21,7 +21,7 @@ function appendData(data){
             d.textContent="ProdID: " + data[i].prodId
             //add the data in whatever html element you want and then append it to the container
             d.innerHTML = d.innerHTML + " ";
-            d.innerHTML = d.innerHTML + '<a onclick="edit('+ data[i] +')" class="btn btn-primary">Edit</a>';
+            d.innerHTML = d.innerHTML + '<a onclick="edit()" class="btn btn-primary">Edit</a>';
             d.innerHTML = d.innerHTML + " ";
             d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i] +')" class="btn btn-primary">Delete</a>';
             
@@ -29,16 +29,16 @@ function appendData(data){
         }
 }
 
-function edit(data){
+function edit(){
   console.log("EDIT");
-  console.log(data);
+  console.log("data");
 
   //window.location.href = "modify.html";
 }
 
-function del(data){
+function del(){
   console.log("DELETE");
-  console.log(data);
+  console.log("data");
 
   //window.location.href = "delete.html";
 }

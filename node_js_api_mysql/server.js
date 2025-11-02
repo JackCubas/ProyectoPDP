@@ -95,7 +95,7 @@ app.get("/get-movie/:id", async(req, res) => {
     if (err) throw err;
     console.log("Connected!");
 
-    let sql = "SELECT *  from users where id = ?";
+    let sql = "SELECT *  from movies WHERE prodId = ?";
 
     let values = [
       [id]
@@ -147,6 +147,8 @@ app.post('/create-movie', (req, res) => {
 
 app.delete('/delete-movie/:id', (req, res) => {
 
+    console.log("delete movie!");
+
     let con;
     const { id } = req.params;
 
@@ -162,7 +164,7 @@ app.delete('/delete-movie/:id', (req, res) => {
     if (err) throw err;
     console.log("Connected!");
 
-    let sql = "DELETE FROM movie WHERE prodId = ?";
+    let sql = "DELETE FROM movies WHERE prodId = ?";
 
     let values = [
       [id]
@@ -178,6 +180,8 @@ app.delete('/delete-movie/:id', (req, res) => {
 
 
 app.patch('/update-movie/:id', (req, res) => {
+
+    console.log("update movie!");
 
     const { id } = req.params;
     const { price, quantity} = req.body;

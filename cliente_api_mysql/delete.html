@@ -8,15 +8,23 @@
   <title>Conectar API</title>
 </head>
 <body>
-  <h1>Como conectar una API</h1>
-  <p>Veremos como conectar una API utilizando Async, Await y Fetch</p>
   <p>DELETE</p>
 
-  <main id="main-container">
-    <!-- main page content -->
-    <button onclick="location.href='table.html'" type="button">Movie Table</button>
-
-  </main>
+    <h1>
+        This is the delete page.
+    </h1>
+    <div class="create-blog content">
+        <form id="form" onsubmit="sendData()">
+            <!-- action="/moviesCreate" method="POST"  -->
+            <lable for="prodId">ProdId:</lable>
+            <input type="number" id="prodId" name="prodId" required>
+            <lable for="price">Price:</lable>
+            <input type="number" id="price" name="price" required>
+            <lable for="quantity">Quantity:</lable>
+            <input type="number" id="quantity" name="quantity" required>
+            <button>Submit</button>
+        </form>
+    </div>
 
   <script src="delete.js"></script>
 
