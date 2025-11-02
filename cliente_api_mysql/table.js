@@ -43,6 +43,19 @@ function appendData(data){
             d.innerHTML = d.innerHTML + "</td>";
             con.appendChild(d);
 
+
+            /*var id=data[i].prodId;
+            d.textContent="ProdID: " + data[i].prodId
+
+            d.innerHTML = d.innerHTML + "<td>";
+            d.innerHTML = d.innerHTML + "<input type='text' onclick='edit()' id='edit_button_"+id+"' value='Edit'>";
+            d.innerHTML = d.innerHTML + "<input type='text' onclick='del()' id='delete_button_"+id+"' value='Delete'>";
+            d.innerHTML = d.innerHTML + "</td>";
+            con.appendChild(d);*/
+
+            //var row = table.insertRow(table_len).outerHTML="<tr id='row"+id+"'><td id='name_val"+id+"'>"+name+"</td><td id='age_val"+id+"'>"+age+"</td><td><input type='button' class='edit_button' id='edit_button"+id+"' value='edit' onclick='edit_row("+id+");'/><input type='button' class='save_button' id='save_button"+id+"' value='save' onclick='save_row("+id+");'/><input type='button' class='delete_button' id='delete_button"+id+"' value='delete' onclick='delete_row("+id+");'/></td></tr>";
+
+
         }
 }
 
