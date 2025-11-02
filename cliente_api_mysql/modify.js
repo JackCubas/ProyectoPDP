@@ -14,7 +14,7 @@ function sendData(){
     }
 
     fetch(URLSERVERModify + prodIdHTML, {
-        method: "DELETE",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"

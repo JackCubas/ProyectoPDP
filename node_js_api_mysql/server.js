@@ -179,12 +179,14 @@ app.delete('/delete-movie/:id', (req, res) => {
 });
 
 
-app.patch('/update-movie/:id', (req, res) => {
+app.put('/update-movie/:id', (req, res) => {
 
     console.log("update movie!");
 
     const { id } = req.params;
     const { price, quantity} = req.body;
+
+    console.log(id + " - " + price + " - " + quantity);
 
     con = mysql.createConnection({
           host: DBHOST,
@@ -198,13 +200,13 @@ app.patch('/update-movie/:id', (req, res) => {
     if (err) throw err;
     console.log("Connected!");
 
-    let sql = "UPDATE movies SET price = ?, quantity = ? WHERE prodId = ?";
-
-    let values = [
-      [price, quantity, id]
-    ]
-
-    con.query(sql, [values], function (err, result) {
+    let sql = `
+      UPDATE movies 
+      SET price = "${price}", 
+      quantity = "${quantity}" 
+      WHERE prodId = "${id}"
+    `;
+    con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("1 record modified");
     });
