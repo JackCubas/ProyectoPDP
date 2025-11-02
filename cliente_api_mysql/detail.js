@@ -16,17 +16,18 @@ function checkUserHosting() {
 function appendData(data){
         var con=document.getElementById("main-container")
         for(let i=0;i<data.length;i++){
-            var d=document.createElement("div")
-
             console.log(data[i]);
-            console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-
-            d.textContent="ProdID: " + data[i].prodId
-            //add the data in whatever html element you want and then append it to the container
-            //d.textContent = "       " + "Price: " + data[i].price;
-            //d.textContent = "       " + "Quality: " + data[i].quality;
-            
+            var d=document.createElement("div")
+            d.textContent="ProdID: " + data[i].prodId                      
             con.appendChild(d);
+
+            var e=document.createElement("div")
+            e.textContent="Price: " + data[i].price                      
+            con.appendChild(e);
+
+            var f=document.createElement("div")
+            f.textContent="Quantity: " + data[i].quantity                      
+            con.appendChild(f);
         }
 }
 
