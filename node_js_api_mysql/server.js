@@ -64,10 +64,8 @@ app.get("/movies", cors(), (req, res) => {
               if (err) throw err;
               
               console.log(result);
-              //console.log(fields);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-              //resultRows.forEach((v) => console.log(v));
               console.log(resultRows);
               res.json(resultRows);
           });
@@ -77,11 +75,44 @@ app.get("/movies", cors(), (req, res) => {
       console.log("Error al conectar con la base de datos");
   }
 
-  //module.exports = {connection};
-  //resultRows = emptyOrRows(resultRows);
-  //connection.end();
-  //res.json(resultRows);
-  //res.json({ message: "ok" });
+});
+
+app.get("/get-movie/:id", async(req, res) => {
+
+  let con;
+  var resultRows;
+  const { id } = req.params;
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "SELECT *  from users where id = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+        res.json(resultRows);
+    });
+    
+  });
+    
 });
 
 app.post('/create-movie', (req, res) => {
@@ -109,6 +140,69 @@ app.post('/create-movie', (req, res) => {
     con.query(sql, [values], function (err, result) {
       if (err) throw err;
       console.log("1 record inserted");
+    });
+    
+  });
+});
+
+app.delete('/delete-movie/:id', (req, res) => {
+
+    let con;
+    const { id } = req.params;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "DELETE FROM movie WHERE prodId = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record deleted");
+    });
+    
+  });
+});
+
+
+app.patch('/update-movie/:id', (req, res) => {
+
+    const { id } = req.params;
+    const { price, quantity} = req.body;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "UPDATE movies SET price = ?, quantity = ? WHERE prodId = ?";
+
+    let values = [
+      [price, quantity, id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record modified");
     });
     
   });
