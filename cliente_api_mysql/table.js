@@ -20,6 +20,10 @@ function appendData(data){
             var d=document.createElement("div")
             d.textContent="ProdID: "+data[i].prodId
             //add the data in whatever html element you want and then append it to the container
+
+            d.innerHTML = d.innerHTML + '<button>Edit</button>';
+            d.innerHTML = d.innerHTML + '<button>Delete</button>';
+            
             con.appendChild(d);
         }
 }
