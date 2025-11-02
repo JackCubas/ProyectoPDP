@@ -16,21 +16,33 @@ function checkUserHosting() {
 
 function appendData(data){
         var con=document.getElementById("main-container")
+
         for(let i=0;i<data.length;i++){
             var d=document.createElement("div")
 
             console.log(data[i]);
-            console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+            console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+
+            //d.textContent="ProdID: " + data[i].prodId
+            //add the data in whatever html element you want and then append it to the container
+            //d.innerHTML = d.innerHTML + " ";
+            //d.innerHTML = d.innerHTML + '<a onclick="edit()" class="btn btn-primary">Edit</a>';
+            //d.innerHTML = d.innerHTML + '<a onclick="edit("+data[i].json+")" class="btn btn-primary">Edit</a>';
+            //d.innerHTML = d.innerHTML + '<a onclick="RoomIsReadyFunc("+data[i]+","+data[i].json+",\""+YourString+"\");" class="btn btn-primary">Edit</a>';
+            //d.innerHTML = d.innerHTML + " ";
+            //d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i].json + ')" class="btn btn-primary">Delete</a>';
+            //d.innerHTML = d.innerHTML + '<a onclick="del()" class="btn btn-primary">Delete</a>';
+            
+            //con.appendChild(d);
 
             d.textContent="ProdID: " + data[i].prodId
-            //add the data in whatever html element you want and then append it to the container
-            d.innerHTML = d.innerHTML + " ";
-            d.innerHTML = d.innerHTML + '<a onclick="edit("+data[i].json+")" class="btn btn-primary">Edit</a>';
-            //d.innerHTML = d.innerHTML + '<a onclick="RoomIsReadyFunc("+data[i]+","+data[i].json+",\""+YourString+"\");" class="btn btn-primary">Edit</a>';
-            d.innerHTML = d.innerHTML + " ";
-            d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i].json + ')" class="btn btn-primary">Delete</a>';
-            
+            d.innerHTML = d.innerHTML + "<td>";
+            d.innerHTML = d.innerHTML + '<input type="button" id="edit_button3" value="Edit" class="edit" onclick="edit()">';
+            d.innerHTML = d.innerHTML + '<input type="button" id="save_button3" value="Save" class="save" onclick="save()">';
+            d.innerHTML = d.innerHTML + '<input type="button" value="Delete" class="delete" onclick="del()">';
+            d.innerHTML = d.innerHTML + "</td>";
             con.appendChild(d);
+
         }
 }
 
@@ -41,11 +53,18 @@ function edit(data){
   //window.location.href = "modify.html";
 }
 
-function del(){
+function del(data){
   console.log("DELETE");
-  console.log("data");
+  console.log(data);
 
   //window.location.href = "delete.html";
+}
+
+function save(data){
+  console.log("SAVE");
+  console.log(data);
+
+  //window.location.href = "modify.html";
 }
 
 function RoomIsReadyFunc(ID, RefId, YourString)
