@@ -4,9 +4,8 @@ function checkUserHosting() {
     return fetch(URLSERVER)
         .then((response) => { 
             return response.json().then((data) => {
-                //console.log(data);
-                //return data;
-                return appendData(data);
+                //return appendData(data);
+                return buildTable(data);
             }).catch((err) => {
                 console.log(err);
             }) 
@@ -14,7 +13,83 @@ function checkUserHosting() {
 
 }
 
-function appendData(data){
+function buildTable(data) {
+  console.log(data);
+  const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
+  for (let i = 0; i < data.length; i++) {
+    console.log(data[i]);
+
+    const newRow = table.insertRow();
+    const cell1 = newRow.insertCell(0);
+    const cell2 = newRow.insertCell(1);
+    cell1.textContent = data[i].prodId;
+
+    const button = document.createElement('button');
+    button.id = "testbutton" + i;
+    button.textContent = "Click Me";
+    button.addEventListener('click', doSmth);
+    cell2.appendChild(button);
+    
+    const butID = data[i].prodId;
+
+    const buttonEdit = document.createElement('button');
+    buttonEdit.id = "editbutton" + butID;
+    buttonEdit.textContent = "Edit";
+    buttonEdit.addEventListener('click', edit);
+    cell2.appendChild(buttonEdit);
+
+    const buttonSave = document.createElement('button');
+    buttonSave.id = "savebutton" + butID;
+    buttonSave.textContent = "Save";
+    buttonSave.addEventListener('click', save);
+    cell2.appendChild(buttonSave);
+
+    const buttonDel = document.createElement('button');
+    buttonDel.id = "delbutton" + butID;
+    buttonDel.textContent = "Delete";
+    buttonDel.addEventListener('click', del);
+    cell2.appendChild(buttonDel);
+  }
+}
+
+function doSmth(event) {
+  alert(event.target.id);
+}
+
+function edit(event){
+  console.log("EDIT");
+  alert("EDIT" + event.target.id);
+
+  //window.location.href = "modify.html";
+}
+
+function del(event){
+  console.log("DELETE");
+  alert("DELETE" + event.target.id);
+
+  //window.location.href = "delete.html";
+}
+
+function save(event){
+  console.log("SAVE");
+  alert("SAVE" + event.target.id);
+
+
+  //window.location.href = "modify.html";
+}
+
+dataHosting = checkUserHosting();
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+
+
+//------------------------
+//------------------------
+
+
+/*function appendData(data){
         var con=document.getElementById("main-container")
 
         for(let i=0;i<data.length;i++){
@@ -22,18 +97,6 @@ function appendData(data){
 
             console.log(data[i]);
             console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-
-            //d.textContent="ProdID: " + data[i].prodId
-            //add the data in whatever html element you want and then append it to the container
-            //d.innerHTML = d.innerHTML + " ";
-            //d.innerHTML = d.innerHTML + '<a onclick="edit()" class="btn btn-primary">Edit</a>';
-            //d.innerHTML = d.innerHTML + '<a onclick="edit("+data[i].json+")" class="btn btn-primary">Edit</a>';
-            //d.innerHTML = d.innerHTML + '<a onclick="RoomIsReadyFunc("+data[i]+","+data[i].json+",\""+YourString+"\");" class="btn btn-primary">Edit</a>';
-            //d.innerHTML = d.innerHTML + " ";
-            //d.innerHTML = d.innerHTML + '<a onclick="del(' + data[i].json + ')" class="btn btn-primary">Delete</a>';
-            //d.innerHTML = d.innerHTML + '<a onclick="del()" class="btn btn-primary">Delete</a>';
-            
-            //con.appendChild(d);
 
             d.textContent="ProdID: " + data[i].prodId
             d.innerHTML = d.innerHTML + "<td>";
@@ -44,48 +107,27 @@ function appendData(data){
             con.appendChild(d);
 
 
-            /*var id=data[i].prodId;
-            d.textContent="ProdID: " + data[i].prodId
+            //var id=data[i].prodId;
+            //d.textContent="ProdID: " + data[i].prodId
 
-            d.innerHTML = d.innerHTML + "<td>";
-            d.innerHTML = d.innerHTML + "<input type='text' onclick='edit()' id='edit_button_"+id+"' value='Edit'>";
-            d.innerHTML = d.innerHTML + "<input type='text' onclick='del()' id='delete_button_"+id+"' value='Delete'>";
-            d.innerHTML = d.innerHTML + "</td>";
-            con.appendChild(d);*/
+            //d.innerHTML = d.innerHTML + "<td>";
+            //d.innerHTML = d.innerHTML + "<input type='text' onclick='edit()' id='edit_button_"+id+"' value='Edit'>";
+            //d.innerHTML = d.innerHTML + "<input type='text' onclick='del()' id='delete_button_"+id+"' value='Delete'>";
+            //d.innerHTML = d.innerHTML + "</td>";
+            //con.appendChild(d);
 
             //var row = table.insertRow(table_len).outerHTML="<tr id='row"+id+"'><td id='name_val"+id+"'>"+name+"</td><td id='age_val"+id+"'>"+age+"</td><td><input type='button' class='edit_button' id='edit_button"+id+"' value='edit' onclick='edit_row("+id+");'/><input type='button' class='save_button' id='save_button"+id+"' value='save' onclick='save_row("+id+");'/><input type='button' class='delete_button' id='delete_button"+id+"' value='delete' onclick='delete_row("+id+");'/></td></tr>";
 
 
         }
-}
+}*/
 
-function edit(data){
-  console.log("EDIT");
-  console.log(data);
-
-  //window.location.href = "modify.html";
-}
-
-function del(data){
-  console.log("DELETE");
-  console.log(data);
-
-  //window.location.href = "delete.html";
-}
-
-function save(data){
-  console.log("SAVE");
-  console.log(data);
-
-  //window.location.href = "modify.html";
-}
-
-function RoomIsReadyFunc(ID, RefId, YourString)
+/*function RoomIsReadyFunc(ID, RefId, YourString)
 {
   alert(ID);
   alert(RefId);
   alert(YourString);
-}
+}*/
 
 
 //-------------------------------------------------------------
@@ -128,11 +170,6 @@ function RoomIsReadyFunc(ID, RefId, YourString)
 }*/
 
 //llamandoConsole();
-dataHosting = checkUserHosting();
-//console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-//console.log(dataHosting);
-//console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-
 //llamandoAPI();
 //fetchMovies();
 
