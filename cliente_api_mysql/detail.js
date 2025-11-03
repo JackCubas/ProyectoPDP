@@ -1,9 +1,13 @@
 const URLSERVERdetail = "http://localhost:3000/get-movie/";
-var prodIdHTML = 101;
+//var prodIdHTML = 101;
 
 
 
 function checkUserHosting() {
+
+    var datosURL = window.location.href.split('?');
+    var prodIdHTML = datosURL[1].replace("id=","");
+
     return fetch(URLSERVERdetail + prodIdHTML)
         .then((response) => { 
             return response.json().then((data) => {

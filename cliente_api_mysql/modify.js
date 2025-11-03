@@ -1,9 +1,37 @@
+const URLSERVERdetail = "http://localhost:3000/get-movie/";
 const URLSERVERModify = "http://localhost:3000/update-movie/";
+
+function checkUserHosting() {
+
+    var datosURL = window.location.href.split('?');
+    var prodIdHTML = datosURL[1].replace("id=","");
+
+    return fetch(URLSERVERdetail + prodIdHTML)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+
+}
+
+function appendData(data){
+    document.getElementById("prodId").value = data[0].prodId;
+    document.getElementById("price").value = data[0].price;
+    document.getElementById("quantity").value = data[0].quantity;
+        
+}
+
+dataHosting = checkUserHosting();
 
 async function sendData(){
 
     //var prodIdHTML = document.getElementById("prodId").value;
-    var prodIdHTML = 101;
+    var datosURL = window.location.href.split('?');
+    var prodIdHTML = datosURL[1].replace("id=","");
+
     var priceHTML = document.getElementById("price").value;
     var quantityHTML = document.getElementById("quantity").value;
 

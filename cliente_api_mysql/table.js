@@ -66,7 +66,7 @@ function detail(event){
 
   alert("DETAIL " + idDetail);
 
-  window.location.href = "detail.html";
+  window.location.href = "detail.html?id=" + idDetail;
 }
 
 function edit(event){
@@ -79,7 +79,7 @@ function edit(event){
 
   alert("EDIT " + idEdit);
 
-  window.location.href = "modify.html";
+  window.location.href = "modify.html?id=" + idEdit;
 }
 
 function del(event){
@@ -92,7 +92,7 @@ function del(event){
 
   alert("DEL " + idDel);
 
-  window.location.href = "delete.html";
+  window.location.href = "delete.html?id=" + idDel;
 }
 
 

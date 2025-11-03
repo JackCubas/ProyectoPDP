@@ -1,11 +1,47 @@
+
+const URLSERVERdetail = "http://localhost:3000/get-movie/";
 const URLSERVERDelete = "http://localhost:3000/delete-movie/";
+
+function checkUserHosting() {
+
+    var datosURL = window.location.href.split('?');
+    var prodIdHTML = datosURL[1].replace("id=","");
+
+    return fetch(URLSERVERdetail + prodIdHTML)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+
+}
+
+function appendData(data){
+        var con=document.getElementById("main-container")
+        for(let i=0;i<data.length;i++){
+            console.log(data[i]);
+            var d=document.createElement("div")
+            d.textContent="ProdID: " + data[i].prodId                      
+            con.appendChild(d);
+
+            var e=document.createElement("div")
+            e.textContent="Price: " + data[i].price                      
+            con.appendChild(e);
+
+            var f=document.createElement("div")
+            f.textContent="Quantity: " + data[i].quantity                      
+            con.appendChild(f);
+        }
+}
+
+dataHosting = checkUserHosting();
 
 async function sendData(){
 
-    //var prodIdHTML = document.getElementById("prodId").value;
-    var prodIdHTML = 101;
-    //var priceHTML = document.getElementById("price").value;
-    //var quantityHTML = document.getElementById("quantity").value;
+    var datosURL = window.location.href.split('?');
+    var prodIdHTML = datosURL[1].replace("id=","");
 
     const response = await fetch(URLSERVERDelete + prodIdHTML, {
         method: "DELETE"
