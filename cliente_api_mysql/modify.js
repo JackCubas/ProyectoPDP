@@ -52,6 +52,6 @@ async function sendData(){
         body: JSON.stringify(modMovie)
     })
 
-    window.location.replace('table.html');
+    window.location.href = 'table.html';
 
 }
