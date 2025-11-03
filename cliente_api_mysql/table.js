@@ -1,7 +1,7 @@
-const URLSERVER = "http://localhost:3000/movies";
+const URLSERVERgetall = "http://localhost:3000/movies";
 
 function checkUserHosting() {
-    return fetch(URLSERVER)
+    return fetch(URLSERVERgetall)
         .then((response) => { 
             return response.json().then((data) => {
                 //return appendData(data);
