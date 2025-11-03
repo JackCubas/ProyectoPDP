@@ -32,17 +32,17 @@ function buildTable(data) {
     
     const butID = data[i].prodId;
 
+    const buttonDetail = document.createElement('button');
+    buttonDetail.id = "detailbutton" + butID;
+    buttonDetail.textContent = "Detail";
+    buttonDetail.addEventListener('click', detail);
+    cell2.appendChild(buttonDetail);
+
     const buttonEdit = document.createElement('button');
     buttonEdit.id = "editbutton" + butID;
     buttonEdit.textContent = "Edit";
     buttonEdit.addEventListener('click', edit);
     cell2.appendChild(buttonEdit);
-
-    const buttonSave = document.createElement('button');
-    buttonSave.id = "savebutton" + butID;
-    buttonSave.textContent = "Save";
-    buttonSave.addEventListener('click', save);
-    cell2.appendChild(buttonSave);
 
     const buttonDel = document.createElement('button');
     buttonDel.id = "delbutton" + butID;
@@ -56,27 +56,28 @@ function doSmth(event) {
   alert(event.target.id);
 }
 
+function detail(event){
+  console.log("DETAIL");
+  alert("DETAIL " + event.target.id);
+
+
+  window.location.href = "detail.html";
+}
+
 function edit(event){
   console.log("EDIT");
-  alert("EDIT" + event.target.id);
+  alert("EDIT " + event.target.id);
 
   //window.location.href = "modify.html";
 }
 
 function del(event){
   console.log("DELETE");
-  alert("DELETE" + event.target.id);
+  alert("DELETE " + event.target.id);
 
   //window.location.href = "delete.html";
 }
 
-function save(event){
-  console.log("SAVE");
-  alert("SAVE" + event.target.id);
-
-
-  //window.location.href = "modify.html";
-}
 
 dataHosting = checkUserHosting();
 //-------------------------------------------------------------

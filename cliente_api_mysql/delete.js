@@ -11,4 +11,6 @@ function sendData(){
         method: "DELETE"
     })
 
+    window.location.href = "table.html";
+
 }

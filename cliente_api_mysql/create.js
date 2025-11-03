@@ -1,6 +1,6 @@
 const URLSERVERCreate = "http://localhost:3000/create-movie";
 
-function sendData(){
+async function sendData(){
 
     var prodIdHTML = document.getElementById("prodId").value;
     var priceHTML = document.getElementById("price").value;
@@ -12,7 +12,7 @@ function sendData(){
         quantity: quantityHTML
     }
 
-    fetch(URLSERVERCreate, {
+    const response = await fetch(URLSERVERCreate, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -20,6 +20,12 @@ function sendData(){
         },
         body: JSON.stringify(nuevoMovie)
     })
+    //.then(console.log('status:', response.status))
+    //.then(window.location.href = "table.html")
+
+    console.log('status:', response.status)
+
+    //window.location.replace("table.html");
 
 }
 
@@ -31,7 +37,7 @@ function sendData(){
 //WIP
 
 
-async function sendData2(){
+/*async function sendData2(){
 
     const newMovie = {
         prodId: 555,
@@ -49,10 +55,10 @@ async function sendData2(){
     })
 
     console.log('status:', response.status)
-}
+}*/
 
 
-function httpGetAsync(theUrl, callback)
+/*function httpGetAsync(theUrl, callback)
 {
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
@@ -61,7 +67,7 @@ function httpGetAsync(theUrl, callback)
     }
    xmlHttp.open("POST", theUrl, true); // true for asynchronous
    xmlHttp.send(JSON.stringify({x: 5}));
-}
+}*/
 
 
 /*httpGetAsync(URLSERVERCreate, function(response) {

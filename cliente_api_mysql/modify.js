@@ -22,4 +22,6 @@ function sendData(){
         body: JSON.stringify(modMovie)
     })
 
+    window.location.href = "table.html";
+
 }
