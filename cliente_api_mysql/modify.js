@@ -1,6 +1,6 @@
 const URLSERVERModify = "http://localhost:3000/update-movie/";
 
-function sendData(){
+async function sendData(){
 
     //var prodIdHTML = document.getElementById("prodId").value;
     var prodIdHTML = 101;
@@ -13,7 +13,7 @@ function sendData(){
         quantity: quantityHTML
     }
 
-    fetch(URLSERVERModify + prodIdHTML, {
+    const response = await fetch(URLSERVERModify + prodIdHTML, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

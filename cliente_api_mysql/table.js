@@ -58,24 +58,41 @@ function doSmth(event) {
 
 function detail(event){
   console.log("DETAIL");
-  alert("DETAIL " + event.target.id);
+  //console.log(event);
 
+  var idDetailString = event.target.id;
+  const substringToRemove = "detailbutton";
+  const idDetail = idDetailString.replace(substringToRemove, '');
+
+  alert("DETAIL " + idDetail);
 
   window.location.href = "detail.html";
 }
 
 function edit(event){
   console.log("EDIT");
-  alert("EDIT " + event.target.id);
+  //alert("EDIT " + event.target.id);
 
-  //window.location.href = "modify.html";
+  var idEditString = event.target.id;
+  const substringToRemove = "editbutton";
+  const idEdit = idEditString.replace(substringToRemove, '');
+
+  alert("EDIT " + idEdit);
+
+  window.location.href = "modify.html";
 }
 
 function del(event){
   console.log("DELETE");
-  alert("DELETE " + event.target.id);
+  //alert("DELETE " + event.target.id);
 
-  //window.location.href = "delete.html";
+  var idDelString = event.target.id;
+  const substringToRemove = "delbutton";
+  const idDel = idDelString.replace(substringToRemove, '');
+
+  alert("DEL " + idDel);
+
+  window.location.href = "delete.html";
 }
 
 
