@@ -1,7 +1,4 @@
 const URLSERVERdetail = "http://localhost:3000/get-movie/";
-//var prodIdHTML = 101;
-
-
 
 function checkUserHosting() {
 
