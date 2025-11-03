@@ -18,9 +18,11 @@ function checkUserHosting() {
 }
 
 function appendData(data){
-    document.getElementById("prodId").value = data[0].prodId;
-    document.getElementById("price").value = data[0].price;
-    document.getElementById("quantity").value = data[0].quantity;
+    if(data && data.length != 0){
+        document.getElementById("prodId").value = data[0].prodId;
+        document.getElementById("price").value = data[0].price;
+        document.getElementById("quantity").value = data[0].quantity;
+    }
         
 }
 
@@ -50,6 +52,6 @@ async function sendData(){
         body: JSON.stringify(modMovie)
     })
 
-    window.location.href = "table.html";
+    window.location.replace('table.html');
 
 }
