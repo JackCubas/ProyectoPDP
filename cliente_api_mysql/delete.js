@@ -45,6 +45,8 @@ async function sendData(){
         method: "DELETE"
     })
 
+    alert('status:', response.status);
+
     window.location.href = "table.html";
 
 }

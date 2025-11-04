@@ -23,8 +23,8 @@ async function sendData(){
     //.then(console.log('status:', response.status))
     //.then(window.location.href = "table.html")
 
-    console.log('status:', response.status)
+    alert('status:', response.status);
 
-    //window.location.replace("table.html");
+    window.location.replace("table.html");
 
 }
