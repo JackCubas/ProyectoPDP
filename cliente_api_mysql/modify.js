@@ -26,8 +26,6 @@ function appendData(data){
         
 }
 
-dataHosting = checkUserHosting();
-
 async function sendData(){
 
     //var prodIdHTML = document.getElementById("prodId").value;
@@ -55,3 +53,5 @@ async function sendData(){
     window.location.href = 'table.html';
 
 }
+
+checkUserHosting();

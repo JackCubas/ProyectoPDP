@@ -34,4 +34,4 @@ function appendData(data){
         }
 }
 
-dataHosting = checkUserHosting();
+checkUserHosting();

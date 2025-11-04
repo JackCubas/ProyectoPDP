@@ -36,8 +36,6 @@ function appendData(data){
         }
 }
 
-dataHosting = checkUserHosting();
-
 async function sendData(){
 
     var datosURL = window.location.href.split('?');
@@ -50,3 +48,5 @@ async function sendData(){
     window.location.href = "table.html";
 
 }
+
+checkUserHosting();
