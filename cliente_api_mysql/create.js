@@ -2,6 +2,8 @@ const URLSERVERCreate = "http://localhost:3000/create-movie";
 
 async function sendData(){
 
+    //event.preventDefault();
+
     var prodIdHTML = document.getElementById("prodId").value;
     var priceHTML = document.getElementById("price").value;
     var quantityHTML = document.getElementById("quantity").value;
@@ -25,6 +27,6 @@ async function sendData(){
 
     alert('status:', response.status);
 
-    window.location.replace("table.html");
+    window.location.href = "table.html";
 
 }
