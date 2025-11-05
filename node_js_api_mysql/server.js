@@ -234,7 +234,7 @@ app.put('/update-movie/:id', (req, res) => {
 
 app.get("/pdfs", cors(), (req, res) => {
 
-   console.log("get all movie!");
+   console.log("get all pdfs!");
 
   let connection;
   var resultRows;
