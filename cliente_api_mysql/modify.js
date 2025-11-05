@@ -6,6 +6,10 @@ function checkUserHosting() {
     var datosURL = window.location.href.split('?');
     var prodIdHTML = datosURL[1].replace("id=","");
 
+    if(prodIdHTML === "" || isNaN(prodIdHTML)){
+        window.location.href = 'table.html';
+    }
+
     return fetch(URLSERVERdetail + prodIdHTML)
         .then((response) => { 
             return response.json().then((data) => {
