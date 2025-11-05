@@ -64,20 +64,19 @@ function detail(event){
   const substringToRemove = "detailbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
-  alert("DETAIL " + idDetail);
+  //alert("DETAIL " + idDetail);
 
   window.location.href = "detail.html?id=" + idDetail;
 }
 
 function edit(event){
   console.log("EDIT");
-  //alert("EDIT " + event.target.id);
 
   var idEditString = event.target.id;
   const substringToRemove = "editbutton";
   const idEdit = idEditString.replace(substringToRemove, '');
 
-  alert("EDIT " + idEdit);
+  //alert("EDIT " + idEdit);
 
   window.location.href = "modify.html?id=" + idEdit;
 }
@@ -90,7 +89,7 @@ function del(event){
   const substringToRemove = "delbutton";
   const idDel = idDelString.replace(substringToRemove, '');
 
-  alert("DEL " + idDel);
+  //alert("DEL " + idDel);
 
   window.location.href = "delete.html?id=" + idDel;
 }
