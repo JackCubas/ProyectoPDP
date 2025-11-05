@@ -11,7 +11,7 @@ CREATE TABLE `Movies` (
 
 CREATE TABLE `Pdfs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pdfBase64` int(11) NOT NULL,
+  `pdfBase64` BLOB,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
