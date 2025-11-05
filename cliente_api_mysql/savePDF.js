@@ -1,4 +1,4 @@
-const URLSERVERCreate = "http://localhost:3000/create-movie";
+const URLSERVERCreate = "http://localhost:3000/create-pdf";
 var datosURL = window.location.href;
 
 if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
@@ -8,16 +8,10 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
 async function sendData(){
 
 
-    returnToTable = true;
-
-    var prodIdHTML = document.getElementById("prodId").value;
-    var priceHTML = document.getElementById("price").value;
-    var quantityHTML = document.getElementById("quantity").value;
-
-    const nuevoMovie = {
-        prodId: prodIdHTML,
-        price: priceHTML,
-        quantity: quantityHTML
+    const nuevoPDF = {
+        name: "pdfPrueba",
+        pdfBase64: ""
+        
     }
 
     await fetch(URLSERVERCreate, {
@@ -26,7 +20,7 @@ async function sendData(){
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify(nuevoMovie)
+        body: JSON.stringify(nuevoPDF)
     })
 
 }
