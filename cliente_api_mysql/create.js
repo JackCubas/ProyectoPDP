@@ -8,7 +8,7 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
     window.location.href = "table.html";
 }
 
-function sendData(){
+async function sendData(){
 
     //event.preventDefault();
 
@@ -24,7 +24,7 @@ function sendData(){
         quantity: quantityHTML
     }
 
-    fetch(URLSERVERCreate, {
+    await fetch(URLSERVERCreate, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -32,13 +32,13 @@ function sendData(){
         },
         body: JSON.stringify(nuevoMovie)
     })
-    .then(response => {
+    /*.then(response => {
             console.log('status:', response.status);
             window.location.href = "table.html";
     })
     .catch(error => {
             console.error('Error:', error);
-    })        
+    })*/        
     //.then(console.log('status:', response.status))
     //.then(window.location.href = "table.html")
 
