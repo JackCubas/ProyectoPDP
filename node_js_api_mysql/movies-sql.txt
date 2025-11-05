@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS `Movies`;
-DROP TABLE IF EXISTS `Pdfs`;
 
 CREATE TABLE `Movies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -9,15 +8,23 @@ CREATE TABLE `Movies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Pdfs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pdfBase64` BLOB,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 INSERT INTO `Movies` (prodId, price, quantity) VALUES
 	(100,20,125),
 	(101,10,234),
 	(102,15,432),
 	(103,17,320),
 	(104,70,240);
+
+
+DROP TABLE IF EXISTS `Pdfs`;
+
+CREATE TABLE `Pdfs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `pdfBase64` BLOB,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `Pdfs` (name, pdfBase64) VALUES
+(pic1, /9j/4AAQSkZJRgABAQEASABIAAD/...),
+(doc1, R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=);

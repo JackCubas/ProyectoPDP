@@ -227,6 +227,40 @@ app.put('/update-movie/:id', (req, res) => {
   });
 });
 
+app.post('/create-pdf', (req, res) => {
+
+    let con;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to pdf!");
+
+    let sql = "INSERT INTO pdfs (name, pdfBase64) VALUES ?";
+
+    let values = [
+      [req.body.name, req.body.pdfBase64]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record inserted into pdf");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+});
+
+
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
 });
