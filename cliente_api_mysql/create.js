@@ -1,6 +1,6 @@
 const URLSERVERCreate = "http://localhost:3000/create-movie";
 
-async function sendData(){
+function sendData(){
 
     //event.preventDefault();
 
@@ -14,7 +14,7 @@ async function sendData(){
         quantity: quantityHTML
     }
 
-    const response = await fetch(URLSERVERCreate, {
+    fetch(URLSERVERCreate, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -22,11 +22,17 @@ async function sendData(){
         },
         body: JSON.stringify(nuevoMovie)
     })
+    .then(response => {
+            window.location.href = "table.html"
+    })
+    .catch(error => {
+            console.error('Error:', error);
+    })        
     //.then(console.log('status:', response.status))
     //.then(window.location.href = "table.html")
 
-    alert('status:', response.status);
+    //alert('status:', response.status);
 
-    window.location.href = "table.html";
+    //window.location.href = "table.html";
 
 }

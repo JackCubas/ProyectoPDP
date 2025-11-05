@@ -144,6 +144,7 @@ app.post('/create-movie', (req, res) => {
     con.query(sql, [values], function (err, result) {
       if (err) throw err;
       console.log("1 record inserted");
+      console.log(result);
     });
     
   });
@@ -177,6 +178,7 @@ app.delete('/delete-movie/:id', (req, res) => {
     con.query(sql, [values], function (err, result) {
       if (err) throw err;
       console.log("1 record deleted");
+      console.log(result);
     });
     
   });
@@ -213,6 +215,7 @@ app.put('/update-movie/:id', (req, res) => {
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("1 record modified");
+      console.log(result);
     });
     
   });
