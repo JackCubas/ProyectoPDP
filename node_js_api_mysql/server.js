@@ -227,6 +227,48 @@ app.put('/update-movie/:id', (req, res) => {
   });
 });
 
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+
+
+app.get("/pdfs", cors(), (req, res) => {
+
+   console.log("get all movie!");
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+          connection.query("SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM FROM pdfs", function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+});
+
+
 app.post('/create-pdf', (req, res) => {
 
     let con;
