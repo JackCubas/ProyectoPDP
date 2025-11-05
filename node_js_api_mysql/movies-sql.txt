@@ -1,10 +1,17 @@
 DROP TABLE IF EXISTS `Movies`;
+DROP TABLE IF EXISTS `Pdfs`;
 
 CREATE TABLE `Movies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `prodId` int(11) NOT NULL,
   `price` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Pdfs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pdfBase64` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
