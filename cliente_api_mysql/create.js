@@ -23,7 +23,8 @@ function sendData(){
         body: JSON.stringify(nuevoMovie)
     })
     .then(response => {
-            window.location.href = "table.html"
+            console.log('status:', response.status);
+            window.location.href = "table.html";
     })
     .catch(error => {
             console.error('Error:', error);

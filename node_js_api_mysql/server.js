@@ -145,6 +145,8 @@ app.post('/create-movie', (req, res) => {
       if (err) throw err;
       console.log("1 record inserted");
       console.log(result);
+
+      res.json(result);
     });
     
   });
@@ -179,6 +181,8 @@ app.delete('/delete-movie/:id', (req, res) => {
       if (err) throw err;
       console.log("1 record deleted");
       console.log(result);
+
+      res.json(result);
     });
     
   });
@@ -216,6 +220,8 @@ app.put('/update-movie/:id', (req, res) => {
       if (err) throw err;
       console.log("1 record modified");
       console.log(result);
+
+      res.json(result);
     });
     
   });
