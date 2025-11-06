@@ -6,18 +6,18 @@ const URLSERVERCreate = "http://localhost:3000/create-pdf";
 //}
 
 var pdfBytes;
-var pdfDoc;
+//var pdfDoc;
 
 async function checkUserHosting() {
-    alert("pdfDoc");
+    //alert("pdfDoc");
 
     pdfBytes = await fetch("document.pdf").then((res) => res.arrayBuffer());
-    pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+    //pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
 
     console.log(pdfBytes);
-    console.log(pdfDoc);
+    //console.log(pdfDoc);
 
-    alert(pdfDoc);
+    //alert(pdfDoc);
 }
 
 async function sendData(){
@@ -25,7 +25,7 @@ async function sendData(){
 
     const nuevoPDF = {
         name: "pdfPrueba",
-        pdfBase64: ""
+        pdfBase64: pdfBytes
         
     }
 
