@@ -252,7 +252,7 @@ app.get("/pdfs", cors(), (req, res) => {
           if (err) throw err;
           
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
-        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM FROM pdfs
+        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
           connection.query("SELECT id, name, pdfBase64 FROM pdfs", function (err, result, fields) {
               if (err) throw err;
               
