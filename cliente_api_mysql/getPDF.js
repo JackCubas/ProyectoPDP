@@ -20,7 +20,7 @@ function appendData(data){
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
             //downloadModifiedPDF(data[i].pdfBase64, i);
-            pdfBytes = data[i];
+            pdfBytes = data[i].docBlob;
         }
 }
 

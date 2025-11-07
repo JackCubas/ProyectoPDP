@@ -253,7 +253,7 @@ app.get("/pdfs", cors(), (req, res) => {
           
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
-          connection.query("SELECT id, name, pdfBase64 FROM pdfs", function (err, result, fields) {
+          connection.query("SELECT id, name, docBlob FROM pdfs", function (err, result, fields) {
               if (err) throw err;
               
               console.log(result);
@@ -287,10 +287,10 @@ app.post('/create-pdf', (req, res) => {
     if (err) throw err;
     console.log("Connected to pdf!");
 
-    let sql = "INSERT INTO pdfs (name, pdfBase64) VALUES ?";
+    let sql = "INSERT INTO pdfs (name, docBlob) VALUES ?";
 
     let values = [
-      [req.body.name, req.body.pdfBase64]
+      [req.body.name, req.body.docBlob]
     ]
 
     con.query(sql, [values], function (err, result) {

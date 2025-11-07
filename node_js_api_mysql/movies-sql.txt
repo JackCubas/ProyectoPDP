@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS `Pdfs`;
 CREATE TABLE `Pdfs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `pdfBase64` BLOB,
+  `docBlob` MEDIUMBLOB,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

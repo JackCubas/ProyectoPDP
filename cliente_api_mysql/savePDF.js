@@ -25,7 +25,7 @@ async function sendData(){
 
     const nuevoPDF = {
         name: "pdfPrueba2",
-        pdfBase64: pdfDoc
+        docBlob: pdfDoc
         
     }
 
