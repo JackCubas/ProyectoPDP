@@ -38,6 +38,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 
 //---------------------------------------------------
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(express.json({limit: '50mb'}));
+
+
 app.use((req, res, next) => {
     console.log('new request made:');
     //console.log('host: ', req.hostname);
