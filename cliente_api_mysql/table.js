@@ -23,14 +23,14 @@ function buildTable(data) {
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
     cell1.textContent = data[i].prodId;
+    
+    const butID = data[i].prodId;
 
     const button = document.createElement('button');
-    button.id = "testbutton" + i;
+    button.id = "testbutton" + butID;
     button.textContent = "Click Me";
     button.addEventListener('click', doSmth);
     cell2.appendChild(button);
-    
-    const butID = data[i].prodId;
 
     const buttonDetail = document.createElement('button');
     buttonDetail.id = "detailbutton" + butID;
@@ -53,7 +53,11 @@ function buildTable(data) {
 }
 
 function doSmth(event) {
-  alert(event.target.id);
+  var idDetailString = event.target.id;
+  const substringToRemove = "testbutton";
+  const idDetail = idDetailString.replace(substringToRemove, '');
+
+  alert("ID: " + idDetail);
 }
 
 function detail(event){
