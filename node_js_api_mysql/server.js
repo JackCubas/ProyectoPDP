@@ -3,12 +3,12 @@ const morgan = require('morgan');
 var cors = require('cors');
 const app = express();
 
-const DBPORT=3306
+/*const DBPORT=3306
 const DBHOST="127.0.0.1"
 const DBUSER="root"
 const DBPASS=""
 const DBNAME="prueba_movie"
-const APIPORT=3000
+const APIPORT=3000*/
 
 //-------------------------------------------------
 
@@ -17,6 +17,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const mysql = require('mysql');
+
+const DBPORT= process.env.DBPORT;
+const DBHOST= process.env.DBHOST;
+const DBUSER= process.env.DBUSER;
+const DBPASS= process.env.DBPASS;
+const DBNAME= process.env.DBNAME;
+const APIPORT= process.env.APIPORT;
 
 //---------------------------------------------------
 

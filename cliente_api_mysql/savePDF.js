@@ -7,6 +7,7 @@ const URLSERVERCreate = "http://localhost:3000/create-pdf";
 
 var pdfBytes;
 var pdfDoc;
+var blob;
 
 async function checkUserHosting() {
     //alert("pdfDoc");
@@ -18,14 +19,18 @@ async function checkUserHosting() {
     //console.log(pdfDoc);
 
     //alert(pdfDoc);
+
+    blob = new Blob(pdfDoc, {
+        type: "application/pdf",
+    });
 }
 
 async function sendData(){
 
 
     const nuevoPDF = {
-        name: "pdfPrueba2",
-        docBlob: pdfDoc
+        name: "pdfPrueba3",
+        docBlob: blob
         
     }
 
