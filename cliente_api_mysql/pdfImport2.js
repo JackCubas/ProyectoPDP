@@ -7,10 +7,13 @@ async function sendData(){
 
     //pdfBytes = await fetch("document.pdf").then((res) => res.arrayBuffer());
     //pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+    const inputValue = document.getElementById('myInputPDF').value;
+
+    alert(inputValue);
 
     const nuevoPDF = {
         name: "pdfPrueba2",
-        docBlob: pdfDoc
+        docBlob: inputValue
         
     }
 
