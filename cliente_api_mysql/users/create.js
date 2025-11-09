@@ -1,4 +1,4 @@
-const URLSERVERCreate = "http://localhost:3000/create-movie";
+const URLSERVERCreate = "http://localhost:3000/users";
 
 //create.html?prodId=34&price=34&quantity=34
 //?prodId=34&price=34&quantity=34
@@ -14,14 +14,16 @@ async function sendData(){
 
     returnToTable = true;
 
-    var prodIdHTML = document.getElementById("prodId").value;
-    var priceHTML = document.getElementById("price").value;
-    var quantityHTML = document.getElementById("quantity").value;
+    var nameUser = document.getElementById("nameUser").value;
+    var emailUser = document.getElementById("emailUser").value;
+    var passUser = document.getElementById("passUser").value;
+    var encryptKeyUser = document.getElementById("encryptKeyUser").value;
 
-    const nuevoMovie = {
-        prodId: prodIdHTML,
-        price: priceHTML,
-        quantity: quantityHTML
+    const nuevoUsers = {
+        nameUser: nameUser,
+        emailUser: emailUser,
+        passUser: passUser,
+        encryptKeyUser: encryptKeyUser
     }
 
     await fetch(URLSERVERCreate, {
@@ -30,20 +32,8 @@ async function sendData(){
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify(nuevoMovie)
+        body: JSON.stringify(nuevoUsers)
     })
-    /*.then(response => {
-            console.log('status:', response.status);
-            window.location.href = "table.html";
-    })
-    .catch(error => {
-            console.error('Error:', error);
-    })*/        
-    //.then(console.log('status:', response.status))
-    //.then(window.location.href = "table.html")
 
-    //alert('status:', response.status);
-
-    //window.location.href = "table.html";
-
+     window.location.href = "table.html";
 }

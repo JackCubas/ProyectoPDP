@@ -1,4 +1,4 @@
-const URLSERVERgetall = "http://localhost:3000/movies";
+const URLSERVERgetall = "http://localhost:3000/users";
 
 function checkUserHosting() {
     return fetch(URLSERVERgetall)
@@ -22,9 +22,9 @@ function buildTable(data) {
     const newRow = table.insertRow();
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
-    cell1.textContent = data[i].prodId;
+    cell1.textContent = data[i].nameUser;
     
-    const butID = data[i].prodId;
+    const butID = data[i].id;
 
     const button = document.createElement('button');
     button.id = "testbutton" + butID;

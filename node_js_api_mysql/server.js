@@ -58,7 +58,7 @@ app.get("/", (req, res) => {
 
 app.get("/movies", cors(), (req, res) => {
 
-   console.log("get all movie!");
+  console.log("get all movie!");
 
   let connection;
   var resultRows;
@@ -313,6 +313,76 @@ app.post('/create-pdf', (req, res) => {
     con.query(sql, [values], function (err, result) {
       if (err) throw err;
       console.log("1 record inserted into pdf");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+});
+
+//--------------------------
+//--------------------------
+//--------------------------
+app.get('/users', (req, res) => {
+  console.log("get all users!");
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+          connection.query("SELECT * FROM users", function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+});
+
+
+app.post('/users', (req, res) => {
+    let con;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "INSERT INTO users (nameUser, emailUser, passUser, encryptKeyUser) VALUES ?";
+
+    let values = [
+      [req.body.nameUser, req.body.emailUser, req.body.passUser, req.body.encryptKeyUser]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record inserted");
       console.log(result);
 
       res.json(result);
