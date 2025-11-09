@@ -358,6 +358,44 @@ app.get('/users', (req, res) => {
   }
 });
 
+app.get('/users/:id', (req, res) => {
+    console.log("get user!");
+
+  let con;
+  var resultRows;
+  const { id } = req.params;
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "SELECT *  from users WHERE id = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+        res.json(resultRows);
+    });
+    
+  });
+});
+
 
 app.post('/users', (req, res) => {
     let con;
