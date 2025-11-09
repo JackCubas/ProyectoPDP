@@ -28,6 +28,7 @@ function sendData(){
         .then((response) => {
             alert(response); 
             return response.json().then((data) => {
+                alert(data);
                 return checkData(data);
         }).catch((err) => {
             console.log(err);
