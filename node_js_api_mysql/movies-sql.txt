@@ -16,6 +16,21 @@ INSERT INTO `Movies` (prodId, price, quantity) VALUES
 	(104,70,240);
 
 
+DROP TABLE IF EXISTS `Users`;
+
+CREATE TABLE `Users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nameUser` varchar(50) NOT NULL,
+  `emailUser` varchar(50) NOT NULL,
+  `passUser` varchar(50) NOT NULL,
+  `encryptKeyUser` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `Users` (nameUser, emailUser, passUser, encryptKeyUser) VALUES
+	('Steve','steve@gmail.com','stevePass','pruebaKey');
+
+
 DROP TABLE IF EXISTS `Pdfs`;
 
 CREATE TABLE `Pdfs` (

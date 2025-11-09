@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <title>Conectar API</title>
+</head>
+<body>
+  <p>MODIFY</p>
+
+    <h1>
+        This is the modify page.
+    </h1>
+    <div class="create-blog content">
+        <form id="form" onsubmit="sendData()">
+            <!-- action="/moviesCreate" method="POST"  -->
+            <lable for="nameUser">Name:</lable>
+            <input disabled type="number" id="nameUser" name="nameUser" required>
+            <lable for="emailUser">Email:</lable>
+            <input type="number" id="emailUser" name="emailUser" required>
+            <lable for="passUser">Pass:</lable>
+            <input type="number" id="passUser" name="passUser" required>
+            <lable for="keyUser">Key:</lable>
+            <input type="number" id="keyUser" name="keyUser" required>
+            <button>Submit</button>
+        </form>
+         <button onclick="location.href='table.html'" type="button">Cancel</button>
+    </div>
+
+  <script src="modify.js"></script>
+
+</body>
+</html>
