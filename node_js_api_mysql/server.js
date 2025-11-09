@@ -429,6 +429,47 @@ app.post('/users', (req, res) => {
   });
 });
 
+app.put('/users/:id', (req, res) => {
+
+  console.log("update user!");
+
+    const { id } = req.params;
+    const { nameUser, emailUser, passUser, encryptKeyUser} = req.body;
+
+    console.log(id + " - " + nameUser + " - " + emailUser);
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = `
+      UPDATE users 
+      SET nameUser = "${nameUser}", 
+      emailUser = "${emailUser}",
+      passUser = "${passUser}",
+      encryptKeyUser = "${encryptKeyUser}" 
+      WHERE id = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("1 record modified");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+    
+});
+
 
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
