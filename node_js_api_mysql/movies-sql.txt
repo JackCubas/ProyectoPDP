@@ -28,7 +28,9 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `Users` (nameUser, emailUser, passUser, encryptKeyUser) VALUES
-	('Steve','steve@gmail.com','stevePass','pruebaKey');
+	('Steve','steve@gmail.com','stevePass','pruebaKey'),
+  ('David','david1@gmail.com','david1Pass','davidKey'),
+  ('Luis','luis@gmail.com','luisPass','luisKey');
 
 
 DROP TABLE IF EXISTS `Pdfs`;
