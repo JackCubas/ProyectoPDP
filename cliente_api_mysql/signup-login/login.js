@@ -35,7 +35,6 @@ function sendData(){
         }) 
     });
 
-     window.location.href = "../main.html";
 }
 
 function checkData(data){
@@ -47,4 +46,6 @@ function checkData(data){
         alert("false");
         console.log("Usuario no existe");
     }
+
+    window.location.href = "../main.html";
 }

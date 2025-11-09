@@ -35,5 +35,5 @@ async function sendData(){
         body: JSON.stringify(nuevoUsers)
     })
 
-     window.location.href = "table.html";
+    window.location.href = "table.html";
 }
