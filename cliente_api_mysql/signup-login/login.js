@@ -42,10 +42,14 @@ function checkData(data){
     if(existe == true){
         alert("true");
         console.log("Usuario existe");
+        localStorage.setItem("usuarioExistente", "true");
     }else{
         alert("false");
         console.log("Usuario no existe");
+        localStorage.setItem("usuarioExistente", "false");
     }
 
+    console.log(localStorage.getItem("usuarioExistente"))
+    //localStorage.clear();
     window.location.href = "../main.html";
 }
