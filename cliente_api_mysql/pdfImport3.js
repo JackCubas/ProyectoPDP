@@ -11,9 +11,7 @@ document.getElementById('filetoRead').addEventListener(
       // data:application/pdf;base64,btoa(unescape(encodeURIComponent(evt.target.result)))
       reader.onload = function (evt) {
         // console.log(evt.target.result);
-
-        datosPDF = 'data:application/pdf;base64,'+btoa(unescape(encodeURIComponent(evt.target.result)))
-
+        datosPDF = 'data:application/pdf;base64,'+btoa(unescape(encodeURIComponent(evt.target.result)));
         console.log('pdf base64', datosPDF)
         // console.log('file-content', btoa(unescape(encodeURIComponent(evt.target.result))))
         method1Workind(evt);
@@ -161,14 +159,19 @@ const decodeFromBase64 = (base64) => {
 async function sendData(){
     const URLSERVERCreate = "http://localhost:3000/create-pdf";
 
-    var pdfBlob = new Blob([datosPDF], {
+    /*var pdfBlob = new Blob([datosPDF], {
         type: "application/pdf"})
 
     const nuevoPDF = {
         name: "pdfPrueba4",
         docBlob: pdfBlob
         
-    }
+    }*/
+
+    const nuevoPDF = {
+        name: "pdfPrueba4",
+        docBlob: datosPDF
+    }        
 
     await fetch(URLSERVERCreate, {
         method: "POST",

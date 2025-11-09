@@ -20,15 +20,26 @@ function appendData(data){
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
             //downloadModifiedPDF(data[i].pdfBase64, i);
-            pdfBytes = data[i].docBlob;
+            //pdfBytes = new Uint8Array(data[i].docBlob);
+            pdfBytes = String(data[i].docBlob);
         }
 }
 
-function sendData(){
-    downloadModifiedPDF(pdfBytes, 1)
+async function sendData(){
+    //downloadModifiedPDF(pdfBytes, 1)
+
+    const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+
+    // Serialize the PDFDocument to bytes (a Uint8Array)
+    const pdfBytesDownload = await pdfDoc.save()
+
+	// Trigger the browser to download the PDF document
+    download(pdfBytesDownload, "pdf-lib_modification_example.pdf", "application/pdf");
 }
 
-function downloadModifiedPDF(modifiedPDFBytes, num) {
+
+
+/*function downloadModifiedPDF(modifiedPDFBytes, num) {
     const blob = new Blob([modifiedPDFBytes], {
         type: "application/pdf",
     });
@@ -44,6 +55,7 @@ function downloadModifiedPDF(modifiedPDFBytes, num) {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-}
+}*/
 
 checkUserHosting();
+

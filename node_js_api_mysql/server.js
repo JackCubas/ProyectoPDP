@@ -271,9 +271,9 @@ app.get("/pdfs", cors(), (req, res) => {
               
               console.log(result);
 
-              result.docBlob = new Blob([result.docBlob], {
-                  type: "application/pdf",
-              });
+              //result.docBlob = new Blob([result.docBlob], {
+              //    type: "application/pdf",
+              //});
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
               console.log(resultRows);
