@@ -505,6 +505,57 @@ app.delete('/users/:id', (req, res) => {
   });
 });
 
+app.get('/users/login', (req, res) => {
+  console.log("get user login!");
+
+  let con;
+  var resultRows;
+  
+  /*let values = [
+      [req.body.emailUser, req.body.passUser]
+    ]*/
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = `
+      SELECT * users WHERE 
+      emailUser = "${req.body.emailUser}", 
+      AND passUser = "${req.body.passUser}"
+    `;
+
+    console.log(sql);
+
+    con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+
+        if(resultRows.length > 0){
+          console.log("user exists!");
+          res.json({"user": true});
+        }else{
+          console.log("user does not exists!");
+          res.json({"user": false});
+        }
+        
+    });
+    
+  });
+});
+
 
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
