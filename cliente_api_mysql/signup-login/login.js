@@ -1,8 +1,10 @@
 const URLSERVERlogin = "http://localhost:3000/users/login";
 
-/*if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
+var datosURL = window.location.href;
+
+if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
     window.location.href = "../main.html";
-}*/
+}
 
 function sendData(){
 
@@ -23,7 +25,8 @@ function sendData(){
         },
         body: JSON.stringify(loginUsers)
         })
-        .then((response) => { 
+        .then((response) => {
+            alert(response); 
             return response.json().then((data) => {
                 return checkData(data);
         }).catch((err) => {
@@ -37,8 +40,10 @@ function sendData(){
 function checkData(data){
     var existe = data[0].user;
     if(existe == true){
-         console.log("Usuario existe");
+        alert("true");
+        console.log("Usuario existe");
     }else{
+        alert("false");
         console.log("Usuario no existe");
     }
 }

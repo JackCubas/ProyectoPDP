@@ -505,7 +505,7 @@ app.delete('/users/:id', (req, res) => {
   });
 });
 
-app.get('/users/login', (req, res) => {
+app.post('/users/login', (req, res) => {
   console.log("get user login!");
 
   let con;
@@ -528,8 +528,8 @@ app.get('/users/login', (req, res) => {
     console.log("Connected!");
 
     let sql = `
-      SELECT * users WHERE 
-      emailUser = "${req.body.emailUser}", 
+      SELECT * FROM users WHERE 
+      emailUser = "${req.body.emailUser}" 
       AND passUser = "${req.body.passUser}"
     `;
 
