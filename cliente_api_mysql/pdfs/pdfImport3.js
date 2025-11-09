@@ -159,19 +159,21 @@ const decodeFromBase64 = (base64) => {
 async function sendData(){
     const URLSERVERCreate = "http://localhost:3000/create-pdf";
 
-    /*var pdfBlob = new Blob([datosPDF], {
+    var projectName = document.getElementById("project_name").value;
+
+    var pdfBlob = new Blob([datosPDF], {
         type: "application/pdf"})
 
     const nuevoPDF = {
-        name: "pdfPrueba4",
+        name: projectName,
         docBlob: pdfBlob
         
-    }*/
+    }
 
-    const nuevoPDF = {
-        name: "pdfPrueba4",
+    /*const nuevoPDF = {
+        name: projectName,
         docBlob: datosPDF
-    }        
+    }*/        
 
     await fetch(URLSERVERCreate, {
         method: "POST",
