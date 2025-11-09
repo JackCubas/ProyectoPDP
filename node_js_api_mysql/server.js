@@ -470,6 +470,41 @@ app.put('/users/:id', (req, res) => {
     
 });
 
+app.delete('/users/:id', (req, res) => {
+    console.log("delete user!");
+
+    let con;
+    const { id } = req.params;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "DELETE FROM users WHERE id = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record deleted");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+});
+
 
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
