@@ -23,14 +23,15 @@ CREATE TABLE `Users` (
   `nameUser` varchar(50) NOT NULL,
   `emailUser` varchar(50) NOT NULL,
   `passUser` varchar(50) NOT NULL,
+  `rolUser` varchar(50) NOT NULL,
   `encryptKeyUser` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `Users` (nameUser, emailUser, passUser, encryptKeyUser) VALUES
-	('Steve','steve@gmail.com','stevePass','pruebaKey'),
-  ('David','david1@gmail.com','david1Pass','davidKey'),
-  ('Luis','luis@gmail.com','luisPass','luisKey');
+INSERT INTO `Users` (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES
+	('Steve','steve@gmail.com','stevePass', 'ADMIN','pruebaKey'),
+  ('David','david1@gmail.com','david1Pass','CLIENT','davidKey'),
+  ('Luis','luis@gmail.com','luisPass','CLIENT','luisKey');
 
 
 DROP TABLE IF EXISTS `Pdfs`;

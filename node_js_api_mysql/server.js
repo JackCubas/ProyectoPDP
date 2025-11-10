@@ -543,12 +543,19 @@ app.post('/users/login', (req, res) => {
         resultRows = Object.values(JSON.parse(JSON.stringify(result)));
         console.log(resultRows);
 
-        if(resultRows.length > 0){
-          console.log("user exists!");
-          res.json({"user": true});
-        }else{
+        if(resultRows.length == 0){
           console.log("user does not exists!");
           res.json({"user": false});
+        }
+
+        if(resultRows.length > 0 && resultRows[0].rolUser == "ADMIN"){
+          console.log("user exists and is ADMIN!");
+          res.json({"user": "ADMIN"});
+        }
+
+        if(resultRows.length > 0 && resultRows[0].rolUser == "CLIENT"){
+          console.log("user exists and is CLIENT!");
+          res.json({"user": "CLIENT"});
         }
         
     });
