@@ -412,10 +412,10 @@ app.post('/users', (req, res) => {
     if (err) throw err;
     console.log("Connected!");
 
-    let sql = "INSERT INTO users (nameUser, emailUser, passUser, encryptKeyUser) VALUES ?";
+    let sql = "INSERT INTO users (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES ?";
 
     let values = [
-      [req.body.nameUser, req.body.emailUser, req.body.passUser, req.body.encryptKeyUser]
+      [req.body.nameUser, req.body.emailUser, req.body.passUser, req.body.rolUser, req.body.encryptKeyUser]
     ]
 
     con.query(sql, [values], function (err, result) {
@@ -434,7 +434,7 @@ app.put('/users/:id', (req, res) => {
   console.log("update user!");
 
     const { id } = req.params;
-    const { nameUser, emailUser, passUser, encryptKeyUser} = req.body;
+    const { nameUser, emailUser, passUser, rolUser, encryptKeyUser} = req.body;
 
     console.log(id + " - " + nameUser + " - " + emailUser);
 
@@ -455,6 +455,7 @@ app.put('/users/:id', (req, res) => {
       SET nameUser = "${nameUser}", 
       emailUser = "${emailUser}",
       passUser = "${passUser}",
+      rolUser = "${rolUser}",
       encryptKeyUser = "${encryptKeyUser}" 
       WHERE id = "${id}"
     `;
