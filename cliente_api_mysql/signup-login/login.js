@@ -3,7 +3,7 @@ const URLSERVERlogin = "http://localhost:3000/users/login";
 var datosURL = window.location.href;
 
 if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
-    window.location.href = "../main.html";
+    window.location.href = "../index.html";
 }
 
 function sendData(){
@@ -51,5 +51,5 @@ function checkData(data){
 
     console.log(localStorage.getItem("usuarioExistente"))
     //localStorage.clear();
-    window.location.href = "../main.html";
+    window.location.href = "../index.html";
 }
