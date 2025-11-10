@@ -39,14 +39,20 @@ function sendData(){
 
 function checkData(data){
     var existe = data[0].user;
-    if(existe == true){
-        alert("true");
-        console.log("Usuario existe");
-        localStorage.setItem("usuarioExistente", "true");
-    }else{
+    if(existe == false){
         alert("false");
         console.log("Usuario no existe");
         localStorage.setItem("usuarioExistente", "false");
+    }
+    if(existe == "ADMIN"){
+        alert("ADMIN");
+        console.log("Usuario ADMIN");
+        localStorage.setItem("usuarioExistente", "ADMIN");
+    }
+    if(existe == "CLIENT"){
+        alert("CLIENT");
+        console.log("Usuario CLIENT");
+        localStorage.setItem("usuarioExistente", "CLIENT");
     }
 
     console.log(localStorage.getItem("usuarioExistente"))
