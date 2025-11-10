@@ -26,6 +26,7 @@ function appendData(data){
         document.getElementById("nameUser").value = data[0].nameUser;
         document.getElementById("emailUser").value = data[0].emailUser;
         document.getElementById("passUser").value = data[0].passUser;
+        document.getElementById("rolUser").value = data[0].rolUser;
         document.getElementById("encryptKeyUser").value = data[0].encryptKeyUser;
     }
         
