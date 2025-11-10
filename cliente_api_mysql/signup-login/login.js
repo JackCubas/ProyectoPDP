@@ -39,10 +39,10 @@ function sendData(){
 
 function checkData(data){
     var existe = data[0].user;
-    if(existe == false){
-        alert("false");
+    if(existe == "FALSE"){
+        alert("FALSE");
         console.log("Usuario no existe");
-        localStorage.setItem("usuarioExistente", "false");
+        localStorage.setItem("usuarioExistente", "FALSE");
     }
     if(existe == "ADMIN"){
         alert("ADMIN");
