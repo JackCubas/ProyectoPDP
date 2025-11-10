@@ -38,6 +38,10 @@ function appendData(data){
             f.textContent="Pass: " + data[i].passUser                      
             con.appendChild(f);
 
+            var h=document.createElement("div")
+            h.textContent="Rol: " + data[i].rolUser                      
+            con.appendChild(h);
+
             var g=document.createElement("div")
             g.textContent="Key: " + data[i].encryptKeyUser                      
             con.appendChild(g);

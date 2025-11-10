@@ -40,12 +40,14 @@ async function sendData(){
     nameUser = document.getElementById("nameUser").value;
     emailUser = document.getElementById("emailUser").value;
     passUser = document.getElementById("passUser").value;
+    rolUser = document.getElementById("rolUser").value;
     encryptKeyUser = document.getElementById("encryptKeyUser").value;
 
     const modUser = {
         nameUser: nameUser,
         emailUser: emailUser,
         passUser: passUser,
+        rolUser: rolUser,
         encryptKeyUser: encryptKeyUser 
     }
 
