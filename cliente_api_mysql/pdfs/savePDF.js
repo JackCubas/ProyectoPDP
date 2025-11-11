@@ -29,6 +29,7 @@ async function sendData(){
 
 
     const nuevoPDF = {
+        userId: 2,
         name: "pdfPrueba3",
         docBlob: blob
         

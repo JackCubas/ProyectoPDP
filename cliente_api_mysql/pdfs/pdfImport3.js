@@ -165,6 +165,7 @@ async function sendData(){
         type: "application/pdf"})
 
     const nuevoPDF = {
+        userId: 2,
         name: projectName,
         docBlob: pdfBlob
         

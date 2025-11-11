@@ -41,6 +41,7 @@ DROP TABLE IF EXISTS `Pdfs`;
 
 CREATE TABLE `Pdfs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `docBlob` LONGBLOB,
   PRIMARY KEY (`id`)

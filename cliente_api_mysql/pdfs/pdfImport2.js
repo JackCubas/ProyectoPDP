@@ -13,6 +13,7 @@ async function sendData(){
     alert(inputValue);
 
     const nuevoPDF = {
+        userId: 2,
         name: projectName,
         docBlob: inputValue
         
