@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS `prueba_movie`;
+CREATE DATABASE IF NOT EXISTS `prueba_movie`;
+
 DROP TABLE IF EXISTS `Movies`;
 
 CREATE TABLE `Movies` (
