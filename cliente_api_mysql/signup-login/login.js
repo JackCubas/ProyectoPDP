@@ -6,6 +6,8 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
     window.location.href = "../index.html";
 }
 
+console.log("Entrando en el login");
+
 function sendData(){
 
 
@@ -26,9 +28,11 @@ function sendData(){
         body: JSON.stringify(loginUsers)
         })
         .then((response) => {
-            alert(response); 
+            console.log(response);
+            alert("response"); 
             return response.json().then((data) => {
-                alert(data);
+                console.log(data);
+                alert("data");
                 return checkData(data);
         }).catch((err) => {
             console.log(err);
