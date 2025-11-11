@@ -42,25 +42,25 @@ function sendData(){
 }
 
 function checkData(data){
-    var userDatos = data[0].user;
+    var userDatos = data;
     if(userDatos == "FALSE"){
         alert("FALSE");
         console.log("Usuario no existe");
-        localStorage.setItem("usuarioExistente", "FALSE");
+        localStorage.setItem("usuario", "FALSE");
     }else{
         if(userDatos.rolUser == "ADMIN"){
             alert("ADMIN");
             console.log("Usuario ADMIN");
-            localStorage.setItem("usuarioExistente", userDatos);
+            localStorage.setItem("usuario", userDatos);
         }
         if(userDatos.rolUser == "CLIENT"){
             alert("CLIENT");
             console.log("Usuario CLIENT");
-            localStorage.setItem("usuarioExistente", userDatos);
+            localStorage.setItem("usuario", userDatos);
         }
     }
 
-    console.log(localStorage.getItem("usuarioExistente"))
+    console.log(localStorage.getItem("usuario"))
     //localStorage.clear();
     window.location.href = "../index.html";
 }
