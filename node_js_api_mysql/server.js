@@ -565,6 +565,49 @@ app.post('/users/login', (req, res) => {
 });
 
 
+function userExistsByEmail(email){
+  console.log("checking if user exists!");
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "SELECT *  from users WHERE email = ?";
+
+    let values = [
+      [email]
+    ]
+
+    con.query(sql, [values], function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+
+        if(resultRows.length == 0){
+          console.log("user does not exists!");
+          return false;
+        }else{
+          console.log("user does exists!");
+          return true;
+        }
+        
+    });
+    
+  });
+}
+
+
 app.listen(APIPORT, () => {
   console.log(`Example app listening at http://localhost:${APIPORT}`);
 });
