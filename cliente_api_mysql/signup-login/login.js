@@ -38,21 +38,22 @@ function sendData(){
 }
 
 function checkData(data){
-    var existe = data[0].user;
-    if(existe == "FALSE"){
+    var userDatos = data[0].user;
+    if(userDatos == "FALSE"){
         alert("FALSE");
         console.log("Usuario no existe");
         localStorage.setItem("usuarioExistente", "FALSE");
-    }
-    if(existe == "ADMIN"){
-        alert("ADMIN");
-        console.log("Usuario ADMIN");
-        localStorage.setItem("usuarioExistente", "ADMIN");
-    }
-    if(existe == "CLIENT"){
-        alert("CLIENT");
-        console.log("Usuario CLIENT");
-        localStorage.setItem("usuarioExistente", "CLIENT");
+    }else{
+        if(userDatos.rolUser == "ADMIN"){
+            alert("ADMIN");
+            console.log("Usuario ADMIN");
+            localStorage.setItem("usuarioExistente", userDatos);
+        }
+        if(userDatos.rolUser == "CLIENT"){
+            alert("CLIENT");
+            console.log("Usuario CLIENT");
+            localStorage.setItem("usuarioExistente", userDatos);
+        }
     }
 
     console.log(localStorage.getItem("usuarioExistente"))
