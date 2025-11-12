@@ -1,26 +1,25 @@
-const URLSERVERCreate = "http://localhost:3000/create-pdf";
-
-var pdfBytes;
-var pdfDoc;
+var datosPDF;
 
 async function sendData(){
+    const URLSERVERCreate = "http://localhost:3000/create-pdf";
 
-    //pdfBytes = await fetch("document.pdf").then((res) => res.arrayBuffer());
-    //pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-    const inputValue = document.getElementById('myInputPDF').value;
     var projectName = document.getElementById("project_name").value;
+    datosPDF = document.getElementById("filetoRead").files[0];
 
-    //pdfBlob = document.getElementById("filetoRead").files[0];
-
-
-    alert(inputValue);
+    var pdfBlob = new Blob([datosPDF], {
+        type: "application/pdf"})
 
     const nuevoPDF = {
         userId: 2,
         name: projectName,
-        docBlob: inputValue
+        docBlob: pdfBlob
         
     }
+
+    /*const nuevoPDF = {
+        name: projectName,
+        docBlob: datosPDF
+    }*/        
 
     await fetch(URLSERVERCreate, {
         method: "POST",
