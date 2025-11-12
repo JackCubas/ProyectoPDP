@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS `prueba_movie`;
-CREATE DATABASE IF NOT EXISTS `prueba_movie`;
+DROP DATABASE IF EXISTS `firma_app`;
+CREATE DATABASE IF NOT EXISTS `firma_app`;
 
 DROP TABLE IF EXISTS `Movies`;
 
@@ -43,7 +43,7 @@ CREATE TABLE `Pdfs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `docBlob` LONGBLOB,
+  `urlCarpeta` varchar(100),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
