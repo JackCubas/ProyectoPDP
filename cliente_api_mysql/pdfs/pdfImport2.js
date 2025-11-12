@@ -10,6 +10,9 @@ async function sendData(){
     const inputValue = document.getElementById('myInputPDF').value;
     var projectName = document.getElementById("project_name").value;
 
+    pdfBlob = document.getElementById("filetoRead").files[0];
+
+
     alert(inputValue);
 
     const nuevoPDF = {
