@@ -559,6 +559,11 @@ app.post('/users/login', (req, res) => {
           console.log("user exists and is CLIENT!");
           res.json({user: resultRows});
         }
+
+        if(resultRows.length > 0 && resultRows[0].rolUser == "FIRMA"){
+          console.log("user exists and is FIRMA!");
+          res.json({user: resultRows});
+        }
         
     });
     

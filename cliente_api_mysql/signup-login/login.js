@@ -58,6 +58,11 @@ function checkData(data){
             console.log("Usuario CLIENT");
             localStorage.setItem("usuario", userDatos);
         }
+        if(userDatos.rolUser == "FIRMA"){
+            alert("FIRMA");
+            console.log("Usuario FIRMA");
+            localStorage.setItem("usuario", userDatos);
+        }
     }
 
     console.log(localStorage.getItem("usuario"))

@@ -34,7 +34,8 @@ CREATE TABLE `Users` (
 INSERT INTO `Users` (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES
 	('Steve','steve@gmail.com','stevePass', 'ADMIN','pruebaKey'),
   ('David','david1@gmail.com','david1Pass','CLIENT','davidKey'),
-  ('Luis','luis@gmail.com','luisPass','CLIENT','luisKey');
+  ('Luis','luis@gmail.com','luisPass','CLIENT','luisKey'),
+  ('Robert','robert@gmail.com','robertPass','FIRMA','robertKey');
 
 
 DROP TABLE IF EXISTS `Pdfs`;
