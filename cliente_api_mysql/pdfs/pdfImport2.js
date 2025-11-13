@@ -7,18 +7,18 @@ async function sendData(){
 
     //pdfBytes = await fetch("document.pdf").then((res) => res.arrayBuffer());
     //pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-    const inputValue = document.getElementById('myInputPDF').value;
+
+    //const inputValue = document.getElementById('myInputPDF').value;
     var projectName = document.getElementById("project_name").value;
-
-    //pdfBlob = document.getElementById("filetoRead").files[0];
-
-
-    alert(inputValue);
+    const inputValue = document.getElementById("myInputPDF").files[0];
+    
+    console.log(inputValue);
+    alert("prueba");
 
     const nuevoPDF = {
         userId: 2,
         name: projectName,
-        docBlob: inputValue
+        docDatos: inputValue
         
     }
 

@@ -164,12 +164,16 @@ async function sendData(){
     var pdfBlob = new Blob([datosPDF], {
         type: "application/pdf"})
 
-    //pdfBlob = document.getElementById("filetoRead").files[0];
+    //var pdfBlob = document.getElementById("filetoRead").files[0];
+
+    console.log("prueba")
+    console.log(pdfBlob);
+    alert("prueba");
 
     const nuevoPDF = {
         userId: 2,
         name: projectName,
-        docBlob: pdfBlob
+        docDatos: pdfBlob
         
     }
 

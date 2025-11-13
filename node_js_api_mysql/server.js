@@ -241,86 +241,6 @@ app.put('/update-movie/:id', (req, res) => {
   });
 });
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-
-
-app.get("/pdfs", cors(), (req, res) => {
-
-   console.log("get all pdfs!");
-
-  let connection;
-  var resultRows;
-
-  try {
-      connection = mysql.createConnection({
-          host: DBHOST,
-          user: DBUSER,
-          password: DBPASS,
-          port     :DBPORT,
-          database: DBNAME
-      });
-
-      connection.connect(function(err) {
-          if (err) throw err;
-          
-        //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
-        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
-          connection.query("SELECT id, userId, name, urlCarpeta FROM pdfs", function (err, result, fields) {
-              if (err) throw err;
-              
-              console.log(result);
-
-              //result.docBlob = new Blob([result.docBlob], {
-              //    type: "application/pdf",
-              //});
-
-              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-              console.log(resultRows);
-              res.json(resultRows);
-          });
-      });
-
-  } catch (error) {
-      console.log("Error al conectar con la base de datos");
-  }
-
-});
-
-
-app.post('/create-pdf', (req, res) => {
-
-    let con;
-
-    con = mysql.createConnection({
-          host: DBHOST,
-          user: DBUSER,
-          password: DBPASS,
-          port     :DBPORT,
-          database: DBNAME
-    });
-
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected to pdf!");
-
-    let sql = "INSERT INTO pdfs (userId, name, urlCarpeta) VALUES ?";
-
-    let values = [
-      [req.body.userId, req.body.name, req.body.urlCarpeta]
-    ]
-
-    con.query(sql, [values], function (err, result) {
-      if (err) throw err;
-      console.log("1 record inserted into pdf");
-      console.log(result);
-
-      res.json(result);
-    });
-    
-  });
-});
 
 //--------------------------
 //--------------------------
@@ -651,6 +571,152 @@ function userExistsByEmail(email){
     
   });
 }
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+
+
+app.get("/pdfs", cors(), (req, res) => {
+
+   console.log("get all pdfs!");
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+        //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
+        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
+          connection.query("SELECT id, userId, name, urlCarpeta FROM pdfs", function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+
+              //result.docBlob = new Blob([result.docBlob], {
+              //    type: "application/pdf",
+              //});
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              var carpetUrl = resultRows[0].urlCarpeta;
+
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+});
+
+app.get("/pdfs/:userId", cors(), (req, res) => {
+
+   console.log("get all pdfs for user!");
+
+  let connection;
+  var resultRows;
+  const { userId } = req.params;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+        //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
+        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
+
+          var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE userId = ?";
+
+          let values = [
+            [userId]
+          ]
+
+          connection.query(sql,[values], function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+
+              //result.docBlob = new Blob([result.docBlob], {
+              //    type: "application/pdf",
+              //});
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              var carpetUrl = resultRows[0].urlCarpeta;
+
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+});
+
+
+app.post('/create-pdf', (req, res) => {
+
+    let con;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to pdf!");
+    console.log(req.body);
+
+    let sql = "INSERT INTO pdfs (userId, name, urlCarpeta) VALUES ?";
+
+    var urlCarpeta = CARPETAPDF + "/" + req.body.name
+    var datosPDF = req.body.docDatos;
+
+    let values = [
+      [req.body.userId, req.body.name, urlCarpeta]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record inserted into pdf");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+});
+
+
+//-----------------------
+//-----------------------
+//-----------------------
 
 
 app.listen(APIPORT, () => {

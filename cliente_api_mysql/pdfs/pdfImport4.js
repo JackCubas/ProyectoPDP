@@ -4,22 +4,23 @@ async function sendData(){
     const URLSERVERCreate = "http://localhost:3000/create-pdf";
 
     var projectName = document.getElementById("project_name").value;
-    datosPDF = document.getElementById("filetoRead").files[0];
+    /*datosPDF = document.getElementById("filetoRead").files[0];
 
     var pdfBlob = new Blob([datosPDF], {
-        type: "application/pdf"})
+        type: "application/pdf"})*/
+
+    var pdfBlob = document.getElementById("filetoRead").files[0];
+
+    console.log("prueba")
+    console.log(pdfBlob);
+    alert("prueba");
 
     const nuevoPDF = {
         userId: 2,
         name: projectName,
-        docBlob: pdfBlob
+        docDatos: pdfBlob
         
-    }
-
-    /*const nuevoPDF = {
-        name: projectName,
-        docBlob: datosPDF
-    }*/        
+    }     
 
     await fetch(URLSERVERCreate, {
         method: "POST",
