@@ -691,14 +691,22 @@ app.post('/create-pdf', (req, res) => {
   con.connect(function(err) {
     if (err) throw err;
     console.log("Connected to pdf!");
-    console.log(req.body);
+    //console.log(req.body);
 
     let sql = "INSERT INTO pdfs (userId, name, urlCarpeta) VALUES ?";
 
-    var urlCarpeta = CARPETAPDF + "/" + req.body.name
+    var urlCarpeta = CARPETAPDF + "/" + req.body.name + ".pdf";
     var datosPDF = req.body.docDatos;
 
+    console.log(urlCarpeta);
     console.log(datosPDF);
+
+    if(datosPDF){
+      var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
+      require("fs").writeFile(urlCarpeta, base64Data, 'base64', function(err) {
+        console.log(err);
+      });
+    }
 
     let values = [
       [req.body.userId, req.body.name, urlCarpeta]
