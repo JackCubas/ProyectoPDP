@@ -10,20 +10,20 @@ async function sendData(){
     console.log(pdfDatosBrutos);
     alert("prueba");
 
-    let reader = new FileReader();
-    reader.readAsDataURL(pdfDatosBrutos);
-    reader.onload = () => {
-        datosPDF = JSON.stringify({ dataURL: reader.result });
-    }
+    //let reader = new FileReader();
+    //reader.readAsDataURL(pdfDatosBrutos);
+    //reader.onload = () => {
+    //    datosPDF = JSON.stringify({ dataURL: reader.result });
+    //}
     
-    console.log("prueba3")
-    console.log(datosPDF);
-    alert("prueba3");
+    //console.log("prueba3")
+    //console.log(datosPDF);
+    //alert("prueba3");
 
     const nuevoPDF = {
         userId: 2,
         name: projectName,
-        docDatos: datosPDF
+        docDatos: pdfDatosBrutos
         
     }     
 

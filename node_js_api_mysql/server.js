@@ -698,6 +698,8 @@ app.post('/create-pdf', (req, res) => {
     var urlCarpeta = CARPETAPDF + "/" + req.body.name
     var datosPDF = req.body.docDatos;
 
+    console.log(datosPDF);
+
     let values = [
       [req.body.userId, req.body.name, urlCarpeta]
     ]
