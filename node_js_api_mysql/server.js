@@ -704,12 +704,12 @@ app.post('/create-pdf', (req, res) => {
     if(datosPDF){
       console.log(datosPDF);
       console.log("procesando");
-      var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
+      /*var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
       //require("fs").writeFile(urlCarpeta, base64Data, 'base64',
       require("fs").writeFileSync(urlCarpeta, base64Data, 'base64', function(err) {
         console.log("error");
         console.log(err);
-      });
+      });*/
     }
 
     let values = [
