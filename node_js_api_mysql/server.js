@@ -675,6 +675,59 @@ app.get("/pdfs/:userId", cors(), (req, res) => {
 
 });
 
+app.get("/pdfs/:id", cors(), (req, res) => {
+
+   console.log("get pdf by id!");
+
+  let connection;
+  var resultRows;
+  const { id } = req.params;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+        //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
+        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
+
+          var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+
+          let values = [
+            [id]
+          ]
+
+          connection.query(sql,[values], function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+
+              //result.docBlob = new Blob([result.docBlob], {
+              //    type: "application/pdf",
+              //});
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              var carpetUrl = resultRows[0].urlCarpeta;
+
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+});
+
 
 app.post('/create-pdf', (req, res) => {
 
