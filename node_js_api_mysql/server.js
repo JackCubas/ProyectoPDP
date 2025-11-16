@@ -44,6 +44,46 @@ app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(express.json({limit: '50mb'}));
 
+//----------------------------------
+const PDFParser = require('pdf-parse');
+const fs = require('fs');
+const uploadDirectory = CARPETAPDF;
+//const multer = require('multer');
+const path = require('path');
+const mammoth = require('mammoth');
+
+var multer = require('multer');
+//var upload = multer({dest: uploadDirectory});
+
+const fileUpload = require('express-fileupload');
+//-------------------------------------------
+
+/*const storage = multer.diskStorage({
+       destination: (req, file, cb) => {
+          cb(null, CARPETAPDF + '/');
+       },
+       filename: (req, file, cb) => {
+          cb(null, file.originalname);
+       }
+});
+const upload = multer({ storage });*/
+
+
+
+// Function to process the file data (perform your file processing logic here)
+/*function processFileData(fileData) {
+  fs.writeFile('output.txt', fileData, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+      });
+}*/
+
+
+//------------------------------------
+
 
 app.use((req, res, next) => {
     console.log('new request made:');
@@ -757,12 +797,12 @@ app.post('/create-pdf', (req, res) => {
     if(datosPDF){
       console.log(datosPDF);
       console.log("procesando");
-      /*var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
+      var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
       //require("fs").writeFile(urlCarpeta, base64Data, 'base64',
       require("fs").writeFileSync(urlCarpeta, base64Data, 'base64', function(err) {
         console.log("error");
         console.log(err);
-      });*/
+      });
     }
 
     let values = [
@@ -780,7 +820,118 @@ app.post('/create-pdf', (req, res) => {
   });
 });
 
+//-------------------
+//-------------------
 
+app.post('/upload', fileUpload(), function(req, res) { 
+  console.log("llegado al upload"); 
+  const sampleFile = req.files.uploadedFile;
+  const archivoNombre = uploadDirectory + "/" + req.files.fileName + ".pdf";
+  const archivoNombrePrueba = 'output.pdf';
+
+  console.log(req.files);
+  console.log(sampleFile);
+  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
+  console.log(sampleFile.data);
+
+  fs.writeFileSync(archivoNombrePrueba, sampleFile.data, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+  });
+
+  res.send('File uploaded');
+})
+
+
+/*app.post('/upload', upload.single('file'), async (req, res) => {
+    var filePath = CARPETAPDF + "/" + "document" + ".pdf";
+    var filePrueba = req.file;
+    console.log(filePrueba);
+
+    try {
+        // Check if a file was uploaded
+        if (!filePrueba) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        console.log(filePrueba);
+
+        // Retrieve the uploaded file from the request body
+        const uploadedFile = filePrueba;
+
+        // Write the file to the upload directory
+        var filePath = CARPETAPDF + "/" + "document" + ".pdf";
+        const fileData = fs.readFileSync(filePath, 'utf8');
+        await processFileData(fileData);
+
+        // Determine the file type
+        const fileExtension = uploadedFile.mimetype ?uploadedFile.mimetype : null;
+
+        // Check if the file is already in PDF format
+        if (fileExtension === 'application/pdf') {
+            // Process the PDF directly
+            await processPDF(filePath, res);
+        } else {
+            // Convert the file to PDF
+            const convertedFilePath = await convertToPDF(filePath);
+
+            // Process the converted PDF
+            await processPDF(convertedFilePath, res);
+        }
+    } catch (error) {
+         console.error('An error occurred while processing the file:', error);
+         res.status(500).json({ error: 'Failed to process the file' });
+    }
+});
+
+// Function to process the PDF and count word occurrences
+async function processPDF(pdfFilePath, res) {
+    try {
+        // Parse the PDF content
+        const pdfBuffer = fs.readFileSync(pdfFilePath);
+        const data = await PDFParser(pdfBuffer);
+        const pdfText = data.text;
+
+        // Define the words to search and their initial count
+        const technologies = ['Node.js', 'React.js', 'Angular', 'Vue.js', 'JavaScript', 'TypeScript', 'HTML', 'CSS', 'Sass', 'Bootstrap', 'jQuery', 'Python', 'Java', 'Ruby', 'Go', 'PHP', 'Swift', 'Kotlin', 'Rust', 'SQL', 'MongoDB', 'Firebase', 'AWS', 'Azure', 'Docker', 'Kubernetes', 'Git', 'GitHub', 'Jenkins', 'CI/CD', 'REST API', 'GraphQL', 'OAuth', 'JSON', 'XML', 'Microservices', 'Artificial Intelligence', 'Machine Learning', 'Data Science', 'Big Data', 'Blockchain'];
+        let wordCounts = {};
+
+        // Count the occurrences of each search word
+         technologies.forEach((word) => {
+            const regex = new RegExp(word, 'gi');
+            const count = (pdfText.match(regex) || []).length;
+            wordCounts[word] = count;
+        });
+
+        // Return the word counts as the response
+         wordCounts = Object.fromEntries(Object.entries(wordCounts).filter(([key, value]) => value !== 0));
+         res.json({ wordCounts });
+    } catch (error) {
+          console.error('An error occurred while processing the PDF:', error);
+          res.status(500).json({ error: 'Failed to process the PDF' });
+    } finally {
+        // Clean up - delete the uploaded file and PDF file if needed
+    }
+}
+
+// Helper function to convert files to PDF using external converter
+async function convertToPDF(filePath) {
+  return new Promise((resolve, reject) => {
+      const convertedFilePath = path.join('converted/', `nuevo_documento.pdf`);
+
+      mammoth.extractRawText({ path: filePath })
+      .then((result) => {
+          console.log(result);
+        })
+      .catch((error) => {
+          reject(error);
+        });
+    });
+
+  }*/
 //-----------------------
 //-----------------------
 //-----------------------
