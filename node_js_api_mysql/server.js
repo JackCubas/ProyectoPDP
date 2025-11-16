@@ -827,7 +827,7 @@ app.post('/upload', fileUpload(), function(req, res) {
   console.log("llegado al upload"); 
   const sampleFile = req.files.uploadedFile;
   const archivoNombre = uploadDirectory + "/" + req.files.fileName + ".pdf";
-  const archivoNombrePrueba = 'output.pdf';
+  const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
 
   console.log(req.files);
   console.log(sampleFile);
