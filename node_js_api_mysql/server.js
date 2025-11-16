@@ -858,19 +858,58 @@ app.get('/retrieve', function(req, res) {
   console.log(fs.existsSync(archivoNombrePruebaRetrieve));
 
   if (fs.existsSync(archivoNombrePruebaRetrieve)) {
+
     fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
       console.log("leyendo archivo");
+
       if (err) {
         console.error('Error reading file:', err);
         return;
       }
+
       console.log('File contents:', data.toString());
-    }); 
+
+    });
+
   }
 
   console.log("finalizado retrieve");
   res.json('File retrieve');
+
+  //request.end();
 })
+
+
+/*app.get('/download', function (req, res) {
+  var options = {
+    method: 'GET',
+    host: 'localhost',
+    port: port,
+    path: '/file'
+  };
+
+  var request = http.request(options, function(response) {
+    var data = [];
+
+    response.on('data', function(chunk) {
+      data.push(chunk);
+    });
+
+    response.on('end', function() {
+      data = Buffer.concat(data);
+      console.log('requested content length: ', response.headers['content-length']);
+      console.log('parsed content length: ', data.length);
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename=working-test.pdf',
+        'Content-Length': data.length
+      });
+      res.end(data);
+    });
+  });
+
+  request.end();
+});*/
 
 
 /*app.post('/upload', upload.single('file'), async (req, res) => {
