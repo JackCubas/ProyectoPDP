@@ -4,12 +4,12 @@ async function sendData(){
     var projectName = document.getElementById("name").value;
     var file = document.getElementById("file").files[0];
 
-    console.log("prueba")
-    alert("prueba");
-
     var formData = new FormData();
     formData.append("filename", projectName);
     formData.append("uploadedFile", file);
+
+    console.log(formData);
+    alert("prueba");
 
     axios.post(URLSERVERUpload,formData).then(res => { console.log(res) })
 

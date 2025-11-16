@@ -826,13 +826,18 @@ app.post('/create-pdf', (req, res) => {
 app.post('/upload', fileUpload(), function(req, res) { 
   console.log("llegado al upload"); 
   const sampleFile = req.files.uploadedFile;
-  const archivoNombre = uploadDirectory + "/" + req.files.fileName + ".pdf";
+  const nombreFile = req.body.filename;
   const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
 
-  console.log(req.files);
-  console.log(sampleFile);
-  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
-  console.log(sampleFile.data);
+  //console.log(req);
+  //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
+  //console.log(req.files);
+  //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
+  //console.log(sampleFile);
+  //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
+  //console.log(sampleFile.data);
+  console.log("yyyyyyyyyyyyyyyyyyy");
+  console.log(nombreFile);
 
   fs.writeFileSync(archivoNombrePrueba, sampleFile.data, (err) => {
         if (err) {
@@ -843,6 +848,13 @@ app.post('/upload', fileUpload(), function(req, res) {
   });
 
   res.send('File uploaded');
+})
+
+app.get('/retrieve', function(req, res) { 
+  console.log("llegado al retrieve");
+  const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf'; 
+
+  res.json('File retrieve');
 })
 
 
