@@ -852,8 +852,23 @@ app.post('/upload', fileUpload(), function(req, res) {
 
 app.get('/retrieve', function(req, res) { 
   console.log("llegado al retrieve");
-  const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf'; 
+  const archivoNombrePruebaRetrieve = CARPETAPDF + "/" + 'output.pdf'; 
+  console.log(archivoNombrePruebaRetrieve);
 
+  console.log(fs.existsSync(archivoNombrePruebaRetrieve));
+
+  if (fs.existsSync(archivoNombrePruebaRetrieve)) {
+    fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
+      console.log("leyendo archivo");
+      if (err) {
+        console.error('Error reading file:', err);
+        return;
+      }
+      console.log('File contents:', data.toString());
+    }); 
+  }
+
+  console.log("finalizado retrieve");
   res.json('File retrieve');
 })
 
