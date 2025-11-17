@@ -875,7 +875,8 @@ app.get('/retrieve', function(req, res) {
   console.log("llegado al retrieve");
   
   const archivoNombrePruebaRetrieve = CARPETAPDF + "/" + 'output.pdf'; 
-  var formData  = new FormData();
+  var formData = new FormData();
+  var fileData;
 
   if (fs.existsSync(archivoNombrePruebaRetrieve)) {
 
@@ -894,20 +895,20 @@ app.get('/retrieve', function(req, res) {
 
     });*/
 
-    const fileData = fs.readFileSync(archivoNombrePruebaRetrieve);
-    console.log(fileData);
-    const buffer = Buffer.from(fileData, "binary");
+    fileData = fs.readFileSync(archivoNombrePruebaRetrieve);
+    //const buffer = Buffer.from(fileData, "binary");
     //console.log(buffer);
-
-    formData.append("filename", 'output.pdf');
-    formData.append("uploadedFile", buffer);
-
   }
 
+  console.log(fileData);
+  formData.append("filename", 'output.pdf');
+  formData.append("uploadedFile", fileData);
+
   console.log("finalizado retrieve");
-  //console.log(formData);
-  //var f = JSON.stringify({formData});
-  res.json({formData});
+  console.log(formData);
+  var jsonFormData = JSON.stringify(formData);
+  console.log(jsonFormData);
+  res.json(jsonFormData);
 
   //request.end();
 })
