@@ -823,6 +823,27 @@ app.post('/create-pdf', (req, res) => {
 //-------------------
 //-------------------
 
+app.post('/uploadPuro', fileUpload(), function(req, res) { 
+  console.log("llegado al upload"); 
+  const sampleFile = req.files.uploadedFile;
+  const nombreFile = req.body.filename;
+  const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
+
+  //console.log(req);
+  console.log(sampleFile);
+  console.log(nombreFile);
+
+  fs.writeFileSync(archivoNombrePrueba, sampleFile.data, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+  });
+
+  res.send('File uploaded');
+})
+
 app.post('/upload', fileUpload(), function(req, res) { 
   console.log("llegado al upload"); 
   const sampleFile = req.files.uploadedFile;
@@ -859,7 +880,10 @@ app.get('/retrieve', function(req, res) {
 
   if (fs.existsSync(archivoNombrePruebaRetrieve)) {
 
-    fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
+    //'ascii', 'base64', 'binary', 'utf8'
+    //const fileData = fs.readFileSync(filePath);
+    //const buffer = Buffer.from(fileData, "binary");
+    fs.readFileSync(archivoNombrePruebaRetrieve, 'binary', (err, data) => {
       console.log("leyendo archivo");
 
       if (err) {
