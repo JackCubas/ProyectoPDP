@@ -1,18 +1,15 @@
 const URLSERVERretrieve = "http://localhost:3000/retrieve";
 
-function checkUserHosting() {
+async function checkUserHosting() {
 
     //var datosURL = window.location.href.split('?');
     //var IdHTML = datosURL[1].replace("id=","");
 
-    return fetch(URLSERVERretrieve)
-        .then((response) => { 
-            return response.json().then((data) => {
-                return appendData(data);
-            }).catch((err) => {
-                console.log(err);
-            }) 
-        });
+    const apiCall = await fetch(URLSERVERretrieve);
+    const result = await apiCall.json();
+    console.log(result);
+    console.log("Analizando resultados");
+    appendData(result);
 
 }
 

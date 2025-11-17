@@ -873,17 +873,16 @@ app.post('/upload', fileUpload(), function(req, res) {
 
 app.get('/retrieve', function(req, res) { 
   console.log("llegado al retrieve");
+  
   const archivoNombrePruebaRetrieve = CARPETAPDF + "/" + 'output.pdf'; 
-  console.log(archivoNombrePruebaRetrieve);
-
-  console.log(fs.existsSync(archivoNombrePruebaRetrieve));
+  var formData  = new FormData();
 
   if (fs.existsSync(archivoNombrePruebaRetrieve)) {
 
     //'ascii', 'base64', 'binary', 'utf8'
     //const fileData = fs.readFileSync(filePath);
     //const buffer = Buffer.from(fileData, "binary");
-    fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
+    /*fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
       console.log("leyendo archivo");
 
       if (err) {
@@ -893,12 +892,21 @@ app.get('/retrieve', function(req, res) {
 
       console.log('File contents:', data.toString());
 
-    });
+    });*/
+
+    const fileData = fs.readFileSync(archivoNombrePruebaRetrieve);
+    console.log(fileData);
+    const buffer = Buffer.from(fileData, "binary");
+    //console.log(buffer);
+
+    formData.append("filename", 'output.pdf');
+    formData.append("uploadedFile", buffer);
 
   }
 
   console.log("finalizado retrieve");
-  res.json('File retrieve');
+  //console.log(formData);
+  res.json({formData});
 
   //request.end();
 })
