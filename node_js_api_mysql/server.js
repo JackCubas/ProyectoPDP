@@ -906,6 +906,7 @@ app.get('/retrieve', function(req, res) {
 
   console.log("finalizado retrieve");
   //console.log(formData);
+  //var f = JSON.stringify({formData});
   res.json({formData});
 
   //request.end();
