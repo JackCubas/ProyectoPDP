@@ -883,7 +883,7 @@ app.get('/retrieve', function(req, res) {
     //'ascii', 'base64', 'binary', 'utf8'
     //const fileData = fs.readFileSync(filePath);
     //const buffer = Buffer.from(fileData, "binary");
-    fs.readFileSync(archivoNombrePruebaRetrieve, 'binary', (err, data) => {
+    fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
       console.log("leyendo archivo");
 
       if (err) {
