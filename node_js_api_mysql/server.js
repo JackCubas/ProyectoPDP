@@ -824,7 +824,7 @@ app.post('/create-pdf', (req, res) => {
 //-------------------
 
 app.post('/uploadPuro', fileUpload(), function(req, res) { 
-  console.log("llegado al upload"); 
+  console.log("llegado al upload puro"); 
   const sampleFile = req.files.uploadedFile;
   const nombreFile = req.body.filename;
   const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
@@ -841,7 +841,7 @@ app.post('/uploadPuro', fileUpload(), function(req, res) {
         }
   });
 
-  res.send('File uploaded');
+  res.send('File uploaded puro');
 })
 
 app.post('/upload', fileUpload(), function(req, res) { 
