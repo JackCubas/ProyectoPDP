@@ -1,30 +1,48 @@
-const URLSERVERlogin = "http://localhost:3000/login";
+const URLSERVERlogin = "http://localhost:3000/users/login";
 
 var datosURL = window.location.href;
 
-//if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
-//    window.location.href = "../index.html";
-//}
+if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
+    window.location.href = "../index.html";
+}
 
 console.log("Entrando en el login");
 
-async function sendData(){
+function sendData(){
 
 
     var emailUser = document.getElementById("emailUser").value;
     var passUser = document.getElementById("passUser").value;
-    //?color1=red&color2=blue
 
-    const apiCall = await fetch(URLSERVERlogin + '?email=' + emailUser + '&pass=' + passUser)
-    const result = await apiCall.json();
-    //console.log(apiCall);
-    //console.log(result);
-    //alert("response"); 
-    checkData(result)    
+    const loginUsers = {
+        emailUser: emailUser,
+        passUser: passUser
+    }
+
+    return fetch(URLSERVERlogin, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(loginUsers)
+        })
+        .then((response) => {
+            console.log(response);
+            alert("response"); 
+            return response.json().then((data) => {
+                console.log(data);
+                alert("data");
+                return checkData(data);
+        }).catch((err) => {
+            console.log(err);
+        }) 
+    });
+
 }
 
 function checkData(data){
-    var userDatos = data.user[0];
+    var userDatos = data;
     if(userDatos == "FALSE"){
         alert("FALSE");
         console.log("Usuario no existe");
@@ -48,7 +66,6 @@ function checkData(data){
     }
 
     console.log(localStorage.getItem("usuario"))
-    alert("response"); 
     //localStorage.clear();
-    //window.location.href = "../index.html";
+    window.location.href = "../index.html";
 }
