@@ -25,6 +25,7 @@ async function sendData(){
 
 function checkData(data){
     var userDatos = data.user[0];
+    console.log(userDatos)
     if(userDatos == "FALSE"){
         alert("FALSE");
         console.log("Usuario no existe");
@@ -33,21 +34,21 @@ function checkData(data){
         if(userDatos.rolUser == "ADMIN"){
             alert("ADMIN");
             console.log("Usuario ADMIN");
-            localStorage.setItem("usuario", userDatos);
+            localStorage.setItem("usuario", JSON.stringify(userDatos));
         }
         if(userDatos.rolUser == "CLIENT"){
             alert("CLIENT");
             console.log("Usuario CLIENT");
-            localStorage.setItem("usuario", userDatos);
+            localStorage.setItem("usuario", JSON.stringify(userDatos));
         }
         if(userDatos.rolUser == "FIRMA"){
             alert("FIRMA");
             console.log("Usuario FIRMA");
-            localStorage.setItem("usuario", userDatos);
+            localStorage.setItem("usuario", JSON.stringify(userDatos));
         }
     }
 
-    console.log(localStorage.getItem("usuario"))
+    console.log(JSON.parse(localStorage.getItem("usuario")));
     alert("response"); 
     //localStorage.clear();
     //window.location.href = "../index.html";
