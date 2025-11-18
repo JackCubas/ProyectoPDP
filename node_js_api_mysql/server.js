@@ -875,7 +875,7 @@ app.get('/retrieve', function(req, res) {
   console.log("llegado al retrieve");
   
   const archivoNombrePruebaRetrieve = CARPETAPDF + "/" + 'output.pdf'; 
-  var formData = new FormData();
+  //var formData = new FormData();
   var fileData;
 
   if (fs.existsSync(archivoNombrePruebaRetrieve)) {
@@ -901,14 +901,16 @@ app.get('/retrieve', function(req, res) {
   }
 
   console.log(fileData);
-  formData.append("filename", 'output.pdf');
-  formData.append("uploadedFile", fileData);
 
-  console.log("finalizado retrieve");
-  console.log(formData);
-  var jsonFormData = JSON.stringify(formData);
-  console.log(jsonFormData);
-  res.json(jsonFormData);
+  return res.status(200).send(fileData);
+  //formData.append("filename", 'output.pdf');
+  //formData.append("uploadedFile", fileData);
+
+  //console.log("finalizado retrieve");
+  //console.log(formData);
+  //var jsonFormData = JSON.stringify(formData);
+  //console.log(jsonFormData);
+  //res.json(jsonFormData);
 
   //request.end();
 })
