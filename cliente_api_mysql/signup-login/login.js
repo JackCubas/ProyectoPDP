@@ -2,9 +2,9 @@ const URLSERVERlogin = "http://localhost:3000/login";
 
 var datosURL = window.location.href;
 
-//if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
-//    window.location.href = "../index.html";
-//}
+if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
+    window.location.href = "../index.html";
+}
 
 console.log("Entrando en el login");
 
@@ -51,5 +51,5 @@ function checkData(data){
     console.log(JSON.parse(localStorage.getItem("usuario")));
     alert("response"); 
     //localStorage.clear();
-    //window.location.href = "../index.html";
+    window.location.href = "../index.html";
 }
