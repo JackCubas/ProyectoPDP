@@ -902,7 +902,18 @@ app.get('/retrieve', function(req, res) {
 
   console.log(fileData);
 
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename="output.pdf"');
+
+  //res.type('application/pdf');
+  //res.header('Content-Disposition', 'attachment; filename="output.pdf"');
+  //res.send(Buffer.from(fileData, 'base64'));
+      
+  // Stream res directly
+  //fileData.body.pipe(res);
+
   return res.status(200).send(fileData);
+
   //formData.append("filename", 'output.pdf');
   //formData.append("uploadedFile", fileData);
 
@@ -913,6 +924,14 @@ app.get('/retrieve', function(req, res) {
   //res.json(jsonFormData);
 
   //request.end();
+
+
+  //const file_blob = new Blob([fileData], { type: "binary" })
+  //formData.append('file', file_blob, 'output.pdf')
+
+  //var form = new formdata();
+  //form.append('docName', 'output.pdf');
+  //form.append('docData', fileData);
 })
 
 

@@ -5,9 +5,18 @@ async function checkUserHosting() {
     //var datosURL = window.location.href.split('?');
     //var IdHTML = datosURL[1].replace("id=","");
 
-    const apiCall = await fetch(URLSERVERretrieve);
+    //const apiCall = await fetch(URLSERVERretrieve);
+
+    const apiCall = await fetch(URLSERVERretrieve, {
+        method: "GET",
+        headers: {
+            
+            "Accept": "application/pdf"
+        }
+    })
     //const result = await apiCall.json();
     console.log(apiCall);
+    //console.log(result);
     console.log("Analizando resultados");
     appendData(apiCall);
 
