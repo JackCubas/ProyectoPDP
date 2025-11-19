@@ -45,19 +45,23 @@ app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:500
 app.use(express.json({limit: '50mb'}));
 
 //----------------------------------
-const PDFParser = require('pdf-parse');
 const fs = require('fs');
-const uploadDirectory = CARPETAPDF;
-//const multer = require('multer');
-const path = require('path');
-const mammoth = require('mammoth');
+const fileUpload = require('express-fileupload');
+const util = require("util");
+//----------------------------------
 
-var multer = require('multer');
+//const PDFParser = require('pdf-parse');
+
+//const uploadDirectory = CARPETAPDF;
+//const multer = require('multer');
+//const path = require('path');
+//const mammoth = require('mammoth');
+
+//var multer = require('multer');
 //var upload = multer({dest: uploadDirectory});
 
-const fileUpload = require('express-fileupload');
 
-const FormData = require('form-data');
+//const FormData = require('form-data');
 //-------------------------------------------
 
 /*const storage = multer.diskStorage({
@@ -923,18 +927,17 @@ app.get('/retrieve', function(req, res) {
   res.setHeader("Content-Length", size);
   rs.pipe(res);
   
-  // delete the file on server after it sends to client
-  /*
-  const util = require("util");
-  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-  rs.on('end', () => {
-      unlinkFile(filePath);
-  });*/
-
-
 }) 
 
+app.delete('/eliminate', function(req, res) {
 
+  console.log("llegado al delete pdf puro");
+  const pathAxios = CARPETAPDF + "/" + 'output.pdf';
+  // delete the file on server after it sends to client
+  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+  unlinkFile(pathAxios);
+
+})
 //-----------------------
 //-----------------------
 //-----------------------
