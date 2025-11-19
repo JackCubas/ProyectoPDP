@@ -938,7 +938,30 @@ app.delete('/eliminate', function(req, res) {
   unlinkFile(pathAxios);
 
 })
+
+//------------------------
 //-----------------------
+
+/*
+
+let formData = {
+        files: {
+            value: fs.createReadStream(filePath),
+            options: {
+                filename: 'test.docx'
+            }
+        }
+      };
+
+*/
+
+/*
+
+const FormData = require('form-data'); 
+const form = new FormData();
+form.append('file', fs.createReadStream(filepath), {filename: 'newname'});
+
+*/
 //-----------------------
 //-----------------------
 
