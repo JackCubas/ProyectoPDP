@@ -18,7 +18,7 @@ async function sendData(){
     var emailUser = document.getElementById("emailUser").value;
     var passUser = document.getElementById("passUser").value;
     var encryptKeyUser = "pruebaKey";
-    var rolUser = "CLIENT";
+    var rolUser = document.getElementById("rolUser").value;
 
     const nuevoUsers = {
         nameUser: nameUser,
