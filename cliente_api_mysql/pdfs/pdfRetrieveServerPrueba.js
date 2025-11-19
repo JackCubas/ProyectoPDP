@@ -1,29 +1,34 @@
-const URLSERVERretrieve = "http://localhost:3000/retrieve";
+const URLSERVERretrieve = "http://localhost:3000/retrieveAxios";
 
 async function checkUserHosting() {
 
-    //var datosURL = window.location.href.split('?');
-    //var IdHTML = datosURL[1].replace("id=","");
-
-    //const apiCall = await fetch(URLSERVERretrieve);
-
-    const apiCall = await fetch(URLSERVERretrieve, {
+    return fetch(URLSERVERretrieve, {
         method: "GET",
         headers: {
-            
-            //"Accept": "application/pdf"
-            "Accept": "application/json"
+            "Content-Type": "application/json"
         }
     })
-    //const result = await apiCall.json();
-    console.log(apiCall);
-    //console.log(result);
-    console.log("Analizando resultados");
-    appendData(apiCall);
+    .then((response) => { 
+        console.log(response);
+        return response.blob().then((data) => {
+                    console.log(data);
+                    return appendData(data);
+                }).catch((err) => {
+                    console.log(err);
+                }) 
+
+
+    });
+    
 
 }
 
-function appendData(data){
+function appendData(response){
+
+        const fileURL = URL.createObjectURL(response);
+        console.log(fileURL);
+        window.open(fileURL); 
+
         var con=document.getElementById("main-container")
         var text = document.createTextNode("This just got added");
         con.appendChild(text);

@@ -2,7 +2,7 @@ const URLSERVERretrieve = "http://localhost:3000/retrieveAxios";
 
 async function checkUserHosting() {
 
-    /*let header = {
+    let header = {
         "Content-Type": "application/json",
     };
 
@@ -17,40 +17,15 @@ async function checkUserHosting() {
     console.log(response);
     const file = new Blob([response.data], { type: "application/pdf" });
     console.log(file);
-        const fileURL = URL.createObjectURL(file);
+    const fileURL = URL.createObjectURL(file);
     console.log(fileURL);
-        window.open(fileURL); 
+    window.open(fileURL); 
     
-    appendData(response)*/
-
-    return fetch(URLSERVERretrieve, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-    .then((response) => { 
-        console.log(response);
-        return response.blob().then((data) => {
-                    console.log(data);
-                    return appendData(data);
-                }).catch((err) => {
-                    console.log(err);
-                }) 
-
-
-    });
-    
+    appendData(response)
 
 }
 
 function appendData(response){
-
-        //const file = new Blob([response.data], { type: "application/pdf" });
-        //console.log(file);
-        const fileURL = URL.createObjectURL(response);
-        console.log(fileURL);
-        window.open(fileURL); 
 
         var con=document.getElementById("main-container")
         var text = document.createTextNode("This just got added");
