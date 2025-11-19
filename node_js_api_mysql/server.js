@@ -1019,9 +1019,6 @@ app.get('/retrieve', function(req, res) {
 })
 
 
-const util = require("util");
-const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-
 app.get('/retrieveAxios', function(req, res) { 
   const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
 
@@ -1035,7 +1032,10 @@ app.get('/retrieveAxios', function(req, res) {
   rs.pipe(res);
   
   // delete the file on server after it sends to client
-  /*rs.on('end', () => {
+  /*
+  const util = require("util");
+  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+  rs.on('end', () => {
       unlinkFile(filePath);
   });*/
 
