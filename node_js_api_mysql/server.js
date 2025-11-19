@@ -864,7 +864,7 @@ app.post('/create-pdf', (req, res) => {
     console.log(urlCarpeta);
     //console.log(datosPDF);
 
-    if(datosPDF){
+    /*if(datosPDF){
       console.log(datosPDF);
       console.log("procesando");
       var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
@@ -873,7 +873,7 @@ app.post('/create-pdf', (req, res) => {
         console.log("error");
         console.log(err);
       });
-    }
+    }*/
 
     let values = [
       [req.body.userId, req.body.name, urlCarpeta]
