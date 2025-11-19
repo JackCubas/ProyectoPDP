@@ -889,7 +889,7 @@ app.post('/create-pdf', (req, res) => {
 //-------------------
 //-------------------
 
-app.post('/uploadPuro', fileUpload(), function(req, res) { 
+app.post('/upload', fileUpload(), function(req, res) { 
   console.log("llegado al upload puro"); 
   const sampleFile = req.files.uploadedFile;
   const nombreFile = req.body.filename;
@@ -910,20 +910,58 @@ app.post('/uploadPuro', fileUpload(), function(req, res) {
   res.send('File uploaded puro');
 })
 
+
+app.get('/retrieve', function(req, res) { 
+  const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
+
+  console.log("llegado al retrieve puro");
+  const rs = fs.createReadStream(pathAxios);
+
+  // get size of the video file
+  const { size } = fs.statSync(pathAxios);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Length", size);
+  rs.pipe(res);
+  
+  // delete the file on server after it sends to client
+  /*
+  const util = require("util");
+  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+  rs.on('end', () => {
+      unlinkFile(filePath);
+  });*/
+
+
+}) 
+
+
+//-----------------------
+//-----------------------
+//-----------------------
+
+
+app.listen(APIPORT, () => {
+  console.log(`Example app listening at http://localhost:${APIPORT}`);
+});
+
+function emptyOrRows(rows) {
+  if (!rows) {
+    return [];
+  }
+  return rows;
+}
+
+
+//---------------
+
+
+/*
+
 app.post('/upload', fileUpload(), function(req, res) { 
   console.log("llegado al upload"); 
   const sampleFile = req.files.uploadedFile;
   const nombreFile = req.body.filename;
   const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
-
-  //console.log(req);
-  //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
-  //console.log(req.files);
-  //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
-  //console.log(sampleFile);
-  //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXx");
-  //console.log(sampleFile.data);
-  console.log("yyyyyyyyyyyyyyyyyyy");
   console.log(nombreFile);
 
   fs.writeFileSync(archivoNombrePrueba, sampleFile.data, (err) => {
@@ -934,8 +972,14 @@ app.post('/upload', fileUpload(), function(req, res) {
         }
   });
 
-  res.send('File uploaded');
+  res.send({'File uploaded'});
 })
+
+
+*/
+
+
+/*
 
 app.get('/retrieve', function(req, res) { 
   console.log("llegado al retrieve");
@@ -949,7 +993,7 @@ app.get('/retrieve', function(req, res) {
     //'ascii', 'base64', 'binary', 'utf8'
     //const fileData = fs.readFileSync(filePath);
     //const buffer = Buffer.from(fileData, "binary");
-    /*fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
+    fs.readFileSync(archivoNombrePruebaRetrieve, (err, data) => {
       console.log("leyendo archivo");
 
       if (err) {
@@ -959,9 +1003,9 @@ app.get('/retrieve', function(req, res) {
 
       console.log('File contents:', data.toString());
 
-    });*/
+    });
 
-    /*const stringData = new FormData();
+    const stringData = new FormData();
     console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     fs.readFileSync(archivoNombrePruebaRetrieve, (error, data) => {  
       if (error) console.log(error)  
@@ -972,7 +1016,7 @@ app.get('/retrieve', function(req, res) {
       }
       console.log('data type =', typeof stringData, '\n', stringData)
     })
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");*/
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
     fileData = fs.readFileSync(archivoNombrePruebaRetrieve);
     //const buffer = Buffer.from(fileData, "binary");
@@ -981,9 +1025,9 @@ app.get('/retrieve', function(req, res) {
 
   console.log(fileData);
 
-  /*res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'attachment; filename="output.pdf"');
-  return res.status(200).send(fileData);*/
+  return res.status(200).send(fileData);
 
 
   //res.type('application/pdf');
@@ -1018,29 +1062,7 @@ app.get('/retrieve', function(req, res) {
   //form.append('docData', fileData);
 })
 
-
-app.get('/retrieveAxios', function(req, res) { 
-  const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
-
-  console.log("llegado al retrieve axios");
-  const rs = fs.createReadStream(pathAxios);
-
-  // get size of the video file
-  const { size } = fs.statSync(pathAxios);
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Length", size);
-  rs.pipe(res);
-  
-  // delete the file on server after it sends to client
-  /*
-  const util = require("util");
-  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-  rs.on('end', () => {
-      unlinkFile(filePath);
-  });*/
-
-
-}) 
+*/
 
 /*app.get('/download', function (req, res) {
   var options = {
@@ -1165,9 +1187,6 @@ async function convertToPDF(filePath) {
 //-----------------------
 
 
-app.listen(APIPORT, () => {
-  console.log(`Example app listening at http://localhost:${APIPORT}`);
-});
 
 //------------------------------------------------------
 //------------------------------------------------------
@@ -1208,9 +1227,4 @@ app.get('/one-movie', (req, res) => {
 //----------------------------------------------------
 //----------------------------------------------------
 
-function emptyOrRows(rows) {
-  if (!rows) {
-    return [];
-  }
-  return rows;
-}
+

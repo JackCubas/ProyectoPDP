@@ -1,4 +1,4 @@
-const URLSERVERretrieve = "http://localhost:3000/retrieveAxios";
+const URLSERVERretrieve = "http://localhost:3000/retrieve";
 
 async function checkUserHosting() {
 

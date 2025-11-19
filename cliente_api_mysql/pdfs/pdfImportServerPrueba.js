@@ -1,5 +1,5 @@
 async function sendData(){
-    const URLSERVERUpload = "http://localhost:3000/uploadPuro";
+    const URLSERVERUpload = "http://localhost:3000/upload";
 
     var projectName = document.getElementById("name").value;
     var file = document.getElementById("file").files[0];
