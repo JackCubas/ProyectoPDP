@@ -1,25 +1,27 @@
-const URLSERVERretrieve = "http://localhost:3000/retrieve";
+const URLSERVERretrieve = "http://localhost:3000/retrieveAxios";
 
 async function checkUserHosting() {
 
-    //var datosURL = window.location.href.split('?');
-    //var IdHTML = datosURL[1].replace("id=","");
+    let header = {
+        "Content-Type": "application/json",
+    };
 
-    //const apiCall = await fetch(URLSERVERretrieve);
+    const response = await axios(
+           URLSERVERretrieve,
+            {
+            method: "GET",
+            responseType: "blob", //Force to receive data in a Blob Format
+            },
+            { headers: header }
+    );
 
-    const apiCall = await fetch(URLSERVERretrieve, {
-        method: "GET",
-        headers: {
-            
-            //"Accept": "application/pdf"
-            "Accept": "application/json"
-        }
-    })
-    //const result = await apiCall.json();
-    console.log(apiCall);
-    //console.log(result);
-    console.log("Analizando resultados");
-    appendData(apiCall);
+    //return response.data;
+
+    const file = new Blob([response.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(file);
+    window.open(fileURL); 
+    
+    appendData(file);
 
 }
 

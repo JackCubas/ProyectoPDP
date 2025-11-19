@@ -56,6 +56,8 @@ var multer = require('multer');
 //var upload = multer({dest: uploadDirectory});
 
 const fileUpload = require('express-fileupload');
+
+const FormData = require('form-data');
 //-------------------------------------------
 
 /*const storage = multer.diskStorage({
@@ -939,7 +941,7 @@ app.get('/retrieve', function(req, res) {
   console.log("llegado al retrieve");
   
   const archivoNombrePruebaRetrieve = CARPETAPDF + "/" + 'output.pdf'; 
-  //var formData = new FormData();
+  var formData = new FormData();
   var fileData;
 
   if (fs.existsSync(archivoNombrePruebaRetrieve)) {
@@ -959,6 +961,19 @@ app.get('/retrieve', function(req, res) {
 
     });*/
 
+    /*const stringData = new FormData();
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    fs.readFileSync(archivoNombrePruebaRetrieve, (error, data) => {  
+      if (error) console.log(error)  
+      if (data) {    
+        // append key-value pair of a file name and the file
+        // note that file should be File or Blob object
+        stringData.append('strings-file', data) 
+      }
+      console.log('data type =', typeof stringData, '\n', stringData)
+    })
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");*/
+
     fileData = fs.readFileSync(archivoNombrePruebaRetrieve);
     //const buffer = Buffer.from(fileData, "binary");
     //console.log(buffer);
@@ -966,20 +981,25 @@ app.get('/retrieve', function(req, res) {
 
   console.log(fileData);
 
-  res.setHeader('Content-Type', 'application/pdf');
+  /*res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'attachment; filename="output.pdf"');
+  return res.status(200).send(fileData);*/
+
 
   //res.type('application/pdf');
+  //res.type('application/json');
   //res.header('Content-Disposition', 'attachment; filename="output.pdf"');
   //res.send(Buffer.from(fileData, 'base64'));
+
+  formData.append("docName", 'output.pdf');
+  formData.append("uploadedFile", fileData);
+  //var jsonFormData = JSON.stringify(formData);
+  console.log(formData);
+  res.json(formData);
       
   // Stream res directly
   //fileData.body.pipe(res);
 
-  return res.status(200).send(fileData);
-
-  //formData.append("filename", 'output.pdf');
-  //formData.append("uploadedFile", fileData);
 
   //console.log("finalizado retrieve");
   //console.log(formData);
@@ -998,6 +1018,29 @@ app.get('/retrieve', function(req, res) {
   //form.append('docData', fileData);
 })
 
+
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+
+app.get('/retrieveAxios', function(req, res) { 
+  const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
+
+  console.log("llegado al retrieve axios");
+  const rs = fs.createReadStream(pathAxios);
+
+  // get size of the video file
+  const { size } = fs.statSync(pathAxios);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Length", size);
+  rs.pipe(res);
+  
+  // delete the file on server after it sends to client
+  /*rs.on('end', () => {
+      unlinkFile(filePath);
+  });*/
+
+
+}) 
 
 /*app.get('/download', function (req, res) {
   var options = {
