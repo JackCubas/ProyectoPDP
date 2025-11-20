@@ -25,9 +25,9 @@ function buildTable(data) {
     cell1.textContent = data[i].DocName;
     cell2.textContent = data[i].nameUser;
     
-    /*const butID = data[i].id;
+    const butID = data[i].pdfId;
 
-    const button = document.createElement('button');
+    /*const button = document.createElement('button');
     button.id = "testbutton" + butID;
     button.textContent = "Click Me";
     button.addEventListener('click', doSmth);
@@ -53,15 +53,15 @@ function buildTable(data) {
   }
 }
 
-/*function doSmth(event) {
+function doSmth(event) {
   var idDetailString = event.target.id;
   const substringToRemove = "testbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
   alert("ID: " + idDetail);
-}*/
+}
 
-/*function detail(event){
+function detail(event){
   console.log("DETAIL");
   //console.log(event);
 
@@ -69,24 +69,24 @@ function buildTable(data) {
   const substringToRemove = "detailbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
-  //alert("DETAIL " + idDetail);
+  alert("DETAIL " + idDetail);
 
-  window.location.href = "detail.html?id=" + idDetail;
-}*/
+  //window.location.href = "detail.html?id=" + idDetail;
+}
 
-/*function edit(event){
+function edit(event){
   console.log("EDIT");
 
   var idEditString = event.target.id;
   const substringToRemove = "editbutton";
   const idEdit = idEditString.replace(substringToRemove, '');
 
-  //alert("EDIT " + idEdit);
+  alert("EDIT " + idEdit);
 
-  window.location.href = "modify.html?id=" + idEdit;
-}*/
+  //window.location.href = "modify.html?id=" + idEdit;
+}
 
-/*function del(event){
+function del(event){
   console.log("DELETE");
   //alert("DELETE " + event.target.id);
 
@@ -94,10 +94,10 @@ function buildTable(data) {
   const substringToRemove = "delbutton";
   const idDel = idDelString.replace(substringToRemove, '');
 
-  //alert("DEL " + idDel);
+  alert("DEL " + idDel);
 
-  window.location.href = "delete.html?id=" + idDel;
-}*/
+  //window.location.href = "delete.html?id=" + idDel;
+}
 
 
 checkUserHosting();
