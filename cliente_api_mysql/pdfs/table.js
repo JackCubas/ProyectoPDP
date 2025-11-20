@@ -22,34 +22,35 @@ function buildTable(data) {
     const newRow = table.insertRow();
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
+    const cell3 = newRow.insertCell(2);
     cell1.textContent = data[i].DocName;
     cell2.textContent = data[i].nameUser;
     
     const butID = data[i].pdfId;
 
-    /*const button = document.createElement('button');
+    const button = document.createElement('button');
     button.id = "testbutton" + butID;
     button.textContent = "Click Me";
     button.addEventListener('click', doSmth);
-    cell2.appendChild(button);
+    cell3.appendChild(button);
 
     const buttonDetail = document.createElement('button');
     buttonDetail.id = "detailbutton" + butID;
     buttonDetail.textContent = "Detail";
     buttonDetail.addEventListener('click', detail);
-    cell2.appendChild(buttonDetail);
+    cell3.appendChild(buttonDetail);
 
     const buttonEdit = document.createElement('button');
     buttonEdit.id = "editbutton" + butID;
     buttonEdit.textContent = "Edit";
     buttonEdit.addEventListener('click', edit);
-    cell2.appendChild(buttonEdit);
+    cell3.appendChild(buttonEdit);
 
     const buttonDel = document.createElement('button');
     buttonDel.id = "delbutton" + butID;
     buttonDel.textContent = "Delete";
     buttonDel.addEventListener('click', del);
-    cell2.appendChild(buttonDel);*/
+    cell3.appendChild(buttonDel);
   }
 }
 
