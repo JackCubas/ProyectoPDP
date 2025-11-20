@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS `firma_app`;
 CREATE DATABASE IF NOT EXISTS `firma_app`;
+USE `firma_app`;
 
 DROP TABLE IF EXISTS `Movies`;
 
