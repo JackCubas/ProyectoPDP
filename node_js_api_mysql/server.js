@@ -365,9 +365,15 @@ app.get('/users/:id', (req, res) => {
 
 
 app.post('/users', (req, res) => {
-    let con;
+    // simple validation
+    const { nameUser, emailUser, passUser, rolUser, encryptKeyUser } = req.body || {};
+    if (!nameUser || nameUser.trim().length < 2) return res.status(400).json({ error: 'Nombre requerido (min 2 chars)' });
+    if (!emailUser || !/^\S+@\S+\.\S+$/.test(emailUser)) return res.status(400).json({ error: 'Mail valido requerido' });
+    if (!passUser || passUser.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
+    const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
+    if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
 
-    con = mysql.createConnection({
+    const con = mysql.createConnection({
           host: DBHOST,
           user: DBUSER,
           password: DBPASS,
@@ -375,25 +381,23 @@ app.post('/users', (req, res) => {
           database: DBNAME
     });
 
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
+    con.connect(function(err) {
+      if (err) {
+        console.error('DB connect error:', err);
+        return res.status(500).json({ error: 'database connection error' });
+      }
 
-    let sql = "INSERT INTO users (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES ?";
+      const sql = 'INSERT INTO users (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES ?';
+      const values = [[nameUser.trim(), emailUser.trim(), passUser, rolUser, encryptKeyUser || null]];
 
-    let values = [
-      [req.body.nameUser, req.body.emailUser, req.body.passUser, req.body.rolUser, req.body.encryptKeyUser]
-    ]
-
-    con.query(sql, [values], function (err, result) {
-      if (err) throw err;
-      console.log("1 record inserted");
-      console.log(result);
-
-      res.json(result);
+      con.query(sql, [values], function (err, result) {
+        if (err) {
+          console.error('DB insert error:', err);
+          return res.status(500).json({ error: 'database insert error' });
+        }
+        return res.json(result);
+      });
     });
-    
-  });
 });
 
 app.put('/users/:id', (req, res) => {
@@ -475,19 +479,14 @@ app.delete('/users/:id', (req, res) => {
 
 
 app.get('/login', (req, res) => {
-  console.log("get user login!");
+  const userEmail = req.query.email;
+  const userPass = req.query.pass;
 
-  var userEmail = req.query.email;
-  var userPass = req.query.pass;
+  if (!userEmail || !/^\S+@\S+\.\S+$/.test(userEmail) || !userPass) {
+    return res.status(400).json({ error: 'email y contra son requeridos' });
+  }
 
-  let con;
-  var resultRows;
-  
-  /*let values = [
-      [req.body.emailUser, req.body.passUser]
-    ]*/
-
-  con = mysql.createConnection({
+  const con = mysql.createConnection({
         host: DBHOST,
         user: DBUSER,
         password: DBPASS,
@@ -496,47 +495,22 @@ app.get('/login', (req, res) => {
   });
 
   con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
+    if (err) {
+      console.error('DB connect error:', err);
+      return res.status(500).json({ error: 'database connection error' });
+    }
 
-    let sql = `
-      SELECT * FROM users WHERE 
-      emailUser = "${userEmail}" 
-      AND passUser = "${userPass}"
-    `;
-
-    console.log(sql);
-
-    con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        
-        console.log(result);
-
-        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-        console.log(resultRows);
-
-        if(resultRows.length == 0){
-          console.log("user does not exists!");
-          res.json({user: "FALSE"});
+    const sql = 'SELECT * FROM users WHERE emailUser = ? AND passUser = ?';
+    con.query(sql, [userEmail.trim(), userPass], function (err, result) {
+        if (err) {
+          console.error('DB query error:', err);
+          return res.status(500).json({ error: 'database query error' });
         }
 
-        if(resultRows.length > 0 && resultRows[0].rolUser == "ADMIN"){
-          console.log("user exists and is ADMIN!");
-          res.json({user: resultRows});
-        }
-
-        if(resultRows.length > 0 && resultRows[0].rolUser == "CLIENT"){
-          console.log("user exists and is CLIENT!");
-          res.json({user: resultRows});
-        }
-
-        if(resultRows.length > 0 && resultRows[0].rolUser == "FIRMA"){
-          console.log("user exists and is FIRMA!");
-          res.json({user: resultRows});
-        }
-        
+        const rows = Object.values(JSON.parse(JSON.stringify(result)));
+        if (!rows || rows.length === 0) return res.json({ user: 'FALSE' });
+        return res.json({ user: rows });
     });
-    
   });
 });
 
