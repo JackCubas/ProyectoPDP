@@ -785,7 +785,7 @@ app.get("/pdfs/:userId", cors(), (req, res) => {
 
 });
 
-app.get("/pdfs/:id", cors(), (req, res) => {
+/*app.get("/pdfs/:id", cors(), (req, res) => {
 
    console.log("get pdf by id!");
 
@@ -836,20 +836,40 @@ app.get("/pdfs/:id", cors(), (req, res) => {
       console.log("Error al conectar con la base de datos");
   }
 
-});
+});*/
 
+//------------------
+//------------------
+app.post('/create-pdf', fileUpload(), (req, res) => {
 
-app.post('/create-pdf', (req, res) => {
+  console.log("llegado al create-pdf"); 
+  const pdfFile = req.files.uploadedFile;
+  const nombreFile = req.body.filename;
+  const archivoNombre = CARPETAPDF + "/" + nombreFile + '.pdf';
 
-    let con;
+  console.log(req.body.userId);
+  console.log(archivoNombre);
+  console.log(nombreFile);
 
-    con = mysql.createConnection({
-          host: DBHOST,
-          user: DBUSER,
-          password: DBPASS,
-          port     :DBPORT,
-          database: DBNAME
-    });
+  fs.writeFileSync(archivoNombre, pdfFile.data, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+  });
+
+  //-------------------------------
+  console.log("llegado a la base de datos"); 
+  let con;
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
 
   con.connect(function(err) {
     if (err) throw err;
@@ -858,25 +878,8 @@ app.post('/create-pdf', (req, res) => {
 
     let sql = "INSERT INTO pdfs (userId, name, urlCarpeta) VALUES ?";
 
-    var urlCarpeta = CARPETAPDF + "/" + req.body.name + ".pdf";
-    var datosPDF = req.body.docDatos;
-
-    console.log(urlCarpeta);
-    //console.log(datosPDF);
-
-    /*if(datosPDF){
-      console.log(datosPDF);
-      console.log("procesando");
-      var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
-      //require("fs").writeFile(urlCarpeta, base64Data, 'base64',
-      require("fs").writeFileSync(urlCarpeta, base64Data, 'base64', function(err) {
-        console.log("error");
-        console.log(err);
-      });
-    }*/
-
     let values = [
-      [req.body.userId, req.body.name, urlCarpeta]
+      [req.body.userId, nombreFile, archivoNombre]
     ]
 
     con.query(sql, [values], function (err, result) {
@@ -890,29 +893,9 @@ app.post('/create-pdf', (req, res) => {
   });
 });
 
+
 //-------------------
 //-------------------
-
-app.post('/upload', fileUpload(), function(req, res) { 
-  console.log("llegado al upload puro"); 
-  const sampleFile = req.files.uploadedFile;
-  const nombreFile = req.body.filename;
-  const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
-
-  //console.log(req);
-  console.log(sampleFile);
-  console.log(nombreFile);
-
-  fs.writeFileSync(archivoNombrePrueba, sampleFile.data, (err) => {
-        if (err) {
-            console.error('Error writing file:', err);
-        } else {
-            console.log('File written successfully');
-        }
-  });
-
-  res.send('File uploaded puro');
-})
 
 
 app.get('/retrieve', function(req, res) { 
@@ -941,6 +924,78 @@ app.delete('/eliminate', function(req, res) {
 
 //------------------------
 //-----------------------
+
+/*app.post('/create-pdf', (req, res) => {
+
+    let con;
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to pdf!");
+    console.log(req.body);
+
+    let sql = "INSERT INTO pdfs (userId, name, urlCarpeta) VALUES ?";
+
+    var urlCarpeta = CARPETAPDF + "/" + req.body.name + ".pdf";
+    var datosPDF = req.body.docDatos;
+
+    console.log(urlCarpeta);
+    //console.log(datosPDF);
+
+    //if(datosPDF){
+    //  console.log(datosPDF);
+    //  console.log("procesando");
+    //  var base64Data = datosPDF.replace("data:application/pdf;base64,", "");
+    //  //require("fs").writeFile(urlCarpeta, base64Data, 'base64',
+    //  require("fs").writeFileSync(urlCarpeta, base64Data, 'base64', function(err) {
+    /7    console.log("error");
+    //    console.log(err);
+    //  });
+    //}
+
+    let values = [
+      [req.body.userId, req.body.name, urlCarpeta]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record inserted into pdf");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+});*/
+
+/*app.post('/upload', fileUpload(), function(req, res) { 
+  console.log("llegado al upload puro"); 
+  const sampleFile = req.files.uploadedFile;
+  const nombreFile = req.body.filename;
+  const archivoNombrePrueba = CARPETAPDF + "/" + 'output.pdf';
+
+  //console.log(req);
+  console.log(sampleFile);
+  console.log(nombreFile);
+
+  fs.writeFileSync(archivoNombrePrueba, sampleFile.data, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+  });
+
+  res.send('File uploaded puro');
+})*/
 
 /*
 

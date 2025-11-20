@@ -1,5 +1,5 @@
 async function sendData(){
-    const URLSERVERUpload = "http://localhost:3000/upload";
+    const URLSERVERUpload = "http://localhost:3000/create-pdf";
 
     var projectName = document.getElementById("name").value;
     var file = document.getElementById("file").files[0];
@@ -7,6 +7,7 @@ async function sendData(){
     var formData = new FormData();
     formData.append("filename", projectName);
     formData.append("uploadedFile", file);
+    formData.append("userId", 2);
 
     console.log(formData);
     alert("prueba");

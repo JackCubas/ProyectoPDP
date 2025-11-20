@@ -48,6 +48,8 @@ CREATE TABLE `Pdfs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `Pdfs` (name, pdfBase64) VALUES
-(pic1, /9j/4AAQSkZJRgABAQEASABIAAD/...),
-(doc1, R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=);
+INSERT INTO `Pdfs` (userId, name, urlCarpeta) VALUES
+(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf'),
+(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf'),
+(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf'),
+(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf');
