@@ -16,7 +16,7 @@ const APIPORT=3000*/
 const dotenv = require("dotenv");
 dotenv.config();
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const DBPORT= process.env.DBPORT;
 const DBHOST= process.env.DBHOST;
