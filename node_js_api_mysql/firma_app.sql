@@ -36,7 +36,17 @@ INSERT INTO `Users` (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VAL
 	('Steve','steve@gmail.com','stevePass', 'ADMIN','pruebaKey'),
   ('David','david1@gmail.com','david1Pass','CLIENT','davidKey'),
   ('Luis','luis@gmail.com','luisPass','CLIENT','luisKey'),
-  ('Robert','robert@gmail.com','robertPass','FIRMA','robertKey');
+  ('Robert','robert@gmail.com','robertPass','FIRMA','robertKey'),
+  ('firma','firma@gmail.com','firmaPass', 'FIRMA','firmaKey'),
+  ('anthony','anthony@email.com','anthonyPass','ADMIN','pruebaKey'),
+  ('Totoro1','totoro1@email.com','totoro1Pass','CLIENT','totoro1Key'),
+  ('pruNombre1','pruebaMail1@email.com','prueba1Pass','CLIENT','prueba1Key'),
+  ('pruNombre2','pruebaMail2@email.com','prueba2Pass','CLIENT','prueba2Key'),
+  ('pruNombre3','pruebaMail3@email.com','prueba3Pass','CLIENT','prueba3Key'),
+  ('pruNombre4','pruebaMail4@email.com','prueba4Pass','CLIENT','prueba4Key'),
+  ('pruNombre5','pruebaMail5@email.com','prueba5Pass','CLIENT','prueba5Key'),
+  ('pruNombre6','pruebaMail6@email.com','prueba6Pass','CLIENT','prueba6Key');
+
 
 
 DROP TABLE IF EXISTS `Pdfs`;

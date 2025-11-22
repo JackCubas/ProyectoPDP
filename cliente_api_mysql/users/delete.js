@@ -8,7 +8,7 @@ function checkUserHosting() {
     var idHTML = datosURL[1].replace("id=","");
 
     if(idHTML === "" || isNaN(idHTML)){
-        window.location.href = 'table.html';
+        window.location.href = 'table_pag.html?page=1';
     }
 
     return fetch(URLSERVERdetail + idHTML)
@@ -59,7 +59,7 @@ async function sendData(){
 
     alert('status:', response.status);
 
-    window.location.href = "table.html";
+    window.location.href = "table_pag.html?page=1";
 
 }
 

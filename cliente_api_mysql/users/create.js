@@ -5,7 +5,7 @@ const URLSERVERCreate = "http://localhost:3000/users";
 var datosURL = window.location.href;
 
 if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
-    window.location.href = "table.html";
+    window.location.href = "table_pag.html?page=1";
 }
 
 async function sendData(){
@@ -37,5 +37,5 @@ async function sendData(){
         body: JSON.stringify(nuevoUsers)
     })
 
-    window.location.href = "table.html";
+    window.location.href = "table_pag.html?page=1";
 }

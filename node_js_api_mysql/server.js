@@ -325,6 +325,48 @@ app.get('/users', (req, res) => {
   }
 });
 
+app.get('/users_pag', (req, res) => {
+  console.log("get all users del paginacion!");
+
+  const page = req.query.page;
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          var sql = "SELECT * FROM users LIMIT 10";
+
+          if(page > 1){
+            sql = sql + " OFFSET " + ((page-1)*10);
+          }
+          console.log(sql);
+          connection.query(sql, function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+});
+
 app.get('/users/:id', (req, res) => {
     console.log("get user!");
 
@@ -894,6 +936,18 @@ app.delete('/eliminate', function(req, res) {
 
 })
 
+//-----------------------
+app.listen(APIPORT, () => {
+  console.log(`Example app listening at http://localhost:${APIPORT}`);
+});
+
+function emptyOrRows(rows) {
+  if (!rows) {
+    return [];
+  }
+  return rows;
+}
+
 //------------------------
 //-----------------------
 
@@ -991,18 +1045,6 @@ form.append('file', fs.createReadStream(filepath), {filename: 'newname'});
 */
 //-----------------------
 //-----------------------
-
-
-app.listen(APIPORT, () => {
-  console.log(`Example app listening at http://localhost:${APIPORT}`);
-});
-
-function emptyOrRows(rows) {
-  if (!rows) {
-    return [];
-  }
-  return rows;
-}
 
 
 //---------------
