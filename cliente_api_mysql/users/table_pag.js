@@ -39,16 +39,17 @@ function buildPaginacion(data){
   console.log("pageNum " + pageNum);
   console.log("prev " + pageNumPrev);
   console.log("next" + pageNumNext);
-
-  linkPrev.href="table_pag.html?page=" + pageNumPrev;
-  linkNext.href="table_pag.html?page=" + pageNumNext;
   
   if(pageNumPrev == 0){
-    linkPrev.disabled = true;
+    linkPrev.href = '#';
+  }else{
+    linkPrev.href="table_pag.html?page=" + pageNumPrev;
   }
 
   if(data.length < 10){
-    linkNext.disabled = true
+    linkNext.href = '#';
+  }else{
+    linkNext.href="table_pag.html?page=" + pageNumNext;
   } 
 }
 
