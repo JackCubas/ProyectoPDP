@@ -49,6 +49,9 @@ const fs = require('fs');
 const fileUpload = require('express-fileupload');
 const util = require("util");
 //----------------------------------
+const crypto = require("crypto")
+
+//---------------------------------
 
 //const PDFParser = require('pdf-parse');
 
@@ -291,6 +294,37 @@ app.put('/update-movie/:id', (req, res) => {
 //--------------------------
 //--------------------------
 //--------------------------
+
+//----------------------------------------------------------------------------------------
+var key = Buffer.from('MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=', 'base64');
+
+function encrypt(plaintext) {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    key,
+    iv
+  );
+  let encrypted = Buffer.concat([iv, cipher.update(plaintext, 'utf8'), cipher.final()]);
+  return encrypted.toString('base64url');
+}
+
+function decrypt(ivCiphertextB64) {
+  const ivCiphertext = Buffer.from(ivCiphertextB64, 'base64url');
+  const iv = ivCiphertext.subarray(0, 16);
+  const ciphertext = ivCiphertext.subarray(16);
+  const cipher = crypto.createDecipheriv(
+    'aes-256-cbc',
+    key,
+    iv
+  );
+  let decrypted = Buffer.concat([cipher.update(ciphertext), cipher.final()]);
+  return decrypted.toString('utf-8');
+}
+//------------------------------------------------------------------------------------
+
+
+
 app.get('/users', (req, res) => {
   console.log("get all users!");
 
@@ -398,7 +432,16 @@ app.get('/users/:id', (req, res) => {
         console.log(result);
 
         resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-        console.log(resultRows);
+        
+        if(resultRows.length > 0){
+          console.log(resultRows);
+          resultFinal = resultRows[0];
+          console.log(resultFinal);
+          resultFinal.passUser = decrypt(resultFinal.passUser);
+          console.log(resultFinal);
+          resultRows[0] = resultFinal;
+        }
+
         res.json(resultRows);
     });
     
@@ -415,6 +458,8 @@ app.post('/users', (req, res) => {
     const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
     if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
 
+    passEncrypt = encrypt(passUser);
+
     const con = mysql.createConnection({
           host: DBHOST,
           user: DBUSER,
@@ -430,7 +475,7 @@ app.post('/users', (req, res) => {
       }
 
       const sql = 'INSERT INTO users (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES ?';
-      const values = [[nameUser.trim(), emailUser.trim(), passUser, rolUser, encryptKeyUser || null]];
+      const values = [[nameUser.trim(), emailUser.trim(), passEncrypt, rolUser, encryptKeyUser || null]];
 
       con.query(sql, [values], function (err, result) {
         if (err) {
@@ -449,7 +494,9 @@ app.put('/users/:id', (req, res) => {
     const { id } = req.params;
     const { nameUser, emailUser, passUser, rolUser, encryptKeyUser} = req.body;
 
-    console.log(id + " - " + nameUser + " - " + emailUser);
+    console.log(id + " - " + nameUser + " - " + emailUser + " - " + passUser);
+
+    passEncrypt = encrypt(req.body.passUser);
 
     con = mysql.createConnection({
           host: DBHOST,
@@ -467,7 +514,7 @@ app.put('/users/:id', (req, res) => {
       UPDATE users 
       SET nameUser = "${nameUser}", 
       emailUser = "${emailUser}",
-      passUser = "${passUser}",
+      passUser = "${passEncrypt}",
       rolUser = "${rolUser}",
       encryptKeyUser = "${encryptKeyUser}" 
       WHERE id = "${id}"
@@ -615,7 +662,6 @@ app.get('/login', (req, res) => {
     
   });
 });*/
-
 
 app.get('/users/checkUserEMail/:email', (req, res) => {
   console.log("checking if user exists!");
