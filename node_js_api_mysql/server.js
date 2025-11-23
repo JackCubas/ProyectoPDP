@@ -575,6 +575,8 @@ app.get('/login', (req, res) => {
     return res.status(400).json({ error: 'email y contra son requeridos' });
   }
 
+  console.log("email: " + userEmail + " userPass: " + userPass);
+
   const con = mysql.createConnection({
         host: DBHOST,
         user: DBUSER,
@@ -589,15 +591,31 @@ app.get('/login', (req, res) => {
       return res.status(500).json({ error: 'database connection error' });
     }
 
-    const sql = 'SELECT * FROM users WHERE emailUser = ? AND passUser = ?';
-    con.query(sql, [userEmail.trim(), userPass], function (err, result) {
+    const sql = 'SELECT * FROM users WHERE emailUser = ?';
+    con.query(sql, [userEmail.trim()], function (err, result) {
         if (err) {
           console.error('DB query error:', err);
           return res.status(500).json({ error: 'database query error' });
         }
 
         const rows = Object.values(JSON.parse(JSON.stringify(result)));
-        if (!rows || rows.length === 0) return res.json({ user: 'FALSE' });
+        if (!rows || rows.length === 0){ 
+          return res.json({ user: 'FALSE' });
+        }
+
+        if(rows.length > 0){
+          console.log(rows);
+          resultFinal = rows[0];
+          console.log(resultFinal);
+          passUserDecrypt = decrypt(resultFinal.passUser);
+
+          if(!passUserDecrypt || passUserDecrypt != userPass){
+            return res.json({ user: 'FALSE' });
+          }else{
+            rows[0] = resultFinal;
+          }
+        }
+
         return res.json({ user: rows });
     });
   });
