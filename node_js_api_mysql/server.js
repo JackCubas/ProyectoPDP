@@ -962,7 +962,7 @@ app.post('/create-pdf', fileUpload(), (req, res) => {
 //-------------------
 
 
-app.get('/retrieve', function(req, res) { 
+/*app.get('/retrieve', function(req, res) { 
   const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
 
   console.log("llegado al retrieve puro");
@@ -974,7 +974,23 @@ app.get('/retrieve', function(req, res) {
   res.setHeader("Content-Length", size);
   rs.pipe(res);
   
-}) 
+})*/
+
+app.get('/retrieve/:thisDocName', function(req, res) {
+  const { thisDocName } = req.params;
+  
+  const pathAxios = CARPETAPDF + "/" + thisDocName + '.pdf'; // path where to file is stored in server
+
+  console.log("llegado al retrieve puro");
+  const rs = fs.createReadStream(pathAxios);
+
+  // get size of the video file
+  const { size } = fs.statSync(pathAxios);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Length", size);
+  rs.pipe(res);
+  
+})
 
 app.delete('/eliminate', function(req, res) {
 
