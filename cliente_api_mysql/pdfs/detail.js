@@ -1,59 +1,39 @@
-const URLSERVERretrieve = "http://localhost:3000/retrieve";
+const URLSERVERdetail = "http://localhost:3000/pdfs/";
 
-async function checkUserHosting() {
+function checkUserHosting() {
 
-    return fetch(URLSERVERretrieve, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-    .then((response) => { 
-        console.log(response);
-        return response.blob().then((data) => {
-                    console.log(data);
-                    return appendData(data);
-                }).catch((err) => {
-                    console.log(err);
-                }) 
+    var datosURL = window.location.href.split('?');
+    var idHTML = datosURL[1].replace("id=","");
 
-
-    });
-    
+    return fetch(URLSERVERdetail + idHTML)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
 
 }
 
-function appendData(response){
-
-        const fileURL = URL.createObjectURL(response);
-        console.log(fileURL);
-        window.open(fileURL); 
-
+//pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, userId
+function appendData(data){
         var con=document.getElementById("main-container")
-        var text = document.createTextNode("This is the retrieved document");
-        con.appendChild(text);
+        for(let i=0;i<data.length;i++){
+            console.log(data[i]);
+            var d=document.createElement("div")
+            d.textContent="Doc Name: " + data[i].DocName                      
+            con.appendChild(d);
 
-        /*
+            var e=document.createElement("div")
+            e.textContent="Doc URL: " + data[i].urlCarpeta                      
+            con.appendChild(e);
 
-        var blob = new Blob([req.response], { type: "application/octetstream" });
- 
-                //Check the Browser type and download the File.
-                var isIE = false || !!document.documentMode;
-                if (isIE) {
-                    window.navigator.msSaveBlob(blob, fileName);
-                } else {
-                    var url = window.URL || window.webkitURL;
-                    link = url.createObjectURL(blob);
-                    var a = document.createElement("a");
-                    a.setAttribute("download", fileName);
-                    a.setAttribute("href", link);
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                }
-
-        */
-        
+            var f=document.createElement("div")
+            f.textContent="User Name: " + data[i].nameUser                      
+            con.appendChild(f);
+        }
 }
+
 
 checkUserHosting();

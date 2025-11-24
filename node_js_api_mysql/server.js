@@ -810,7 +810,7 @@ app.get("/pdfs", cors(), (req, res) => {
 
 });
 
-app.get("/pdfs/:userId", cors(), (req, res) => {
+app.get("/pdfsByUser/:userId", cors(), (req, res) => {
 
    console.log("get all pdfs for user!");
 
@@ -844,13 +844,7 @@ app.get("/pdfs/:userId", cors(), (req, res) => {
               
               console.log(result);
 
-              //result.docBlob = new Blob([result.docBlob], {
-              //    type: "application/pdf",
-              //});
-
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-
-              var carpetUrl = resultRows[0].urlCarpeta;
 
               console.log(resultRows);
               res.json(resultRows);
@@ -863,7 +857,7 @@ app.get("/pdfs/:userId", cors(), (req, res) => {
 
 });
 
-/*app.get("/pdfs/:id", cors(), (req, res) => {
+app.get("/pdfs/:id", cors(), (req, res) => {
 
    console.log("get pdf by id!");
 
@@ -882,28 +876,20 @@ app.get("/pdfs/:userId", cors(), (req, res) => {
 
       connection.connect(function(err) {
           if (err) throw err;
-          
-        //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
-        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
 
-          var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
 
           let values = [
             [id]
           ]
 
-          connection.query(sql,[values], function (err, result, fields) {
+          connection.query(queryBusqueda,[values], function (err, result, fields) {
               if (err) throw err;
               
               console.log(result);
 
-              //result.docBlob = new Blob([result.docBlob], {
-              //    type: "application/pdf",
-              //});
-
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-
-              var carpetUrl = resultRows[0].urlCarpeta;
 
               console.log(resultRows);
               res.json(resultRows);
@@ -914,7 +900,7 @@ app.get("/pdfs/:userId", cors(), (req, res) => {
       console.log("Error al conectar con la base de datos");
   }
 
-});*/
+});
 
 //------------------
 //------------------
