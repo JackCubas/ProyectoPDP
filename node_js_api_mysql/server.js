@@ -1002,7 +1002,7 @@ app.delete('/eliminate', function(req, res) {
 
 //-----------------------
 app.listen(APIPORT, () => {
-  console.log(`Example app listening at http://localhost:${APIPORT}`);
+  console.log(`Firma app listening at http://localhost:${APIPORT}`);
 });
 
 function emptyOrRows(rows) {
