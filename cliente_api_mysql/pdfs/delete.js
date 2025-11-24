@@ -6,7 +6,7 @@ async function sendData(){
         method: "DELETE"
     })
 
-    window.location.href = "pdf.html";
+    window.location.href = "table.html";
 
 }
 

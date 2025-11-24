@@ -70,9 +70,9 @@ function detail(event){
   const substringToRemove = "detailbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
-  alert("DETAIL " + idDetail);
+  //alert("DETAIL " + idDetail);
 
-  //window.location.href = "detail.html?id=" + idDetail;
+  window.location.href = "detail.html?id=" + idDetail;
 }
 
 function edit(event){
@@ -95,9 +95,9 @@ function del(event){
   const substringToRemove = "delbutton";
   const idDel = idDelString.replace(substringToRemove, '');
 
-  alert("DEL " + idDel);
+  //alert("DEL " + idDel);
 
-  //window.location.href = "delete.html?id=" + idDel;
+  window.location.href = "delete.html?id=" + idDel;
 }
 
 
