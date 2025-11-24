@@ -30,7 +30,7 @@ function appendData(response){
         window.open(fileURL); 
 
         var con=document.getElementById("main-container")
-        var text = document.createTextNode("This just got added");
+        var text = document.createTextNode("This is the retrieved document");
         con.appendChild(text);
 
         /*
