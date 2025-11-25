@@ -28,12 +28,6 @@ function buildTable(data) {
     
     const butID = data[i].pdfId;
 
-    const button = document.createElement('button');
-    button.id = "testbutton" + butID;
-    button.textContent = "Click Me";
-    button.addEventListener('click', doSmth);
-    cell3.appendChild(button);
-
     const buttonDetail = document.createElement('button');
     buttonDetail.id = "detailbutton" + butID;
     buttonDetail.textContent = "Detail";
@@ -51,15 +45,19 @@ function buildTable(data) {
     buttonDel.textContent = "Delete";
     buttonDel.addEventListener('click', del);
     cell3.appendChild(buttonDel);
+
+    const buttonSign = document.createElement('button');
+    buttonSign.id = "signbutton" + butID;
+    buttonSign.textContent = "Sign";
+    buttonSign.addEventListener('click', sign);
+    cell3.appendChild(buttonSign);
+
+    const buttonStamp = document.createElement('button');
+    buttonStamp.id = "stampbutton" + butID;
+    buttonStamp.textContent = "Stamp";
+    buttonStamp.addEventListener('click', stamp);
+    cell3.appendChild(buttonStamp);
   }
-}
-
-function doSmth(event) {
-  var idDetailString = event.target.id;
-  const substringToRemove = "testbutton";
-  const idDetail = idDetailString.replace(substringToRemove, '');
-
-  alert("ID: " + idDetail);
 }
 
 function detail(event){
@@ -98,6 +96,22 @@ function del(event){
   //alert("DEL " + idDel);
 
   window.location.href = "delete.html?id=" + idDel;
+}
+
+function sign(event) {
+  var idSignString = event.target.id;
+  const substringToRemove = "signbutton";
+  const idSign = idSignString.replace(substringToRemove, '');
+
+  alert("Sign: " + idSign);
+}
+
+function stamp(event) {
+  var idStampString = event.target.id;
+  const substringToRemove = "stampbutton";
+  const idStamp = idStampString.replace(substringToRemove, '');
+
+  alert("Stamp: " + idStamp);
 }
 
 
