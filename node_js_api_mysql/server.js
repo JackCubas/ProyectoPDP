@@ -769,7 +769,7 @@ function userExistsByEmail(email){
 
 app.get("/pdfs", cors(), (req, res) => {
 
-   console.log("get all pdfs!");
+  //console.log("get all pdfs!");
 
   let connection;
   var resultRows;
@@ -793,13 +793,13 @@ app.get("/pdfs", cors(), (req, res) => {
           connection.query(queryBusqueda, function (err, result, fields) {
               if (err) throw err;
               
-              console.log(result);
+              //console.log(result);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
               //var carpetUrl = resultRows[0].urlCarpeta;
 
-              console.log(resultRows);
+              //console.log(resultRows);
               res.json(resultRows);
           });
       });
@@ -859,7 +859,7 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
 
 app.get("/pdfs/:id", cors(), (req, res) => {
 
-   console.log("get pdf by id!");
+  //console.log("get pdf by id!");
 
   let connection;
   var resultRows;
@@ -887,11 +887,11 @@ app.get("/pdfs/:id", cors(), (req, res) => {
           connection.query(queryBusqueda,[values], function (err, result, fields) {
               if (err) throw err;
               
-              console.log(result);
+              //console.log(result);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
-              console.log(resultRows);
+              //console.log(resultRows);
               res.json(resultRows);
           });
       });
@@ -981,7 +981,7 @@ app.get('/retrieve/:thisDocName', function(req, res) {
   
   const pathAxios = CARPETAPDF + "/" + thisDocName + '.pdf'; // path where to file is stored in server
 
-  console.log("llegado al retrieve puro");
+  //console.log("llegado al retrieve puro");
   const rs = fs.createReadStream(pathAxios);
 
   // get size of the video file
@@ -992,13 +992,104 @@ app.get('/retrieve/:thisDocName', function(req, res) {
   
 })
 
-app.delete('/eliminate', function(req, res) {
+/*app.delete('/eliminate', function(req, res) {
 
   console.log("llegado al delete pdf puro");
   const pathAxios = CARPETAPDF + "/" + 'output.pdf';
   // delete the file on server after it sends to client
   const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
   unlinkFile(pathAxios);
+
+})*/
+
+app.delete('/eliminate/:id', function(req, res) {
+
+  let connection;
+  var resultRows;
+  var docName = "";
+
+  const { id } = req.params;
+  console.log("llegado al delete pdf para doc " + id);
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          var queryBusqueda = "SELECT * FROM pdfs WHERE id = ?"
+
+          let values = [
+            [id]
+          ]
+
+          connection.query(queryBusqueda,[values], function (err, result, fields) {
+              if (err) throw err;
+              
+              console.log(result[0]);
+
+              //resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              //console.log(resultRows);
+              //resultRows = result;
+              docName = result[0].name;
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos para el pdf del borrado");
+  }
+
+  //docName = resultRows[0].name;
+  console.log("llegado al delete pdf para doc nombre " + docName);
+
+  //------------------------------------------------
+
+  console.log("llegado al delete pdf puro");
+  const pathAxios = CARPETAPDF + "/" + docName  +".pdf";
+  // delete the file on server after it sends to client
+  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+  unlinkFile(pathAxios);
+
+  //-----------------------------------------------
+
+  console.log("delete pdf from bbdd!");
+
+  let con;
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "DELETE FROM pdfs WHERE id = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record deleted");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
 
 })
 
