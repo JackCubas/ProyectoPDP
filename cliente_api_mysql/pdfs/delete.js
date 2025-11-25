@@ -1,4 +1,4 @@
-const URLSERVERDelete = "http://localhost:3000/eliminate/";
+const URLSERVERDelete = "http://localhost:3000/eliminate";
 
 const URLSERVERdetail = "http://localhost:3000/pdfs/";
 const URLSERVERretrieve = "http://localhost:3000/retrieve/";
@@ -89,13 +89,33 @@ async function sendData(){
     var datosURL = window.location.href.split('?');
     var idHTML = datosURL[1].replace("id=","");
 
+    //console.log(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName);
+
     //console.log("delete pdf: " + URLSERVERDelete + idHtml);
     //alert("delete pdf: " + URLSERVERDelete + idHtml);
 
-    const response = await fetch(URLSERVERDelete + idHTML, {
+    const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName, {
         method: "DELETE"
     })
 
     window.location.href = "table.html";
+
+}
+
+async function myFunction(){
+
+    var datosURL = window.location.href.split('?');
+    var idHTML = datosURL[1].replace("id=","");
+
+    console.log(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName);
+
+    //console.log("delete pdf: " + URLSERVERDelete + idHtml);
+    //alert("delete pdf: " + URLSERVERDelete + idHtml);
+
+    /*const response = await fetch(URLSERVERDelete + idHTML, {
+        method: "DELETE"
+    })
+
+    window.location.href = "table.html";*/
 
 }

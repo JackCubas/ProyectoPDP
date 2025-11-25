@@ -1002,51 +1002,17 @@ app.get('/retrieve/:thisDocName', function(req, res) {
 
 })*/
 
-app.delete('/eliminate/:id', function(req, res) {
+app.delete('/eliminate', function(req, res) {
 
-  let connection;
-  var resultRows;
-  var docName = "";
+  const id = req.query.id;
+  const docName = req.query.docName;
 
-  const { id } = req.params;
-  console.log("llegado al delete pdf para doc " + id);
-
-  try {
-      connection = mysql.createConnection({
-          host: DBHOST,
-          user: DBUSER,
-          password: DBPASS,
-          port     :DBPORT,
-          database: DBNAME
-      });
-
-      connection.connect(function(err) {
-          if (err) throw err;
-
-          var queryBusqueda = "SELECT * FROM pdfs WHERE id = ?"
-
-          let values = [
-            [id]
-          ]
-
-          connection.query(queryBusqueda,[values], function (err, result, fields) {
-              if (err) throw err;
-              
-              console.log(result[0]);
-
-              //resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-
-              //console.log(resultRows);
-              //resultRows = result;
-              docName = result[0].name;
-          });
-      });
-
-  } catch (error) {
-      console.log("Error al conectar con la base de datos para el pdf del borrado");
+  if (!id || !docName) {
+    return res.status(400).json({ id: 'email y docName son requeridos' });
   }
 
-  //docName = resultRows[0].name;
+  console.log("id: " + id + " docName: " + docName);
+
   console.log("llegado al delete pdf para doc nombre " + docName);
 
   //------------------------------------------------
