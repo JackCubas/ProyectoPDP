@@ -66,9 +66,9 @@ function buildTable(data) {
     const butID = data[i].id;
 
     const button = document.createElement('button');
-    button.id = "testbutton" + butID;
-    button.textContent = "Click Me";
-    button.addEventListener('click', doSmth);
+    button.id = "showIDbutton" + butID;
+    button.textContent = "Show ID";
+    button.addEventListener('click', showId);
     cell2.appendChild(button);
 
     const buttonDetail = document.createElement('button');
@@ -91,9 +91,9 @@ function buildTable(data) {
   }
 }
 
-function doSmth(event) {
+function showId(event) {
   var idDetailString = event.target.id;
-  const substringToRemove = "testbutton";
+  const substringToRemove = "showIDbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
   alert("ID: " + idDetail);
