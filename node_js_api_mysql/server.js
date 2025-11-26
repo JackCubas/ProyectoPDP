@@ -789,7 +789,7 @@ app.get("/pdfs", cors(), (req, res) => {
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
         //SELECT id, userId, name, urlCarpeta FROM pdfs
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id"
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id"
           connection.query(queryBusqueda, function (err, result, fields) {
               if (err) throw err;
               
@@ -833,7 +833,7 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
 
-          var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE userId = ?";
+          var sql = "SELECT id, userId, name, estado, urlCarpeta FROM pdfs WHERE userId = ?";
 
           let values = [
             [userId]
@@ -878,7 +878,7 @@ app.get("/pdfs/:id", cors(), (req, res) => {
           if (err) throw err;
 
           //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
 
           let values = [
             [id]
@@ -909,6 +909,7 @@ app.post('/create-pdf', fileUpload(), (req, res) => {
   console.log("llegado al create-pdf"); 
   const pdfFile = req.files.uploadedFile;
   const nombreFile = req.body.filename;
+  const estado = req.body.estado;
   const archivoNombre = CARPETAPDF + "/" + nombreFile + '.pdf';
 
   console.log(req.body.userId);
@@ -940,10 +941,10 @@ app.post('/create-pdf', fileUpload(), (req, res) => {
     console.log("Connected to pdf!");
     console.log(req.body);
 
-    let sql = "INSERT INTO pdfs (userId, name, urlCarpeta) VALUES ?";
+    let sql = "INSERT INTO pdfs (userId, name, urlCarpeta, estado) VALUES ?";
 
     let values = [
-      [req.body.userId, nombreFile, archivoNombre]
+      [req.body.userId, nombreFile, archivoNombre, estado]
     ]
 
     con.query(sql, [values], function (err, result) {

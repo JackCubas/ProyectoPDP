@@ -62,6 +62,10 @@ function appendData(data){
         var f=document.createElement("div")
         f.textContent="User Name: " + data[i].nameUser                      
         con.appendChild(f);
+
+        var g=document.createElement("div")
+        g.textContent="Estado: " + data[i].estado                      
+        con.appendChild(g);
     }
     console.log("finalizado generacion de ventana");
 }

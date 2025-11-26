@@ -55,12 +55,13 @@ CREATE TABLE `Pdfs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `urlCarpeta` varchar(100),
+  `urlCarpeta` varchar(100) NOT NULL,
+  `estado` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `Pdfs` (userId, name, urlCarpeta) VALUES
-(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf'),
-(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf'),
-(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf'),
-(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf');
+INSERT INTO `Pdfs` (userId, name, urlCarpeta, estado) VALUES
+(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf', 'VALIDADO'),
+(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf', 'PENDIENTE'),
+(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf', 'PENDIENTE'),
+(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'RECHAZADO');
