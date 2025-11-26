@@ -962,21 +962,6 @@ app.post('/create-pdf', fileUpload(), (req, res) => {
 //-------------------
 //-------------------
 
-
-/*app.get('/retrieve', function(req, res) { 
-  const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
-
-  console.log("llegado al retrieve puro");
-  const rs = fs.createReadStream(pathAxios);
-
-  // get size of the video file
-  const { size } = fs.statSync(pathAxios);
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Length", size);
-  rs.pipe(res);
-  
-})*/
-
 app.get('/retrieve/:thisDocName', function(req, res) {
   const { thisDocName } = req.params;
   
@@ -993,15 +978,6 @@ app.get('/retrieve/:thisDocName', function(req, res) {
   
 })
 
-/*app.delete('/eliminate', function(req, res) {
-
-  console.log("llegado al delete pdf puro");
-  const pathAxios = CARPETAPDF + "/" + 'output.pdf';
-  // delete the file on server after it sends to client
-  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-  unlinkFile(pathAxios);
-
-})*/
 
 app.delete('/eliminate', function(req, res) {
 
@@ -1074,6 +1050,30 @@ function emptyOrRows(rows) {
 
 //------------------------
 //-----------------------
+
+/*app.delete('/eliminate', function(req, res) {
+
+  console.log("llegado al delete pdf puro");
+  const pathAxios = CARPETAPDF + "/" + 'output.pdf';
+  // delete the file on server after it sends to client
+  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+  unlinkFile(pathAxios);
+
+})*/
+
+/*app.get('/retrieve', function(req, res) { 
+  const pathAxios = CARPETAPDF + "/" + 'output.pdf'; // path where to file is stored in server
+
+  console.log("llegado al retrieve puro");
+  const rs = fs.createReadStream(pathAxios);
+
+  // get size of the video file
+  const { size } = fs.statSync(pathAxios);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Length", size);
+  rs.pipe(res);
+  
+})*/
 
 /*app.post('/create-pdf', (req, res) => {
 
