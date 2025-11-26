@@ -621,66 +621,6 @@ app.get('/login', (req, res) => {
   });
 });
 
-
-/*app.post('/users/login', (req, res) => {
-  console.log("get user login!");
-
-  let con;
-  var resultRows;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
-
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-
-    let sql = `
-      SELECT * FROM users WHERE 
-      emailUser = "${req.body.emailUser}" 
-      AND passUser = "${req.body.passUser}"
-    `;
-
-    console.log(sql);
-
-    con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        
-        console.log(result);
-
-        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-        console.log(resultRows);
-
-        if(resultRows.length == 0){
-          console.log("user does not exists!");
-          res.json({user: "FALSE"});
-        }
-
-        if(resultRows.length > 0 && resultRows[0].rolUser == "ADMIN"){
-          console.log("user exists and is ADMIN!");
-          res.json({user: resultRows});
-        }
-
-        if(resultRows.length > 0 && resultRows[0].rolUser == "CLIENT"){
-          console.log("user exists and is CLIENT!");
-          res.json({user: resultRows});
-        }
-
-        if(resultRows.length > 0 && resultRows[0].rolUser == "FIRMA"){
-          console.log("user exists and is FIRMA!");
-          res.json({user: resultRows});
-        }
-        
-    });
-    
-  });
-});*/
-
 app.get('/users/checkUserEMail/:email', (req, res) => {
   console.log("checking if user exists!");
 
@@ -1050,6 +990,65 @@ function emptyOrRows(rows) {
 
 //------------------------
 //-----------------------
+
+/*app.post('/users/login', (req, res) => {
+  console.log("get user login!");
+
+  let con;
+  var resultRows;
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = `
+      SELECT * FROM users WHERE 
+      emailUser = "${req.body.emailUser}" 
+      AND passUser = "${req.body.passUser}"
+    `;
+
+    console.log(sql);
+
+    con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+
+        if(resultRows.length == 0){
+          console.log("user does not exists!");
+          res.json({user: "FALSE"});
+        }
+
+        if(resultRows.length > 0 && resultRows[0].rolUser == "ADMIN"){
+          console.log("user exists and is ADMIN!");
+          res.json({user: resultRows});
+        }
+
+        if(resultRows.length > 0 && resultRows[0].rolUser == "CLIENT"){
+          console.log("user exists and is CLIENT!");
+          res.json({user: resultRows});
+        }
+
+        if(resultRows.length > 0 && resultRows[0].rolUser == "FIRMA"){
+          console.log("user exists and is FIRMA!");
+          res.json({user: resultRows});
+        }
+        
+    });
+    
+  });
+});*/
 
 /*app.delete('/eliminate', function(req, res) {
 
