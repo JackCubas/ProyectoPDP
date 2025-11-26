@@ -101,21 +101,3 @@ async function sendData(){
     window.location.href = "table.html";
 
 }
-
-async function myFunction(){
-
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
-
-    console.log(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName);
-
-    //console.log("delete pdf: " + URLSERVERDelete + idHtml);
-    //alert("delete pdf: " + URLSERVERDelete + idHtml);
-
-    /*const response = await fetch(URLSERVERDelete + idHTML, {
-        method: "DELETE"
-    })
-
-    window.location.href = "table.html";*/
-
-}

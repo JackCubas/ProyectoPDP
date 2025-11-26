@@ -346,10 +346,10 @@ app.get('/users', (req, res) => {
           connection.query("SELECT * FROM users", function (err, result, fields) {
               if (err) throw err;
               
-              console.log(result);
+              //console.log(result);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-              console.log(resultRows);
+              //console.log(resultRows);
               res.json(resultRows);
           });
       });
@@ -388,10 +388,10 @@ app.get('/users_pag', (req, res) => {
           connection.query(sql, function (err, result, fields) {
               if (err) throw err;
               
-              console.log(result);
+              //console.log(result);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-              console.log(resultRows);
+              //console.log(resultRows);
               res.json(resultRows);
           });
       });
@@ -429,16 +429,16 @@ app.get('/users/:id', (req, res) => {
     con.query(sql, [values], function (err, result, fields) {
         if (err) throw err;
         
-        console.log(result);
+        //console.log(result);
 
         resultRows = Object.values(JSON.parse(JSON.stringify(result)));
         
         if(resultRows.length > 0){
-          console.log(resultRows);
+          //console.log(resultRows);
           resultFinal = resultRows[0];
-          console.log(resultFinal);
+          //console.log(resultFinal);
           resultFinal.passUser = decrypt(resultFinal.passUser);
-          console.log(resultFinal);
+          //console.log(resultFinal);
           resultRows[0] = resultFinal;
         }
 
