@@ -940,11 +940,11 @@ app.delete('/eliminate', function(req, res) {
   console.log("llegado al delete pdf puro");
   const pathAxios = CARPETAPDF + "/" + docName  +".pdf";
 
-  if (fs.existsSync(pathAxios)) {
+  //if (fs.existsSync(pathAxios)) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
     unlinkFile(pathAxios);
-  }
+  //}
 
   //-----------------------------------------------
 
