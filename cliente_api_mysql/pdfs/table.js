@@ -80,9 +80,9 @@ function edit(event){
   const substringToRemove = "editbutton";
   const idEdit = idEditString.replace(substringToRemove, '');
 
-  alert("EDIT " + idEdit);
+  //alert("EDIT " + idEdit);
 
-  //window.location.href = "modify.html?id=" + idEdit;
+  window.location.href = "modify.html?id=" + idEdit;
 }
 
 function del(event){
