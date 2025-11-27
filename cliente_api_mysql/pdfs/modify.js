@@ -98,7 +98,7 @@ async function sendData(){
     alert("prueba");
 
 
-    /*const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
+    const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
         method: "PUT",
         headers: {
             "Accept": "application/json"
@@ -108,7 +108,7 @@ async function sendData(){
     );
 
     const result = await apiCall.json();
-    console.log(result);*/
+    console.log(result);
 
     //window.location.href = "table.html";
 

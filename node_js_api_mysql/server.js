@@ -983,14 +983,44 @@ app.delete('/eliminate', function(req, res) {
 })
 
 
-app.put('/modify-pdf/:id', (req, res) => {
+app.put('/modify-pdf/:id', fileUpload(), (req, res) => {
+
+  console.log("llegado al modify-pdf");
+  
+  console.log(req.files);
+
+  const { id } = req.params;
+
+  const nombreFileNuevo = req.body.filename;
+  const nombreFileOriginal = req.body.filenameOriginal;
+  const estado = req.body.estado;
+  const userId = req.body.userId;
+
+  const archivoNombreNuevo = CARPETAPDF + "/" + nombreFileNuevo + '.pdf';
+  const archivoNombreOriginal = CARPETAPDF + "/" + nombreFileOriginal + '.pdf';
+  
+  var pdfFile;
+  if(req.files != null){
+    pdfFile = req.files.uploadedFile;
+  }else{
+    pdfFile = null;
+  }
+
+  console.log(id);
+  console.log(archivoNombreNuevo);
+  console.log(archivoNombreOriginal);
+  console.log(nombreFileOriginal);
+  console.log(nombreFileNuevo);
+  console.log(estado);
+  console.log(userId);
+  console.log(pdfFile);
 
   //use the fs object's rename method to re-name the file
-  fs.rename(oldFilePath, newFilePath, function (err) {
+  /*fs.rename(oldFilePath, newFilePath, function (err) {
   if (err) {console.log(err); return; }
   
-  console.log('The file has been re-named to: ' + newFilePath);
-});
+    console.log('The file has been re-named to: ' + newFilePath);
+  });*/
 
 })
 
