@@ -982,6 +982,18 @@ app.delete('/eliminate', function(req, res) {
 
 })
 
+
+app.put('/modify-pdf/:id', (req, res) => {
+
+  //use the fs object's rename method to re-name the file
+  fs.rename(oldFilePath, newFilePath, function (err) {
+  if (err) {console.log(err); return; }
+  
+  console.log('The file has been re-named to: ' + newFilePath);
+});
+
+})
+
 //-----------------------
 app.listen(APIPORT, () => {
   console.log(`Firma app listening at http://localhost:${APIPORT}`);
