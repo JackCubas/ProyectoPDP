@@ -80,16 +80,17 @@ async function sendData(){
     var file = document.getElementById("file").files[0];
     var docEstado = document.getElementById("docEstado").value;
 
-    console.log("filename: " + projectName + " estado: " + docEstado + " uploadedFile: " + file);
+    console.log("filename: " + projectName + " filenameOriginal: " + thisDocName + " estado: " + docEstado + " uploadedFile: " + file);
     
     if(file === undefined){
         file = null;
     }
 
-    console.log("filename2: " + projectName + " estado2: " + docEstado + " uploadedFile2: " + file);
+    console.log("filename2: " + projectName + " filenameOriginal: " + thisDocName + " estado2: " + docEstado + " uploadedFile2: " + file);
 
     var formData = new FormData();
     formData.append("filename", projectName);
+    formData.append("filenameOriginal", thisDocName);
     formData.append("estado", docEstado);
     formData.append("uploadedFile", file);
     formData.append("userId", 2);
