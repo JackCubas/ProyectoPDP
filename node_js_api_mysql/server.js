@@ -940,11 +940,11 @@ app.delete('/eliminate', function(req, res) {
   console.log("llegado al delete pdf puro");
   const pathAxios = CARPETAPDF + "/" + docName  +".pdf";
 
-  //if (fs.existsSync(pathAxios)) {
+  if (fs.existsSync(pathAxios)) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
     unlinkFile(pathAxios);
-  //}
+  }
 
   //-----------------------------------------------
 
@@ -1015,13 +1015,66 @@ app.put('/modify-pdf/:id', fileUpload(), (req, res) => {
   console.log(userId);
   console.log(pdfFile);
 
-  //use the fs object's rename method to re-name the file
-  /*fs.rename(oldFilePath, newFilePath, function (err) {
-  if (err) {console.log(err); return; }
-  
-    console.log('The file has been re-named to: ' + newFilePath);
-  });*/
+  if(pdfFile === null){
 
+    fs.rename(archivoNombreOriginal, archivoNombreNuevo, function (err) {
+      if (err) {console.log(err); return; }
+      
+        console.log('The file has been re-named to: ' + archivoNombreNuevo);
+      })
+
+  }
+  
+  if(pdfFile !== null && pdfFile.data !== null){
+
+    if (fs.existsSync(archivoNombreOriginal)) {
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      unlinkFile(archivoNombreOriginal);
+    }
+
+    fs.writeFileSync(archivoNombreNuevo, pdfFile.data, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+    });
+
+  }
+
+
+  //-----------------------------------
+
+  con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = `
+      UPDATE pdfs 
+      SET userId = "${userId}", 
+      name = "${nombreFileNuevo}",
+      urlCarpeta = "${archivoNombreNuevo}",
+      estado = "${estado}"
+      WHERE id = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("1 record modified");
+      console.log(result);
+
+      res.json(result);
+    });
+
+  })
 })
 
 //-----------------------
