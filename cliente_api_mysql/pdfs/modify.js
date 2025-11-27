@@ -80,13 +80,20 @@ async function sendData(){
     var file = document.getElementById("file").files[0];
     var docEstado = document.getElementById("docEstado").value;
 
+    console.log("filename: " + projectName + " estado: " + docEstado + " uploadedFile: " + file);
+    
+    if(file === undefined){
+        file = null;
+    }
+
+    console.log("filename2: " + projectName + " estado2: " + docEstado + " uploadedFile2: " + file);
+
     var formData = new FormData();
     formData.append("filename", projectName);
     formData.append("estado", docEstado);
     formData.append("uploadedFile", file);
     formData.append("userId", 2);
 
-    console.log(formData);
     alert("prueba");
 
 
@@ -102,6 +109,6 @@ async function sendData(){
     const result = await apiCall.json();
     console.log(result);*/
 
-    window.location.href = "table.html";
+    //window.location.href = "table.html";
 
 }
