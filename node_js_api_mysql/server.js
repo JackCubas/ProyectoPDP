@@ -50,6 +50,7 @@ const fileUpload = require('express-fileupload');
 const util = require("util");
 //----------------------------------
 const crypto = require("crypto")
+const pdfParse = require('pdf-parse');
 
 //---------------------------------
 
@@ -322,6 +323,27 @@ function decrypt(ivCiphertextB64) {
   return decrypted.toString('utf-8');
 }
 //------------------------------------------------------------------------------------
+
+async function computePdfMetadata(filePath){
+  try{
+    const buffer = fs.readFileSync(filePath);
+    const stats = fs.statSync(filePath);
+    const fileSize = stats.size;
+    const hash = crypto.createHash('sha256').update(buffer).digest('hex');
+    let numPages = 0;
+    try{
+      const data = await pdfParse(buffer);
+      numPages = data && data.numpages ? data.numpages : 0;
+    }catch(err){
+      console.error('pdf-parse error:', err);
+    }
+    const uploadTimestamp = new Date();
+    return { fileSize, numPages, sha256: hash, uploadTimestamp };
+  }catch(err){
+    console.error('computePdfMetadata error:', err);
+    return { fileSize: 0, numPages: 0, sha256: null, uploadTimestamp: new Date() };
+  }
+}
 
 
 
@@ -844,58 +866,68 @@ app.get("/pdfs/:id", cors(), (req, res) => {
 
 //------------------
 //------------------
-app.post('/create-pdf', fileUpload(), (req, res) => {
+app.post('/create-pdf', fileUpload(), async (req, res) => {
 
   console.log("llegado al create-pdf"); 
-  const pdfFile = req.files.uploadedFile;
+  const pdfFile = req.files && req.files.uploadedFile ? req.files.uploadedFile : null;
   const nombreFile = req.body.filename;
-  const estado = req.body.estado;
+  const estado = req.body.estado || 'PENDING';
   const archivoNombre = CARPETAPDF + "/" + nombreFile + '.pdf';
 
-  console.log(req.body.userId);
-  console.log(archivoNombre);
-  console.log(nombreFile);
+  if(!pdfFile){
+    return res.status(400).json({ error: 'No uploadedFile provided' });
+  }
 
-  fs.writeFileSync(archivoNombre, pdfFile.data, (err) => {
-        if (err) {
-            console.error('Error writing file:', err);
-        } else {
-            console.log('File written successfully');
-        }
-  });
+  try{
+    fs.writeFileSync(archivoNombre, pdfFile.data);
+    console.log('File written successfully', archivoNombre);
 
-  //-------------------------------
-  console.log("llegado a la base de datos"); 
-  let con;
+    // compute metadata
+    const metadata = await computePdfMetadata(archivoNombre);
 
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
+    //-------------------------------
+    console.log("llegado a la base de datos"); 
+    let con;
 
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected to pdf!");
-    console.log(req.body);
-
-    let sql = "INSERT INTO pdfs (userId, name, urlCarpeta, estado) VALUES ?";
-
-    let values = [
-      [req.body.userId, nombreFile, archivoNombre, estado]
-    ]
-
-    con.query(sql, [values], function (err, result) {
-      if (err) throw err;
-      console.log("1 record inserted into pdf");
-      console.log(result);
-
-      res.json(result);
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
     });
-    
-  });
+
+    con.connect(function(err) {
+      if (err) {
+        console.error('DB connect error:', err);
+        return res.status(500).json({ error: 'database connection error' });
+      }
+      console.log("Connected to pdf!");
+      console.log(req.body);
+
+      let sql = "INSERT INTO pdfs (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp) VALUES ?";
+
+      let values = [
+        [req.body.userId, nombreFile, archivoNombre, estado, metadata.fileSize, metadata.numPages, metadata.sha256, metadata.uploadTimestamp]
+      ]
+
+      con.query(sql, [values], function (err, result) {
+        if (err) {
+          console.error('DB insert error:', err);
+          return res.status(500).json({ error: 'database insert error' });
+        }
+        console.log("1 record inserted into pdf");
+        console.log(result);
+
+        res.json(result);
+      });
+      
+    });
+
+  }catch(err){
+    console.error('create-pdf error:', err);
+    return res.status(500).json({ error: 'failed to save or process pdf' });
+  }
 });
 
 
@@ -923,7 +955,7 @@ app.get('/retrieve/:thisDocName', function(req, res) {
 })
 
 
-app.delete('/eliminate', function(req, res) {
+app.delete('/eliminate', async function(req, res) {
 
   const id = req.query.id;
   const docName = req.query.docName;
@@ -983,98 +1015,240 @@ app.delete('/eliminate', function(req, res) {
 })
 
 
-app.put('/modify-pdf/:id', fileUpload(), (req, res) => {
+// Validation endpoint: only FIRMA role can validate a PDF.
+app.put('/pdfs/:id/validate', async (req, res) => {
+  const { id } = req.params;
+  const actionRaw = (req.body && req.body.action) ? String(req.body.action) : 'VALIDATE';
+  const action = actionRaw.toUpperCase().trim(); // expected 'VALIDATE'
+
+  // Validator identity must be provided in headers
+  const headerUserId = req.headers['x-user-id'];
+  const headerUserRoleRaw = req.headers['x-user-role'];
+  const headerUserRole = headerUserRoleRaw ? String(headerUserRoleRaw).toUpperCase().trim() : null;
+
+  if (!headerUserId || !headerUserRole) return res.status(401).json({ error: 'validator identity required (x-user-id and x-user-role headers)' });
+  if (headerUserRole !== 'FIRMA') return res.status(403).json({ error: 'only FIRMA role can validate' });
+
+  // fetch pdf metadata from DB
+  const con = mysql.createConnection({
+    host: DBHOST,
+    user: DBUSER,
+    password: DBPASS,
+    port: DBPORT,
+    database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) { console.error('DB connect error:', err); return res.status(500).json({ error: 'database connection error' }); }
+
+    con.query('SELECT * FROM pdfs WHERE id = ?', [[id]], async function(err, result){
+      if (err) { console.error('DB select error:', err); return res.status(500).json({ error: 'database query error' }); }
+      const rows = Object.values(JSON.parse(JSON.stringify(result)));
+      if(!rows || rows.length === 0) return res.status(404).json({ error: 'pdf not found' });
+
+      const row = rows[0];
+      const filePath = row.urlCarpeta || (CARPETAPDF + '/' + row.name + '.pdf');
+
+      if(!fs.existsSync(filePath)) return res.status(400).json({ error: 'file missing on server' });
+
+      try{
+        const buffer = fs.readFileSync(filePath);
+        const currentHash = crypto.createHash('sha256').update(buffer).digest('hex');
+
+        // Check integrity
+        if(!row.sha256 || row.sha256 !== currentHash){
+          return res.status(400).json({ error: 'file integrity check failed (hash mismatch)' });
+        }
+
+        // Check modification time: prevent validation if file changed after upload
+        const stats = fs.statSync(filePath);
+        const mtimeMs = stats.mtimeMs;
+        const uploadTsMs = row.uploadTimestamp ? new Date(row.uploadTimestamp).getTime() : null;
+        if(uploadTsMs && mtimeMs > uploadTsMs + 1000){
+          return res.status(400).json({ error: 'file was modified after upload; validation prevented' });
+        }
+
+        // determine state value (always VALIDATED here)
+        const newEstado = 'VALIDATED';
+        const validationTimestamp = new Date();
+
+        const updateSql = `UPDATE pdfs SET estado = ?, validatorId = ?, validationTimestamp = ? WHERE id = ?`;
+        const params = [newEstado, headerUserId, validationTimestamp, id];
+
+        con.query(updateSql, params, function(err, updateResult){
+          if(err){ console.error('DB update error:', err); return res.status(500).json({ error: 'database update error' }); }
+          return res.json({ success: true, estado: newEstado, validatorId: headerUserId, validationTimestamp });
+        });
+
+      }catch(err){
+        console.error('validation error:', err);
+        return res.status(500).json({ error: 'validation failed' });
+      }
+    });
+  });
+
+});
+
+// Explicit rejection endpoint: forces REJECTED state (only FIRMA role)
+app.put('/pdfs/:id/reject', async (req, res) => {
+  const { id } = req.params;
+
+  // Validator identity must be provided in headers (normalize role)
+  const headerUserId = req.headers['x-user-id'];
+  const headerUserRoleRaw = req.headers['x-user-role'];
+  const headerUserRole = headerUserRoleRaw ? String(headerUserRoleRaw).toUpperCase().trim() : null;
+
+  if (!headerUserId || !headerUserRole) return res.status(401).json({ error: 'validator identity required (x-user-id and x-user-role headers)' });
+  if (headerUserRole !== 'FIRMA') return res.status(403).json({ error: 'only FIRMA role can reject' });
+
+  // fetch pdf metadata from DB
+  const con = mysql.createConnection({
+    host: DBHOST,
+    user: DBUSER,
+    password: DBPASS,
+    port: DBPORT,
+    database: DBNAME
+  });
+
+  con.connect(function(err) {
+    if (err) { console.error('DB connect error:', err); return res.status(500).json({ error: 'database connection error' }); }
+
+    con.query('SELECT * FROM pdfs WHERE id = ?', [[id]], async function(err, result){
+      if (err) { console.error('DB select error:', err); return res.status(500).json({ error: 'database query error' }); }
+      const rows = Object.values(JSON.parse(JSON.stringify(result)));
+      if(!rows || rows.length === 0) return res.status(404).json({ error: 'pdf not found' });
+
+      const row = rows[0];
+      const filePath = row.urlCarpeta || (CARPETAPDF + '/' + row.name + '.pdf');
+
+      if(!fs.existsSync(filePath)) return res.status(400).json({ error: 'file missing on server' });
+
+      try{
+        const buffer = fs.readFileSync(filePath);
+        const currentHash = crypto.createHash('sha256').update(buffer).digest('hex');
+
+        // Check integrity
+        if(!row.sha256 || row.sha256 !== currentHash){
+          return res.status(400).json({ error: 'file integrity check failed (hash mismatch)' });
+        }
+
+        // Check modification time: prevent rejection if file changed after upload
+        const stats = fs.statSync(filePath);
+        const mtimeMs = stats.mtimeMs;
+        const uploadTsMs = row.uploadTimestamp ? new Date(row.uploadTimestamp).getTime() : null;
+        if(uploadTsMs && mtimeMs > uploadTsMs + 1000){
+          return res.status(400).json({ error: 'file was modified after upload; rejection prevented' });
+        }
+
+        const newEstado = 'REJECTED';
+        const validationTimestamp = new Date();
+
+        const updateSql = `UPDATE pdfs SET estado = ?, validatorId = ?, validationTimestamp = ? WHERE id = ?`;
+        const params = [newEstado, headerUserId, validationTimestamp, id];
+
+        con.query(updateSql, params, function(err, updateResult){
+          if(err){ console.error('DB update error:', err); return res.status(500).json({ error: 'database update error' }); }
+          return res.json({ success: true, estado: newEstado, validatorId: headerUserId, validationTimestamp });
+        });
+
+      }catch(err){
+        console.error('rejection error:', err);
+        return res.status(500).json({ error: 'rejection failed' });
+      }
+    });
+  });
+});
+
+app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
   console.log("llegado al modify-pdf");
-  
   console.log(req.files);
+
+
 
   const { id } = req.params;
 
   const nombreFileNuevo = req.body.filename;
   const nombreFileOriginal = req.body.filenameOriginal;
-  const estado = req.body.estado;
+  const estado = req.body.estado || 'PENDING';
   const userId = req.body.userId;
 
   const archivoNombreNuevo = CARPETAPDF + "/" + nombreFileNuevo + '.pdf';
   const archivoNombreOriginal = CARPETAPDF + "/" + nombreFileOriginal + '.pdf';
   
-  var pdfFile;
-  if(req.files != null){
-    pdfFile = req.files.uploadedFile;
-  }else{
-    pdfFile = null;
-  }
+  var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile : null;
 
-  console.log(id);
-  console.log(archivoNombreNuevo);
-  console.log(archivoNombreOriginal);
-  console.log(nombreFileOriginal);
-  console.log(nombreFileNuevo);
-  console.log(estado);
-  console.log(userId);
-  console.log(pdfFile);
+  console.log(id, archivoNombreNuevo, archivoNombreOriginal, nombreFileOriginal, nombreFileNuevo, estado, userId, !!pdfFile);
 
-  if(pdfFile === null){
-
-    fs.rename(archivoNombreOriginal, archivoNombreNuevo, function (err) {
-      if (err) {console.log(err); return; }
-      
+  try{
+    if(pdfFile === null){
+      // rename file
+      if (fs.existsSync(archivoNombreOriginal)){
+        fs.renameSync(archivoNombreOriginal, archivoNombreNuevo);
         console.log('The file has been re-named to: ' + archivoNombreNuevo);
-      })
-
-  }
-  
-  if(pdfFile !== null && pdfFile.data !== null){
-
-    if (fs.existsSync(archivoNombreOriginal)) {
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      unlinkFile(archivoNombreOriginal);
+      }else{
+        console.warn('Original file not found for rename:', archivoNombreOriginal);
+      }
+    } else {
+      // replace file
+      if (fs.existsSync(archivoNombreOriginal)) {
+        const unlinkFile = util.promisify(fs.unlink);
+        await unlinkFile(archivoNombreOriginal);
+      }
+      fs.writeFileSync(archivoNombreNuevo, pdfFile.data);
+      console.log('File written successfully:', archivoNombreNuevo);
     }
 
-    fs.writeFileSync(archivoNombreNuevo, pdfFile.data, (err) => {
+    // compute metadata for the new file
+    const metadata = await computePdfMetadata(archivoNombreNuevo);
+
+    //-----------------------------------
+    con = mysql.createConnection({
+            host: DBHOST,
+            user: DBUSER,
+            password: DBPASS,
+            port     :DBPORT,
+            database: DBNAME
+      });
+
+    con.connect(function(err) {
+      if (err) {
+        console.error('DB connect error:', err);
+        return res.status(500).json({ error: 'database connection error' });
+      }
+      console.log("Connected!");
+
+      // Format uploadTimestamp for MySQL DATETIME
+      const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
+
+      let sql = `
+        UPDATE pdfs 
+        SET userId = "${userId}", 
+        name = "${nombreFileNuevo}",
+        urlCarpeta = "${archivoNombreNuevo}",
+        estado = "${estado}",
+        fileSize = ${metadata.fileSize},
+        numPages = ${metadata.numPages},
+        sha256 = "${metadata.sha256}",
+        uploadTimestamp = "${uploadTs}"
+        WHERE id = "${id}"
+      `;
+      con.query(sql, function (err, result) {
         if (err) {
-            console.error('Error writing file:', err);
-        } else {
-            console.log('File written successfully');
+          console.error('DB update error:', err);
+          return res.status(500).json({ error: 'database update error' });
         }
-    });
+        console.log("1 record modified");
+        console.log(result);
 
+        res.json(result);
+      });
+
+    })
+  }catch(err){
+    console.error('modify-pdf error:', err);
+    return res.status(500).json({ error: 'failed to modify pdf' });
   }
-
-
-  //-----------------------------------
-
-  con = mysql.createConnection({
-          host: DBHOST,
-          user: DBUSER,
-          password: DBPASS,
-          port     :DBPORT,
-          database: DBNAME
-    });
-
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-
-    let sql = `
-      UPDATE pdfs 
-      SET userId = "${userId}", 
-      name = "${nombreFileNuevo}",
-      urlCarpeta = "${archivoNombreNuevo}",
-      estado = "${estado}"
-      WHERE id = "${id}"
-    `;
-    con.query(sql, function (err, result) {
-      if (err) throw err;
-      console.log("1 record modified");
-      console.log(result);
-
-      res.json(result);
-    });
-
-  })
 })
 
 //-----------------------

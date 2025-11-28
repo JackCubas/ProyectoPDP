@@ -49,19 +49,26 @@ INSERT INTO `Users` (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VAL
 
 
 
-DROP TABLE IF EXISTS `Pdfs`;
+DROP TABLE IF EXISTS `pdfs`;
 
-CREATE TABLE `Pdfs` (
+CREATE TABLE `pdfs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `urlCarpeta` varchar(100) NOT NULL,
-  `estado` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `urlCarpeta` varchar(255) NOT NULL,
+  `estado` ENUM('PENDING','VALIDATED','REJECTED') NOT NULL DEFAULT 'PENDING',
+  `fileSize` bigint(20) NOT NULL DEFAULT 0,
+  `numPages` int(11) NOT NULL DEFAULT 0,
+  `sha256` varchar(128) DEFAULT NULL,
+  `uploadTimestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `validatorId` int(11) DEFAULT NULL,
+  `validationTimestamp` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `Pdfs` (userId, name, urlCarpeta, estado) VALUES
-(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf', 'VALIDADO'),
-(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf', 'PENDIENTE'),
-(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf', 'PENDIENTE'),
-(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'RECHAZADO');
+-- Como son dentro de carpeta y no sacadas desde archivo, los valores los deje a dafault
+INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, validatorId, validationTimestamp) VALUES
+(2, 'pdfPrueba1', './pdfs de prueba/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
+(2, 'pdfPrueba2', './pdfs de prueba/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
+(2, 'pdfPrueba3', './pdfs de prueba/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
+(2, 'probandoPdf_4', './pdfs de prueba/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL);
