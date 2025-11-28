@@ -110,6 +110,6 @@ async function sendData(){
     const result = await apiCall.json();
     console.log(result);
 
-    //window.location.href = "table.html";
+    window.location.href = "table.html";
 
 }
