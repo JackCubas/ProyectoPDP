@@ -6,7 +6,7 @@ async function sendData(){
 
     var formData = new FormData();
     formData.append("filename", projectName);
-    formData.append("estado", "PENDIENTE");
+    formData.append("estado", "PENDING");
     formData.append("uploadedFile", file);
     formData.append("userId", 2);
 

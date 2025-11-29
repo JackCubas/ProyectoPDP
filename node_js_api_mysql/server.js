@@ -868,10 +868,11 @@ app.get("/pdfs/:id", cors(), (req, res) => {
 //------------------
 app.post('/create-pdf', fileUpload(), async (req, res) => {
 
-  console.log("llegado al create-pdf"); 
+  console.log("llegado al create-pdf: " + req.body.estado); 
   const pdfFile = req.files && req.files.uploadedFile ? req.files.uploadedFile : null;
   const nombreFile = req.body.filename;
   const estado = req.body.estado || 'PENDING';
+  //const estado = req.body.estado;
   const archivoNombre = CARPETAPDF + "/" + nombreFile + '.pdf';
 
   if(!pdfFile){
@@ -1161,7 +1162,7 @@ app.put('/pdfs/:id/reject', async (req, res) => {
 
 app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
-  console.log("llegado al modify-pdf");
+  console.log("llegado al modify-pdf" + req.body.estado);
   console.log(req.files);
 
 
@@ -1262,6 +1263,104 @@ function emptyOrRows(rows) {
   }
   return rows;
 }
+
+
+//---------------------
+//--------------------
+
+/*app.put('/modify-pdf/:id', fileUpload(), (req, res) => {
+
+  console.log("llegado al modify-pdf");
+  
+  console.log(req.files);
+
+  const { id } = req.params;
+
+  const nombreFileNuevo = req.body.filename;
+  const nombreFileOriginal = req.body.filenameOriginal;
+  const estado = req.body.estado;
+  const userId = req.body.userId;
+
+  const archivoNombreNuevo = CARPETAPDF + "/" + nombreFileNuevo + '.pdf';
+  const archivoNombreOriginal = CARPETAPDF + "/" + nombreFileOriginal + '.pdf';
+  
+  var pdfFile;
+  if(req.files != null){
+    pdfFile = req.files.uploadedFile;
+  }else{
+    pdfFile = null;
+  }
+
+  console.log(id);
+  console.log(archivoNombreNuevo);
+  console.log(archivoNombreOriginal);
+  console.log(nombreFileOriginal);
+  console.log(nombreFileNuevo);
+  console.log(estado);
+  console.log(userId);
+  console.log(pdfFile);
+
+  if(pdfFile === null){
+
+    fs.rename(archivoNombreOriginal, archivoNombreNuevo, function (err) {
+      if (err) {console.log(err); return; }
+      
+        console.log('The file has been re-named to: ' + archivoNombreNuevo);
+      })
+
+  }
+  
+  if(pdfFile !== null && pdfFile.data !== null){
+
+    if (fs.existsSync(archivoNombreOriginal)) {
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      unlinkFile(archivoNombreOriginal);
+    }
+
+    fs.writeFileSync(archivoNombreNuevo, pdfFile.data, (err) => {
+        if (err) {
+            console.error('Error writing file:', err);
+        } else {
+            console.log('File written successfully');
+        }
+    });
+
+  }
+
+
+  //-----------------------------------
+
+  con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = `
+      UPDATE pdfs 
+      SET userId = "${userId}", 
+      name = "${nombreFileNuevo}",
+      urlCarpeta = "${archivoNombreNuevo}",
+      estado = "${estado}"
+      WHERE id = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("1 record modified");
+      console.log(result);
+
+      res.json(result);
+    });
+
+  })
+})*/
 
 //------------------------
 //-----------------------

@@ -68,7 +68,7 @@ CREATE TABLE `pdfs` (
 
 -- Como son dentro de carpeta y no sacadas desde archivo, los valores los deje a dafault
 INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, validatorId, validationTimestamp) VALUES
-(2, 'pdfPrueba1', './pdfs de prueba/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'pdfPrueba2', './pdfs de prueba/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'pdfPrueba3', './pdfs de prueba/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'probandoPdf_4', './pdfs de prueba/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL);
+(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
+(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
+(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
+(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL);
