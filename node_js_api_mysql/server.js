@@ -50,7 +50,7 @@ const fileUpload = require('express-fileupload');
 const util = require("util");
 //----------------------------------
 const crypto = require("crypto")
-const pdfParse = require('pdf-parse');
+const pdfParse = require('pdf-parse'); //TODO cambiar a la version 1.x.x
 
 //---------------------------------
 
