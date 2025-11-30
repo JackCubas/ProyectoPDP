@@ -32,8 +32,6 @@ const CARPETAPDF= process.env.CARPETAPDF;
 //---------------------------------------------------    
 
 app.set('view engine','ejs');
-//app.use(express.json());
-//app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
@@ -97,9 +95,6 @@ const upload = multer({ storage });*/
 
 app.use((req, res, next) => {
     console.log('new request made:');
-    //console.log('host: ', req.hostname);
-    //console.log('path: ', req.path);
-    //console.log('method: ', req.method);
     next();
 });
 
