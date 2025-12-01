@@ -71,4 +71,7 @@ INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256
 (2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
 (2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
 (2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL);
+(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL),
+(3, 'probandoPdf5', './pdfBBDD/probandoPdf5.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
+(3, 'probandoPdf6', './pdfBBDD/probandoPdf6.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
+(3, 'probandoPdf7', './pdfBBDD/probandoPdf7.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL);
