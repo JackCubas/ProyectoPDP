@@ -1,4 +1,5 @@
 const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
+var thisDocName = "";
 
 /*var datosURL = window.location.href;
 
@@ -16,18 +17,45 @@ async function sendData(){
 
     //?color1=red&color2=blue
 
-    const apiCall = await fetch(URLSERVERpdfcriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&docName=' + docName + '&estado=' + estado)
-    const result = await apiCall.json();
-    //console.log(apiCall);
-    //console.log(result);
-    //alert("response"); 
-    checkData(result)    
+    return fetch(URLSERVERpdfcriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&docName=' + docName + '&estado=' + estado)
+    .then((response) => { 
+            return response.json().then((data) => {
+                //return appendData(data);
+                return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });    
 }
 
-function checkData(data){
-    for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
+function appendData(data){
+    console.log(data);
+    var con=document.getElementById("main-container");
+    for(let i=0;i<data.length;i++){
+        console.log(data[i]);
+        var d=document.createElement("div");
+        d.textContent="Doc Name: " + data[i].DocName;
+        thisDocName = data[i].DocName;                     
+        con.appendChild(d);
+
+        var e=document.createElement("div")
+        e.textContent="Doc URL: " + data[i].urlCarpeta                      
+        con.appendChild(e);
+
+        var f=document.createElement("div")
+        f.textContent="User Name: " + data[i].nameUser                      
+        con.appendChild(f);
+
+        var g=document.createElement("div")
+        g.textContent="User Email: " + data[i].emailUser                      
+        con.appendChild(g);
+
+        var h=document.createElement("div")
+        h.textContent="Estado: " + data[i].estado                      
+        con.appendChild(h);
     }
+    console.log("finalizado generacion de ventana");
+    alert("final");
 }
 
 /*
