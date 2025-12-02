@@ -111,7 +111,7 @@ function stamp(event) {
   const substringToRemove = "stampbutton";
   const idStamp = idStampString.replace(substringToRemove, '');
 
-  alert("Stamp: " + idStamp);
+  window.location.href = "stamp.html?id=" + idStamp;
 }
 
 

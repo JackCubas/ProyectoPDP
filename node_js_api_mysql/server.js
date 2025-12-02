@@ -1310,6 +1310,22 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
   }
 })
 
+//----------------------
+
+app.put('/stamp/:id', async (req, res) => {
+
+  console.log("llegado al stamp");
+  console.log(req.body);
+
+  const { id } = req.params;
+  const { filename, userId} = req.body;
+  const archivoNombre = CARPETAPDF + "/" + filename + '.pdf';
+
+  console.log(id, archivoNombre, userId);
+  
+})
+
+
 //-----------------------
 app.listen(APIPORT, () => {
   console.log(`Firma app listening at http://localhost:${APIPORT}`);

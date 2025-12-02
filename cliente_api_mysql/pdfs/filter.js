@@ -59,7 +59,7 @@ function appendData(data){
     form.addEventListener('submit', handleForm);
     
     console.log("finalizado generacion de ventana");
-    alert("final");
+    //alert("final");
 }
 
 
