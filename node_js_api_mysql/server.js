@@ -25,6 +25,7 @@ const DBPASS= process.env.DBPASS;
 const DBNAME= process.env.DBNAME;
 const APIPORT= process.env.APIPORT;
 const CARPETAPDF= process.env.CARPETAPDF;
+const CARPETASTAMP= process.env.CARPETASTAMP;
 
 //---------------------------------------------------
 
