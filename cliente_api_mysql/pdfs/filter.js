@@ -1,5 +1,8 @@
 const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
-var thisDocName = "";
+var emailUser = "";
+var nameUser = "";
+var docName = "";
+var estado = "";
 
 /*var datosURL = window.location.href;
 
@@ -9,11 +12,10 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
 
 async function sendData(){
 
-
-    var emailUser = document.getElementById("emailUser").value;
-    var nameUser = document.getElementById("nameUser").value;
-    var docName = document.getElementById("docName").value;
-    var estado = document.getElementById("estado").value;
+    emailUser = document.getElementById("emailUser").value;
+    nameUser = document.getElementById("nameUser").value;
+    docName = document.getElementById("docName").value;
+    estado = document.getElementById("estado").value;
 
     //?color1=red&color2=blue
 
@@ -30,32 +32,57 @@ async function sendData(){
 
 function appendData(data){
     console.log(data);
-    var con=document.getElementById("main-container");
+
+    let parent = document.getElementById("mytable").getElementsByTagName('tbody')[0];
+    empty(parent);
+
+    const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
+
     for(let i=0;i<data.length;i++){
         console.log(data[i]);
-        var d=document.createElement("div");
-        d.textContent="Doc Name: " + data[i].DocName;
-        thisDocName = data[i].DocName;                     
-        con.appendChild(d);
 
-        var e=document.createElement("div")
-        e.textContent="Doc URL: " + data[i].urlCarpeta                      
-        con.appendChild(e);
+        const newRow = table.insertRow();
 
-        var f=document.createElement("div")
-        f.textContent="User Name: " + data[i].nameUser                      
-        con.appendChild(f);
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2);
 
-        var g=document.createElement("div")
-        g.textContent="User Email: " + data[i].emailUser                      
-        con.appendChild(g);
-
-        var h=document.createElement("div")
-        h.textContent="Estado: " + data[i].estado                      
-        con.appendChild(h);
+        cell1.innerText = data[i].DocName;
+        cell2.innerText = data[i].nameUser;
+        cell3.innerText = data[i].estado;
     }
+
+    var form = document.getElementById("form"); 
+    function handleForm(event) {     
+        event.preventDefault(); 
+    }  
+    form.addEventListener('submit', handleForm);
+    
     console.log("finalizado generacion de ventana");
     alert("final");
+}
+
+
+function checkUserHosting() {
+    return fetch(URLSERVERpdfcriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&docName=' + docName + '&estado=' + estado)
+        .then((response) => { 
+            return response.json().then((data) => {
+                //return appendData(data);
+                return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+
+}
+
+
+checkUserHosting();
+
+function empty(element) {
+  while(element.firstElementChild) {
+     element.firstElementChild.remove();
+  }
 }
 
 /*

@@ -907,7 +907,7 @@ app.get("/pdfsByCriteria", cors(), (req, res) => {
           connection.query(queryBusqueda, function (err, result, fields) {
               if (err) throw err;
               
-              console.log(result);
+              //console.log(result);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
