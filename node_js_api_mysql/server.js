@@ -1319,10 +1319,10 @@ app.put('/stamp/:id', async (req, res) => {
   console.log(req.body);
 
   const { id } = req.params;
-  const { filename, userId} = req.body;
-  const archivoNombre = CARPETAPDF + "/" + filename + '.pdf';
+  const { filename, stampUserId} = req.body;
+  const archivoUrl = CARPETAPDF + "/" + filename + '.pdf';
 
-  console.log(id, archivoNombre, userId);
+  console.log(id, archivoUrl, stampUserId);
   
 })
 

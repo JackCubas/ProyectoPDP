@@ -101,7 +101,7 @@ async function sendData(){
 
     const modUser = {
         filename: thisDocName,
-        userId: 5
+        stampUserId: 5
     }
 
     const apiCall = await fetch(URLSERVERStamp + idHTML, {

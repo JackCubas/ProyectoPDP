@@ -61,42 +61,30 @@ function buildTable(data) {
     const newRow = table.insertRow();
     const cell1 = newRow.insertCell(0);
     const cell2 = newRow.insertCell(1);
+    const cell3 = newRow.insertCell(2);
     cell1.textContent = data[i].nameUser;
-    
-    const butID = data[i].id;
+    cell2.textContent = data[i].rolUser;
 
-    const button = document.createElement('button');
-    button.id = "showIDbutton" + butID;
-    button.textContent = "Show ID";
-    button.addEventListener('click', showId);
-    cell2.appendChild(button);
+    const butID = data[i].id;
 
     const buttonDetail = document.createElement('button');
     buttonDetail.id = "detailbutton" + butID;
     buttonDetail.textContent = "Detail";
     buttonDetail.addEventListener('click', detail);
-    cell2.appendChild(buttonDetail);
+    cell3.appendChild(buttonDetail);
 
     const buttonEdit = document.createElement('button');
     buttonEdit.id = "editbutton" + butID;
     buttonEdit.textContent = "Edit";
     buttonEdit.addEventListener('click', edit);
-    cell2.appendChild(buttonEdit);
+    cell3.appendChild(buttonEdit);
 
     const buttonDel = document.createElement('button');
     buttonDel.id = "delbutton" + butID;
     buttonDel.textContent = "Delete";
     buttonDel.addEventListener('click', del);
-    cell2.appendChild(buttonDel);
+    cell3.appendChild(buttonDel);
   }
-}
-
-function showId(event) {
-  var idDetailString = event.target.id;
-  const substringToRemove = "showIDbutton";
-  const idDetail = idDetailString.replace(substringToRemove, '');
-
-  alert("ID: " + idDetail);
 }
 
 function detail(event){
