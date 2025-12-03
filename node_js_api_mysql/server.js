@@ -1361,7 +1361,7 @@ app.put('/stamp/:id', async (req, res) => {
       if (err) throw err;
       console.log("Connected!");
 
-      const stampTimestamp = new Date();
+      const stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
         UPDATE pdfs 
