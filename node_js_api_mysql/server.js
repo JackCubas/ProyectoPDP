@@ -1347,6 +1347,57 @@ app.put('/stamp/:id', async (req, res) => {
     const newFilePath = CARPETAPDF + "/" + filename + '.pdf';
     fs.writeFileSync(newFilePath, pdfBytes);
 
+    console.log("Leyendo pdf: " + newFilePath);
+
+    const rs = fs.createReadStream(newFilePath);
+
+    // get size of the file
+    const { size } = fs.statSync(newFilePath);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Length", size);
+
+    console.log("Enviando pdf: " + newFilePath);
+
+    rs.pipe(res);
+
+  }else{
+    console.warn('Pdf o Estampado no se han encontrado');
+    return res.status(500).json({ error: 'failed to find pdf or stamp' });
+
+  }
+
+})
+
+/*app.put('/stamp/:id', async (req, res) => {
+
+  console.log("llegado al stamp");
+  console.log(req.body);
+
+  const { id } = req.params;
+  const { filename, stampUserId} = req.body;
+  const archivoPdf = CARPETAPDF + "/" + filename + '.pdf';
+  const archivoStamp = CARPETASTAMP + "/" + stampUserId + '.png';
+
+  if (fs.existsSync(archivoPdf) && fs.existsSync(archivoStamp)){
+
+    console.log(id, archivoPdf, stampUserId, archivoStamp);
+
+    const pdfDoc = await PDFDocument.load(fs.readFileSync(archivoPdf));
+    const img = await pdfDoc.embedPng(fs.readFileSync(archivoStamp));
+    const imagePage = pdfDoc.insertPage(0);
+
+    imagePage.drawImage(img, {
+      x: 0,
+      y: 0,
+      width: imagePage.getWidth(),
+      height: imagePage.getHeight()
+    });
+
+    const pdfBytes = await pdfDoc.save();
+    //const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
+    const newFilePath = CARPETAPDF + "/" + filename + '.pdf';
+    fs.writeFileSync(newFilePath, pdfBytes);
+
     //-------------------------------------------------
     try{
       con = mysql.createConnection({
@@ -1386,7 +1437,7 @@ app.put('/stamp/:id', async (req, res) => {
 
     const rs = fs.createReadStream(newFilePath);
 
-    // get size of the video file
+    // get size of the file
     const { size } = fs.statSync(newFilePath);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Length", size);
@@ -1401,7 +1452,7 @@ app.put('/stamp/:id', async (req, res) => {
 
   }
   
-})
+})*/
 
 
 //-----------------------
