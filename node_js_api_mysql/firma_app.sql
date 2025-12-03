@@ -84,15 +84,17 @@ CREATE TABLE `pdfs` (
   `uploadTimestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `validatorId` int(11) DEFAULT NULL,
   `validationTimestamp` DATETIME DEFAULT NULL,
+  `stampUserId` int(11) DEFAULT NULL,
+  `signUserId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Como son dentro de carpeta y no sacadas desde archivo, los valores los deje a dafault
-INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, validatorId, validationTimestamp) VALUES
-(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
-(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL),
-(3, 'probandoPdf5', './pdfBBDD/probandoPdf5.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL),
-(3, 'probandoPdf6', './pdfBBDD/probandoPdf6.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL),
-(3, 'probandoPdf7', './pdfBBDD/probandoPdf7.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL);
+INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, validatorId, validationTimestamp, stampUserId, signUserId) VALUES
+(2, 'pdfPrueba1', './pdfBBDD/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL),
+(2, 'pdfPrueba2', './pdfBBDD/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL),
+(2, 'pdfPrueba3', './pdfBBDD/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL),
+(2, 'probandoPdf_4', './pdfBBDD/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL),
+(3, 'probandoPdf5', './pdfBBDD/probandoPdf5.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL),
+(3, 'probandoPdf6', './pdfBBDD/probandoPdf6.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL),
+(3, 'probandoPdf7', './pdfBBDD/probandoPdf7.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL);

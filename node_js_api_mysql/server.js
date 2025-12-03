@@ -1347,6 +1347,37 @@ app.put('/stamp/:id', async (req, res) => {
     const newFilePath = CARPETAPDF + "/" + filename + '.pdf';
     fs.writeFileSync(newFilePath, pdfBytes);
 
+    //-------------------------------------------------
+    try{
+      con = mysql.createConnection({
+            host: DBHOST,
+            user: DBUSER,
+            password: DBPASS,
+            port     :DBPORT,
+            database: DBNAME
+      });
+
+      con.connect(function(err) {
+      if (err) throw err;
+      console.log("Connected!");
+
+      let sql = `
+        UPDATE pdfs 
+        SET stampUserId = "${stampUserId}" 
+        WHERE id = "${id}"
+      `;
+
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record modified");
+        console.log(result);
+      });
+      })
+    }catch(err){
+      console.error('modify-pdf error:', err);
+      return res.status(500).json({ error: 'failed to modify pdf' });
+    }
+
     //--------------------------------------------------
     console.log("Leyendo pdf: " + newFilePath);
 
