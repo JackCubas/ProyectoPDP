@@ -1361,9 +1361,12 @@ app.put('/stamp/:id', async (req, res) => {
       if (err) throw err;
       console.log("Connected!");
 
+      const stampTimestamp = new Date();
+
       let sql = `
         UPDATE pdfs 
-        SET stampUserId = "${stampUserId}" 
+        SET stampUserId = "${stampUserId}",
+        stampTimestamp = "${stampTimestamp}" 
         WHERE id = "${id}"
       `;
 
