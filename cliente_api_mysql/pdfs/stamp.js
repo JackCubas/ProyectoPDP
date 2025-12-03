@@ -127,11 +127,11 @@ async function sendData(){
     .then((response) => { 
         console.log(response);
         return response.blob().then((data) => {
-                    console.log(data);
-                    return generateWindow(data);
-                }).catch((err) => {
-                    console.log(err);
-                }) 
+            console.log(data);
+            return generateWindow(data);
+        }).catch((err) => {
+            console.log(err);
+        }) 
 
 
     });

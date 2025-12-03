@@ -1343,7 +1343,8 @@ app.put('/stamp/:id', async (req, res) => {
     });
 
     const pdfBytes = await pdfDoc.save();
-    const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
+    //const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
+    const newFilePath = CARPETAPDF + "/" + filename + '.pdf';
     fs.writeFileSync(newFilePath, pdfBytes);
 
     //--------------------------------------------------
@@ -1362,6 +1363,8 @@ app.put('/stamp/:id', async (req, res) => {
 
   }else{
     console.warn('Pdf o Estampado no se han encontrado');
+    return res.status(500).json({ error: 'failed to find pdf or stamp' });
+
   }
   
 })
