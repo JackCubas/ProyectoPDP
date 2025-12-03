@@ -53,6 +53,10 @@ const util = require("util");
 const crypto = require("crypto")
 const pdfParse = require('pdf-parse'); //TODO cambiar a la version 1.x.x
 
+const path = require('path');
+const assert = require('assert');
+const { PDFDocument } = require('pdf-lib');
+
 //---------------------------------
 
 //const PDFParser = require('pdf-parse');
@@ -1320,9 +1324,45 @@ app.put('/stamp/:id', async (req, res) => {
 
   const { id } = req.params;
   const { filename, stampUserId} = req.body;
-  const archivoUrl = CARPETAPDF + "/" + filename + '.pdf';
+  const archivoPdf = CARPETAPDF + "/" + filename + '.pdf';
+  const archivoStamp = CARPETASTAMP + "/" + stampUserId + '.png';
 
-  console.log(id, archivoUrl, stampUserId);
+  if (fs.existsSync(archivoPdf) && fs.existsSync(archivoStamp)){
+
+    console.log(id, archivoPdf, stampUserId, archivoStamp);
+
+    const pdfDoc = await PDFDocument.load(fs.readFileSync(archivoPdf));
+    const img = await pdfDoc.embedPng(fs.readFileSync(archivoStamp));
+    const imagePage = pdfDoc.insertPage(0);
+
+    imagePage.drawImage(img, {
+      x: 0,
+      y: 0,
+      width: imagePage.getWidth(),
+      height: imagePage.getHeight()
+    });
+
+    const pdfBytes = await pdfDoc.save();
+    const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
+    fs.writeFileSync(newFilePath, pdfBytes);
+
+    //--------------------------------------------------
+    console.log("Leyendo pdf: " + newFilePath);
+
+    const rs = fs.createReadStream(newFilePath);
+
+    // get size of the video file
+    const { size } = fs.statSync(newFilePath);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Length", size);
+
+    console.log("Enviando pdf: " + newFilePath);
+
+    rs.pipe(res);
+
+  }else{
+    console.warn('Pdf o Estampado no se han encontrado');
+  }
   
 })
 

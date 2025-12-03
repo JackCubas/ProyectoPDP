@@ -104,7 +104,7 @@ async function sendData(){
         stampUserId: 5
     }
 
-    const apiCall = await fetch(URLSERVERStamp + idHTML, {
+    /*const apiCall = await fetch(URLSERVERStamp + idHTML, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -115,7 +115,26 @@ async function sendData(){
     );
 
     const result = await apiCall.json();
-    console.log(result);
+    console.log(result);*/
+
+    return fetch(URLSERVERStamp + idHTML, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(modUser)
+    })
+    .then((response) => { 
+        console.log(response);
+        return response.blob().then((data) => {
+                    console.log(data);
+                    return generateWindow(data);
+                }).catch((err) => {
+                    console.log(err);
+                }) 
+
+
+    });
 
     window.location.href = "table.html";
 
