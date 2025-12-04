@@ -1335,7 +1335,7 @@ app.put('/stamp/:id', async (req, res) => {
     //-------------------------------------------------------------------
 
     //-------------------------------------------------
-    /*try{
+    try{
       con = mysql.createConnection({
             host: DBHOST,
             user: DBUSER,
@@ -1366,7 +1366,7 @@ app.put('/stamp/:id', async (req, res) => {
     }catch(err){
       console.error('modify-pdf error:', err);
       return res.status(500).json({ error: 'failed to modify pdf' });
-    }*/
+    }
 
 
     //-------------------------------------------------------------------

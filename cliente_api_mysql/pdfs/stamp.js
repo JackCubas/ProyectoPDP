@@ -86,6 +86,15 @@ function generateWindow(response){
 }
 
 function checkUserHosting(){
+
+    var idHTML = null;
+    var datosURL = window.location.href.split('?');
+    idHTML = datosURL[1].replace("id=","");
+
+    if(idHTML === null || idHTML === ""){
+        window.location.href = "table.html";
+    }
+
     returnData().then(() => {
         retrievePDF();
     })
