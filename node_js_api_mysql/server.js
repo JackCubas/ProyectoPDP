@@ -1332,6 +1332,45 @@ app.put('/stamp/:id', async (req, res) => {
 
     console.log(id, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG);
 
+    //-------------------------------------------------------------------
+
+    //-------------------------------------------------
+    /*try{
+      con = mysql.createConnection({
+            host: DBHOST,
+            user: DBUSER,
+            password: DBPASS,
+            port     :DBPORT,
+            database: DBNAME
+      });
+
+      con.connect(function(err) {
+      if (err) throw err;
+      console.log("Connected!");
+
+      const stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+      let sql = `
+        UPDATE pdfs 
+        SET stampUserId = "${stampUserId}",
+        stampTimestamp = "${stampTimestamp}" 
+        WHERE id = "${id}"
+      `;
+
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record modified");
+        console.log(result);
+      });
+      })
+    }catch(err){
+      console.error('modify-pdf error:', err);
+      return res.status(500).json({ error: 'failed to modify pdf' });
+    }*/
+
+
+    //-------------------------------------------------------------------
+
     const pdfDoc = await PDFDocument.load(fs.readFileSync(archivoPdf));
 
     var img = null;
@@ -1388,6 +1427,23 @@ app.put('/stamp/:id', async (req, res) => {
   }
 
 })
+
+
+//-----------------------
+app.listen(APIPORT, () => {
+  console.log(`Firma app listening at http://localhost:${APIPORT}`);
+});
+
+function emptyOrRows(rows) {
+  if (!rows) {
+    return [];
+  }
+  return rows;
+}
+
+
+//---------------------
+//--------------------
 
 /*app.put('/stamp/:id', async (req, res) => {
 
@@ -1475,23 +1531,6 @@ app.put('/stamp/:id', async (req, res) => {
   }
   
 })*/
-
-
-//-----------------------
-app.listen(APIPORT, () => {
-  console.log(`Firma app listening at http://localhost:${APIPORT}`);
-});
-
-function emptyOrRows(rows) {
-  if (!rows) {
-    return [];
-  }
-  return rows;
-}
-
-
-//---------------------
-//--------------------
 
 /*app.put('/modify-pdf/:id', fileUpload(), (req, res) => {
 
