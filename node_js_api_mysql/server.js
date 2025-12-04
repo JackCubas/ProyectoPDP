@@ -1325,15 +1325,23 @@ app.put('/stamp/:id', async (req, res) => {
   const { id } = req.params;
   const { filename, stampUserId} = req.body;
   const archivoPdf = CARPETAPDF + "/" + filename + '.pdf';
-  const archivoStamp = CARPETASTAMP + "/" + stampUserId + '.png';
+  const archivoStampPNG = CARPETASTAMP + "/" + stampUserId + '.png';
+  const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
 
-  if (fs.existsSync(archivoPdf) && fs.existsSync(archivoStamp)){
+  if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG))){
 
-    console.log(id, archivoPdf, stampUserId, archivoStamp);
+    console.log(id, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG);
 
     const pdfDoc = await PDFDocument.load(fs.readFileSync(archivoPdf));
-    const img = await pdfDoc.embedPng(fs.readFileSync(archivoStamp));
-    //await pdfDoc.embedJpg
+
+    var img = null;
+    if(fs.existsSync(archivoStampPNG)){
+      img = await pdfDoc.embedPng(fs.readFileSync(archivoStampPNG));
+    }
+    
+    if(fs.existsSync(archivoStampJPG)){
+      img = await pdfDoc.embedJpg(fs.readFileSync(archivoStampJPG));
+    }
 
     /*const imagePage = pdfDoc.insertPage(0);
     imagePage.drawImage(img, {
@@ -1343,14 +1351,17 @@ app.put('/stamp/:id', async (req, res) => {
       height: imagePage.getHeight()
     });*/
 
-    const page = pdfDoc.getPage(0);
-    const dims = img.scale(0.5)
-    page.drawImage(img, {
-        x: page.getWidth() / 2 - dims.width / 2 + 75,
-        y: page.getHeight() / 2 - dims.height + 250,
-        width: dims.width,
-        height: dims.height,
-    })
+
+    if(img !== null){
+      const page = pdfDoc.getPage(0);
+      const dims = img.scale(0.5)
+      page.drawImage(img, {
+          x: page.getWidth() / 2 - dims.width / 2 + 75,
+          y: page.getHeight() / 2 - dims.height + 250,
+          width: dims.width,
+          height: dims.height,
+      })
+    }
 
     const pdfBytes = await pdfDoc.save();
     //const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
