@@ -390,7 +390,6 @@ function encryptWithPrivateKey(privateKey, message) {
 
 function decryptWithPublicKey(publicKey, encryptedMessage) { 
   return crypto.publicDecrypt(publicKey, encryptedMessage);
-    
 }
 
 function decryptWithPrivateKey(privateKey, encryptedMessage) {
