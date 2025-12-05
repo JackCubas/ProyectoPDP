@@ -10,6 +10,7 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario === null){
     document.getElementById("logoutButton").style.display = 'none';
+    document.getElementById("movieButton").style.display = 'none';
 }else{
 
     if(datosUsuario.rolUser != "ADMIN"){
