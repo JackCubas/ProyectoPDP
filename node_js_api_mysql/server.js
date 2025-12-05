@@ -401,6 +401,13 @@ function genKeyPairSimple() {
   return keyPair;
 }
 
+function getPublicKeyfromPrivateKey(privateKeyByte){
+  const privateKey = Buffer.from(privateKeyByte, 'hex'); //your_32_byte_private_key_here 
+  const publicKey = crypto.getPublicKey(privateKey, { format: 'hex', type: 'compressed' });
+
+  return publicKey;
+}
+
 //const encrypted = encryptMessage(receiverPublicKey, message);
 //const decrypted = decryptMessage(receiverPrivateKey, message);
 
