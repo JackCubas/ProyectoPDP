@@ -352,6 +352,26 @@ async function computePdfMetadata(filePath){
 
 //---------------------------------------------
 
+/*
+
+generateKeyPair('rsa', {
+  modulusLength: 4096,
+  publicKeyEncoding: {
+    type: 'spki',
+    format: 'pem'
+  },
+  privateKeyEncoding: {
+    type: 'pkcs8',
+    format: 'pem',
+    cipher: 'aes-256-cbc',
+    passphrase: 'top secret'
+  }
+}, (err, publicKey, privateKey) => {
+  //...
+});
+
+*/
+
 function genKeyPair() {
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
   const keyPair = crypto.generateKeyPairSync("rsa", {
