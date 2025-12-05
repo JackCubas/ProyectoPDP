@@ -380,19 +380,25 @@ function genKeyPair() {
 
 function encryptWithPublicKey(publicKey, message) {
   const bufferMessage = Buffer.from(message, "utf8");
-
   return crypto.publicEncrypt(publicKey, bufferMessage);
+}
+
+function encryptWithPrivateKey(privateKey, message) {
+  const bufferMessage = Buffer.from(message, 'utf8');
+  return crypto.privateEncrypt(privateKey, bufferMessage);
+}
+
+function decryptWithPublicKey(publicKey, encryptedMessage) { 
+  return crypto.publicDecrypt(publicKey, encryptedMessage);
+    
 }
 
 function decryptWithPrivateKey(privateKey, encryptedMessage) {
   return crypto.privateDecrypt(privateKey, encryptedMessage);
 }
 
-function encryptWithPrivateKey(senderPrivateKey, myData){
-   /*const senderPrivateKey = fs.readFileSync(
-    __dirname + "/id_rsa_priv.pem",
-    "utf8"
-  );*/
+function encryptWithPrivateKeyProcess(senderPrivateKey, myData){
+  //const senderPrivateKey = fs.readFileSync(__dirname + "/id_rsa_priv.pem", "utf8");
 
   const hash = crypto.createHash("sha256");
 
@@ -406,17 +412,13 @@ function encryptWithPrivateKey(senderPrivateKey, myData){
   const hashedData = hash.digest("hex");
 
   var signedMessage = null;
-
-  /*signedMessage = encrypt.encryptWithPrivateKey(
-    senderPrivateKey,
-    hashedData
-  );*/
+  signedMessage = encryptWithPrivateKey(senderPrivateKey, hashedData);
 
   return signedMessage;
 
 }
 
-function decryptWithPublicKey(publicKey, receivedData){
+function decryptWithPublicKeyProcess(publicKey, receivedData){
   
   // We have the sender's public key here:
   //const publicKey = fs.readFileSync(__dirname + "/id_rsa_pub.pem", "utf8");
@@ -428,11 +430,7 @@ function decryptWithPublicKey(publicKey, receivedData){
   // Step 1: Decrypt the signed message
   // ==================================
   var decryptedMessage = null;
-
-  /*const decryptedMessage = decrypt.decryptWithPublicKey(
-    publicKey,
-    receivedData.signedAndEncryptedData
-  );*/
+  decryptedMessage = decryptWithPublicKey(publicKey, receivedData.signedAndEncryptedData);
 
   // By default, returns a Buffer object, so convert to string
   const decryptedMessageHex = decryptedMessage.toString();
