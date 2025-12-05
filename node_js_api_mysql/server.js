@@ -396,48 +396,58 @@ function decryptWithPrivateKey(privateKey, encryptedMessage) {
   return crypto.privateDecrypt(privateKey, encryptedMessage);
 }
 
-function encryptWithPrivateKeyProcess(senderPrivateKey, myData){
+//encryptWithPrivateKeyProcess
+function signMessage(senderPrivateKey, myData){
+  /*
+  const myData = {
+    firstName: 'Zach',
+    lastName: 'Gollwitzer',
+    socialSecurityNumber: 'NO NO NO.  Never put personal info in a digitally \
+    signed message since this form of cryptography does not hide the data!'
+  };
+  */
+
   //const senderPrivateKey = fs.readFileSync(__dirname + "/id_rsa_priv.pem", "utf8");
 
   const hash = crypto.createHash("sha256");
-
-  // String version of our data that can be hashed
-  const myDataString = JSON.stringify(myData);
-
-  // Sets the value on the hash object: requires string format, so we must convert our object
-  hash.update(myDataString);
-
-  // Hashed data in Hexidecimal format
-  const hashedData = hash.digest("hex");
+  const myDataString = JSON.stringify(myData); // String version of our data that can be hashed
+  hash.update(myDataString); // Sets the value on the hash object: requires string format, so we must convert our object
+  const hashedData = hash.digest("hex"); // Hashed data in Hexidecimal format
 
   var signedMessage = null;
   signedMessage = encryptWithPrivateKey(senderPrivateKey, hashedData);
+
+  /*
+  module.exports = {
+    algorithm: 'sha256',
+    originalData: myData,
+    signedAndEncryptedData: signedMessage
+  };
+  */
 
   return signedMessage;
 
 }
 
-function decryptWithPublicKeyProcess(publicKey, receivedData){
+//decryptWithPublicKeyProcess
+function verifySenderUser(senderPublicKey, signAlgorithm, receivedEncryptedData, recievedOriginalData){
   
   // We have the sender's public key here:
-  //const publicKey = fs.readFileSync(__dirname + "/id_rsa_pub.pem", "utf8");
-
-  // Use the hash function provided!
-  const hash = crypto.createHash(receivedData.algorithm);
+  //const senderPublicKey = fs.readFileSync(__dirname + "/id_rsa_pub.pem", "utf8");
 
   // ==================================
   // Step 1: Decrypt the signed message
   // ==================================
   var decryptedMessage = null;
-  decryptedMessage = decryptWithPublicKey(publicKey, receivedData.signedAndEncryptedData);
-
-  // By default, returns a Buffer object, so convert to string
-  const decryptedMessageHex = decryptedMessage.toString();
+  decryptedMessage = decryptWithPublicKey(senderPublicKey, receivedEncryptedData);
+  const decryptedMessageHex = decryptedMessage.toString(); // By default, returns a Buffer object, so convert to string
 
   // ========================================
   // Step 2: Take a hash of the original data
   // ========================================
-  const hashOfOriginal = hash.update(JSON.stringify(receivedData.originalData));
+  // Use the hash function provided!
+  const hash = crypto.createHash(signAlgorithm); //deberia ser algorithm: 'sha256' de la funcion de firmado
+  const hashOfOriginal = hash.update(JSON.stringify(recievedOriginalData));
   const hashOfOriginalHex = hash.digest("hex");
 
   // ========================================
@@ -445,15 +455,15 @@ function decryptWithPublicKeyProcess(publicKey, receivedData){
   // ========================================
   if (hashOfOriginalHex === decryptedMessageHex) {
     console.log(
-      "Success!  The data has not been tampered with and the sender is valid."
+      "Success: The data has not been tampered with and the sender is valid."
     );
   } else {
     console.log(
-      "Uh oh... Someone is trying to manipulate the data or someone else is sending this!  Do not use!"
+      "Failure: Someone is trying to manipulate the data or someone else is sending this!  Do not use!"
     );
   }
 
-  return decryptedMessage;
+  return decryptedMessageHex;
 
 }
 
