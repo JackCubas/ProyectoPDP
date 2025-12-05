@@ -352,27 +352,33 @@ async function computePdfMetadata(filePath){
 
 //---------------------------------------------
 
-/*
+function genKeyPairStrong(phrase) {
+  const keyPair = crypto.generateKeyPair('rsa', {
+    modulusLength: 4096,
+    publicKeyEncoding: {
+      type: 'spki',
+      format: 'pem'
+    },
+    privateKeyEncoding: {
+      type: 'pkcs8',
+      format: 'pem',
+      cipher: 'aes-256-cbc',
+      passphrase: phrase
+    },
+  });
 
-generateKeyPair('rsa', {
-  modulusLength: 4096,
-  publicKeyEncoding: {
-    type: 'spki',
-    format: 'pem'
-  },
-  privateKeyEncoding: {
-    type: 'pkcs8',
-    format: 'pem',
-    cipher: 'aes-256-cbc',
-    passphrase: 'top secret'
-  }
-}, (err, publicKey, privateKey) => {
-  //...
-});
+  // Create the public key file
+  //fs.writeFileSync(__dirname + "/id_rsa_pub.pem", keyPair.publicKey);
 
-*/
+  // Create the private key file
+  //fs.writeFileSync(__dirname + "/id_rsa_priv.pem", keyPair.privateKey);
 
-function genKeyPair() {
+  return keyPair;
+}
+
+
+
+function genKeyPairSimple() {
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
   const keyPair = crypto.generateKeyPairSync("rsa", {
     modulusLength: 4096, // bits - standard for RSA keys
