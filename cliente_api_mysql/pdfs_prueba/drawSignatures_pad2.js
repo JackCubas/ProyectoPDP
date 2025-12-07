@@ -125,6 +125,18 @@ async function saveSignatureAndInsertIntoPDF() {
     downloadModifiedPDF(modifiedPDFBytes);
 }
 
+async function saveToServer() {
+    const signatureDataUrl = signaturePad.toDataURL("image/png");
+    // You can now send this data to the server for processing or save it locally.
+    console.log(signatureDataUrl); // Log the signature data URL for demonstration purposes.
+
+    // Call the function to insert the signature into the PDF.
+    const modifiedPDFBytes = await insertSignatureIntoPDF(signatureDataUrl);
+
+    // Send the modified PDF with the inserted signature.
+    sendData(modifiedPDFBytes);
+}
+
 // Function to insert the signature into the PDF.
 async function insertSignatureIntoPDF(signatureDataURL) {
     const pdfBytes = await fetch("document.pdf").then((res) => res.arrayBuffer());
@@ -176,6 +188,7 @@ function dataURLToUint8Array(dataURL) {
 
 // Function to trigger the download of the modified PDF.
 function downloadModifiedPDF(modifiedPDFBytes) {
+    console.log(modifiedPDFBytes);
     const blob = new Blob([modifiedPDFBytes], {
         type: "application/pdf",
     });
@@ -190,4 +203,40 @@ function downloadModifiedPDF(modifiedPDFBytes) {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+}
+
+async function sendData(modifiedPDFBytes){
+
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
+
+    //var array = modifiedPDFBytes.toBase64();
+
+    var array = new Blob([modifiedPDFBytes], {
+        type: "application/pdf",
+    });
+
+    console.log(array);
+    var idHTML = 7;
+
+    const URLSERVERsign = "http://localhost:3000/sign/";
+
+    var formData = new FormData();
+    formData.append("filename", "probandoPdf7");
+    formData.append("uploadedFile", array);
+    formData.append("signUserId", 4);
+
+
+    const apiCall = await fetch(URLSERVERsign + idHTML, {
+        method: "PUT",
+        headers: {
+            "Accept": "application/json"
+        },
+        body: formData,
+    }
+    );
+
+    //const result = await apiCall.json();
+    //console.log(result);
+
 }

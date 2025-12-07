@@ -1578,6 +1578,50 @@ app.put('/stamp/:id', async (req, res) => {
 
 })
 
+app.put('/sign/:id', fileUpload(), async (req, res) => {
+
+  console.log("llegado al sign-pdf");
+  console.log(req.files);
+
+  const { id } = req.params;
+
+  const fileName = req.body.filename;
+  const signUserId = req.body.signUserId;
+
+  const archivoPdf = CARPETAPDF + "/" + fileName + '.pdf';
+  console.log(archivoPdf);
+  var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile.data : null;
+
+  if (fs.existsSync(archivoPdf) && pdfFile !== null){
+
+    console.log(id, archivoPdf, signUserId);
+
+    //-------------------------------------------------------------------
+
+    const newFilePath = CARPETAPDF + "/" + fileName + '.pdf';
+    fs.writeFileSync(newFilePath, pdfFile);
+
+    console.log("Leyendo pdf: " + newFilePath);
+
+    const rs = fs.createReadStream(newFilePath);
+
+    // get size of the file
+    const { size } = fs.statSync(newFilePath);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Length", size);
+
+    console.log("Enviando pdf: " + newFilePath);
+
+    rs.pipe(res);
+
+  }else{
+    console.warn('Pdf no se ha encontrado');
+    return res.status(500).json({ error: 'failed to find pdf or stamp' });
+
+  }
+
+})
+
 
 //-----------------------
 app.listen(APIPORT, () => {
