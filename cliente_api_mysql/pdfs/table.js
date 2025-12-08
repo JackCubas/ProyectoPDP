@@ -103,7 +103,9 @@ function sign(event) {
   const substringToRemove = "signbutton";
   const idSign = idSignString.replace(substringToRemove, '');
 
-  alert("Sign: " + idSign);
+  //alert("Sign: " + idSign);
+
+  window.location.href = "sign.html?id=" + idSign;
 }
 
 function stamp(event) {
