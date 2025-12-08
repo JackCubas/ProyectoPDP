@@ -220,8 +220,8 @@ async function sendData(modifiedPDFBytes){
         type: "application/pdf",
     });
 
-    console.log(pdfBlob);
-    console.log(thisDocName);
+    //console.log(pdfBlob);
+    //console.log(thisDocName);
 
     const URLSERVERsign = "http://localhost:3000/sign/";
 
@@ -251,7 +251,7 @@ async function returnData() {
     var datosURL = window.location.href.split('?');
     var idHTML = datosURL[1].replace("id=","");
 
-    console.log("return data");
+    //console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
         .then((response) => { 
             return response.json().then((data) => {
@@ -266,17 +266,17 @@ async function returnData() {
 
 function appendData(data){
     for(let i=0;i<data.length;i++){
-        console.log(data[i]);
+        //console.log(data[i]);
         thisDocName = data[i].DocName;                     
     }
-    console.log("finalizado generacion de ventana");
+    //console.log("finalizado generacion de ventana");
 }
 
 async function retrievePDF() {
 
     const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
-    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
+    //console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
     return fetch(URLSERVERretrieve + thisDocName, {
         method: "GET",
         headers: {
@@ -284,9 +284,10 @@ async function retrievePDF() {
         }
     })
     .then((response) => { 
-        console.log(response);
+        //console.log(response);
         return response.blob().then((data) => {
-                    console.log(data);
+                    //console.log(data);
+                    pdfBuffer = blobToArray(data);
                     return generateWindow(data);
                 }).catch((err) => {
                     console.log(err);
@@ -299,7 +300,7 @@ async function retrievePDF() {
 }
 
 function generateWindow(response){
-    //pdfBuffer = response;
+    //pdfBuffer = response.data;
     const fileURL = URL.createObjectURL(response);
     console.log(fileURL);
     window.open(fileURL); 
@@ -309,6 +310,22 @@ function checkUserHosting(){
     returnData().then(() => {
         retrievePDF();
     })
+}
+
+async function blobToArray(data){
+    console.log("blob to array");
+    console.log(data);
+    //var fileReader  = new FileReader();
+    /*fileReader.onload = function(event) {
+        arrayBuffer = event.target.result;
+    };*/
+    //await fileReader.readAsArrayBuffer(data);
+    //console.log(fileReader.result);
+    //return fileReader.result;
+
+    pdfBuffer = await data.arrayBuffer();
+    console.log(pdfBuffer);
+    return await data.arrayBuffer();
 }
 
 checkUserHosting();
