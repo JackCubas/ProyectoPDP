@@ -1514,8 +1514,8 @@ app.put('/stamp/:id', async (req, res) => {
       });
       })
     }catch(err){
-      console.error('modify-pdf error:', err);
-      return res.status(500).json({ error: 'failed to modify pdf' });
+      console.error('stamp-pdf error:', err);
+      return res.status(500).json({ error: 'failed to stamp pdf' });
     }
 
 
@@ -1596,6 +1596,41 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
     console.log(id, archivoPdf, signUserId);
 
+    //-----------------------------------------------------------------
+
+    try{
+      con = mysql.createConnection({
+            host: DBHOST,
+            user: DBUSER,
+            password: DBPASS,
+            port     :DBPORT,
+            database: DBNAME
+      });
+
+      con.connect(function(err) {
+      if (err) throw err;
+      console.log("Connected!");
+
+      const signTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+      let sql = `
+        UPDATE pdfs 
+        SET signUserId = "${signUserId}",
+        signTimestamp = "${signTimestamp}" 
+        WHERE id = "${id}"
+      `;
+
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record modified");
+        console.log(result);
+      });
+      })
+    }catch(err){
+      console.error('sign-pdf error:', err);
+      return res.status(500).json({ error: 'failed to sign pdf' });
+    }
+
     //-------------------------------------------------------------------
 
     const newFilePath = CARPETAPDF + "/" + fileName + '.pdf';
@@ -1616,7 +1651,7 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
   }else{
     console.warn('Pdf no se ha encontrado');
-    return res.status(500).json({ error: 'failed to find pdf or stamp' });
+    return res.status(500).json({ error: 'failed to find pdf' });
 
   }
 
