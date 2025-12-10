@@ -1675,6 +1675,13 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
     return res.status(400).json({ error: 'No uploadedFile provided' });
   }
 
+  const nombreFileJpg =  CARPETASTAMP + "/" + nombreFile + ".jpg";
+  const nombreFilePng =  CARPETASTAMP + "/" + nombreFile + ".png";
+
+  if (fs.existsSync(nombreFileJpg) || fs.existsSync(nombreFilePng)){
+    return res.status(400).json({ error: 'File already exists' });
+  }
+
   try{
     fs.writeFileSync(archivoNombre, stampFile.data);
     console.log('File written successfully', archivoNombre);
