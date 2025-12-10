@@ -1658,6 +1658,32 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 })
 
 
+//---------------------
+//---------------------
+
+app.post('/create-stamp', fileUpload(), async (req, res) => {
+
+  console.log("llegado al create-stamp"); 
+  const stampFile = req.files && req.files.uploadedFile ? req.files.uploadedFile : null;
+  const nombreFile = req.body.userId;
+  const fileType = req.body.fileType;
+  
+  //const estado = req.body.estado;
+  const archivoNombre = CARPETASTAMP + "/" + nombreFile + fileType;
+
+  if(!stampFile){
+    return res.status(400).json({ error: 'No uploadedFile provided' });
+  }
+
+  try{
+    fs.writeFileSync(archivoNombre, stampFile.data);
+    console.log('File written successfully', archivoNombre);
+  }catch(err){
+    console.error('create-pdf error:', err);
+    return res.status(500).json({ error: 'failed to save or process pdf' });
+  }
+});
+
 //-----------------------
 app.listen(APIPORT, () => {
   console.log(`Firma app listening at http://localhost:${APIPORT}`);
