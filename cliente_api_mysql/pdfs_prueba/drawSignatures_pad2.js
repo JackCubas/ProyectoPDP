@@ -106,3 +106,11 @@ document.addEventListener('DOMContentLoaded', function () {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 });
+
+async function saveSignatureAndInsertIntoPDF() {
+    alert("saveSignatureAndInsertIntoPDF");
+}
+
+async function saveToServer() {
+    alert("saveToServer");
+}
