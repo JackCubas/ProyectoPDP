@@ -80,35 +80,47 @@ async function sendData(){
     var file = document.getElementById("file").files[0];
     var docEstado = document.getElementById("docEstado").value;
 
+    var fileInput = document.getElementById('file');	
+    var filePath = fileInput.value;
+    var allowedExtensions = /(\.pdf)$/i;
+
     console.log("filename: " + projectName + " filenameOriginal: " + thisDocName + " estado: " + docEstado + " uploadedFile: " + file);
+
+    if (file !== undefined && file !== null && !allowedExtensions.exec(filePath)) {
+        alert('Invalid file type');
+        fileInput.value = '';
+        return false;
     
-    if(file === undefined){
-        file = null;
+    }else{
+         
+        if(file === undefined){
+            file = null;
+        }
+
+        console.log("filename2: " + projectName + " filenameOriginal: " + thisDocName + " estado2: " + docEstado + " uploadedFile2: " + file);
+
+        var formData = new FormData();
+        formData.append("filename", projectName);
+        formData.append("filenameOriginal", thisDocName);
+        formData.append("estado", docEstado);
+        formData.append("uploadedFile", file);
+        formData.append("userId", 2);
+
+        alert("prueba");
+
+
+        const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json"
+            },
+            body: formData,
+        }
+        );
+
+        const result = await apiCall.json();
+        console.log(result);
     }
-
-    console.log("filename2: " + projectName + " filenameOriginal: " + thisDocName + " estado2: " + docEstado + " uploadedFile2: " + file);
-
-    var formData = new FormData();
-    formData.append("filename", projectName);
-    formData.append("filenameOriginal", thisDocName);
-    formData.append("estado", docEstado);
-    formData.append("uploadedFile", file);
-    formData.append("userId", 2);
-
-    alert("prueba");
-
-
-    const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
-        method: "PUT",
-        headers: {
-            "Accept": "application/json"
-        },
-        body: formData,
-    }
-    );
-
-    const result = await apiCall.json();
-    console.log(result);
 
     window.location.href = "table.html";
 
