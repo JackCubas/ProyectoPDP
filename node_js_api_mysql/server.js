@@ -1477,10 +1477,11 @@ app.put('/stamp/:id', async (req, res) => {
   const archivoPdf = CARPETAPDF + "/" + filename + '.pdf';
   const archivoStampPNG = CARPETASTAMP + "/" + stampUserId + '.png';
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
+  const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
 
-  if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG))){
+  if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG) || fs.existsSync(archivoStampJPEG))){
 
-    console.log(id, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG);
+    console.log(id, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG, archivoStampJPEG);
 
     //-------------------------------------------------------------------
 
@@ -1530,6 +1531,10 @@ app.put('/stamp/:id', async (req, res) => {
     
     if(fs.existsSync(archivoStampJPG)){
       img = await pdfDoc.embedJpg(fs.readFileSync(archivoStampJPG));
+    }
+
+    if(fs.existsSync(archivoStampJPEG)){
+      img = await pdfDoc.embedJpg(fs.readFileSync(archivoStampJPEG));
     }
 
     /*const imagePage = pdfDoc.insertPage(0);
