@@ -73,7 +73,7 @@ function appendData(data){
         con.appendChild(g);
 
         var h=document.createElement("div");
-        
+
         var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
         var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
         initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
@@ -121,7 +121,7 @@ async function sendData(){
     //console.log("delete pdf: " + URLSERVERDelete + idHtml);
     //alert("delete pdf: " + URLSERVERDelete + idHtml);
 
-    const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId, {
+    const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId + '&initialTimestampName=' + initialTimestampName, {
         method: "DELETE"
     })
 

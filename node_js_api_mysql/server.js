@@ -916,7 +916,7 @@ app.get("/pdfs", cors(), (req, res) => {
 
               //var carpetUrl = resultRows[0].urlCarpeta;
 
-              console.log(resultRows);
+              //console.log(resultRows);
               res.json(resultRows);
           });
       });
@@ -1180,8 +1180,9 @@ app.delete('/eliminate', async function(req, res) {
   const id = req.query.id;
   const docName = req.query.docName;
   const userId = req.query.userId;
+  const initialTimestampName = req.query.initialTimestampName;
 
-  if (!id || !docName || !userId) {
+  if (!id || !docName || !userId || !initialTimestampName) {
     return res.status(400).json({ id: 'id, userid y docName son requeridos' });
   }
 
@@ -1191,7 +1192,7 @@ app.delete('/eliminate', async function(req, res) {
   //------------------------------------------------
 
   console.log("llegado al delete pdf puro");
-  const pathDelete = CARPETAPDF + "/" + userId + "/" + docName  +".pdf";
+  const pathDelete = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + ".pdf";
 
   if (fs.existsSync(pathDelete)) {
     // delete the file on server after it sends to client
