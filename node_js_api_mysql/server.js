@@ -1379,21 +1379,22 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
   console.log("llegado al modify-pdf" + req.body.estado);
   console.log(req.files);
 
-
-
   const { id } = req.params;
 
   const nombreFileNuevo = req.body.filename;
   const nombreFileOriginal = req.body.filenameOriginal;
-  const estado = req.body.estado || 'PENDING';
-  const userId = req.body.userId;
 
-  const archivoNombreNuevo = CARPETAPDF + "/" + nombreFileNuevo + '.pdf';
-  const archivoNombreOriginal = CARPETAPDF + "/" + nombreFileOriginal + '.pdf';
+  const estado = req.body.estado || 'PENDING';
+  
+  const userIdNuevo = req.body.userIdNuevo;
+  const userIdOriginal = req.body.userIdOriginal;
+
+  const archivoNombreNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + '.pdf';
+  const archivoNombreOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + '.pdf';
   
   var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile : null;
 
-  console.log(id, archivoNombreNuevo, archivoNombreOriginal, nombreFileOriginal, nombreFileNuevo, estado, userId, !!pdfFile);
+  console.log(id, archivoNombreNuevo, archivoNombreOriginal, nombreFileOriginal, nombreFileNuevo, estado, userIdOriginal, userIdNuevo, !!pdfFile);
 
   try{
     if(pdfFile === null){
@@ -1404,12 +1405,15 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       }else{
         console.warn('Original file not found for rename:', archivoNombreOriginal);
       }
-    } else {
+    }  
+    
+    if(pdfFile !== null){
       // replace file
       if (fs.existsSync(archivoNombreOriginal)) {
         const unlinkFile = util.promisify(fs.unlink);
-        await unlinkFile(archivoNombreOriginal);
+        await unlinkFile(archivoNombreOriginal);       
       }
+
       fs.writeFileSync(archivoNombreNuevo, pdfFile.data);
       console.log('File written successfully:', archivoNombreNuevo);
     }
@@ -1438,7 +1442,7 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
       let sql = `
         UPDATE pdfs 
-        SET userId = "${userId}", 
+        SET userId = "${userIdNuevo}", 
         name = "${nombreFileNuevo}",
         urlCarpeta = "${archivoNombreNuevo}",
         estado = "${estado}",

@@ -106,7 +106,9 @@ async function sendData(){
         formData.append("filenameOriginal", thisDocName);
         formData.append("estado", docEstado);
         formData.append("uploadedFile", file);
-        formData.append("userId", 2);
+        formData.append("userIdOriginal", userId);
+        formData.append("userIdNuevo", 2);
+        //formData.append("userIdNuevo", 1);
 
         alert("prueba");
 
