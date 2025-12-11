@@ -1,4 +1,5 @@
 var thisDocName = "";
+var userId = null;
 var pdfBuffer = null;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -256,6 +257,7 @@ async function returnData() {
         .then((response) => { 
             return response.json().then((data) => {
                 thisDocName = data[0].DocName;
+                userId = data[0].userId;
                 return appendData(data);
             }).catch((err) => {
                 console.log(err);
@@ -267,7 +269,8 @@ async function returnData() {
 function appendData(data){
     for(let i=0;i<data.length;i++){
         //console.log(data[i]);
-        thisDocName = data[i].DocName;                     
+        thisDocName = data[i].DocName;
+        userId = data[i].userId;                     
     }
     //console.log("finalizado generacion de ventana");
 }
@@ -277,7 +280,7 @@ async function retrievePDF() {
     const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
     //console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
-    return fetch(URLSERVERretrieve + thisDocName, {
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"

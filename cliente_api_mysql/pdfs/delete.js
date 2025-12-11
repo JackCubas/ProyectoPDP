@@ -4,6 +4,7 @@ const URLSERVERdetail = "http://localhost:3000/pdfs/";
 const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 var thisDocName = "";
+var userId = null;
 
 async function returnData() {
 
@@ -15,6 +16,7 @@ async function returnData() {
         .then((response) => { 
             return response.json().then((data) => {
                 thisDocName = data[0].DocName;
+                userId = data[0].userId;
                 return appendData(data);
             }).catch((err) => {
                 console.log(err);
@@ -25,8 +27,8 @@ async function returnData() {
 
 async function retrievePDF() {
 
-    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
-    return fetch(URLSERVERretrieve + thisDocName, {
+    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId);
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -87,11 +89,13 @@ function checkUserHosting(){
 
     if(idHTML === null || idHTML === ""){
         window.location.href = "table.html";
-    }
+    }else{
 
-    returnData().then(() => {
-        retrievePDF();
-    })
+        returnData().then(() => {
+            retrievePDF();
+        })
+
+    }
     
 }
 
@@ -107,7 +111,7 @@ async function sendData(){
     //console.log("delete pdf: " + URLSERVERDelete + idHtml);
     //alert("delete pdf: " + URLSERVERDelete + idHtml);
 
-    const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName, {
+    const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId, {
         method: "DELETE"
     })
 

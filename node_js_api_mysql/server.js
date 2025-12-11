@@ -1085,8 +1085,8 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
   const pdfFile = req.files && req.files.uploadedFile ? req.files.uploadedFile : null;
   const nombreFile = req.body.filename;
   const estado = req.body.estado || 'PENDING';
-  //const estado = req.body.estado;
-  const archivoNombre = CARPETAPDF + "/" + nombreFile + '.pdf';
+  const userId = req.body.userId;
+  const archivoNombre = CARPETAPDF + "/" + userId + "/" + nombreFile + '.pdf';
 
   if(!pdfFile){
     return res.status(400).json({ error: 'No uploadedFile provided' });
@@ -1148,17 +1148,17 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
 //-------------------
 //-------------------
 
-app.get('/retrieve/:thisDocName', function(req, res) {
-  const { thisDocName } = req.params;
+app.get('/retrieve/:thisDocName/:userId', function(req, res) {
+  const { thisDocName, userId } = req.params;
   
-  const pathAxios = CARPETAPDF + "/" + thisDocName + '.pdf'; // path where to file is stored in server
+  const pathRetrieve = CARPETAPDF + "/" + userId + "/" + thisDocName + '.pdf'; // path where to file is stored in server
 
-  if (fs.existsSync(pathAxios)) {
+  if (fs.existsSync(pathRetrieve)) {
     //console.log("llegado al retrieve puro");
-    const rs = fs.createReadStream(pathAxios);
+    const rs = fs.createReadStream(pathRetrieve);
 
     // get size of the video file
-    const { size } = fs.statSync(pathAxios);
+    const { size } = fs.statSync(pathRetrieve);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Length", size);
     rs.pipe(res);
@@ -1173,23 +1173,24 @@ app.delete('/eliminate', async function(req, res) {
 
   const id = req.query.id;
   const docName = req.query.docName;
+  const userId = req.query.userId;
 
-  if (!id || !docName) {
-    return res.status(400).json({ id: 'email y docName son requeridos' });
+  if (!id || !docName || !userId) {
+    return res.status(400).json({ id: 'id, userid y docName son requeridos' });
   }
 
-  console.log("id: " + id + " docName: " + docName);
+  console.log("id: " + id + " docName: " + docName + " userId: " + userId);
   console.log("llegado al delete pdf para doc nombre " + docName);
 
   //------------------------------------------------
 
   console.log("llegado al delete pdf puro");
-  const pathAxios = CARPETAPDF + "/" + docName  +".pdf";
+  const pathDelete = CARPETAPDF + "/" + userId + "/" + docName  +".pdf";
 
-  if (fs.existsSync(pathAxios)) {
+  if (fs.existsSync(pathDelete)) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-    unlinkFile(pathAxios);
+    unlinkFile(pathDelete);
   }
 
   //-----------------------------------------------
