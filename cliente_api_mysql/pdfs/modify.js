@@ -3,6 +3,7 @@ const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 var thisDocName = "";
 var userId = null;
+var initialTimestampName = "";
 
 async function returnData() {
 
@@ -15,6 +16,11 @@ async function returnData() {
             return response.json().then((data) => {
                 thisDocName = data[0].DocName;
                 userId = data[0].userId;
+
+                var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+                var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+                initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+
                 return appendData(data);
             }).catch((err) => {
                 console.log(err);
@@ -25,8 +31,8 @@ async function returnData() {
 
 async function retrievePDF() {
 
-    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId);
-    return fetch(URLSERVERretrieve + thisDocName + "/" + userId, {
+    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName);
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -104,6 +110,7 @@ async function sendData(){
         var formData = new FormData();
         formData.append("filename", projectName);
         formData.append("filenameOriginal", thisDocName);
+        formData.append("initialTimestampName", initialTimestampName);
         formData.append("estado", docEstado);
         formData.append("uploadedFile", file);
         formData.append("userIdOriginal", userId);

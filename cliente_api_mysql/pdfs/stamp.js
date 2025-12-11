@@ -11,6 +11,7 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
 
 var thisDocName = "";
 var userId = null;
+var initialTimestampName = "";
 
 async function returnData() {
 
@@ -33,8 +34,8 @@ async function returnData() {
 
 async function retrievePDF() {
 
-    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId);
-    return fetch(URLSERVERretrieve + thisDocName + "/" + userId, {
+    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName);
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -76,6 +77,15 @@ function appendData(data){
         var g=document.createElement("div")
         g.textContent="Estado: " + data[i].estado                      
         con.appendChild(g);
+
+        var h=document.createElement("div");
+
+        var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+        var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+        initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+        
+        h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+        con.appendChild(h);
     }
     console.log("finalizado generacion de ventana");
 }

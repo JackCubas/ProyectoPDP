@@ -1,6 +1,7 @@
 var thisDocName = "";
 var userId = null;
 var pdfBuffer = null;
+var initialTimestampName = ""; 
 
 document.addEventListener('DOMContentLoaded', function () {
     var canvas = document.getElementById('signature-pad');
@@ -258,6 +259,11 @@ async function returnData() {
             return response.json().then((data) => {
                 thisDocName = data[0].DocName;
                 userId = data[0].userId;
+
+                var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+                var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+                initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+
                 return appendData(data);
             }).catch((err) => {
                 console.log(err);
@@ -280,7 +286,7 @@ async function retrievePDF() {
     const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
     //console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
-    return fetch(URLSERVERretrieve + thisDocName + "/" + userId, {
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
