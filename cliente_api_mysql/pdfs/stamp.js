@@ -95,11 +95,12 @@ function checkUserHosting(){
 
     if(idHTML === null || idHTML === ""){
         window.location.href = "table.html";
-    }
+    }else{
 
-    returnData().then(() => {
-        retrievePDF();
-    })
+        returnData().then(() => {
+            retrievePDF();
+        })
+    }
     
 }
 
