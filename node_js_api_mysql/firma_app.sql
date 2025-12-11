@@ -81,6 +81,7 @@ CREATE TABLE `pdfs` (
   `fileSize` bigint(20) NOT NULL DEFAULT 0,
   `numPages` int(11) NOT NULL DEFAULT 0,
   `sha256` varchar(128) DEFAULT NULL,
+  `initialUploadTimestamp` DATETIME NOT NULL,
   `uploadTimestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `validatorId` int(11) DEFAULT NULL,
   `validationTimestamp` DATETIME DEFAULT NULL,
@@ -92,11 +93,11 @@ CREATE TABLE `pdfs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Como son dentro de carpeta y no sacadas desde archivo, los valores los deje a dafault
-INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, validatorId, validationTimestamp, stampUserId, stampTimestamp, signUserId, signTimestamp) VALUES
-(2, 'pdfPrueba1', './pdfBBDD/2/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'pdfPrueba2', './pdfBBDD/2/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'pdfPrueba3', './pdfBBDD/2/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'probandoPdf_4', './pdfBBDD/2/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'probandoPdf5', './pdfBBDD/3/probandoPdf5.pdf', 'VALIDATED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'probandoPdf6', './pdfBBDD/3/probandoPdf6.pdf', 'PENDING', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'probandoPdf7', './pdfBBDD/3/probandoPdf7.pdf', 'REJECTED', 0, 0, NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, initialUploadTimestamp, uploadTimestamp, validatorId, validationTimestamp, stampUserId, stampTimestamp, signUserId, signTimestamp) VALUES
+(2, 'pdfPrueba1', './pdfBBDD/2/pdfPrueba1.pdf', 'VALIDATED', 0, 0, NULL, "2025-12-11 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'pdfPrueba2', './pdfBBDD/2/pdfPrueba2.pdf', 'PENDING', 0, 0, NULL, "2025-12-10 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'pdfPrueba3', './pdfBBDD/2/pdfPrueba3.pdf', 'PENDING', 0, 0, NULL, "2025-12-09 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'probandoPdf_4', './pdfBBDD/2/probandoPdf_4.pdf', 'REJECTED', 0, 0, NULL, "2025-12-08 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'probandoPdf5', './pdfBBDD/3/probandoPdf5.pdf', 'VALIDATED', 0, 0, NULL, "2025-12-07 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'probandoPdf6', './pdfBBDD/3/probandoPdf6.pdf', 'PENDING', 0, 0, NULL, "2025-12-06 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'probandoPdf7', './pdfBBDD/3/probandoPdf7.pdf', 'REJECTED', 0, 0, NULL, "2025-12-05 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL);

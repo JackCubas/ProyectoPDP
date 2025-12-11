@@ -1119,10 +1119,12 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
       console.log("Connected to pdf!");
       console.log(req.body);
 
-      let sql = "INSERT INTO pdfs (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp) VALUES ?";
+      const initialTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+      let sql = "INSERT INTO pdfs (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, initialUploadTimestamp) VALUES ?";
 
       let values = [
-        [req.body.userId, nombreFile, archivoNombre, estado, metadata.fileSize, metadata.numPages, metadata.sha256, metadata.uploadTimestamp]
+        [req.body.userId, nombreFile, archivoNombre, estado, metadata.fileSize, metadata.numPages, metadata.sha256, metadata.uploadTimestamp, initialTimestamp]
       ]
 
       con.query(sql, [values], function (err, result) {
@@ -1385,7 +1387,7 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
   const nombreFileOriginal = req.body.filenameOriginal;
 
   const estado = req.body.estado || 'PENDING';
-  
+
   const userIdNuevo = req.body.userIdNuevo;
   const userIdOriginal = req.body.userIdOriginal;
 
