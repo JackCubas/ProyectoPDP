@@ -5,7 +5,7 @@ async function sendData(){
 	var filePath = fileInput.value;
 		
 	// Allowing file type
-	var allowedExtensions = /(\.jpg|\.png)$/i;
+	var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 			
 	if (!allowedExtensions.exec(filePath)) {
         alert('Invalid file type');
@@ -19,11 +19,16 @@ async function sendData(){
 	if (fileInput.files && fileInput.files[0]) {
 
         var jpgExtensions = /(\.jpg)$/i;
+        var jpegExtensions = /(\.jpeg)$/i;
         var pngExtensions = /(\.png)$/i;
         var fileType = "";
 
         if(jpgExtensions.exec(filePath)){
             fileType = ".jpg";
+        }
+
+        if(jpegExtensions.exec(filePath)){
+            fileType = ".jpeg";
         }
 
         if(pngExtensions.exec(filePath)){

@@ -1676,9 +1676,10 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   }
 
   const nombreFileJpg =  CARPETASTAMP + "/" + nombreFile + ".jpg";
+  const nombreFileJpeg =  CARPETASTAMP + "/" + nombreFile + ".jpeg";
   const nombreFilePng =  CARPETASTAMP + "/" + nombreFile + ".png";
 
-  if (fs.existsSync(nombreFileJpg) || fs.existsSync(nombreFilePng)){
+  if (fs.existsSync(nombreFileJpg) || fs.existsSync(nombreFilePng) || fs.existsSync(nombreFileJpeg)){
     return res.status(400).json({ error: 'File already exists' });
   }
 
