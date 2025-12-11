@@ -1391,13 +1391,15 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
   const nombreFileNuevo = req.body.filename;
   const nombreFileOriginal = req.body.filenameOriginal;
 
+  const initialTimestampName = req.body.initialTimestampName;
+
   const estado = req.body.estado || 'PENDING';
 
   const userIdNuevo = req.body.userIdNuevo;
   const userIdOriginal = req.body.userIdOriginal;
 
-  const archivoNombreNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + '.pdf';
-  const archivoNombreOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + '.pdf';
+  const archivoNombreNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + '.pdf';
+  const archivoNombreOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + '.pdf';
   
   var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile : null;
 
