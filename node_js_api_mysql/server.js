@@ -1573,7 +1573,7 @@ app.put('/stamp/:id', async (req, res) => {
 
     const pdfBytes = await pdfDoc.save();
     //const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
-    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + '.pdf';
+    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + "-stamp" + '.pdf';
     fs.writeFileSync(newFilePath, pdfBytes);
 
     console.log("Leyendo pdf: " + newFilePath);
@@ -1654,7 +1654,7 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
     //-------------------------------------------------------------------
 
-    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + fileName + "_" + initialTimestampName + '.pdf';
+    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + fileName + "_" + initialTimestampName + "-sign" + '.pdf';
     fs.writeFileSync(newFilePath, pdfFile);
 
     console.log("Leyendo pdf: " + newFilePath);
