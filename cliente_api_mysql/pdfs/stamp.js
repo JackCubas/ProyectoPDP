@@ -13,7 +13,7 @@ var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";
 
-async function returnData() {
+async function returnDataOriginal() {
 
     var datosURL = window.location.href.split('?');
     var idHTML = datosURL[1].replace("id=","");
@@ -29,7 +29,7 @@ async function returnData() {
                 var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
                 initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
-                return appendData(data);
+                return appendDataOriginal(data);
             }).catch((err) => {
                 console.log(err);
             }) 
@@ -62,7 +62,7 @@ async function retrievePDF() {
 }
 
 //pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, userId
-function appendData(data){
+function appendDataOriginal(data){
     var con=document.getElementById("main-container")
     for(let i=0;i<data.length;i++){
         console.log(data[i]);
@@ -95,6 +95,35 @@ function appendData(data){
     console.log("finalizado generacion de ventana");
 }
 
+async function returnDataStamp() {
+    const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
+
+    var datosURL = window.location.href.split('?');
+    var idHTML = datosURL[1].replace("id=","");
+
+    //console.log("return data");
+    return fetch(URLSERVERdetail + idHTML)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return appendDataStamp(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+
+}
+
+function appendDataStamp(data){
+    if(data.length === 1){
+        for(let i=0;i<data.length;i++){
+            console.log(data[i]);
+        }
+    }else{
+        console.log("No hay documento estampado");
+    }
+    //console.log("finalizado generacion de ventana");
+}
+
 function generateWindow(response){
 
     const fileURL = URL.createObjectURL(response);
@@ -112,7 +141,9 @@ function checkUserHosting(){
         window.location.href = "table.html";
     }else{
 
-        returnData().then(() => {
+        returnDataOriginal().then(() => {
+            returnDataStamp();
+        }).then(() => {
             retrievePDF();
         })
     }
@@ -130,7 +161,7 @@ async function sendData(){
         filename: thisDocName,
         initialTimestampName: initialTimestampName,
         originalUserId: userId,
-        stampUserId: 2
+        stampUserId: 5
     }
 
     /*const apiCall = await fetch(URLSERVERStamp + idHTML, {
