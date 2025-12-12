@@ -1158,8 +1158,8 @@ app.get('/retrieve/:thisDocName/:userId/:initialTimestampName/:docStatus', funct
   const { thisDocName, userId, initialTimestampName, docStatus} = req.params;
   
   const pathRetrieveOriginal = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf'; // path where to file is stored in server
-  const pathRetrieveSign = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf';
-  const pathRetrieveStamp = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf';
+  const pathRetrieveSign = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + "-sign" + '.pdf';
+  const pathRetrieveStamp = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + "-stamp" + '.pdf';
 
   var pathRetrieve = pathRetrieveOriginal;
 
