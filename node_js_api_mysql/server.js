@@ -1157,10 +1157,11 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
 app.get('/retrieve/:thisDocName/:userId/:initialTimestampName/:docStatus', function(req, res) {
   const { thisDocName, userId, initialTimestampName, docStatus} = req.params;
   
-  const pathRetrieve = "";
   const pathRetrieveOriginal = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf'; // path where to file is stored in server
   const pathRetrieveSign = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf';
   const pathRetrieveStamp = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf';
+
+  var pathRetrieve = pathRetrieveOriginal;
 
   if((docStatus === "ORIGINAL") && fs.existsSync(pathRetrieveOriginal)){
     pathRetrieve = pathRetrieveOriginal;
