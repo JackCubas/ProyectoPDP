@@ -288,7 +288,7 @@ async function retrievePDF() {
     const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
     //console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
-    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName, {
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "SIGN", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"

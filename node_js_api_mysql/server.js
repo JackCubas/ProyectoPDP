@@ -1154,10 +1154,25 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
 //-------------------
 //-------------------
 
-app.get('/retrieve/:thisDocName/:userId/:initialTimestampName', function(req, res) {
-  const { thisDocName, userId, initialTimestampName} = req.params;
+app.get('/retrieve/:thisDocName/:userId/:initialTimestampName/:docStatus', function(req, res) {
+  const { thisDocName, userId, initialTimestampName, docStatus} = req.params;
   
-  const pathRetrieve = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf'; // path where to file is stored in server
+  const pathRetrieve = "";
+  const pathRetrieveOriginal = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf'; // path where to file is stored in server
+  const pathRetrieveSign = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf';
+  const pathRetrieveStamp = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf';
+
+  if((docStatus === "ORIGINAL") && fs.existsSync(pathRetrieveOriginal)){
+    pathRetrieve = pathRetrieveOriginal;
+  }
+
+  if((docStatus === "SIGN") && fs.existsSync(pathRetrieveSign)){
+    pathRetrieve = pathRetrieveSign;
+  }
+
+  if((docStatus === "STAMP") && fs.existsSync(pathRetrieveStamp)){
+    pathRetrieve = pathRetrieveStamp;
+  }
 
   if (fs.existsSync(pathRetrieve)) {
     //console.log("llegado al retrieve puro");

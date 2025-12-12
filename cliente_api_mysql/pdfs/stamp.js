@@ -34,8 +34,8 @@ async function returnData() {
 
 async function retrievePDF() {
 
-    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName);
-    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName, {
+    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "STAMP");
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "STAMP", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
