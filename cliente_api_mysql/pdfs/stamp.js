@@ -24,6 +24,11 @@ async function returnData() {
             return response.json().then((data) => {
                 thisDocName = data[0].DocName;
                 userId = data[0].userId;
+
+                var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+                var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+                initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+
                 return appendData(data);
             }).catch((err) => {
                 console.log(err);

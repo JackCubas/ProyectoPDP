@@ -278,7 +278,11 @@ function appendData(data){
     for(let i=0;i<data.length;i++){
         //console.log(data[i]);
         thisDocName = data[i].DocName;
-        userId = data[i].userId;                     
+        userId = data[i].userId;
+        
+        var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+        var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+        initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
     }
     //console.log("finalizado generacion de ventana");
 }
