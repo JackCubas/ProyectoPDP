@@ -124,7 +124,7 @@ async function sendData(){
     const modUser = {
         filename: thisDocName,
         initialTimestampName: initialTimestampName,
-        originalUserId, userId,
+        originalUserId: userId,
         stampUserId: 2
     }
 
