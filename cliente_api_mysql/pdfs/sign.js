@@ -246,6 +246,7 @@ async function sendData(modifiedPDFBytes){
 
     //const result = await apiCall.json();
     //console.log(result);
+    window.location.href = "table.html";
 
 }
 
