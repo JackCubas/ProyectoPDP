@@ -83,7 +83,7 @@ function appendData(data){
         var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
         var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
         initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
-        
+
         h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
         con.appendChild(h);
     }
@@ -123,6 +123,7 @@ async function sendData(){
 
     const modUser = {
         filename: thisDocName,
+        initialTimestampName: initialTimestampName,
         stampUserId: 2
     }
 

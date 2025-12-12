@@ -230,6 +230,7 @@ async function sendData(modifiedPDFBytes){
     var formData = new FormData();
     formData.append("filename", thisDocName);
     formData.append("uploadedFile", pdfBlob);
+    formData.append("initialTimestampName", initialTimestampName);
     formData.append("signUserId", 4);
 
 
