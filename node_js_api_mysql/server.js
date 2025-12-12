@@ -1639,6 +1639,49 @@ app.delete('/eliminateDocStamp', async function(req, res) {
     unlinkFile(pathDelete);
   }
 
+  //----------------------------------
+  try{
+    con = mysql.createConnection({
+            host: DBHOST,
+            user: DBUSER,
+            password: DBPASS,
+            port     :DBPORT,
+            database: DBNAME
+      });
+
+    con.connect(function(err) {
+      if (err) {
+        console.error('DB connect error:', err);
+        return res.status(500).json({ error: 'database connection error' });
+      }
+      console.log("Connected!");
+
+      var stampUserId = null;
+      var stampTimestamp = null;
+
+      let sql = `
+        UPDATE pdfs 
+        SET stampUserId = "${stampUserId}", 
+        stampTimestamp = "${stampTimestamp}"
+        WHERE id = "${id}"
+      `;
+      con.query(sql, function (err, result) {
+        if (err) {
+          console.error('DB update error:', err);
+          return res.status(500).json({ error: 'database update error' });
+        }
+        console.log("1 record modified");
+        console.log(result);
+
+        res.json(result);
+      });
+
+    })
+  }catch(err){
+    console.error('modify-pdf stamp error:', err);
+    return res.status(500).json({ error: 'failed to modify stamp pdf' });
+  }
+
 })  
 
 app.put('/sign/:id', fileUpload(), async (req, res) => {
@@ -1746,6 +1789,49 @@ app.delete('/eliminateDocSign', async function(req, res) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
     unlinkFile(pathDelete);
+  }
+
+  //----------------------------------
+  try{
+    con = mysql.createConnection({
+            host: DBHOST,
+            user: DBUSER,
+            password: DBPASS,
+            port     :DBPORT,
+            database: DBNAME
+      });
+
+    con.connect(function(err) {
+      if (err) {
+        console.error('DB connect error:', err);
+        return res.status(500).json({ error: 'database connection error' });
+      }
+      console.log("Connected!");
+
+      var signUserId = null;
+      var signTimestamp = null;
+
+      let sql = `
+        UPDATE pdfs 
+        SET signUserId = "${signUserId}", 
+        signTimestamp = "${signUserId}"
+        WHERE id = "${id}"
+      `;
+      con.query(sql, function (err, result) {
+        if (err) {
+          console.error('DB update error:', err);
+          return res.status(500).json({ error: 'database update error' });
+        }
+        console.log("1 record modified");
+        console.log(result);
+
+        res.json(result);
+      });
+
+    })
+  }catch(err){
+    console.error('modify-pdf sign error:', err);
+    return res.status(500).json({ error: 'failed to modify sign pdf' });
   }
 
 })  
