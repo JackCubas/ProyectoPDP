@@ -112,6 +112,15 @@ app.get("/", (req, res) => {
   res.json({ message: "ok" });
 });
 
+
+
+//------------------------------------
+//------------------------------------
+//------------------------------------
+//------------------------------------
+
+
+
 app.get("/movies", cors(), (req, res) => {
 
   console.log("get all movie!");
@@ -297,6 +306,7 @@ app.put('/update-movie/:id', (req, res) => {
 });
 
 
+//--------------------------
 //--------------------------
 //--------------------------
 //--------------------------
@@ -500,7 +510,13 @@ function verifySenderUser(senderPublicKey, signAlgorithm, receivedEncryptedData,
 
 }
 
+
 //-------------------------------------------
+//-------------------------------------------
+//-------------------------------------------
+//-------------------------------------------
+
+
 
 app.get('/users', (req, res) => {
   console.log("get all users!");
@@ -879,6 +895,9 @@ function userExistsByEmail(email){
   });
 }
 
+
+
+//----------------------------------------------------------------
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -1495,7 +1514,59 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
   }
 })
 
-//----------------------
+
+
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+
+
+app.get("/pdfStamp/:id", cors(), (req, res) => {
+
+  //console.log("get pdf by id!");
+
+  let connection;
+  var resultRows;
+  const { id } = req.params;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, stampUserId, DATE_ADD(stampTimestamp, INTERVAL 1 HOUR) as stampTimestamp FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = ?"
+
+          let values = [
+            [id]
+          ]
+
+          connection.query(queryBusqueda,[values], function (err, result, fields) {
+              if (err) throw err;
+              
+              //console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              //console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+});
 
 app.put('/stamp/:id', async (req, res) => {
 
@@ -1682,7 +1753,62 @@ app.delete('/eliminateDocStamp', async function(req, res) {
     return res.status(500).json({ error: 'failed to modify stamp pdf' });
   }
 
-})  
+})
+
+
+
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+
+
+app.get("/pdfSign/:id", cors(), (req, res) => {
+
+  //console.log("get pdf by id!");
+
+  let connection;
+  var resultRows;
+  const { id } = req.params;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, stampUserId, DATE_ADD(signTimestamp, INTERVAL 1 HOUR) as signTimestamp FROM pdfs INNER JOIN users ON pdfs.signUserId = users.id WHERE pdfs.id = ?"
+
+          let values = [
+            [id]
+          ]
+
+          connection.query(queryBusqueda,[values], function (err, result, fields) {
+              if (err) throw err;
+              
+              //console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              //console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+
+});
+
 
 app.put('/sign/:id', fileUpload(), async (req, res) => {
 
@@ -1837,8 +1963,13 @@ app.delete('/eliminateDocSign', async function(req, res) {
 })  
 
 
-//---------------------
-//---------------------
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+
+
 
 app.post('/create-stamp', fileUpload(), async (req, res) => {
 
