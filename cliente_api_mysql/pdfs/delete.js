@@ -1,4 +1,4 @@
-const URLSERVERDelete = "http://localhost:3000/eliminate";
+const URLSERVERDelete = "http://localhost:3000/eliminateDocOriginal";
 
 const URLSERVERdetail = "http://localhost:3000/pdfs/";
 const URLSERVERretrieve = "http://localhost:3000/retrieve/";

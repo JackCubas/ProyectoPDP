@@ -343,4 +343,15 @@ checkUserHosting();
 
 async function deleteDocument(){
     alert("delete document");
+
+    const URLSERVERDelete = "http://localhost:3000/eliminateDocSign";
+
+    var datosURL = window.location.href.split('?');
+    var idHTML = datosURL[1].replace("id=","");
+
+    const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId + '&initialTimestampName=' + initialTimestampName, {
+        method: "DELETE"
+    })
+
+    window.location.href = "table.html";
 }

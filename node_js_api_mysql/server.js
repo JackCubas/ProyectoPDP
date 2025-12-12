@@ -1191,7 +1191,7 @@ app.get('/retrieve/:thisDocName/:userId/:initialTimestampName/:docStatus', funct
 })
 
 
-app.delete('/eliminate', async function(req, res) {
+app.delete('/eliminateDocOriginal', async function(req, res) {
 
   const id = req.query.id;
   const docName = req.query.docName;
@@ -1613,6 +1613,28 @@ app.put('/stamp/:id', async (req, res) => {
 
 })
 
+app.delete('/eliminateDocStamp', async function(req, res) {
+
+  const id = req.query.id;
+  const docName = req.query.docName;
+  const userId = req.query.userId;
+  const initialTimestampName = req.query.initialTimestampName;
+
+  if (!id || !docName || !userId || !initialTimestampName) {
+    return res.status(400).json({ id: 'id, userid y docName son requeridos' });
+  }
+
+  //console.log("id: " + id + " docName: " + docName + " userId: " + userId);
+  //console.log("llegado al delete pdf para doc nombre " + docName);
+
+  //------------------------------------------------
+
+  console.log("llegado al delete pdf stamp");
+  const pathDelete = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-stamp" + ".pdf";
+  console.log("ruta: " + pathDelete);
+
+})  
+
 app.put('/sign/:id', fileUpload(), async (req, res) => {
 
   console.log("llegado al sign-pdf");
@@ -1693,6 +1715,28 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
   }
 
 })
+
+app.delete('/eliminateDocSign', async function(req, res) {
+
+  const id = req.query.id;
+  const docName = req.query.docName;
+  const userId = req.query.userId;
+  const initialTimestampName = req.query.initialTimestampName;
+
+  if (!id || !docName || !userId || !initialTimestampName) {
+    return res.status(400).json({ id: 'id, userid y docName son requeridos' });
+  }
+
+  //console.log("id: " + id + " docName: " + docName + " userId: " + userId);
+  //console.log("llegado al delete pdf para doc nombre " + docName);
+
+  //------------------------------------------------
+
+  console.log("llegado al delete pdf sign");
+  const pathDelete = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-sign" + ".pdf";
+  console.log("ruta: " + pathDelete);
+
+})  
 
 
 //---------------------
