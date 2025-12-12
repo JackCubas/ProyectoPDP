@@ -1487,8 +1487,8 @@ app.put('/stamp/:id', async (req, res) => {
   console.log(req.body);
 
   const { id } = req.params;
-  const { filename, stampUserId, initialTimestampName} = req.body;
-  const archivoPdf = CARPETAPDF + "/" + filename + "_" + initialTimestampName + '.pdf';
+  const { filename, stampUserId, originalUserId, initialTimestampName} = req.body;
+  const archivoPdf = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + '.pdf';
   const archivoStampPNG = CARPETASTAMP + "/" + stampUserId + '.png';
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
@@ -1573,7 +1573,7 @@ app.put('/stamp/:id', async (req, res) => {
 
     const pdfBytes = await pdfDoc.save();
     //const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
-    const newFilePath = CARPETAPDF + "/" + filename + "_" + initialTimestampName + '.pdf';
+    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + '.pdf';
     fs.writeFileSync(newFilePath, pdfBytes);
 
     console.log("Leyendo pdf: " + newFilePath);
@@ -1606,9 +1606,10 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
   const fileName = req.body.filename;
   const signUserId = req.body.signUserId;
+  const originalUserId = req.body.originalUserId;
   const initialTimestampName = req.body.initialTimestampName;
 
-  const archivoPdf = CARPETAPDF + "/" + fileName + "_" + initialTimestampName + '.pdf';
+  const archivoPdf = CARPETAPDF + "/" + originalUserId + "/" + fileName + "_" + initialTimestampName + '.pdf';
   console.log(archivoPdf);
   var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile.data : null;
 
@@ -1653,7 +1654,7 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
     //-------------------------------------------------------------------
 
-    const newFilePath = CARPETAPDF + "/" + fileName + "_" + initialTimestampName + '.pdf';
+    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + fileName + "_" + initialTimestampName + '.pdf';
     fs.writeFileSync(newFilePath, pdfFile);
 
     console.log("Leyendo pdf: " + newFilePath);
