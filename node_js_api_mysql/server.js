@@ -1633,6 +1633,12 @@ app.delete('/eliminateDocStamp', async function(req, res) {
   const pathDelete = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-stamp" + ".pdf";
   console.log("ruta: " + pathDelete);
 
+  if (fs.existsSync(pathDelete)) {
+    // delete the file on server after it sends to client
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathDelete);
+  }
+
 })  
 
 app.put('/sign/:id', fileUpload(), async (req, res) => {
@@ -1735,6 +1741,12 @@ app.delete('/eliminateDocSign', async function(req, res) {
   console.log("llegado al delete pdf sign");
   const pathDelete = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-sign" + ".pdf";
   console.log("ruta: " + pathDelete);
+
+  if (fs.existsSync(pathDelete)) {
+    // delete the file on server after it sends to client
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathDelete);
+  }
 
 })  
 
