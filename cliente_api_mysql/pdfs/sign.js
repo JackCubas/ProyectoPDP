@@ -249,7 +249,7 @@ async function sendData(modifiedPDFBytes){
 
 }
 
-async function returnData() {
+async function returnDataOriginal() {
     const URLSERVERdetail = "http://localhost:3000/pdfs/";
 
     var datosURL = window.location.href.split('?');
@@ -266,7 +266,7 @@ async function returnData() {
                 var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
                 initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
-                return appendData(data);
+                return appendDataOriginal(data);
             }).catch((err) => {
                 console.log(err);
             }) 
@@ -274,15 +274,44 @@ async function returnData() {
 
 }
 
-function appendData(data){
+function appendDataOriginal(data){
     for(let i=0;i<data.length;i++){
-        //console.log(data[i]);
+        console.log(data[i]);
         thisDocName = data[i].DocName;
         userId = data[i].userId;
         
         var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
         var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
         initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+    }
+    //console.log("finalizado generacion de ventana");
+}
+
+async function returnDataSign() {
+    const URLSERVERdetail = "http://localhost:3000/pdfSign/";
+
+    var datosURL = window.location.href.split('?');
+    var idHTML = datosURL[1].replace("id=","");
+
+    //console.log("return data");
+    return fetch(URLSERVERdetail + idHTML)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return appendDataSign(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+
+}
+
+function appendDataSign(data){
+    if(data.length === 1){
+        for(let i=0;i<data.length;i++){
+            console.log(data[i]);
+        }
+    }else{
+        console.log("No hay documento firmado");
     }
     //console.log("finalizado generacion de ventana");
 }
@@ -322,7 +351,9 @@ function generateWindow(response){
 }
 
 function checkUserHosting(){
-    returnData().then(() => {
+    returnDataOriginal().then(() => {
+        returnDataSign();
+    }).then(() => {
         retrievePDF();
     })
 }
