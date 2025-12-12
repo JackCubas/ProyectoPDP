@@ -1814,7 +1814,7 @@ app.delete('/eliminateDocSign', async function(req, res) {
       let sql = `
         UPDATE pdfs 
         SET signUserId = "${signUserId}", 
-        signTimestamp = "${signUserId}"
+        signTimestamp = "${signTimestamp}"
         WHERE id = "${id}"
       `;
       con.query(sql, function (err, result) {
