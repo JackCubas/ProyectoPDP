@@ -340,3 +340,7 @@ async function blobToArray(data){
 }
 
 checkUserHosting();
+
+async function deleteDocument(){
+    alert("delete document");
+}

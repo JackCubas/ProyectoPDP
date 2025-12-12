@@ -163,3 +163,7 @@ async function sendData(){
     window.location.href = "table.html";
 
 }
+
+async function deleteDocument(){
+    alert("delete document");
+}
