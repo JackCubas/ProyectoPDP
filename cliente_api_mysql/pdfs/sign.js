@@ -306,7 +306,7 @@ async function returnDataSign() {
 }
 
 function appendDataSign(data){
-    if(data.length === 1){
+    if(data.length !== 0){
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
         }
