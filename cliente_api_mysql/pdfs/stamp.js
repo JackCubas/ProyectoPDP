@@ -63,34 +63,15 @@ async function retrievePDF() {
 
 //pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, userId
 function appendDataOriginal(data){
-    var con=document.getElementById("main-container")
     for(let i=0;i<data.length;i++){
         console.log(data[i]);
-        var d=document.createElement("div");
-        d.textContent="Doc Name: " + data[i].DocName;
+
         thisDocName = data[i].DocName;                     
-        con.appendChild(d);
-
-        var e=document.createElement("div")
-        e.textContent="Doc URL: " + data[i].urlCarpeta                      
-        con.appendChild(e);
-
-        var f=document.createElement("div")
-        f.textContent="User Name: " + data[i].nameUser                      
-        con.appendChild(f);
-
-        var g=document.createElement("div")
-        g.textContent="Estado: " + data[i].estado                      
-        con.appendChild(g);
-
-        var h=document.createElement("div");
 
         var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
         var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
         initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
-        h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
-        con.appendChild(h);
     }
     console.log("finalizado generacion de ventana");
 }
@@ -114,12 +95,50 @@ async function returnDataStamp() {
 }
 
 function appendDataStamp(data){
+    var con=document.getElementById("main-container");
     if(data.length !== 0){
+        
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
+
+            var d=document.createElement("div");
+            d.textContent="Doc Name: " + data[i].DocName;
+            thisDocName = data[i].DocName;                     
+            con.appendChild(d);
+
+            var e=document.createElement("div")
+            e.textContent="Doc URL: " + data[i].urlCarpeta                      
+            con.appendChild(e);
+
+            var f=document.createElement("div")
+            f.textContent="Stamp User Name: " + data[i].nameUser                      
+            con.appendChild(f);
+
+            var g=document.createElement("div")
+            g.textContent="Estado: " + data[i].estado                      
+            con.appendChild(g);
+
+            var h=document.createElement("div");
+
+            var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+            var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+            initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+
+            h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+            con.appendChild(h);
+
+            var k=document.createElement("div");
+            var stampTimestampNameAux = data[0].stampTimestamp.slice(0, 19).replace('T', ' ');
+            k.textContent="Stamp DateTime: " + stampTimestampNameAux;                      
+            con.appendChild(k);
+
         }
     }else{
         console.log("No hay documento estampado");
+
+        var j=document.createElement("div");
+        j.textContent="No hay documento estampado";
+        con.appendChild(j);
     }
     //console.log("finalizado generacion de ventana");
 }
