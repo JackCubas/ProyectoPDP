@@ -56,6 +56,7 @@ const pdfParse = require('pdf-parse'); //TODO cambiar a la version 1.x.x
 const path = require('path');
 const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
+const { Jimp } = require("jimp");
 
 //---------------------------------
 
@@ -1995,6 +1996,7 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
 
   try{
     fs.writeFileSync(archivoNombre, stampFile.data);
+    await modifyImage(archivoNombre);
     console.log('File written successfully', archivoNombre);
   }catch(err){
     console.error('create-pdf error:', err);
@@ -2014,6 +2016,19 @@ function emptyOrRows(rows) {
   return rows;
 }
 
+async function modifyImage(imageName){
+  // open a file called "lenna.png"
+  const image = await Jimp.read(imageName);
+
+  //image.resize(256, 256); // resize
+  /*await image.opacity(0.3, function(err){
+      if (err) throw err;
+  })*/
+
+  await image.opacity(0.3) //.resize(256, 256);
+
+  await image.write(imageName); // save
+}
 
 //---------------------
 //--------------------
