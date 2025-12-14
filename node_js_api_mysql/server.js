@@ -56,6 +56,7 @@ const pdfParse = require('pdf-parse'); //TODO cambiar a la version 1.x.x
 const path = require('path');
 const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
+const { degrees, rgb, StandardFonts } = require('pdf-lib');
 const { Jimp } = require("jimp");
 
 //---------------------------------
@@ -1580,6 +1581,7 @@ app.put('/stamp/:id', async (req, res) => {
   const archivoStampPNG = CARPETASTAMP + "/" + stampUserId + '.png';
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
+  var stampTimestamp = "";
 
   if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG) || fs.existsSync(archivoStampJPEG))){
 
@@ -1601,7 +1603,7 @@ app.put('/stamp/:id', async (req, res) => {
       if (err) throw err;
       console.log("Connected!");
 
-      const stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
         UPDATE pdfs 
@@ -1650,6 +1652,7 @@ app.put('/stamp/:id', async (req, res) => {
     if(img !== null){
       for (let i = 0; i < pdfDoc.getPageCount(); i++) {
         var page = pdfDoc.getPage(i);
+
         var dims = img.scale(0.5)
         page.drawImage(img, {
             x: page.getWidth() / 2 - dims.width / 2 + 75,
@@ -1657,6 +1660,16 @@ app.put('/stamp/:id', async (req, res) => {
             width: dims.width,
             height: dims.height,
         })
+
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        page.drawText(stampTimestamp.toString(), {
+            x: 5,
+            y: page.getHeight() / 2 + 300,
+            size: 50,
+            font: helveticaFont,
+            color: rgb(0.95, 0.1, 0.1),
+            rotate: degrees(-45),
+        });
       }
     }
 
