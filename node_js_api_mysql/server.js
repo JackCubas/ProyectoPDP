@@ -2045,6 +2045,11 @@ async function modifyImage(imageName){
   //await image.resize(256, 256);
   //await image.color('#000000ff');
 
+  /*
+  const colorArray = [{r: 0, g: 0, b: 0, a: 255}];
+  await image.color(colorArray);
+  */
+
   await image.write(imageName); // save
 
   /*Jimp.read(imageName, function (err, img) {
