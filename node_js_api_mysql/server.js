@@ -2048,6 +2048,12 @@ async function modifyImage(imageName){
   /*
   const colorArray = [{r: 0, g: 0, b: 0, a: 255}];
   await image.color(colorArray);
+
+  if(image.hasAlpha()){
+    //const colorArray = [{r: 0, g: 0, b: 0, a: 0}];
+    //await image.color(colorArray);
+    image.background = 0x000000ff;
+  }
   */
 
   await image.write(imageName); // save
