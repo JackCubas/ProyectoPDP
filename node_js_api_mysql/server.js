@@ -2028,7 +2028,7 @@ async function modifyImage(imageName){
       if (err) throw err;
   })*/
 
-  await image.opacity(0.7);
+  await image.opacity(0.3);
   //await image.resize(256, 256);
   //await image.color('0xFFFFFF00');
 
