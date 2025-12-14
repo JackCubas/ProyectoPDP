@@ -58,7 +58,7 @@ const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
 const { degrees, rgb, StandardFonts } = require('pdf-lib');
 const { Jimp } = require("jimp");
-const gm = require('gm');
+//const gm = require('gm');
 
 //---------------------------------
 
@@ -1582,7 +1582,7 @@ app.put('/stamp/:id', async (req, res) => {
   const archivoStampPNG = CARPETASTAMP + "/" + stampUserId + '.png';
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
-  var stampTimestamp = "";
+  var stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
   if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG) || fs.existsSync(archivoStampJPEG))){
 
@@ -1603,8 +1603,6 @@ app.put('/stamp/:id', async (req, res) => {
       con.connect(function(err) {
       if (err) throw err;
       console.log("Connected!");
-
-      stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
         UPDATE pdfs 
@@ -1654,7 +1652,9 @@ app.put('/stamp/:id', async (req, res) => {
       for (let i = 0; i < pdfDoc.getPageCount(); i++) {
         var page = pdfDoc.getPage(i);
 
-        var dims = img.scale(0.5)
+        var dims = img.scale(0.5);
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
         page.drawImage(img, {
             x: page.getWidth() / 2 - dims.width / 2 + 75,
             y: page.getHeight() / 2 - dims.height + 250,
@@ -1662,7 +1662,7 @@ app.put('/stamp/:id', async (req, res) => {
             height: dims.height,
         })
 
-        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        //console.log("insertando timestamp al pdf " + stampTimestamp.toString());
         page.drawText(stampTimestamp.toString(), {
             x: 5,
             y: page.getHeight() / 2 + 300,
@@ -2012,7 +2012,7 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   try{
     await fs.writeFileSync(archivoNombre, stampFile.data);
     await modifyImage(archivoNombre);
-    await modifyImageTransparent(archivoNombre);
+    //await modifyImageTransparent(archivoNombre);
     console.log('File written successfully', archivoNombre);
   }catch(err){
     console.error('create-stamp error:', err);
@@ -2070,7 +2070,7 @@ async function modifyImage(imageName){
   console.log("Finalizado modificacion de stamp");
 }
 
-async function modifyImageTransparent(imageName){
+/*async function modifyImageTransparent(imageName){
   console.log("Iniciado modificacion transparent de stamp");
 
   // open a file called "lenna.png"
@@ -2085,7 +2085,7 @@ async function modifyImageTransparent(imageName){
   });
 
   console.log("Finalizado modificacion transparent de stamp");
-}
+}*/
 
 //---------------------
 //--------------------
