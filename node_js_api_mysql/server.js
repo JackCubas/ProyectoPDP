@@ -2043,7 +2043,7 @@ async function modifyImage(imageName){
 
   await image.opacity(0.3);
   //await image.resize(256, 256);
-  //await image.color('0xFFFFFF00');
+  //await image.color('#000000ff');
 
   await image.write(imageName); // save
 
