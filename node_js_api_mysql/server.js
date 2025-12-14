@@ -58,6 +58,7 @@ const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
 const { degrees, rgb, StandardFonts } = require('pdf-lib');
 const { Jimp } = require("jimp");
+const gm = require('gm');
 
 //---------------------------------
 
@@ -2011,6 +2012,7 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   try{
     await fs.writeFileSync(archivoNombre, stampFile.data);
     await modifyImage(archivoNombre);
+    await modifyImageTransparent(archivoNombre);
     console.log('File written successfully', archivoNombre);
   }catch(err){
     console.error('create-stamp error:', err);
@@ -2066,6 +2068,23 @@ async function modifyImage(imageName){
   });*/
 
   console.log("Finalizado modificacion de stamp");
+}
+
+async function modifyImageTransparent(imageName){
+  console.log("Iniciado modificacion transparent de stamp");
+
+  // open a file called "lenna.png"
+  gm(imageName)
+
+ // Invoke transparent function on white color
+  .transparent('white')
+
+  // Process and Write the image
+  .write(imageName, function (err) {
+      if (!err) console.log('done');
+  });
+
+  console.log("Finalizado modificacion transparent de stamp");
 }
 
 //---------------------
