@@ -1647,16 +1647,17 @@ app.put('/stamp/:id', async (req, res) => {
       height: imagePage.getHeight()
     });*/
 
-
     if(img !== null){
-      const page = pdfDoc.getPage(0);
-      const dims = img.scale(0.5)
-      page.drawImage(img, {
-          x: page.getWidth() / 2 - dims.width / 2 + 75,
-          y: page.getHeight() / 2 - dims.height + 250,
-          width: dims.width,
-          height: dims.height,
-      })
+      for (let i = 0; i < pdfDoc.getPageCount(); i++) {
+        var page = pdfDoc.getPage(i);
+        var dims = img.scale(0.5)
+        page.drawImage(img, {
+            x: page.getWidth() / 2 - dims.width / 2 + 75,
+            y: page.getHeight() / 2 - dims.height + 250,
+            width: dims.width,
+            height: dims.height,
+        })
+      }
     }
 
     const pdfBytes = await pdfDoc.save();
