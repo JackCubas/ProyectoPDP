@@ -180,7 +180,7 @@ async function sendData(){
         filename: thisDocName,
         initialTimestampName: initialTimestampName,
         originalUserId: userId,
-        stampUserId: 5
+        stampUserId: 2
     }
 
     /*const apiCall = await fetch(URLSERVERStamp + idHTML, {
