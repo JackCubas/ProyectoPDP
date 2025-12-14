@@ -60,6 +60,8 @@ async function sendData(){
         console.log(result);
     }
 
+    alert("prueba");
+
     window.location.href = "table.html";
     }
 }

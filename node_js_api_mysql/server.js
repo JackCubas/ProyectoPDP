@@ -1995,12 +1995,12 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   }
 
   try{
-    fs.writeFileSync(archivoNombre, stampFile.data);
+    await fs.writeFileSync(archivoNombre, stampFile.data);
     await modifyImage(archivoNombre);
     console.log('File written successfully', archivoNombre);
   }catch(err){
-    console.error('create-pdf error:', err);
-    return res.status(500).json({ error: 'failed to save or process pdf' });
+    console.error('create-stamp error:', err);
+    return res.status(500).json({ error: 'failed to save or process stamp' });
   }
 });
 
@@ -2017,6 +2017,8 @@ function emptyOrRows(rows) {
 }
 
 async function modifyImage(imageName){
+  console.log("Iniciado modificacion de stamp");
+
   // open a file called "lenna.png"
   const image = await Jimp.read(imageName);
 
@@ -2025,9 +2027,20 @@ async function modifyImage(imageName){
       if (err) throw err;
   })*/
 
-  await image.opacity(0.3) //.resize(256, 256);
+  await image.opacity(0.7);
+  //await image.resize(256, 256);
+  //await image.color('0xFFFFFF00');
 
   await image.write(imageName); // save
+
+  /*Jimp.read(imageName, function (err, img) {
+        if (err) throw err;
+        img.resize(256, 256)
+             .opacity(0.7)                 
+             .write(imageName); 
+  });*/
+
+  console.log("Finalizado modificacion de stamp");
 }
 
 //---------------------
