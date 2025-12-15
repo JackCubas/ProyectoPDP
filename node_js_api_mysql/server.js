@@ -2011,6 +2011,12 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
 
   try{
     await fs.writeFileSync(archivoNombre, stampFile.data);
+
+    /*if((fileType === ".jpg")||(fileType === ".jpeg")){
+      var transformFileName = CARPETASTAMP + "/" + nombreFile;
+      await transformStampType(transformFileName, fileType);
+    }*/
+
     await modifyImage(archivoNombre);
     //await modifyImageTransparent(archivoNombre);
     console.log('File written successfully', archivoNombre);
@@ -2086,6 +2092,27 @@ async function modifyImage(imageName){
 
   console.log("Finalizado modificacion transparent de stamp");
 }*/
+
+async function transformStampType(fileName, fileType){
+
+  originalFile = fileName + fileType;
+  pngFile = fileName + ".png";
+
+  //We will first read the JPG image using read() method. 
+  Jimp.read(originalFile.toString(), function (err, image) {
+    //If there is an error in reading the image, 
+    //we will print the error in our terminal
+    if (err) {
+      console.log(err)
+    } 
+    //Otherwise we convert the image into PNG format 
+    //and save it inside images folder using write() method.
+    else {
+      image.write(pngFile.toString())
+    }
+  })
+
+}
 
 //---------------------
 //--------------------
