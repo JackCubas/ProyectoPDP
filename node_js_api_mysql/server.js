@@ -2012,14 +2012,14 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   try{
     await fs.writeFileSync(archivoNombre, stampFile.data);
 
-    /*if((fileType === ".jpg")||(fileType === ".jpeg")){
+    if((fileType === ".jpg")||(fileType === ".jpeg")){
       var transformFileName = CARPETASTAMP + "/" + nombreFile;
       await transformStampType(transformFileName, fileType);
-    }*/
+    }
 
-    await modifyImage(archivoNombre);
+    await modifyImage(nombreFilePng);
     //await modifyImageTransparent(archivoNombre);
-    console.log('File written successfully', archivoNombre);
+    console.log('File written successfully', nombreFilePng);
   }catch(err){
     console.error('create-stamp error:', err);
     return res.status(500).json({ error: 'failed to save or process stamp' });
@@ -2098,19 +2098,21 @@ async function transformStampType(fileName, fileType){
   originalFile = fileName + fileType;
   pngFile = fileName + ".png";
 
+  console.log("Iniciando transformacion del tipo de archivo " + originalFile.toString() + " " + pngFile.toString());
+
   //We will first read the JPG image using read() method. 
-  Jimp.read(originalFile.toString(), function (err, image) {
-    //If there is an error in reading the image, 
-    //we will print the error in our terminal
-    if (err) {
-      console.log(err)
-    } 
-    //Otherwise we convert the image into PNG format 
-    //and save it inside images folder using write() method.
-    else {
-      image.write(pngFile.toString())
-    }
-  })
+  const image = await Jimp.read(originalFile.toString());
+  await image.write(pngFile.toString());
+
+  if (fs.existsSync(originalFile)) {
+    // delete the file on server after it sends to client
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(originalFile);
+  }
+
+  console.log("archivo transformado " + pngFile.toString());
+
+  console.log("finalizado transformacion del tipo de archivo");
 
 }
 
