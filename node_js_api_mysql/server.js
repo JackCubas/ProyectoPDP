@@ -2026,17 +2026,37 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   }
 });
 
-//-----------------------
-app.listen(APIPORT, () => {
-  console.log(`Firma app listening at http://localhost:${APIPORT}`);
-});
+app.delete('/delete-stamp', async function(req, res) {
 
-function emptyOrRows(rows) {
-  if (!rows) {
-    return [];
+  const userId = req.query.userId;
+
+  if (!userId) {
+    return res.status(400).json({error:'userid son requeridos'});
   }
-  return rows;
-}
+
+  const nombreFileJpg =  CARPETASTAMP + "/" + userId + ".jpg";
+  const nombreFileJpeg =  CARPETASTAMP + "/" + userId + ".jpeg";
+  const nombreFilePng =  CARPETASTAMP + "/" + userId + ".png";
+
+  if (!fs.existsSync(nombreFileJpg) && !fs.existsSync(nombreFilePng) && !fs.existsSync(nombreFileJpeg)){
+    return res.status(400).json({ error: 'File does not exists' });
+  }else{
+
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    if(fs.existsSync(nombreFileJpg)){
+      await unlinkFile(nombreFileJpg);
+    }
+    if(fs.existsSync(nombreFileJpeg)){
+      await unlinkFile(nombreFileJpeg);
+    }
+    if(fs.existsSync(nombreFilePng)){
+      await unlinkFile(nombreFilePng);
+    }
+    return res.status(200).json({ responseData: 'stamp deleted' });
+  }
+
+})  
+
 
 async function modifyImage(imageName){
   console.log("Iniciado modificacion de stamp");
@@ -2076,23 +2096,6 @@ async function modifyImage(imageName){
   console.log("Finalizado modificacion de stamp");
 }
 
-/*async function modifyImageTransparent(imageName){
-  console.log("Iniciado modificacion transparent de stamp");
-
-  // open a file called "lenna.png"
-  gm(imageName)
-
- // Invoke transparent function on white color
-  .transparent('white')
-
-  // Process and Write the image
-  .write(imageName, function (err) {
-      if (!err) console.log('done');
-  });
-
-  console.log("Finalizado modificacion transparent de stamp");
-}*/
-
 async function transformStampType(fileName, fileType){
 
   originalFile = fileName + fileType;
@@ -2114,8 +2117,37 @@ async function transformStampType(fileName, fileType){
   console.log("finalizado transformacion del tipo de archivo");
 }
 
+//-----------------------
+app.listen(APIPORT, () => {
+  console.log(`Firma app listening at http://localhost:${APIPORT}`);
+});
+
+function emptyOrRows(rows) {
+  if (!rows) {
+    return [];
+  }
+  return rows;
+}
+
 //---------------------
 //--------------------
+
+/*async function modifyImageTransparent(imageName){
+  console.log("Iniciado modificacion transparent de stamp");
+
+  // open a file called "lenna.png"
+  gm(imageName)
+
+ // Invoke transparent function on white color
+  .transparent('white')
+
+  // Process and Write the image
+  .write(imageName, function (err) {
+      if (!err) console.log('done');
+  });
+
+  console.log("Finalizado modificacion transparent de stamp");
+}*/
 
 /*app.put('/stamp/:id', async (req, res) => {
 
