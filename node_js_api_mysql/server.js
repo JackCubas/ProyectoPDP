@@ -2100,20 +2100,18 @@ async function transformStampType(fileName, fileType){
 
   console.log("Iniciando transformacion del tipo de archivo " + originalFile.toString() + " " + pngFile.toString());
 
-  //We will first read the JPG image using read() method. 
-  const image = await Jimp.read(originalFile.toString());
-  await image.write(pngFile.toString());
+  //We will first read the JPG image using read() method.
+  if (fs.existsSync(originalFile)) { 
+    const image = await Jimp.read(originalFile.toString());
+    await image.write(pngFile.toString());
 
-  if (fs.existsSync(originalFile)) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-    unlinkFile(originalFile);
+    await unlinkFile(originalFile);
   }
 
   console.log("archivo transformado " + pngFile.toString());
-
   console.log("finalizado transformacion del tipo de archivo");
-
 }
 
 //---------------------
