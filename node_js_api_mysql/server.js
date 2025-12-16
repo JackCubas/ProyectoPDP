@@ -911,64 +911,58 @@ function userExistsByEmail(email){
 
 
 //--------------------------Jimp compatibility--------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
 
 // Resize y compresion de imagenes antes de guardar, intento mantener el aspect ratio,
 // pero limito la imagen a 1024 (si es mas pequeña, no lo modifico) y la guardo en png
-async function resizeImage(buffer){
-  // Ensure Jimp provides the `read` API (handles ESM/CommonJS interop)
+async function resizeAndWriteImage(buffer, outPath){
+  // Asegurar Jimp
   if (!Jimp || typeof Jimp.read !== 'function') {
     try {
       const mod = await import('jimp');
       Jimp = mod.Jimp || mod.default || mod;
-    } catch (e) {
-      // fallback: keep original Jimp and let the call below fail with clearer message
-    }
+    } catch (e) {}
   }
 
   if (!Jimp || typeof Jimp.read !== 'function') {
     throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
   }
 
-  const image = await Jimp.read(buffer);
-  const MAX_WIDTH = 1024;
+  
+  let image;
+  try{
+    const readPromise = Jimp.read(buffer);
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Jimp.read timeout after 15s')), 15000));
+    image = await Promise.race([readPromise, timeout]);
+  }catch(err){
+    console.error('resizeAndWriteImage: Jimp.read failed:', err && err.stack ? err.stack : err);
+    throw err;
+  }
 
-  // Si es mas pequeño q 1024 no lo modifico
+  const MAX_WIDTH = 1024;
   if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
     await image.resize(MAX_WIDTH, Jimp.AUTO);
   }
 
-  // Compresion sin perder mucha calidad
   try {
     if (typeof image.deflateLevel === 'function') {
       image.deflateLevel(9);
     }
-  } catch (e) {
-    // En caso de que haya un error, habra peor compresion, pero funciona igual
-  }
+  } catch (e) {}
 
-  // Devolver la imagen haya pasado por el compresor o no
-  const mime = (Jimp && Jimp.MIME_PNG) ? Jimp.MIME_PNG : 'image/png';
-  let outBuffer;
-  if (typeof image.getBufferAsync === 'function') {
-    outBuffer = await image.getBufferAsync(mime);
-  } else if (typeof image.getBuffer === 'function') {
-    outBuffer = await new Promise((resolve, reject) => {
-      try {
-        image.getBuffer(mime, (err, buf) => {
-          if (err) return reject(err);
-          resolve(buf);
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
-  } else {
-    throw new Error('Jimp image does not provide getBuffer/getBufferAsync methods');
+  try{
+    if (typeof image.writeAsync === 'function') {
+      await image.writeAsync(outPath);
+    } else {
+      // fallback to callback-based write
+      await new Promise((resolve, reject) => {
+        image.write(outPath, (err) => err ? reject(err) : resolve());
+      });
+    }
+    
+  }catch(err){
+    console.error('resizeAndWriteImage: write failed', err && err.stack ? err.stack : err);
+    throw err;
   }
-  return outBuffer;
 }
 
 
@@ -2055,42 +2049,33 @@ app.delete('/eliminateDocSign', async function(req, res) {
 
 
 app.post('/create-stamp', fileUpload(), async (req, res) => {
-
-  console.log("llegado al create-stamp"); 
   const stampFile = req.files && req.files.uploadedFile ? req.files.uploadedFile : null;
   const nombreFile = req.body.userId;
-  const fileType = req.body.fileType;
-  
-  //const estado = req.body.estado;
-  const archivoNombre = CARPETASTAMP + "/" + nombreFile + fileType;
 
-  if(!stampFile){
+  if (!stampFile) {
     return res.status(400).json({ error: 'No uploadedFile provided' });
   }
 
-  const nombreFileJpg =  CARPETASTAMP + "/" + nombreFile + ".jpg";
-  const nombreFileJpeg =  CARPETASTAMP + "/" + nombreFile + ".jpeg";
-  const nombreFilePng =  CARPETASTAMP + "/" + nombreFile + ".png";
+  const mime = (stampFile.mimetype || '').toLowerCase();
+  if (!['image/png', 'image/jpeg', 'image/jpg'].includes(mime)) {
+    return res.status(400).json({ error: 'uploaded file must be PNG, JPEG or JPG' });
+  }
 
-  if (fs.existsSync(nombreFileJpg) || fs.existsSync(nombreFilePng) || fs.existsSync(nombreFileJpeg)){
+  const stampDir = path.join(process.cwd(), CARPETASTAMP);
+  if (!fs.existsSync(stampDir)) fs.mkdirSync(stampDir, { recursive: true });
+
+  const outPath = path.join(stampDir, nombreFile + '.png');
+  if (fs.existsSync(outPath) || fs.existsSync(path.join(stampDir, nombreFile + '.jpg')) || fs.existsSync(path.join(stampDir, nombreFile + '.jpeg'))) {
     return res.status(400).json({ error: 'File already exists' });
   }
 
-  try{
-    const mime = stampFile.mimetype || ''; // Comprobacion de tipo PNG/JPEG/JPG
-    if (!['image/png', 'image/jpeg', 'image/jpg'].includes(mime.toLowerCase())) {
-      return res.status(400).json({ error: 'uploaded file must be PNG, JPEG or JPG' });
-    }
-
-    // Resize/compresion y pasar a PNG y hacer un poco de procesado
-    const resizedBuffer = await resizeImage(stampFile.data);
-    await fs.writeFileSync(nombreFilePng, resizedBuffer);
-    await modifyImage(nombreFilePng);
-
-    console.log('File written and processed successfully', nombreFilePng);
-  }catch(err){
-    console.error('create-stamp error:', err);
-    return res.status(500).json({ error: 'failed to save or process stamp' });
+  try {
+    await resizeAndWriteImage(stampFile.data, outPath);
+    await modifyImage(outPath);
+    return res.json({ saved: true, path: outPath });
+  } catch (err) {
+    console.error('create-stamp error:', err && err.stack ? err.stack : err);
+    return res.status(500).json({ error: 'image processing failed' });
   }
 });
 
