@@ -51,13 +51,23 @@ const fileUpload = require('express-fileupload');
 const util = require("util");
 //----------------------------------
 const crypto = require("crypto")
-const pdfParse = require('pdf-parse'); //TODO cambiar a la version 1.x.x
+const pdfParse = require('pdf-parse');
 
 const path = require('path');
 const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
 const { degrees, rgb, StandardFonts } = require('pdf-lib');
-const { Jimp } = require("jimp");
+let Jimp = require("jimp");
+// Jimp da algun q otro error, por eso hago comprobaciones
+if (Jimp) {
+  if (typeof Jimp.read !== 'function') {
+    if (Jimp.Jimp && typeof Jimp.Jimp.read === 'function') {
+      Jimp = Jimp.Jimp;
+    } else if (Jimp.default && typeof Jimp.default.read === 'function') {
+      Jimp = Jimp.default;
+    }
+  }
+}
 //const gm = require('gm');
 
 //---------------------------------
@@ -900,7 +910,7 @@ function userExistsByEmail(email){
 
 
 
-//----------------------------------------------------------------
+//--------------------------Jimp compatibility--------------------------------------
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -908,6 +918,19 @@ function userExistsByEmail(email){
 // Resize y compresion de imagenes antes de guardar, intento mantener el aspect ratio,
 // pero limito la imagen a 1024 (si es mas pequeña, no lo modifico) y la guardo en png
 async function resizeImage(buffer){
+  // Ensure Jimp provides the `read` API (handles ESM/CommonJS interop)
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    try {
+      const mod = await import('jimp');
+      Jimp = mod.Jimp || mod.default || mod;
+    } catch (e) {
+      // fallback: keep original Jimp and let the call below fail with clearer message
+    }
+  }
+
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
+  }
 
   const image = await Jimp.read(buffer);
   const MAX_WIDTH = 1024;
@@ -927,7 +950,24 @@ async function resizeImage(buffer){
   }
 
   // Devolver la imagen haya pasado por el compresor o no
-  const outBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+  const mime = (Jimp && Jimp.MIME_PNG) ? Jimp.MIME_PNG : 'image/png';
+  let outBuffer;
+  if (typeof image.getBufferAsync === 'function') {
+    outBuffer = await image.getBufferAsync(mime);
+  } else if (typeof image.getBuffer === 'function') {
+    outBuffer = await new Promise((resolve, reject) => {
+      try {
+        image.getBuffer(mime, (err, buf) => {
+          if (err) return reject(err);
+          resolve(buf);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  } else {
+    throw new Error('Jimp image does not provide getBuffer/getBufferAsync methods');
+  }
   return outBuffer;
 }
 
@@ -2090,6 +2130,17 @@ async function modifyImage(imageName){
   console.log("Iniciado modificacion de stamp");
 
   // open a file called "lenna.png"
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    try {
+      const mod = await import('jimp');
+      Jimp = mod.Jimp || mod.default || mod;
+    } catch (e) {}
+  }
+
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
+  }
+
   const image = await Jimp.read(imageName);
 
   //image.resize(256, 256); // resize
