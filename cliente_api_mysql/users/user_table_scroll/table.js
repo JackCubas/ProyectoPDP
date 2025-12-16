@@ -8,6 +8,7 @@ function checkUserHosting() {
                 return buildTable(data);
             }).catch((err) => {
                 console.log(err);
+                return buildTable(null);
             }) 
         });
 
@@ -16,40 +17,47 @@ function checkUserHosting() {
 function buildTable(data) {
   console.log(data);
   const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
-  for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
+  if(data !== null && data.length > 0){
+    for (let i = 0; i < data.length; i++) {
+      console.log(data[i]);
 
-    const newRow = table.insertRow();
-    const cell1 = newRow.insertCell(0);
-    const cell2 = newRow.insertCell(1);
-    cell1.textContent = data[i].nameUser;
-    
-    const butID = data[i].id;
+      const newRow = table.insertRow();
+      const cell1 = newRow.insertCell(0);
+      const cell2 = newRow.insertCell(1);
+      cell1.textContent = data[i].nameUser;
+      
+      const butID = data[i].id;
 
-    const button = document.createElement('button');
-    button.id = "testbutton" + butID;
-    button.textContent = "Click Me";
-    button.addEventListener('click', doSmth);
-    cell2.appendChild(button);
+      const button = document.createElement('button');
+      button.id = "testbutton" + butID;
+      button.textContent = "Click Me";
+      button.addEventListener('click', doSmth);
+      cell2.appendChild(button);
 
-    const buttonDetail = document.createElement('button');
-    buttonDetail.id = "detailbutton" + butID;
-    buttonDetail.textContent = "Detail";
-    buttonDetail.addEventListener('click', detail);
-    cell2.appendChild(buttonDetail);
+      const buttonDetail = document.createElement('button');
+      buttonDetail.id = "detailbutton" + butID;
+      buttonDetail.textContent = "Detail";
+      buttonDetail.addEventListener('click', detail);
+      cell2.appendChild(buttonDetail);
 
-    const buttonEdit = document.createElement('button');
-    buttonEdit.id = "editbutton" + butID;
-    buttonEdit.textContent = "Edit";
-    buttonEdit.addEventListener('click', edit);
-    cell2.appendChild(buttonEdit);
+      const buttonEdit = document.createElement('button');
+      buttonEdit.id = "editbutton" + butID;
+      buttonEdit.textContent = "Edit";
+      buttonEdit.addEventListener('click', edit);
+      cell2.appendChild(buttonEdit);
 
-    const buttonDel = document.createElement('button');
-    buttonDel.id = "delbutton" + butID;
-    buttonDel.textContent = "Delete";
-    buttonDel.addEventListener('click', del);
-    cell2.appendChild(buttonDel);
+      const buttonDel = document.createElement('button');
+      buttonDel.id = "delbutton" + butID;
+      buttonDel.textContent = "Delete";
+      buttonDel.addEventListener('click', del);
+      cell2.appendChild(buttonDel);
+    }
+  }else{
+    const emptyRow = table.insertRow();
+    const cellempty = emptyRow.insertCell(0);
+    cellempty.textContent = "No users have been found"
   }
+
 }
 
 function doSmth(event) {

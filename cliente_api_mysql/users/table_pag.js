@@ -15,6 +15,7 @@ function checkUserHosting() {
                 return buildVentana(data);
             }).catch((err) => {
                 console.log(err);
+                return buildVentana(null);
             }) 
         });
 
@@ -46,7 +47,7 @@ function buildPaginacion(data){
     linkPrev.href="table_pag.html?page=" + pageNumPrev;
   }
 
-  if(data.length < 10){
+  if(data != null && data.length < 10){
     linkNext.href = '#';
   }else{
     linkNext.href="table_pag.html?page=" + pageNumNext;
@@ -55,35 +56,41 @@ function buildPaginacion(data){
 
 function buildTable(data) {
   const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
-  for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
+  if(data !== null && data.length > 0){
+    for (let i = 0; i < data.length; i++) {
+      console.log(data[i]);
 
-    const newRow = table.insertRow();
-    const cell1 = newRow.insertCell(0);
-    const cell2 = newRow.insertCell(1);
-    const cell3 = newRow.insertCell(2);
-    cell1.textContent = data[i].nameUser;
-    cell2.textContent = data[i].rolUser;
+      const newRow = table.insertRow();
+      const cell1 = newRow.insertCell(0);
+      const cell2 = newRow.insertCell(1);
+      const cell3 = newRow.insertCell(2);
+      cell1.textContent = data[i].nameUser;
+      cell2.textContent = data[i].rolUser;
 
-    const butID = data[i].id;
+      const butID = data[i].id;
 
-    const buttonDetail = document.createElement('button');
-    buttonDetail.id = "detailbutton" + butID;
-    buttonDetail.textContent = "Detail";
-    buttonDetail.addEventListener('click', detail);
-    cell3.appendChild(buttonDetail);
+      const buttonDetail = document.createElement('button');
+      buttonDetail.id = "detailbutton" + butID;
+      buttonDetail.textContent = "Detail";
+      buttonDetail.addEventListener('click', detail);
+      cell3.appendChild(buttonDetail);
 
-    const buttonEdit = document.createElement('button');
-    buttonEdit.id = "editbutton" + butID;
-    buttonEdit.textContent = "Edit";
-    buttonEdit.addEventListener('click', edit);
-    cell3.appendChild(buttonEdit);
+      const buttonEdit = document.createElement('button');
+      buttonEdit.id = "editbutton" + butID;
+      buttonEdit.textContent = "Edit";
+      buttonEdit.addEventListener('click', edit);
+      cell3.appendChild(buttonEdit);
 
-    const buttonDel = document.createElement('button');
-    buttonDel.id = "delbutton" + butID;
-    buttonDel.textContent = "Delete";
-    buttonDel.addEventListener('click', del);
-    cell3.appendChild(buttonDel);
+      const buttonDel = document.createElement('button');
+      buttonDel.id = "delbutton" + butID;
+      buttonDel.textContent = "Delete";
+      buttonDel.addEventListener('click', del);
+      cell3.appendChild(buttonDel);
+    }
+  }else{
+    const emptyRow = table.insertRow();
+    const cellempty = emptyRow.insertCell(0);
+    cellempty.textContent = "No users have been found"
   }
 }
 
