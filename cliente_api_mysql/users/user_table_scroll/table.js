@@ -8,6 +8,7 @@ function checkUserHosting() {
                 return buildTable(data);
             }).catch((err) => {
                 console.log(err);
+                return buildTable(null);
             }) 
         });
 
