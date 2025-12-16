@@ -905,6 +905,32 @@ function userExistsByEmail(email){
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 
+// Resize y compresion de imagenes antes de guardar, intento mantener el aspect ratio,
+// pero limito la imagen a 1024 (si es mas pequeña, no lo modifico) y la guardo en png
+async function resizeImage(buffer){
+
+  const image = await Jimp.read(buffer);
+  const MAX_WIDTH = 1024;
+
+  // Si es mas pequeño q 1024 no lo modifico
+  if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
+    await image.resize(MAX_WIDTH, Jimp.AUTO);
+  }
+
+  // Compresion sin perder mucha calidad
+  try {
+    if (typeof image.deflateLevel === 'function') {
+      image.deflateLevel(9);
+    }
+  } catch (e) {
+    // En caso de que haya un error, habra peor compresion, pero funciona igual
+  }
+
+  // Devolver la imagen haya pasado por el compresor o no
+  const outBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+  return outBuffer;
+}
+
 
 app.get("/pdfs", cors(), (req, res) => {
 
@@ -2010,16 +2036,17 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
   }
 
   try{
-    await fs.writeFileSync(archivoNombre, stampFile.data);
-
-    if((fileType === ".jpg")||(fileType === ".jpeg")){
-      var transformFileName = CARPETASTAMP + "/" + nombreFile;
-      await transformStampType(transformFileName, fileType);
+    const mime = stampFile.mimetype || ''; // Comprobacion de tipo PNG/JPEG/JPG
+    if (!['image/png', 'image/jpeg', 'image/jpg'].includes(mime.toLowerCase())) {
+      return res.status(400).json({ error: 'uploaded file must be PNG, JPEG or JPG' });
     }
 
+    // Resize/compresion y pasar a PNG y hacer un poco de procesado
+    const resizedBuffer = await resizeImage(stampFile.data);
+    await fs.writeFileSync(nombreFilePng, resizedBuffer);
     await modifyImage(nombreFilePng);
-    //await modifyImageTransparent(archivoNombre);
-    console.log('File written successfully', nombreFilePng);
+
+    console.log('File written and processed successfully', nombreFilePng);
   }catch(err){
     console.error('create-stamp error:', err);
     return res.status(500).json({ error: 'failed to save or process stamp' });
