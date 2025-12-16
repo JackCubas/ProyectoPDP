@@ -1670,6 +1670,7 @@ app.put('/stamp/:id', async (req, res) => {
             font: helveticaFont,
             color: rgb(0.95, 0.1, 0.1),
             rotate: degrees(-45),
+            opacity: 0.3,
         });
       }
     }
