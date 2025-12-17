@@ -2142,7 +2142,8 @@ async function modifyImage(imageName){
 
   let image;
   try {
-    const readPromise = Jimp.read(imageName);
+    const buffer = fs.readFileSync(imageName);
+    const readPromise = Jimp.read(buffer);
     const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Jimp.read timeout after 15s')), 15000));
     image = await Promise.race([readPromise, timeout]);
   } catch (err) {
