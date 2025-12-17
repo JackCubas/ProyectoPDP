@@ -9,6 +9,12 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
     window.location.href = "table.html";
 }*/
 
+var datosUsuario = null;
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
 var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";
@@ -180,7 +186,7 @@ async function sendData(){
         filename: thisDocName,
         initialTimestampName: initialTimestampName,
         originalUserId: userId,
-        stampUserId: 2
+        stampUserId: datosUsuario.id
     }
 
     /*const apiCall = await fetch(URLSERVERStamp + idHTML, {

@@ -10,11 +10,15 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario === null){
     document.getElementById("logoutButton").style.display = 'none';
-    document.getElementById("movieButton").style.display = 'none';
+    document.getElementById("userButton").style.display = 'none';
+    document.getElementById("pdfButton").style.display = 'none';
 }else{
 
+    document.getElementById("loginButton").style.display = 'none';
+    document.getElementById("signupButton").style.display = 'none';
+
     if(datosUsuario.rolUser != "ADMIN"){
-        document.getElementById("movieButton").style.display = 'none';
+        document.getElementById("userButton").style.display = 'none';
     }
 
 }

@@ -1,6 +1,12 @@
 const URLSERVERdetail = "http://localhost:3000/pdfs/";
 const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
+var datosUsuario = null;
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
 var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";
@@ -114,7 +120,7 @@ async function sendData(){
         formData.append("estado", docEstado);
         formData.append("uploadedFile", file);
         formData.append("userIdOriginal", userId);
-        formData.append("userIdNuevo", 2);
+        formData.append("userIdNuevo", datosUsuario.id);
         //formData.append("userIdNuevo", 1);
 
         alert("prueba");

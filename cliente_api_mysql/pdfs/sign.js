@@ -1,7 +1,13 @@
 var thisDocName = "";
 var userId = null;
 var pdfBuffer = null;
-var initialTimestampName = ""; 
+var initialTimestampName = "";
+
+var datosUsuario = null;
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     var canvas = document.getElementById('signature-pad');
@@ -232,7 +238,7 @@ async function sendData(modifiedPDFBytes){
     formData.append("uploadedFile", pdfBlob);
     formData.append("initialTimestampName", initialTimestampName);
     formData.append("originalUserId", userId);
-    formData.append("signUserId", 4);
+    formData.append("signUserId", datosUsuario.id);
 
 
     const apiCall = await fetch(URLSERVERsign + idHTML, {
