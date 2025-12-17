@@ -1032,7 +1032,7 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
 
-          var sql = "SELECT id, userId, name, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, urlCarpeta FROM pdfs WHERE userId = ?";
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ?";
 
           let values = [
             [userId]
