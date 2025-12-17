@@ -51,13 +51,23 @@ const fileUpload = require('express-fileupload');
 const util = require("util");
 //----------------------------------
 const crypto = require("crypto")
-const pdfParse = require('pdf-parse'); //TODO cambiar a la version 1.x.x
+const pdfParse = require('pdf-parse');
 
 const path = require('path');
 const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
 const { degrees, rgb, StandardFonts } = require('pdf-lib');
-const { Jimp } = require("jimp");
+let Jimp = require("jimp");
+// Jimp da algun q otro error, por eso hago comprobaciones
+if (Jimp) {
+  if (typeof Jimp.read !== 'function') {
+    if (Jimp.Jimp && typeof Jimp.Jimp.read === 'function') {
+      Jimp = Jimp.Jimp;
+    } else if (Jimp.default && typeof Jimp.default.read === 'function') {
+      Jimp = Jimp.default;
+    }
+  }
+}
 //const gm = require('gm');
 
 //---------------------------------
@@ -900,10 +910,60 @@ function userExistsByEmail(email){
 
 
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
+//--------------------------Jimp compatibility--------------------------------------
+
+// Resize y compresion de imagenes antes de guardar, intento mantener el aspect ratio,
+// pero limito la imagen a 1024 (si es mas pequeña, no lo modifico) y la guardo en png
+async function resizeAndWriteImage(buffer, outPath){
+  // Asegurar Jimp
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    try {
+      const mod = await import('jimp');
+      Jimp = mod.Jimp || mod.default || mod;
+    } catch (e) {}
+  }
+
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
+  }
+
+  
+  let image;
+  try{
+    const readPromise = Jimp.read(buffer);
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Jimp.read timeout after 15s')), 15000));
+    image = await Promise.race([readPromise, timeout]);
+  }catch(err){
+    console.error('resizeAndWriteImage: Jimp.read failed:', err && err.stack ? err.stack : err);
+    throw err;
+  }
+
+  const MAX_WIDTH = 1024;
+  if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
+    await image.resize(MAX_WIDTH, Jimp.AUTO);
+  }
+
+  try {
+    if (typeof image.deflateLevel === 'function') {
+      image.deflateLevel(9);
+    }
+  } catch (e) {}
+
+  try{
+    if (typeof image.writeAsync === 'function') {
+      await image.writeAsync(outPath);
+    } else {
+      // fallback to callback-based write
+      await new Promise((resolve, reject) => {
+        image.write(outPath, (err) => err ? reject(err) : resolve());
+      });
+    }
+    
+  }catch(err){
+    console.error('resizeAndWriteImage: write failed', err && err.stack ? err.stack : err);
+    throw err;
+  }
+}
 
 
 app.get("/pdfs", cors(), (req, res) => {
@@ -972,7 +1032,7 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
 
-          var sql = "SELECT id, userId, name, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, urlCarpeta FROM pdfs WHERE userId = ?";
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ?";
 
           let values = [
             [userId]
@@ -1989,41 +2049,33 @@ app.delete('/eliminateDocSign', async function(req, res) {
 
 
 app.post('/create-stamp', fileUpload(), async (req, res) => {
-
-  console.log("llegado al create-stamp"); 
   const stampFile = req.files && req.files.uploadedFile ? req.files.uploadedFile : null;
   const nombreFile = req.body.userId;
-  const fileType = req.body.fileType;
-  
-  //const estado = req.body.estado;
-  const archivoNombre = CARPETASTAMP + "/" + nombreFile + fileType;
 
-  if(!stampFile){
+  if (!stampFile) {
     return res.status(400).json({ error: 'No uploadedFile provided' });
   }
 
-  const nombreFileJpg =  CARPETASTAMP + "/" + nombreFile + ".jpg";
-  const nombreFileJpeg =  CARPETASTAMP + "/" + nombreFile + ".jpeg";
-  const nombreFilePng =  CARPETASTAMP + "/" + nombreFile + ".png";
+  const mime = (stampFile.mimetype || '').toLowerCase();
+  if (!['image/png', 'image/jpeg', 'image/jpg'].includes(mime)) {
+    return res.status(400).json({ error: 'uploaded file must be PNG, JPEG or JPG' });
+  }
 
-  if (fs.existsSync(nombreFileJpg) || fs.existsSync(nombreFilePng) || fs.existsSync(nombreFileJpeg)){
+  const stampDir = path.join(process.cwd(), CARPETASTAMP);
+  if (!fs.existsSync(stampDir)) fs.mkdirSync(stampDir, { recursive: true });
+
+  const outPath = path.join(stampDir, nombreFile + '.png');
+  if (fs.existsSync(outPath) || fs.existsSync(path.join(stampDir, nombreFile + '.jpg')) || fs.existsSync(path.join(stampDir, nombreFile + '.jpeg'))) {
     return res.status(400).json({ error: 'File already exists' });
   }
 
-  try{
-    await fs.writeFileSync(archivoNombre, stampFile.data);
-
-    if((fileType === ".jpg")||(fileType === ".jpeg")){
-      var transformFileName = CARPETASTAMP + "/" + nombreFile;
-      await transformStampType(transformFileName, fileType);
-    }
-
-    await modifyImage(nombreFilePng);
-    //await modifyImageTransparent(archivoNombre);
-    console.log('File written successfully', nombreFilePng);
-  }catch(err){
-    console.error('create-stamp error:', err);
-    return res.status(500).json({ error: 'failed to save or process stamp' });
+  try {
+    await resizeAndWriteImage(stampFile.data, outPath);
+    await modifyImage(outPath);
+    return res.json({ saved: true, path: outPath });
+  } catch (err) {
+    console.error('create-stamp error:', err && err.stack ? err.stack : err);
+    return res.status(500).json({ error: 'image processing failed' });
   }
 });
 
@@ -2063,6 +2115,17 @@ async function modifyImage(imageName){
   console.log("Iniciado modificacion de stamp");
 
   // open a file called "lenna.png"
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    try {
+      const mod = await import('jimp');
+      Jimp = mod.Jimp || mod.default || mod;
+    } catch (e) {}
+  }
+
+  if (!Jimp || typeof Jimp.read !== 'function') {
+    throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
+  }
+
   const image = await Jimp.read(imageName);
 
   //image.resize(256, 256); // resize
