@@ -2070,6 +2070,17 @@ async function modifyImage(imageName){
       if (err) throw err;
   })*/
 
+  const MAX_WIDTH = 1024;
+  try {
+    console.log("Checking size: " + image.bitmap + " " + image.bitmap.width + " " + image.bitmap.width);
+    if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
+      console.log("Resizing...");
+      await image.resize(MAX_WIDTH, Jimp.AUTO);
+    }
+  } catch (e) {
+    console.warn('resizeAndWriteImage: resize failed', e && e.stack ? e.stack : e);
+  }
+
   await image.opacity(0.3);
   //await image.resize(256, 256);
   //await image.color('#000000ff');
