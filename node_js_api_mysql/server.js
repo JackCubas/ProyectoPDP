@@ -2125,37 +2125,35 @@ async function modifyImage(imageName){
   if (!Jimp || typeof Jimp.read !== 'function') {
     throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
   }
-
-  const image = await Jimp.read(imageName);
-
-  //image.resize(256, 256); // resize
-  /*await image.opacity(0.3, function(err){
-      if (err) throw err;
-  })*/
-
-  await image.opacity(0.3);
-  //await image.resize(256, 256);
-  //await image.color('#000000ff');
-
-  /*
-  const colorArray = [{r: 0, g: 0, b: 0, a: 255}];
-  await image.color(colorArray);
-
-  if(image.hasAlpha()){
-    //const colorArray = [{r: 0, g: 0, b: 0, a: 0}];
-    //await image.color(colorArray);
-    image.background = 0x000000ff;
+  let image;
+  try {
+    image = await Jimp.read(imageName);
+  } catch (err) {
+    console.error('modifyImage: Jimp.read failed:', err && err.stack ? err.stack : err);
+    throw err;
   }
-  */
 
-  await image.write(imageName); // save
+  // apply opacity if available (guard for older/newer Jimp versions)
+  try {
+    if (typeof image.opacity === 'function') {
+      image.opacity(0.3);
+    } else {
+      console.warn('modifyImage: opacity() not available on this Jimp version');
+    }
+  } catch (e) {
+    console.warn('modifyImage: opacity failed', e && e.stack ? e.stack : e);
+  }
 
-  /*Jimp.read(imageName, function (err, img) {
-        if (err) throw err;
-        img.resize(256, 256)
-             .opacity(0.7)                 
-             .write(imageName); 
-  });*/
+  try {
+    if (typeof image.writeAsync === 'function') {
+      await image.writeAsync(imageName);
+    } else {
+      image.write(imageName);
+    }
+  } catch (err) {
+    console.error('modifyImage: write failed', err && err.stack ? err.stack : err);
+    throw err;
+  }
 
   console.log("Finalizado modificacion de stamp");
 }
