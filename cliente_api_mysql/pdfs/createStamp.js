@@ -1,8 +1,8 @@
 var datosUsuario = null;
 
-if(localStorage.getItem("usuario") !== null){
-    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
-}
+// if(localStorage.getItem("usuario") !== null){
+//     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+// }
 
 async function sendData(){
     const URLSERVERUpload = "http://localhost:3000/create-stamp";
@@ -46,7 +46,7 @@ async function sendData(){
         var formData = new FormData();
         formData.append("fileType", fileType);
         formData.append("uploadedFile", file);
-        formData.append("userId", datosUsuario.id);
+        formData.append("userId", 1); //datosUsuario.id
 
         console.log(formData);
         alert("prueba");

@@ -1,19 +1,19 @@
-var URLSERVERgetall = ""; //"http://localhost:3000/pdfs";
+var URLSERVERgetall = "http://localhost:3000/pdfs"; //"http://localhost:3000/pdfs";
 
 var datosUsuario = null;
 
-if(localStorage.getItem("usuario") !== null){
-    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
-}
+// if(localStorage.getItem("usuario") !== null){
+//     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+// }
 
-if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
-  URLSERVERgetall = "http://localhost:3000/pdfs"
-}
+// if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
+//   URLSERVERgetall = "http://localhost:3000/pdfs"
+// }
 
-if((datosUsuario.rolUser === "CLIENT")){
- var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser/"
- URLSERVERgetall = URLSERVERgetallAux + datosUsuario.id
-}
+// if((datosUsuario.rolUser === "CLIENT")){
+//  var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser/"
+//  URLSERVERgetall = URLSERVERgetallAux + datosUsuario.id
+// }
 
 function checkUserHosting() {
     return fetch(URLSERVERgetall)

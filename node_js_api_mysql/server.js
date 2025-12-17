@@ -926,21 +926,27 @@ async function resizeAndWriteImage(buffer, outPath){
   if (!Jimp || typeof Jimp.read !== 'function') {
     throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
   }
+  console.log('resizeAndWriteImage: start, outPath ->', outPath);
 
-  
   let image;
-  try{
+  try {
     const readPromise = Jimp.read(buffer);
     const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Jimp.read timeout after 15s')), 15000));
     image = await Promise.race([readPromise, timeout]);
-  }catch(err){
+  } catch (err) {
     console.error('resizeAndWriteImage: Jimp.read failed:', err && err.stack ? err.stack : err);
     throw err;
   }
 
+  console.log('resizeAndWriteImage: image loaded', !!image && !!image.bitmap, 'size:', image && image.bitmap ? `${image.bitmap.width}x${image.bitmap.height}` : 'unknown');
+
   const MAX_WIDTH = 1024;
-  if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
-    await image.resize(MAX_WIDTH, Jimp.AUTO);
+  try {
+    if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
+      await image.resize(MAX_WIDTH, Jimp.AUTO);
+    }
+  } catch (e) {
+    console.warn('resizeAndWriteImage: resize failed', e && e.stack ? e.stack : e);
   }
 
   try {
@@ -949,17 +955,25 @@ async function resizeAndWriteImage(buffer, outPath){
     }
   } catch (e) {}
 
-  try{
+  try {
     if (typeof image.writeAsync === 'function') {
       await image.writeAsync(outPath);
     } else {
-      // fallback to callback-based write
-      await new Promise((resolve, reject) => {
-        image.write(outPath, (err) => err ? reject(err) : resolve());
-      });
+      // fallback using getBufferAsync
+      if (typeof image.getBufferAsync === 'function') {
+        const mime = Jimp.MIME_PNG || 'image/png';
+        const buf = await image.getBufferAsync(mime);
+        await fs.promises.writeFile(outPath, buf);
+      } else {
+        // last resort: try synchronous write (may not exist)
+        try {
+          image.write(outPath);
+        } catch (err) {
+          throw new Error('No suitable write method available on Jimp image');
+        }
+      }
     }
-    
-  }catch(err){
+  } catch (err) {
     console.error('resizeAndWriteImage: write failed', err && err.stack ? err.stack : err);
     throw err;
   }
@@ -2112,9 +2126,7 @@ app.delete('/delete-stamp', async function(req, res) {
 
 
 async function modifyImage(imageName){
-  console.log("Iniciado modificacion de stamp");
-
-  // open a file called "lenna.png"
+  // ensure Jimp is available
   if (!Jimp || typeof Jimp.read !== 'function') {
     try {
       const mod = await import('jimp');
@@ -2123,39 +2135,55 @@ async function modifyImage(imageName){
   }
 
   if (!Jimp || typeof Jimp.read !== 'function') {
-    throw new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
+    const err = new Error('Jimp.read is not available. Ensure the "jimp" package is installed and compatible.');
+    console.error('modifyImage:', err.message);
+    throw err;
   }
+
   let image;
   try {
-    image = await Jimp.read(imageName);
+    const readPromise = Jimp.read(imageName);
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Jimp.read timeout after 15s')), 15000));
+    image = await Promise.race([readPromise, timeout]);
   } catch (err) {
     console.error('modifyImage: Jimp.read failed:', err && err.stack ? err.stack : err);
     throw err;
   }
 
-  // apply opacity if available (guard for older/newer Jimp versions)
   try {
     if (typeof image.opacity === 'function') {
       image.opacity(0.3);
-    } else {
-      console.warn('modifyImage: opacity() not available on this Jimp version');
+    } else if (typeof image.fade === 'function') {
+      image.fade(0.7);
     }
-  } catch (e) {
-    console.warn('modifyImage: opacity failed', e && e.stack ? e.stack : e);
-  }
+  } catch (e) {}
+
+  try {
+    if (typeof image.deflateLevel === 'function') {
+      image.deflateLevel(9);
+    }
+  } catch (e) {}
 
   try {
     if (typeof image.writeAsync === 'function') {
       await image.writeAsync(imageName);
     } else {
-      image.write(imageName);
+      if (typeof image.getBufferAsync === 'function') {
+        const mime = Jimp.MIME_PNG || 'image/png';
+        const buf = await image.getBufferAsync(mime);
+        await fs.promises.writeFile(imageName, buf);
+      } else {
+        try {
+          image.write(imageName);
+        } catch (err) {
+          throw new Error('No suitable write method available on Jimp image');
+        }
+      }
     }
   } catch (err) {
     console.error('modifyImage: write failed', err && err.stack ? err.stack : err);
     throw err;
   }
-
-  console.log("Finalizado modificacion de stamp");
 }
 
 async function transformStampType(fileName, fileType){

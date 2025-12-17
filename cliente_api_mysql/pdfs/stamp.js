@@ -9,11 +9,11 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
     window.location.href = "table.html";
 }*/
 
-var datosUsuario = null;
+// var datosUsuario = null;
 
-if(localStorage.getItem("usuario") !== null){
-    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
-}
+// if(localStorage.getItem("usuario") !== null){
+//     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+// }
 
 var thisDocName = "";
 var userId = null;
@@ -186,7 +186,7 @@ async function sendData(){
         filename: thisDocName,
         initialTimestampName: initialTimestampName,
         originalUserId: userId,
-        stampUserId: datosUsuario.id
+        stampUserId: 1 //datosUsuario.id
     }
 
     /*const apiCall = await fetch(URLSERVERStamp + idHTML, {
