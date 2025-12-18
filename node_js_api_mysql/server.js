@@ -2021,6 +2021,7 @@ app.post('/create-stamp', fileUpload(), async (req, res) => {
     await modifyImage(nombreFilePng);
     //await modifyImageTransparent(archivoNombre);
     console.log('File written successfully', nombreFilePng);
+    return res.status(200).json({ resultData: 'failed to save or process stamp' });
   }catch(err){
     console.error('create-stamp error:', err);
     return res.status(500).json({ error: 'failed to save or process stamp' });

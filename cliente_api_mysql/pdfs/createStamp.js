@@ -64,6 +64,7 @@ async function sendData(){
 
         const result = await apiCall.json();
         console.log(result);
+
     }
 
     alert("prueba");
