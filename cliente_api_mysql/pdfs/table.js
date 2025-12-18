@@ -74,6 +74,12 @@ function buildTable(data) {
       buttonStamp.textContent = "Stamp";
       buttonStamp.addEventListener('click', stamp);
       cell3.appendChild(buttonStamp);
+
+      const buttonFD = document.createElement('button');
+      buttonFD.id = "FDbutton" + butID;
+      buttonFD.textContent = "FD";
+      buttonFD.addEventListener('click', firmadoDigital);
+      cell3.appendChild(buttonFD);
     }
   }else{
     const emptyRow = table.insertRow();
@@ -136,6 +142,16 @@ function stamp(event) {
   const idStamp = idStampString.replace(substringToRemove, '');
 
   window.location.href = "stamp.html?id=" + idStamp;
+}
+
+function firmadoDigital(event) {
+  var idFirmadoDigital = event.target.id;
+  const substringToRemove = "FDbutton";
+  const idFD = idFirmadoDigital.replace(substringToRemove, '');
+
+  alert("Firmado digital: " + idFD);
+
+  //window.location.href = "firmadoDigital.html?id=" + idFD;
 }
 
 
