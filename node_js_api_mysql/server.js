@@ -1114,6 +1114,7 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
   const initialTimestampName = initialTimestampNameAux.replaceAll("-","_");
 
   const archivoNombre = CARPETAPDF + "/" + userId + "/" + nombreFile + "_" + initialTimestampName + '.pdf';
+  const carpetaNombre  = CARPETAPDF + "/" + userId;
   console.log(archivoNombre);
 
   if(!pdfFile){
@@ -1121,6 +1122,10 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
   }
 
   try{
+    if (!fs.existsSync(carpetaNombre)){
+      fs.mkdirSync(carpetaNombre);
+    }
+
     fs.writeFileSync(archivoNombre, pdfFile.data);
     console.log('File written successfully', archivoNombre);
 
