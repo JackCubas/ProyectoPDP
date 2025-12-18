@@ -63,23 +63,25 @@ function buildTable(data) {
       buttonDel.addEventListener('click', del);
       cell3.appendChild(buttonDel);
 
-      const buttonSign = document.createElement('button');
-      buttonSign.id = "signbutton" + butID;
-      buttonSign.textContent = "Sign";
-      buttonSign.addEventListener('click', sign);
-      cell3.appendChild(buttonSign);
+      if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
+        const buttonSign = document.createElement('button');
+        buttonSign.id = "signbutton" + butID;
+        buttonSign.textContent = "Sign";
+        buttonSign.addEventListener('click', sign);
+        cell3.appendChild(buttonSign);
 
-      const buttonStamp = document.createElement('button');
-      buttonStamp.id = "stampbutton" + butID;
-      buttonStamp.textContent = "Stamp";
-      buttonStamp.addEventListener('click', stamp);
-      cell3.appendChild(buttonStamp);
+        const buttonStamp = document.createElement('button');
+        buttonStamp.id = "stampbutton" + butID;
+        buttonStamp.textContent = "Stamp";
+        buttonStamp.addEventListener('click', stamp);
+        cell3.appendChild(buttonStamp);
 
-      const buttonFD = document.createElement('button');
-      buttonFD.id = "FDbutton" + butID;
-      buttonFD.textContent = "FD";
-      buttonFD.addEventListener('click', firmadoDigital);
-      cell3.appendChild(buttonFD);
+        const buttonFD = document.createElement('button');
+        buttonFD.id = "FDbutton" + butID;
+        buttonFD.textContent = "FD";
+        buttonFD.addEventListener('click', firmadoDigital);
+        cell3.appendChild(buttonFD);
+      }
     }
   }else{
     const emptyRow = table.insertRow();
