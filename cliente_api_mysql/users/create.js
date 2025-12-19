@@ -1,5 +1,17 @@
 const URLSERVERCreate = "http://localhost:3000/users";
 
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(datosUsuario.rolUser != "ADMIN"){
+    window.location.href = "../404.html";
+}
+
 //create.html?prodId=34&price=34&quantity=34
 //?prodId=34&price=34&quantity=34
 var datosURL = window.location.href;

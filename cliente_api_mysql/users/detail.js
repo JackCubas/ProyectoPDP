@@ -1,5 +1,17 @@
 const URLSERVERdetail = "http://localhost:3000/users/";
 
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(datosUsuario.rolUser != "ADMIN"){
+    window.location.href = "../404.html";
+}
+
 function checkUserHosting() {
 
     var datosURL = window.location.href.split('?');

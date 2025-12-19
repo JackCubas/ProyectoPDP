@@ -2,6 +2,10 @@ var URLSERVERgetall = ""; //"http://localhost:3000/pdfs";
 
 var datosUsuario = null;
 
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
 if(localStorage.getItem("usuario") !== null){
      datosUsuario = JSON.parse(localStorage.getItem("usuario"));
 }

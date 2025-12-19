@@ -4,6 +4,10 @@ var nameUser = "";
 var docName = "";
 var estado = "";
 
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
 /*var datosURL = window.location.href;
 
 if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){

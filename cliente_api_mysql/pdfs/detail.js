@@ -1,6 +1,10 @@
 const URLSERVERdetail = "http://localhost:3000/pdfs/";
 const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
 var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";

@@ -1,5 +1,17 @@
 const URLSERVERgetall = "http://localhost:3000/users_pag";
 
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(datosUsuario.rolUser != "ADMIN"){
+    window.location.href = "../404.html";
+}
+
 var datosURL = window.location.href.split('?');
 var page = datosURL[1].replace("page=","");
 
