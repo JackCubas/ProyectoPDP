@@ -73,7 +73,7 @@ async function sendData(){
         body: JSON.stringify(modUser)
     })
 
-    const result = await apiCall.json();
+    const result = await response.json();
     console.log(result);
 
     alert('status:', response.status);
