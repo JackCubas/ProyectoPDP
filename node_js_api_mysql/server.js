@@ -647,7 +647,12 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     // simple validation
+    console.log("llega a create users");
+    
     const { nameUser, emailUser, passUser, rolUser, encryptKeyUser } = req.body || {};
+
+    console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + encryptKeyUser);
+
     if (!nameUser || nameUser.trim().length < 2) return res.status(400).json({ error: 'Nombre requerido (min 2 chars)' });
     if (!emailUser || !/^\S+@\S+\.\S+$/.test(emailUser)) return res.status(400).json({ error: 'Mail valido requerido' });
     if (!passUser || passUser.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
@@ -655,6 +660,8 @@ app.post('/users', (req, res) => {
     if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
 
     passEncrypt = encrypt(passUser);
+
+    console.log("llega a encriptar users");
 
     const con = mysql.createConnection({
           host: DBHOST,
@@ -664,6 +671,8 @@ app.post('/users', (req, res) => {
           database: DBNAME
     });
 
+    console.log("llega a conectar users");
+
     con.connect(function(err) {
       if (err) {
         console.error('DB connect error:', err);
@@ -672,6 +681,8 @@ app.post('/users', (req, res) => {
 
       const sql = 'INSERT INTO users (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES ?';
       const values = [[nameUser.trim(), emailUser.trim(), passEncrypt, rolUser, encryptKeyUser || null]];
+
+      console.log("llega a generar query users");
 
       con.query(sql, [values], function (err, result) {
         if (err) {

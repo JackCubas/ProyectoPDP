@@ -73,6 +73,9 @@ async function sendData(){
         body: JSON.stringify(modUser)
     })
 
+    const result = await apiCall.json();
+    console.log(result);
+
     alert('status:', response.status);
 
     window.location.href = 'table_pag.html?page=1';

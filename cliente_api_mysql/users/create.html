@@ -13,18 +13,18 @@
             <form id="form" onsubmit="sendData()">
                 <!-- action="/moviesCreate" method="POST"  -->
                 <lable for="nameUser">Name:</lable>
-                <input type="text" id="nameUser" name="nameUser" required>
+                <input type="text" id="nameUser" name="nameUser" maxlength="50" required>
                 <lable for="emailUser">Email:</lable>
-                <input type="text" id="emailUser" name="emailUser" required>
+                <input type="text" id="emailUser" name="emailUser" maxlength="50" required>
                 <lable for="passUser">Pass:</lable>
-                <input type="password" id="passUser" name="passUser" required>
+                <input type="password" id="passUser" name="passUser" maxlength="50" required>
                 <select id="rolUser" name="rolUser">
                     <option selected value="CLIENT">CLIENT</option>
                     <option value="FIRMA">FIRMA</option>
                     <option value="ADMIN">ADMIN</option>
                 </select>
                 <lable for="encryptKeyUser">Key:</lable>
-                <input type="text" id="encryptKeyUser" name="encryptKeyUser" required>
+                <input type="text" id="encryptKeyUser" name="encryptKeyUser" maxlength="50" required>
                 <button>Submit</button>
             </form>
             <button onclick="location.href='table_pag.html?page=1'" type="button">Cancel</button>

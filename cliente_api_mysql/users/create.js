@@ -40,7 +40,7 @@ async function sendData(){
         encryptKeyUser: encryptKeyUser
     }
 
-    await fetch(URLSERVERCreate, {
+    const apiCall = await fetch(URLSERVERCreate, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -48,6 +48,11 @@ async function sendData(){
         },
         body: JSON.stringify(nuevoUsers)
     })
+
+    const result = await apiCall.json();
+    console.log(result);
+
+    alert("prueba");
 
     window.location.href = "table_pag.html?page=1";
 }
