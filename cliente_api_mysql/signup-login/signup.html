@@ -13,11 +13,11 @@
             <form id="form" onsubmit="sendData()">
                 <!-- action="/moviesCreate" method="POST"  -->
                 <lable for="nameUser">Name:</lable>
-                <input type="text" id="nameUser" name="nameUser" maxlength="50" required>
+                <input type="text" id="nameUser" name="nameUser" maxlength="50" minlength="2" required>
                 <lable for="emailUser">Email:</lable>
                 <input type="text" id="emailUser" name="emailUser" maxlength="50" required>
                 <lable for="passUser">Pass:</lable>
-                <input type="password" id="passUser" name="passUser" maxlength="50" required>
+                <input type="password" id="passUser" name="passUser" maxlength="50" minlength="6" required>
                 <select id="rolUser" name="rolUser">
                     <option value="CLIENT">CLIENT</option>
                     <option value="FIRMA">FIRMA</option>
