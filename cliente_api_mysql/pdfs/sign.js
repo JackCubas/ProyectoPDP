@@ -17,6 +17,8 @@ if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
     window.location.href = "../404.html";
 }
 
+document.getElementById("stroke-style").style.display = 'none';
+
 document.addEventListener('DOMContentLoaded', function () {
     var canvas = document.getElementById('signature-pad');
     var ctx = canvas.getContext('2d');
