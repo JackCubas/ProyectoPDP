@@ -52,7 +52,7 @@ async function sendData(){
     const result = await apiCall.json();
     console.log(result);
 
-    alert("prueba");
+    //alert("prueba");
 
     window.location.href = "table_pag.html?page=1";
 }

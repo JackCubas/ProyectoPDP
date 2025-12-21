@@ -69,7 +69,7 @@ async function sendData(){
         method: "DELETE"
     })
 
-    alert('status:', response.status);
+    //alert('status:', response.status);
 
     window.location.href = "table_pag.html?page=1";
 

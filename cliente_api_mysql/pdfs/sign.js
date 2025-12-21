@@ -394,7 +394,7 @@ async function blobToArray(data){
 checkUserHosting();
 
 async function deleteDocument(){
-    alert("delete document");
+    //alert("delete document");
 
     const URLSERVERDelete = "http://localhost:3000/eliminateDocSign";
 

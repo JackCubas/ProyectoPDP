@@ -192,7 +192,7 @@ async function sendData(){
 
     var checkbox = document.getElementById('timeStampCheck');
 
-    alert(checkbox.checked);
+    //alert(checkbox.checked);
 
     const modUser = {
         filename: thisDocName,
@@ -239,7 +239,7 @@ async function sendData(){
 }
 
 async function deleteDocument(){
-    alert("delete document");
+    //alert("delete document");
 
     const URLSERVERDelete = "http://localhost:3000/eliminateDocStamp";
 
