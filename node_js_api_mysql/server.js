@@ -1925,7 +1925,7 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
   }else{
     console.warn('Pdf no se ha encontrado o ya se ha firmado');
-    return res.status(500).json({ error: 'failed to find pdf or pdf already exists' });
+    return res.status(500).json({ error: 'failed to find pdf or signed pdf already exists' });
 
   }
 
