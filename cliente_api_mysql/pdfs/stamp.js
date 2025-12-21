@@ -62,13 +62,13 @@ async function retrievePDF() {
     })
     .then((response) => { 
         console.log(response);
+
         return response.blob().then((data) => {
-                    console.log(data);
+                    //console.log(data);
                     return generateWindow(data);
                 }).catch((err) => {
                     console.log(err);
                 }) 
-
 
     });
     
@@ -158,10 +158,12 @@ function appendDataStamp(data){
 }
 
 function generateWindow(response){
+    console.log(response);
 
     const fileURL = URL.createObjectURL(response);
     console.log(fileURL);
-    window.open(fileURL); 
+    window.open(fileURL);
+
 }
 
 function checkUserHosting(){
@@ -224,12 +226,19 @@ async function sendData(){
     })
     .then((response) => { 
         console.log(response);
-        return response.blob().then((data) => {
-            console.log(data);
-            return generateWindow(data);
-        }).catch((err) => {
-            console.log(err);
-        }) 
+
+        if(response.status === 400 || response.status === 500){
+            alert("No se ha podido crear documento estampado");
+            window.location.href = "table.html";
+        }else{
+
+            return response.blob().then((data) => {
+                console.log(data);
+                return generateWindow(data);
+            }).catch((err) => {
+                console.log(err);
+            })
+        } 
 
 
     });
