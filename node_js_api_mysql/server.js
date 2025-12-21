@@ -1603,7 +1603,9 @@ app.put('/stamp/:id', async (req, res) => {
 
   var stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-  if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG) || fs.existsSync(archivoStampJPEG))){
+  const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + "-stamp" + '.pdf';
+
+  if (fs.existsSync(archivoPdf) && !fs.existsSync(newFilePath) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG) || fs.existsSync(archivoStampJPEG))){
 
     console.log(id, addTimeStamp, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG, archivoStampJPEG);
 
@@ -1698,7 +1700,6 @@ app.put('/stamp/:id', async (req, res) => {
 
     const pdfBytes = await pdfDoc.save();
     //const newFilePath = CARPETAPDF + "/" + filename + '-estampado.pdf';
-    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + "-stamp" + '.pdf';
     fs.writeFileSync(newFilePath, pdfBytes);
 
     console.log("Leyendo pdf: " + newFilePath);
@@ -1715,8 +1716,8 @@ app.put('/stamp/:id', async (req, res) => {
     rs.pipe(res);
 
   }else{
-    console.warn('Pdf o Estampado no se han encontrado');
-    return res.status(500).json({ error: 'failed to find pdf or stamp' });
+    console.warn('Pdf o Estampado no se han encontrado, o ya se ha estampado el pdf');
+    return res.status(500).json({ error: 'failed to find pdf or stamp, or stamped pdf already exists' });
 
   }
 
@@ -1864,7 +1865,9 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
   console.log(archivoPdf);
   var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile.data : null;
 
-  if (fs.existsSync(archivoPdf) && pdfFile !== null){
+  const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + fileName + "_" + initialTimestampName + "-sign" + '.pdf';
+
+  if (fs.existsSync(archivoPdf) && pdfFile !== null && !fs.existsSync(newFilePath)){
 
     console.log(id, archivoPdf, signUserId);
 
@@ -1905,7 +1908,6 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
     //-------------------------------------------------------------------
 
-    const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + fileName + "_" + initialTimestampName + "-sign" + '.pdf';
     fs.writeFileSync(newFilePath, pdfFile);
 
     console.log("Leyendo pdf: " + newFilePath);
@@ -1922,8 +1924,8 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
     rs.pipe(res);
 
   }else{
-    console.warn('Pdf no se ha encontrado');
-    return res.status(500).json({ error: 'failed to find pdf' });
+    console.warn('Pdf no se ha encontrado o ya se ha firmado');
+    return res.status(500).json({ error: 'failed to find pdf or pdf already exists' });
 
   }
 
