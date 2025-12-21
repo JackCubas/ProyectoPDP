@@ -53,7 +53,7 @@ async function sendData(){
         formData.append("userId", datosUsuario.id); //datosUsuario.id
 
         console.log(formData);
-        alert("prueba");
+        //alert("prueba");
 
         //axios.post(URLSERVERUpload,formData).then(res => { console.log(res) })
 
@@ -69,10 +69,14 @@ async function sendData(){
         const result = await apiCall.json();
         console.log(result);
 
+        if(result.status === 400 || result.status === 500){
+            alert("No se ha podido crear stamp");
+            window.location.href = "table.html";
+        }
+
     }
 
-    alert("prueba");
-
+    alert("Finalizado procesamiento");
     window.location.href = "table.html";
     }
 }
