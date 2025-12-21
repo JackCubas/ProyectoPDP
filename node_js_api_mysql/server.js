@@ -1593,16 +1593,19 @@ app.put('/stamp/:id', async (req, res) => {
   console.log(req.body);
 
   const { id } = req.params;
-  const { filename, stampUserId, originalUserId, initialTimestampName} = req.body;
+  const { filename, stampUserId, originalUserId, initialTimestampName, addTimeStamp} = req.body;
+
   const archivoPdf = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + '.pdf';
+
   const archivoStampPNG = CARPETASTAMP + "/" + stampUserId + '.png';
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
+
   var stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
   if (fs.existsSync(archivoPdf) && (fs.existsSync(archivoStampPNG) || fs.existsSync(archivoStampJPG) || fs.existsSync(archivoStampJPEG))){
 
-    console.log(id, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG, archivoStampJPEG);
+    console.log(id, addTimeStamp, archivoPdf, stampUserId, archivoStampPNG, archivoStampJPG, archivoStampJPEG);
 
     //-------------------------------------------------------------------
 
@@ -1679,15 +1682,17 @@ app.put('/stamp/:id', async (req, res) => {
         })
 
         //console.log("insertando timestamp al pdf " + stampTimestamp.toString());
-        page.drawText(stampTimestamp.toString(), {
-            x: 5,
-            y: page.getHeight() / 2 + 300,
-            size: 50,
-            font: helveticaFont,
-            color: rgb(0.95, 0.1, 0.1),
-            rotate: degrees(-45),
-            opacity: 0.3,
-        });
+        if(addTimeStamp === true){
+          page.drawText(stampTimestamp.toString(), {
+              x: 5,
+              y: page.getHeight() / 2 + 300,
+              size: 50,
+              font: helveticaFont,
+              color: rgb(0.95, 0.1, 0.1),
+              rotate: degrees(-45),
+              opacity: 0.3,
+          });
+        }
       }
     }
 

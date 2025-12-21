@@ -190,11 +190,16 @@ async function sendData(){
     var datosURL = window.location.href.split('?');
     var idHTML = datosURL[1].replace("id=","");
 
+    var checkbox = document.getElementById('timeStampCheck');
+
+    alert(checkbox.checked);
+
     const modUser = {
         filename: thisDocName,
         initialTimestampName: initialTimestampName,
         originalUserId: userId,
-        stampUserId: datosUsuario.id
+        stampUserId: datosUsuario.id,
+        addTimeStamp: checkbox.checked
     }
 
     /*const apiCall = await fetch(URLSERVERStamp + idHTML, {
