@@ -13,6 +13,8 @@ async function sendData(){
 
     var fileInput = document.getElementById('file');		
 	var filePath = fileInput.value;
+
+    var result = "";
 		
 	// Allowing file type
 	var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
@@ -69,19 +71,21 @@ async function sendData(){
         }
         );
 
-        const result = await apiCall.json();
+        result = await apiCall.json();
         console.log(result);
-
-        if(result.status === 400 || result.status === 500){
-            alert("No se ha podido crear stamp");
-            window.location.href = "table.html";
-        }
 
         loader.setAttribute('hidden', "hidden");
 
     }
 
-    alert("Finalizado procesamiento");
-    window.location.href = "table.html";
+    if(result.status === 400 || result.status === 500){
+        alert("No se ha podido crear stamp");
+        window.location.href = "table.html";
+    }else{
+        alert("Finalizado procesamiento");
+        window.location.href = "table.html";
+    }
+
+    
     }
 }
