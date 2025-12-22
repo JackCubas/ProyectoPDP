@@ -1,0 +1,58 @@
+const URLSERVERretrieve = "http://localhost:3000/get-stamp/";
+
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
+
+var datosUsuario = null;
+var userId = null;
+
+if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+    userId = datosUsuario.id;
+}
+
+async function checkUserHosting() {
+
+    console.log("return data");
+    return fetch(URLSERVERretrieve + userId, {
+        method: "GET"
+        /*headers: {
+            "Content-Type": "application/png"
+        }*/
+    })
+    .then((response) => { 
+        console.log(response);
+
+         if(response.status === 400 || response.status === 500){
+            alert("No se ha podido encontrar imagen estampado");
+            window.location.href = "table.html";
+        }else{
+
+            if(response.status === 204){
+                alert("No existe imagen estampado");
+            }else{    
+
+                return response.blob().then((data) => {
+                            console.log(data);
+                            return generateWindow(data);
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+            }         
+
+        }
+    });
+    
+
+}
+
+function generateWindow(response){
+
+    const fileURL = URL.createObjectURL(response);
+    console.log(fileURL);
+    window.open(fileURL); 
+}
+
+
+checkUserHosting();

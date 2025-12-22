@@ -2009,6 +2009,33 @@ app.delete('/eliminateDocSign', async function(req, res) {
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 
+app.get("/get-stamp/:id", cors(), (req, res) => {
+
+  const { id } = req.params;
+  console.log("llegado al get-stamp: " + id);
+
+  const archivoStampPNG = CARPETASTAMP + "/" + id + '.png';
+  //const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
+  //const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
+
+  if(fs.existsSync(archivoStampPNG)){
+
+    const rs = fs.createReadStream(archivoStampPNG);
+
+    // get size of the file
+    const { size } = fs.statSync(archivoStampPNG);
+    res.setHeader("Content-Type", "application/png");
+    res.setHeader("Content-Length", size);
+
+    console.log("Enviando stamp imagen: " + archivoStampPNG);
+
+    rs.pipe(res);
+  }else{
+    return res.status(204).json({ info: 'There is no stamp' });
+  }
+
+});
+
 
 
 app.post('/create-stamp', fileUpload(), async (req, res) => {
