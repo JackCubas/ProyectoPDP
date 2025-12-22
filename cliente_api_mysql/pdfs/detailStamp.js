@@ -47,11 +47,12 @@ async function checkUserHosting() {
 
 }
 
-function generateWindow(response){
+function generateWindow(blob){
 
-    const fileURL = URL.createObjectURL(response);
-    console.log(fileURL);
-    window.open(fileURL); 
+    let img = document.createElement("img");
+    img.src = URL.createObjectURL(blob);
+    //img.width = 300;
+    document.body.appendChild(img);
 }
 
 
