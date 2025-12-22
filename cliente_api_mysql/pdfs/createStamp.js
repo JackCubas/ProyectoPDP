@@ -56,6 +56,9 @@ async function sendData(){
         //alert("prueba");
 
         //axios.post(URLSERVERUpload,formData).then(res => { console.log(res) })
+        
+        loader = document.getElementById("loader");
+        loader.removeAttribute('hidden');
 
         const apiCall = await fetch(URLSERVERUpload, {
             method: "POST",
@@ -73,6 +76,8 @@ async function sendData(){
             alert("No se ha podido crear stamp");
             window.location.href = "table.html";
         }
+
+        loader.setAttribute('hidden', "hidden");
 
     }
 
