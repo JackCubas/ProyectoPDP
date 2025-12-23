@@ -63,6 +63,12 @@ function buildTable(data) {
       buttonDel.textContent = "Delete";
       buttonDel.addEventListener('click', del);
       cell2.appendChild(buttonDel);
+
+      const buttonStamp = document.createElement('button');
+      buttonStamp.id = "stampbutton" + butID;
+      buttonStamp.textContent = "Stamp";
+      buttonStamp.addEventListener('click', stamp);
+      cell2.appendChild(buttonStamp);
     }
   }else{
     const emptyRow = table.insertRow();
@@ -116,6 +122,19 @@ function del(event){
   //alert("DEL " + idDel);
 
   window.location.href = "delete.html?id=" + idDel;
+}
+
+function stamp(event){
+  console.log("STAMP");
+  //alert("DELETE " + event.target.id);
+
+  var idStampString = event.target.id;
+  const substringToRemove = "stampbutton";
+  const idStamp = idStampString.replace(substringToRemove, '');
+
+  //alert("DEL " + idDel);
+
+  window.location.href = "stamp.html?id=" + idStamp;
 }
 
 
