@@ -30,7 +30,13 @@ async function checkUserHosting() {
         }else{
 
             if(response.status === 204){
-                alert("No existe imagen estampado");
+                //alert("No existe imagen estampado");
+
+                var con=document.getElementById("main-container");
+                var j=document.createElement("div");
+                j.textContent="No existe imagen estampado";
+                con.appendChild(j);
+
             }else{    
 
                 return response.blob().then((data) => {
@@ -49,10 +55,12 @@ async function checkUserHosting() {
 
 function generateWindow(blob){
 
+    var con=document.getElementById("main-container");
     let img = document.createElement("img");
     img.src = URL.createObjectURL(blob);
     //img.width = 300;
-    document.body.appendChild(img);
+    //document.body.appendChild(img);
+    con.appendChild(img);
 }
 
 
