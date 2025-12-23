@@ -34,10 +34,15 @@ async function checkUserHosting() {
         }else{
 
             if(response.status === 204){
-                alert("No existe imagen estampado");
-
                 stampSelect = document.getElementById("stampSelect");
                 stampSelect.removeAttribute('hidden');
+
+                //alert("No existe imagen estampado");
+
+                var con=document.getElementById("main-container");
+                var j=document.createElement("div");
+                j.textContent="No existe imagen estampado";
+                con.appendChild(j);
 
             }else{    
 
@@ -60,10 +65,12 @@ function generateWindow(blob){
     stampSelect = document.getElementById("stampSelect");
     stampSelect.setAttribute('hidden', "hidden");
 
+    var con=document.getElementById("main-container");
     let img = document.createElement("img");
     img.src = URL.createObjectURL(blob);
     //img.width = 300;
-    document.body.appendChild(img);
+    //document.body.appendChild(img);
+    con.appendChild(img);
 }
 
 async function deleteStamp(){
