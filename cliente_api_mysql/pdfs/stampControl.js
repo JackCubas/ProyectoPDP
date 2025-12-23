@@ -14,11 +14,13 @@ if(datosUsuario.rolUser != "ADMIN"){
 
 async function checkUserHosting() {
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
+
+    var idHTML = datosUsuario.id;
 
     if(idHTML === "" || isNaN(idHTML)){
-        window.location.href = 'table_pag.html?page=1';
+        window.location.href = 'table.html';
     }
 
     console.log("return data");
@@ -30,7 +32,7 @@ async function checkUserHosting() {
 
          if(response.status === 400 || response.status === 500){
             alert("No se ha podido encontrar imagen estampado");
-            window.location.href = "table_pag.html?page=1";
+            window.location.href = "table.html";
         }else{
 
             if(response.status === 204){
@@ -80,22 +82,26 @@ function generateWindow(blob){
 async function deleteStamp(){
     const URLSERVERDelete = "http://localhost:3000/delete-stamp";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
+
+    var idHTML = datosUsuario.id;
 
     const response = await fetch(URLSERVERDelete + '?userId=' + idHTML, {
         method: "DELETE"
     })
 
-    window.location.href = "table_pag.html?page=1";
+    window.location.href = "table.html";
 
 }
 
 async function createStamp(){
     const URLSERVERUpload = "http://localhost:3000/create-stamp";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
+
+    var idHTML = datosUsuario.id;
 
     var fileInput = document.getElementById('file');		
 	var filePath = fileInput.value;
@@ -166,10 +172,10 @@ async function createStamp(){
 
     if(result.status === 400 || result.status === 500){
         alert("No se ha podido crear stamp");
-        window.location.href = "table_pag.html?page=1";;
+        window.location.href = "table.html";;
     }else{
         alert("Finalizado procesamiento");
-        window.location.href = "table_pag.html?page=1";;
+        window.location.href = "table.html";;
     }
 
     
