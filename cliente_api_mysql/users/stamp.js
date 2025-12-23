@@ -44,6 +44,8 @@ async function checkUserHosting() {
                 j.textContent="No existe imagen estampado";
                 con.appendChild(j);
 
+                document.getElementById("deleteStamp").disabled = true;
+
             }else{    
 
                 return response.blob().then((data) => {
@@ -71,6 +73,8 @@ function generateWindow(blob){
     //img.width = 300;
     //document.body.appendChild(img);
     con.appendChild(img);
+
+    document.getElementById("createStamp").disabled = true;
 }
 
 async function deleteStamp(){
