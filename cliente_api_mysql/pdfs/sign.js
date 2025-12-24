@@ -324,7 +324,10 @@ async function returnDataSign() {
 
 function appendDataSign(data){
     if(data.length !== 0){
+
         document.getElementById("saveServer").disabled = true;
+        document.getElementById("savePDF").disabled = true;
+
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
         }
