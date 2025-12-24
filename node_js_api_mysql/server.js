@@ -1677,8 +1677,10 @@ app.put('/stamp/:id', async (req, res) => {
         const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
         page.drawImage(img, {
-            x: page.getWidth() / 2 - dims.width / 2 + 75,
-            y: page.getHeight() / 2 - dims.height + 250,
+            //x: page.getWidth() / 2 - dims.width / 2 + 75,
+            //y: page.getHeight() / 2 - dims.height + 250,
+            x: 5,
+            y: page.getHeight() - 200,
             width: dims.width,
             height: dims.height,
         })
@@ -1687,11 +1689,12 @@ app.put('/stamp/:id', async (req, res) => {
         if(addTimeStamp === true){
           page.drawText(stampTimestamp.toString(), {
               x: 5,
-              y: page.getHeight() / 2 + 300,
-              size: 50,
+              //y: page.getHeight() / 2 + 300,
+              y: page.getHeight() - 220,
+              size: 20,
               font: helveticaFont,
               color: rgb(0.95, 0.1, 0.1),
-              rotate: degrees(-45),
+              //rotate: degrees(-45),
               opacity: 0.3,
           });
         }
