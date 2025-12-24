@@ -174,7 +174,8 @@ async function insertSignatureIntoPDF(signatureDataURL) {
     const pages = pdfDoc.getPages();
     const firstPage = pages[0];
 
-    const x = firstPage.getWidth() - 100 - width; // Adjust the value 100 for the horizontal position.
+    //const x = firstPage.getWidth() - 100 - width; // Adjust the value 100 for the horizontal position.
+    const x = (firstPage.getWidth()/2) - (width/2)
     const y = firstPage.getHeight() - 100 - height; // Adjust the value 100 for the vertical position.
 
     // Add the signature image to the first page at the desired location.
