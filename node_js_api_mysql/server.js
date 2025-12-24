@@ -2121,7 +2121,7 @@ async function modifyImage(imageName){
       if (err) throw err;
   })*/
 
-  const MAX_WIDTH = 1024;
+  const MAX_WIDTH = 256;
   try {
     console.log("Checking size: " + image.bitmap + " " + image.bitmap.width + " " + image.bitmap.width);
     if (image.bitmap && image.bitmap.width && image.bitmap.width > MAX_WIDTH) {
@@ -2129,7 +2129,7 @@ async function modifyImage(imageName){
       //await image.resize(MAX_WIDTH, Jimp.AUTO);
       //await image.resize({ width: 100 });
       //await image.resize(256, 256);
-      image.resize({ w: 256});
+      image.resize({ w: MAX_WIDTH});
     }
   } catch (e) {
     console.warn('resizeAndWriteImage: resize failed', e && e.stack ? e.stack : e);
