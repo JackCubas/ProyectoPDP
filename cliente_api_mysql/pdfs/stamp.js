@@ -146,6 +146,9 @@ function appendDataStamp(data){
             k.textContent="Stamp DateTime: " + stampTimestampNameAux;                      
             con.appendChild(k);
 
+            document.getElementById("timeStampCheck").disabled = true;
+            document.getElementById("submit").disabled = true;
+
         }
     }else{
         console.log("No hay documento estampado");
@@ -153,6 +156,8 @@ function appendDataStamp(data){
         var j=document.createElement("div");
         j.textContent="No hay documento estampado";
         con.appendChild(j);
+
+        document.getElementById("delete").disabled = true;
     }
     //console.log("finalizado generacion de ventana");
 }

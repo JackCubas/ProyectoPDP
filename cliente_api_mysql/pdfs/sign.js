@@ -324,10 +324,12 @@ async function returnDataSign() {
 
 function appendDataSign(data){
     if(data.length !== 0){
+        document.getElementById("saveServer").disabled = true;
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
         }
     }else{
+        document.getElementById("delete").disabled = true;
         console.log("No hay documento firmado");
     }
     //console.log("finalizado generacion de ventana");
