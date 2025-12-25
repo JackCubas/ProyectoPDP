@@ -1469,17 +1469,39 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
   const archivoNombreNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + '.pdf';
   const archivoNombreOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + '.pdf';
+
+
+  const pathStampOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + "-stamp" + '.pdf';
+  const pathSignOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + "-sign" + '.pdf';
+
+  const pathStampNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + "-stamp" + '.pdf';
+  const pathSignNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + "-sign" + '.pdf';
   
   var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile : null;
 
   console.log(id, archivoNombreNuevo, archivoNombreOriginal, nombreFileOriginal, nombreFileNuevo, estado, userIdOriginal, userIdNuevo, !!pdfFile);
 
   try{
+    const carpetaNombreNuevo = CARPETAPDF + "/" + userIdNuevo
+    if (!fs.existsSync(carpetaNombreNuevo)){
+      fs.mkdirSync(carpetaNombreNuevo);
+    }
+
     if(pdfFile === null){
       // rename file
       if (fs.existsSync(archivoNombreOriginal)){
+
         fs.renameSync(archivoNombreOriginal, archivoNombreNuevo);
         console.log('The file has been re-named to: ' + archivoNombreNuevo);
+
+        if(fs.existsSync(pathStampOriginal)){
+          fs.renameSync(pathStampOriginal, pathStampNuevo);
+        }
+
+        if(fs.existsSync(pathSignOriginal)){
+          fs.renameSync(pathSignOriginal, pathSignNuevo);
+        }
+
       }else{
         console.warn('Original file not found for rename:', archivoNombreOriginal);
       }
@@ -1490,6 +1512,16 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       if (fs.existsSync(archivoNombreOriginal)) {
         const unlinkFile = util.promisify(fs.unlink);
         await unlinkFile(archivoNombreOriginal);       
+      }
+
+      if(fs.existsSync(pathStampOriginal)){
+        const unlinkFile = util.promisify(fs.unlink);
+        await unlinkFile(pathStampOriginal);
+      }
+
+      if(fs.existsSync(pathSignOriginal)){
+        const unlinkFile = util.promisify(fs.unlink);
+        await unlinkFile(pathSignOriginal);
       }
 
       fs.writeFileSync(archivoNombreNuevo, pdfFile.data);
