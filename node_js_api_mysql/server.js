@@ -1120,7 +1120,7 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
   const estado = req.body.estado || 'PENDING';
   const userId = req.body.userId;
 
-  const initialTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const initialTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
   const initialTimestampNameAux = initialTimestamp.replace(" ","_").replaceAll(":","-");
   const initialTimestampName = initialTimestampNameAux.replaceAll("-","_");
 
@@ -1501,7 +1501,9 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       console.log("Connected!");
 
       // Format uploadTimestamp for MySQL DATETIME
-      const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
+      //const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
+
+      const uploadTs = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
         UPDATE pdfs 
@@ -1601,7 +1603,7 @@ app.put('/stamp/:id', async (req, res) => {
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
 
-  var stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  var stampTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
 
   const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + "-stamp" + '.pdf';
 
@@ -1889,7 +1891,7 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
       if (err) throw err;
       console.log("Connected!");
 
-      const signTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const signTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
         UPDATE pdfs 
@@ -2263,7 +2265,7 @@ function emptyOrRows(rows) {
       if (err) throw err;
       console.log("Connected!");
 
-      const stampTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const stampTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
         UPDATE pdfs 

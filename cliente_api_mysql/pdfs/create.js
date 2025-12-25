@@ -34,7 +34,7 @@ async function sendData(){
         formData.append("userId", datosUsuario.id);
 
         console.log(formData);
-        alert("prueba");
+        //alert("prueba");
 
         //axios.post(URLSERVERUpload,formData).then(res => { console.log(res) })
 

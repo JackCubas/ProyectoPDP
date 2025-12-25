@@ -127,7 +127,7 @@ async function sendData(){
         formData.append("userIdNuevo", datosUsuario.id);
         //formData.append("userIdNuevo", 1);
 
-        alert("prueba");
+        //alert("prueba");
 
 
         const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
