@@ -1248,10 +1248,25 @@ app.delete('/eliminateDocOriginal', async function(req, res) {
   console.log("llegado al delete pdf puro");
   const pathDelete = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + ".pdf";
 
+  const pathDeleteStamp = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-stamp" + '.pdf';
+  const pathDeleteSign = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-sign" + '.pdf';
+
   if (fs.existsSync(pathDelete)) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
     unlinkFile(pathDelete);
+  }
+
+  if (fs.existsSync(pathDeleteStamp)) {
+    // delete the file on server after it sends to client
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathDeleteStamp);
+  }
+
+  if (fs.existsSync(pathDeleteSign)) {
+    // delete the file on server after it sends to client
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathDeleteSign);
   }
 
   //-----------------------------------------------
