@@ -18,10 +18,14 @@
                 <input type="text" id="emailUser" name="emailUser" maxlength="50" required>
                 <lable for="passUser">Pass:</lable>
                 <input type="password" id="passUser" name="passUser" maxlength="50" minlength="6" required>
+                <lable for="passUserRepeat">Repeat Pass:</lable>
+                <input type="password" id="passUserRepeat" name="passUserRepeat" maxlength="50" minlength="6" required>
                 <select id="rolUser" name="rolUser">
                     <option value="CLIENT">CLIENT</option>
                     <option value="FIRMA">FIRMA</option>
                 </select>
+                <lable for="encryptKeyUser">Encrypt text:</lable>
+                <input type="text" id="encryptKeyUser" name="encryptKeyUser" maxlength="50" required>
                 <button>Submit</button>
             </form>
             <button onclick="location.href='../index.html'" type="button">Cancel</button>
