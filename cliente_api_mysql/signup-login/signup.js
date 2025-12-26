@@ -9,8 +9,8 @@ if(datosURL.includes("?")){
     var datosURLSplit = window.location.href.split('?');
     var datosURLNuevo = datosURLSplit[0];
 
-    window.history.replaceState( {} , '', datosURLNuevo);
-    //window.location.href = datosURLNuevo;
+    //window.history.replaceState( {} , '', datosURLNuevo);
+    window.location.href = datosURLNuevo;
 }
 
 async function sendData(){
