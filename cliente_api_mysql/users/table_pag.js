@@ -71,10 +71,10 @@ function buildPaginacion(data){
 function buildTable(data, currentPageNum) {
 
   const main = document.getElementById("main-container");
-  var numUsers = 0;
+  var newPage = currentPageNum;
 
-  if(data !== null && data.length > 0){
-    numUsers = data.length;
+  if(data !== null && data.length > 0 && data.length === 10){
+    newPage = currentPageNum + 1;
   }
 
   var a = document.createElement('a');
@@ -167,6 +167,21 @@ function del(event){
   var datosDel = datosDelString.split('-');
 
   alert("DEL " + datosDel[0] + " " + datosDel[1] + " " + datosDel[2]);
+
+  if(!isNaN(datosDel[1]) && !isNaN(datosDel[2])){
+
+    var currentPageNum = parseInt(datosDel[1]);
+    var numUsers = parseInt(datosDel[2]);
+
+    var newPageNum = currentPageNum;
+
+    if(numUsers === 1 && currentPageNum > 1){
+      newPageNum = currentPageNum - 1;
+    }
+
+    alert("nums: " + currentPageNum + " " + newPageNum + " " + numUsers);
+
+  }
 
   window.location.href = "delete.html?id=" + datosDel[0];
 }
