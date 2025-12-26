@@ -25,7 +25,7 @@
                     <option value="FIRMA">FIRMA</option>
                 </select>
                 <lable for="dniUser">DNI:</lable>
-                <input type="text" id="dniUser" name="dniUser" maxlength="9" minlength="9" required>
+                <input type="text" pattern="[0-9]{8}[A-Za-z]{1}" id="dniUser" name="dniUser" maxlength="9" minlength="9" required>
                 <button>Submit</button>
             </form>
             <button onclick="location.href='../index.html'" type="button">Cancel</button>
