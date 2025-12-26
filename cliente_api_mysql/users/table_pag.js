@@ -70,7 +70,12 @@ function buildPaginacion(data){
 
 function buildTable(data, currentPageNum) {
 
-  const main = document.getElementById("main-container")
+  const main = document.getElementById("main-container");
+  var numUsers = 0;
+
+  if(data !== null && data.length > 0){
+    numUsers = data.length;
+  }
 
   var a = document.createElement('a');
   var linkText = document.createTextNode("Create");
