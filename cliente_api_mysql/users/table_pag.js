@@ -35,8 +35,8 @@ function checkUserHosting() {
 
 function buildVentana(data){
   console.log(data);
-  buildPaginacion(data);
-  buildTable(data);
+  var currentPageNum = buildPaginacion(data);
+  buildTable(data, currentPageNum);
 
 }
 
@@ -63,10 +63,23 @@ function buildPaginacion(data){
     linkNext.href = '#';
   }else{
     linkNext.href="table_pag.html?page=" + pageNumNext;
-  } 
+  }
+  
+  return pageNum;
 }
 
-function buildTable(data) {
+function buildTable(data, currentPageNum) {
+
+  const main = document.getElementById("main-container")
+
+  var a = document.createElement('a');
+  var linkText = document.createTextNode("Create");
+  a.appendChild(linkText);
+  a.title = "Create";
+  a.href = 'create.html';
+  a.className = 'button';
+  main.appendChild(a);
+
   const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
   if(data !== null && data.length > 0){
     for (let i = 0; i < data.length; i++) {
@@ -82,25 +95,25 @@ function buildTable(data) {
       const butID = data[i].id;
 
       const buttonDetail = document.createElement('button');
-      buttonDetail.id = "detailbutton" + butID;
+      buttonDetail.id = "detailbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonDetail.textContent = "Detail";
       buttonDetail.addEventListener('click', detail);
       cell3.appendChild(buttonDetail);
 
       const buttonEdit = document.createElement('button');
-      buttonEdit.id = "editbutton" + butID;
+      buttonEdit.id = "editbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonEdit.textContent = "Edit";
       buttonEdit.addEventListener('click', edit);
       cell3.appendChild(buttonEdit);
 
       const buttonDel = document.createElement('button');
-      buttonDel.id = "delbutton" + butID;
+      buttonDel.id = "delbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonDel.textContent = "Delete";
       buttonDel.addEventListener('click', del);
       cell3.appendChild(buttonDel);
 
       const buttonStamp = document.createElement('button');
-      buttonStamp.id = "stampbutton" + butID;
+      buttonStamp.id = "stampbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonStamp.textContent = "Stamp";
       buttonStamp.addEventListener('click', stamp);
       cell3.appendChild(buttonStamp);
@@ -118,11 +131,12 @@ function detail(event){
 
   var idDetailString = event.target.id;
   const substringToRemove = "detailbutton";
-  const idDetail = idDetailString.replace(substringToRemove, '');
+  var datosDetailString = idDetailString.replace(substringToRemove, '');
+  var datosDetail = datosDetailString.split('-');
 
-  //alert("DETAIL " + idDetail);
+  alert("DETAIL " + datosDetail[0] + " " + datosDetail[1] + " " + datosDetail[2]);
 
-  window.location.href = "detail.html?id=" + idDetail;
+  window.location.href = "detail.html?id=" + datosDetail[0];
 }
 
 function edit(event){
@@ -130,11 +144,12 @@ function edit(event){
 
   var idEditString = event.target.id;
   const substringToRemove = "editbutton";
-  const idEdit = idEditString.replace(substringToRemove, '');
+  var datosEditString = idEditString.replace(substringToRemove, '');
+  var datosEdit = datosEditString.split('-');
 
-  //alert("EDIT " + idEdit);
+  alert("EDIT " + datosEdit[0] + " " + datosEdit[1] + " " + datosEdit[2]);
 
-  window.location.href = "modify.html?id=" + idEdit;
+  window.location.href = "modify.html?id=" + datosEdit[0];
 }
 
 function del(event){
@@ -143,11 +158,12 @@ function del(event){
 
   var idDelString = event.target.id;
   const substringToRemove = "delbutton";
-  const idDel = idDelString.replace(substringToRemove, '');
+  var datosDelString = idDelString.replace(substringToRemove, '');
+  var datosDel = datosDelString.split('-');
 
-  //alert("DEL " + idDel);
+  alert("DEL " + datosDel[0] + " " + datosDel[1] + " " + datosDel[2]);
 
-  window.location.href = "delete.html?id=" + idDel;
+  window.location.href = "delete.html?id=" + datosDel[0];
 }
 
 function stamp(event){
@@ -156,11 +172,12 @@ function stamp(event){
 
   var idStampString = event.target.id;
   const substringToRemove = "stampbutton";
-  const idStamp = idStampString.replace(substringToRemove, '');
+  var datosStampString = idStampString.replace(substringToRemove, '');
+  var datosStamp = datosStampString.split('-');
 
-  //alert("DEL " + idDel);
+  alert("STAMP " + datosStamp[0] + " " + datosStamp[1] + " " + datosStamp[2]);
 
-  window.location.href = "stamp.html?id=" + idStamp;
+  window.location.href = "stamp.html?id=" + datosStamp[0];
 }
 
 
