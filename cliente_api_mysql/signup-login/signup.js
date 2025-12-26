@@ -5,12 +5,15 @@ const URLSERVERCreate = "http://localhost:3000/users";
 var datosURL = window.location.href;
 
 if(datosURL.includes("?")){
+    //alert(datosURL);
     var datosURLSplit = window.location.href.split('?');
     var datosURLNuevo = datosURLSplit[0];
-    window.location.href = datosURLNuevo;
+
+    window.history.replaceState( {} , '', datosURLNuevo);
+    //window.location.href = datosURLNuevo;
 }
 
-async function sendData(event){
+async function sendData(){
 
     //event.preventDefault();
 
@@ -26,7 +29,7 @@ async function sendData(event){
         document.getElementById("passUser").value = "";
         document.getElementById("passUserRepeat").value = "";
 
-        event.stopPropagation();
+        //event.stopPropagation();
 
         //return false;
     }else{
@@ -35,7 +38,7 @@ async function sendData(event){
             alert('No es un correo electronico adecuado');
             document.getElementById("emailUser").value = "";
 
-            event.stopPropagation();
+            //event.stopPropagation();
 
             //return false;
         }else{    
