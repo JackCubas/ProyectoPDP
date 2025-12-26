@@ -39,7 +39,7 @@ function appendData(data){
         document.getElementById("emailUser").value = data[0].emailUser;
         document.getElementById("passUser").value = data[0].passUser;
         document.getElementById("rolUser").value = data[0].rolUser;
-        document.getElementById("encryptKeyUser").value = data[0].encryptKeyUser;
+        document.getElementById("dniUser").value = data[0].dniUser;
     }
         
 }
@@ -54,14 +54,14 @@ async function sendData(){
     emailUser = document.getElementById("emailUser").value;
     passUser = document.getElementById("passUser").value;
     rolUser = document.getElementById("rolUser").value;
-    encryptKeyUser = document.getElementById("encryptKeyUser").value;
+    dniUser = document.getElementById("dniUser").value;
 
     const modUser = {
         nameUser: nameUser,
         emailUser: emailUser,
         passUser: passUser,
         rolUser: rolUser,
-        encryptKeyUser: encryptKeyUser 
+        dniUser: dniUser 
     }
 
     const response = await fetch(URLSERVERModify + idHTML, {

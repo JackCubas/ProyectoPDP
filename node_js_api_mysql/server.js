@@ -649,9 +649,9 @@ app.post('/users', (req, res) => {
     // simple validation
     console.log("llega a create users");
     
-    const { nameUser, emailUser, passUser, rolUser, encryptKeyUser } = req.body || {};
+    const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
-    console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + encryptKeyUser);
+    console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + dniUser);
 
     if (!nameUser || nameUser.trim().length < 2) return res.status(400).json({ error: 'Nombre requerido (min 2 chars)' });
     if (!emailUser || !/^\S+@\S+\.\S+$/.test(emailUser)) return res.status(400).json({ error: 'Mail valido requerido' });
@@ -679,8 +679,8 @@ app.post('/users', (req, res) => {
         return res.status(500).json({ error: 'database connection error' });
       }
 
-      const sql = 'INSERT INTO users (nameUser, emailUser, passUser, rolUser, encryptKeyUser) VALUES ?';
-      const values = [[nameUser.trim(), emailUser.trim(), passEncrypt, rolUser, encryptKeyUser || null]];
+      const sql = 'INSERT INTO users (nameUser, emailUser, passUser, rolUser, dniUser) VALUES ?';
+      const values = [[nameUser.trim(), emailUser.trim(), passEncrypt, rolUser, dniUser || null]];
 
       console.log("llega a generar query users");
 
@@ -699,7 +699,7 @@ app.put('/users/:id', (req, res) => {
   console.log("update user!");
 
     const { id } = req.params;
-    const { nameUser, emailUser, passUser, rolUser, encryptKeyUser} = req.body;
+    const { nameUser, emailUser, passUser, rolUser, dniUser} = req.body;
 
     console.log(id + " - " + nameUser + " - " + emailUser + " - " + passUser);
 
@@ -723,7 +723,7 @@ app.put('/users/:id', (req, res) => {
       emailUser = "${emailUser}",
       passUser = "${passEncrypt}",
       rolUser = "${rolUser}",
-      encryptKeyUser = "${encryptKeyUser}" 
+      dniUser = "${dniUser}" 
       WHERE id = "${id}"
     `;
     con.query(sql, function (err, result) {

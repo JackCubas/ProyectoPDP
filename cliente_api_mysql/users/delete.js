@@ -55,7 +55,7 @@ function appendData(data){
             con.appendChild(h);
 
             var g=document.createElement("div")
-            g.textContent="Key: " + data[i].encryptKeyUser                      
+            g.textContent="DNI: " + data[i].dniUser                      
             con.appendChild(g);
         }
 }

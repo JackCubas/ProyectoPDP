@@ -21,7 +21,7 @@ async function sendData(){
     var emailUser = document.getElementById("emailUser").value;
     var passUser = document.getElementById("passUser").value;
     var passUserRepeat = document.getElementById("passUserRepeat").value;
-    var encryptKeyUser = document.getElementById("encryptKeyUser").value;
+    var dniUser = document.getElementById("dniUser").value;
     var rolUser = document.getElementById("rolUser").value;
 
     if (passUser !== passUserRepeat) {
@@ -46,7 +46,7 @@ async function sendData(){
                 nameUser: nameUser,
                 emailUser: emailUser,
                 passUser: passUser,
-                encryptKeyUser: encryptKeyUser,
+                dniUser: dniUser,
                 rolUser: rolUser
             }
 

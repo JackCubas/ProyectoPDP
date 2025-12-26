@@ -30,14 +30,14 @@ async function sendData(){
     var emailUser = document.getElementById("emailUser").value;
     var passUser = document.getElementById("passUser").value;
     var rolUser = document.getElementById("rolUser").value;
-    var encryptKeyUser = document.getElementById("encryptKeyUser").value;
+    var dniUser = document.getElementById("dniUser").value;
 
     const nuevoUsers = {
         nameUser: nameUser,
         emailUser: emailUser,
         passUser: passUser,
         rolUser: rolUser,
-        encryptKeyUser: encryptKeyUser
+        dniUser: dniUser
     }
 
     const apiCall = await fetch(URLSERVERCreate, {
