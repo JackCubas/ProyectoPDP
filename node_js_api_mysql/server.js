@@ -784,6 +784,7 @@ app.delete('/users/:id', (req, res) => {
 
     if (fs.existsSync(pathStamp)) {
     // delete the file on server after it sends to client
+      console.log("eliminando stamp");
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
       unlinkFile(pathStamp);
     }
@@ -791,8 +792,10 @@ app.delete('/users/:id', (req, res) => {
     if (fs.existsSync(pathCarpetaPDF)){
 
       if(fs.readdirSync(pathCarpetaPDF).length === 0){
-        fs.rmdir(pathCarpetaPDF)
+        console.log("eliminando carpeta vacia");
+        fs.rmdirSync(pathCarpetaPDF);
       }else{
+        console.log("eliminando carpeta no vacia");
         fs.rmSync(pathCarpetaPDF, { recursive: true, force: true });
       }
 
