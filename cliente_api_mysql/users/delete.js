@@ -38,6 +38,9 @@ var idHTML = datosURL[0].replace("id=","");
 var pageHTML = datosURL[1].replace("page=","");
 var newHTML = datosURL[2].replace("new=","");
 
+console.log("Current page: " + pageHTML);
+console.log("New page: " + newHTML);
+
 
 function appendData(data){
     var con=document.getElementById("main-container")
