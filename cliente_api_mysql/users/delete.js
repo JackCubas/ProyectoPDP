@@ -89,8 +89,8 @@ function onbuttonclicked() {
 
 async function sendData(){
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     const response = await fetch(URLSERVERDelete + idHTML, {
         method: "DELETE"
