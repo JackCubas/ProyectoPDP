@@ -10,7 +10,7 @@
             This is the signup page.
         </h1>
         <div class="create-blog content">
-            <form id="form" onsubmit="sendData()">
+            <form id="form">
                 <!-- action="/moviesCreate" method="POST"  -->
                 <lable for="nameUser">Name:</lable>
                 <input type="text" id="nameUser" name="nameUser" maxlength="50" minlength="2" required>
@@ -26,8 +26,10 @@
                 </select>
                 <lable for="dniUser">DNI:</lable>
                 <input type="text" pattern="[0-9]{8}[A-Za-z]{1}" id="dniUser" name="dniUser" maxlength="9" minlength="9" required>
-                <button>Submit</button>
             </form>
+            <div id="button-container">
+      
+            </div>
             <button onclick="location.href='../index.html'" type="button">Cancel</button>
         </div>
 

@@ -8,6 +8,15 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
 
 console.log("Entrando en el login");
 
+function checkUserHosting() {
+    var buttons = document.getElementById("button-container");
+
+    var buttonSub = document.createElement("button");
+    buttonSub.innerHTML = "Submit";
+    buttonSub.onclick = sendData;
+    buttons.appendChild(buttonSub);
+}
+
 async function sendData(){
 
 
@@ -15,12 +24,33 @@ async function sendData(){
     var passUser = document.getElementById("passUser").value;
     //?color1=red&color2=blue
 
-    const apiCall = await fetch(URLSERVERlogin + '?email=' + emailUser + '&pass=' + passUser)
-    const result = await apiCall.json();
+    //const apiCall = await fetch(URLSERVERlogin + '?email=' + emailUser + '&pass=' + passUser)
+    //const result = await apiCall.json();
     //console.log(apiCall);
     //console.log(result);
-    //alert("response"); 
-    checkData(result)    
+    //alert("response");
+    
+    return fetch(URLSERVERlogin + '?email=' + emailUser + '&pass=' + passUser, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+    .then((response) => {
+
+        if(response.status === 400 || response.status === 500 || response.status === 204){
+            alert("No se ha podido encontrar usuario");
+                //window.location.href = "../index.html";
+        }else{
+            return response.json().then((data) => {
+                return checkData(data);
+            }).catch((err) => {
+                console.log(err);
+            })           
+        } 
+
+    });
+   
 }
 
 function checkData(data){
@@ -53,3 +83,5 @@ function checkData(data){
     //localStorage.clear();
     window.location.href = "../index.html";
 }
+
+checkUserHosting();

@@ -13,6 +13,15 @@ if(datosURL.includes("?")){
     window.location.href = datosURLNuevo;
 }
 
+function checkUserHosting() {
+    var buttons = document.getElementById("button-container");
+
+    var buttonSub = document.createElement("button");
+    buttonSub.innerHTML = "Submit";
+    buttonSub.onclick = sendData;
+    buttons.appendChild(buttonSub);
+}
+
 async function sendData(){
 
     //event.preventDefault();
@@ -50,7 +59,7 @@ async function sendData(){
                 rolUser: rolUser
             }
 
-            const apiCall = await fetch(URLSERVERCreate, {
+            /*const apiCall = await fetch(URLSERVERCreate, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +73,32 @@ async function sendData(){
 
             alert("SignUp hecho correctamente");
 
-            window.location.href = "../index.html";
+            window.location.href = "../index.html";*/
+
+            return fetch(URLSERVERCreate, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(nuevoUsers)
+            })
+            .then((response) => { 
+                console.log(response);
+
+                if(response.status === 400 || response.status === 500){
+                    alert("No se ha podido crear usuario");
+                    window.location.href = "../index.html";
+                }else{
+                    console.log(response);
+                    alert("SignUp hecho correctamente");
+                    window.location.href = "../index.html"
+                    
+                } 
+
+            });
         }
     }
 }
+
+checkUserHosting();

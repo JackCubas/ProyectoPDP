@@ -870,7 +870,7 @@ app.get('/login', (req, res) => {
 
         const rows = Object.values(JSON.parse(JSON.stringify(result)));
         if (!rows || rows.length === 0){ 
-          return res.json({ user: 'FALSE' });
+          return res.status(204).json({ user: 'FALSE' });
         }
 
         if(rows.length > 0){
@@ -880,7 +880,7 @@ app.get('/login', (req, res) => {
           passUserDecrypt = decrypt(resultFinal.passUser);
 
           if(!passUserDecrypt || passUserDecrypt != userPass){
-            return res.json({ user: 'FALSE' });
+            return res.status(204).json({ user: 'FALSE' });
           }else{
             rows[0] = resultFinal;
           }

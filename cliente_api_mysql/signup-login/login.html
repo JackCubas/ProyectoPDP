@@ -10,14 +10,17 @@
             This is the login page.
         </h1>
         <div class="create-blog content">
-            <form id="form" onsubmit="sendData()">
+            <form id="form">
                 <!-- action="/moviesCreate" method="POST"  -->
                 <lable for="emailUser">Email:</lable>
                 <input type="text" id="emailUser" name="emailUser" maxlength="50" required>
                 <lable for="passUser">Pass:</lable>
                 <input type="password" id="passUser" name="passUser" maxlength="50" minlength="6" required>
-                <button>Submit</button>
             </form>
+            <div id="button-container">
+      
+            </div>
+
             <button onclick="location.href='../index.html'" type="button">Cancel</button>
         </div>
 
