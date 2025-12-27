@@ -12,14 +12,23 @@ if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
 }
 
+var URLString = window.location.href.split('?');
+var datosURL = URLString[1].split('&');
+var idHTML = datosURL[0].replace("id=","");
+
+if(idHTML === "" || isNaN(idHTML)){
+    window.location.href = 'table_pag.html?page=1';
+}
+
+var pageHTML = datosURL[1].replace("page=","");
+
 async function checkUserHosting() {
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
-
-    if(idHTML === "" || isNaN(idHTML)){
-        window.location.href = 'table_pag.html?page=1';
-    }
+    var buttons = document.getElementById("button-container");
+    var button = document.createElement("button");
+    button.innerHTML = "Cancel";
+    button.onclick = onbuttonclicked;
+    buttons.appendChild(button);
 
     console.log("return data");
     return fetch(URLSERVERretrieve + idHTML, {
@@ -30,7 +39,7 @@ async function checkUserHosting() {
 
          if(response.status === 400 || response.status === 500){
             alert("No se ha podido encontrar imagen estampado");
-            window.location.href = "table_pag.html?page=1";
+            window.location.href = "table_pag.html?page=" + pageHTML;
         }else{
 
             if(response.status === 204){
@@ -74,7 +83,14 @@ function generateWindow(blob){
     //document.body.appendChild(img);
     con.appendChild(img);
 
-    document.getElementById("createStamp").disabled = true;
+    document.getElementById("createStamp").disabled = true;  
+}
+
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table_pag.html?page=" + pageHTML;
+  }
 }
 
 async function deleteStamp(){
@@ -87,15 +103,15 @@ async function deleteStamp(){
         method: "DELETE"
     })
 
-    window.location.href = "table_pag.html?page=1";
+    const result = await response.json();
+    console.log(result);
+
+    window.location.href = "table_pag.html?page=" + pageHTML;
 
 }
 
 async function createStamp(){
     const URLSERVERUpload = "http://localhost:3000/create-stamp";
-
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
 
     var fileInput = document.getElementById('file');		
 	var filePath = fileInput.value;
@@ -166,10 +182,10 @@ async function createStamp(){
 
     if(result.status === 400 || result.status === 500){
         alert("No se ha podido crear stamp");
-        window.location.href = "table_pag.html?page=1";;
+        window.location.href = "table_pag.html?page=" + pageHTML;
     }else{
         alert("Finalizado procesamiento");
-        window.location.href = "table_pag.html?page=1";;
+        window.location.href = "table_pag.html?page=" + pageHTML;
     }
 
     

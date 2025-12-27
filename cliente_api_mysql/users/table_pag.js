@@ -139,7 +139,7 @@ function detail(event){
   var datosDetailString = idDetailString.replace(substringToRemove, '');
   var datosDetail = datosDetailString.split('-');
 
-  alert("DETAIL " + datosDetail[0] + " " + datosDetail[1] + " " + datosDetail[2]);
+  //alert("DETAIL " + datosDetail[0] + " " + datosDetail[1] + " " + datosDetail[2]);
 
   window.location.href = "detail.html?id=" + datosDetail[0] + "&page=" + datosDetail[1];
 }
@@ -152,9 +152,9 @@ function edit(event){
   var datosEditString = idEditString.replace(substringToRemove, '');
   var datosEdit = datosEditString.split('-');
 
-  alert("EDIT " + datosEdit[0] + " " + datosEdit[1] + " " + datosEdit[2]);
+  //alert("EDIT " + datosEdit[0] + " " + datosEdit[1] + " " + datosEdit[2]);
 
-  window.location.href = "modify.html?id=" + datosEdit[0];
+  window.location.href = "modify.html?id=" + datosEdit[0] + "&page=" + datosEdit[1];
 }
 
 function del(event){
@@ -195,9 +195,9 @@ function stamp(event){
   var datosStampString = idStampString.replace(substringToRemove, '');
   var datosStamp = datosStampString.split('-');
 
-  alert("STAMP " + datosStamp[0] + " " + datosStamp[1] + " " + datosStamp[2]);
+  //alert("STAMP " + datosStamp[0] + " " + datosStamp[1] + " " + datosStamp[2]);
 
-  window.location.href = "stamp.html?id=" + datosStamp[0];
+  window.location.href = "stamp.html?id=" + datosStamp[0] + "&page=" + datosStamp[1];
 }
 
 
