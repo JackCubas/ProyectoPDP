@@ -782,6 +782,8 @@ app.delete('/users/:id', (req, res) => {
     const pathCarpetaPDF  = CARPETAPDF + "/" + id;
     const pathStamp = CARPETASTAMP + "/" + id + '.png';
 
+    console.log(pathCarpetaPDF + " - " + pathStamp);
+
     if (fs.existsSync(pathStamp)) {
     // delete the file on server after it sends to client
       console.log("eliminando stamp");
@@ -802,6 +804,8 @@ app.delete('/users/:id', (req, res) => {
     }
 
     //-------------------------------------------
+
+    console.log("conectando para borrado");
 
     con = mysql.createConnection({
           host: DBHOST,
