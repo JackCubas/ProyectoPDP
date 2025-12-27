@@ -124,9 +124,13 @@ function buildTable(data, currentPageNum) {
       cell3.appendChild(buttonStamp);
     }
   }else{
-    const emptyRow = table.insertRow();
-    const cellempty = emptyRow.insertCell(0);
-    cellempty.textContent = "No users have been found"
+    //const emptyRow = table.insertRow();
+    //const cellempty = emptyRow.insertCell(0);
+    //cellempty.textContent = "No users have been found"
+
+    var newParagraph = document.createElement('p');
+    newParagraph.textContent = 'No users have been found';
+    main.append(newParagraph);
   }
 }
 

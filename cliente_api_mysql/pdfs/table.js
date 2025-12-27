@@ -34,6 +34,9 @@ function checkUserHosting() {
 }
 
 function buildTable(data) {
+
+  const main = document.getElementById("main-container");
+
   console.log(data);
   const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
   if(data !== null && data.length > 0){
@@ -88,9 +91,13 @@ function buildTable(data) {
       }
     }
   }else{
-    const emptyRow = table.insertRow();
-    const cellempty = emptyRow.insertCell(0);
-    cellempty.textContent = "No documents have been found"
+    //const emptyRow = table.insertRow();
+    //const cellempty = emptyRow.insertCell(0);
+    //cellempty.textContent = "No documents have been found"
+
+    var newParagraph = document.createElement('p');
+    newParagraph.textContent = 'No documents have been found';
+    main.append(newParagraph);
   }
 }
 
