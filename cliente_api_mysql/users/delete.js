@@ -69,6 +69,9 @@ async function sendData(){
         method: "DELETE"
     })
 
+    const result = await response.json();
+    console.log(result);
+
     //alert('status:', response.status);
 
     window.location.href = "table_pag.html?page=1";

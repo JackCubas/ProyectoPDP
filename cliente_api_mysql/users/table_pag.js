@@ -141,7 +141,7 @@ function detail(event){
 
   alert("DETAIL " + datosDetail[0] + " " + datosDetail[1] + " " + datosDetail[2]);
 
-  window.location.href = "detail.html?id=" + datosDetail[0];
+  window.location.href = "detail.html?id=" + datosDetail[0] + "&page=" + datosDetail[1];
 }
 
 function edit(event){

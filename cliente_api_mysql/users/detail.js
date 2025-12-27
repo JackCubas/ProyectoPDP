@@ -12,10 +12,12 @@ if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
 }
 
-function checkUserHosting() {
+var URLString = window.location.href.split('?');
+var datosURL = URLString[1].split('&');
+var idHTML = datosURL[0].replace("id=","");
+var pageHTML = datosURL[1].replace("page=","");
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+function checkUserHosting() {
 
     return fetch(URLSERVERdetail + idHTML)
         .then((response) => { 
@@ -29,30 +31,43 @@ function checkUserHosting() {
 }
 
 function appendData(data){
-        var con=document.getElementById("main-container")
-        for(let i=0;i<data.length;i++){
-            console.log(data[i]);
-            var d=document.createElement("div")
-            d.textContent="Name: " + data[i].nameUser                      
-            con.appendChild(d);
+    var con=document.getElementById("main-container")
+    for(let i=0;i<data.length;i++){
+        console.log(data[i]);
+        var d=document.createElement("div")
+        d.textContent="Name: " + data[i].nameUser                      
+        con.appendChild(d);
 
-            var e=document.createElement("div")
-            e.textContent="Email: " + data[i].emailUser                      
-            con.appendChild(e);
+        var e=document.createElement("div")
+        e.textContent="Email: " + data[i].emailUser                      
+        con.appendChild(e);
 
-            var f=document.createElement("div")
-            f.textContent="Pass: " + data[i].passUser                      
-            con.appendChild(f);
+        var f=document.createElement("div")
+        f.textContent="Pass: " + data[i].passUser                      
+        con.appendChild(f);
 
-            var h=document.createElement("div")
-            h.textContent="Rol: " + data[i].rolUser                      
-            con.appendChild(h);
+        var h=document.createElement("div")
+        h.textContent="Rol: " + data[i].rolUser                      
+        con.appendChild(h);
 
-            var g=document.createElement("div")
-            g.textContent="DNI: " + data[i].dniUser                                    
-            con.appendChild(g);
-        }
+        var g=document.createElement("div")
+        g.textContent="DNI: " + data[i].dniUser                                    
+        con.appendChild(g);
+    }
+
+    var buttons = document.getElementById("button-container");
+    var button = document.createElement("button");
+    button.innerHTML = "Cancel";
+    button.onclick = onbuttonclicked;
+    buttons.appendChild(button);   
 }
+
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table_pag.html?page=" + pageHTML;
+  }
+}    
 
 
 checkUserHosting();

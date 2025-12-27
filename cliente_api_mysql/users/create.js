@@ -16,9 +16,9 @@ if(datosUsuario.rolUser != "ADMIN"){
 //?prodId=34&price=34&quantity=34
 var datosURL = window.location.href;
 
-if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
+/*if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
     window.location.href = "table_pag.html?page=1";
-}
+}*/
 
 async function sendData(){
 
