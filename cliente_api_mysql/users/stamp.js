@@ -96,8 +96,8 @@ function onbuttonclicked() {
 async function deleteStamp(){
     const URLSERVERDelete = "http://localhost:3000/delete-stamp";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     const response = await fetch(URLSERVERDelete + '?userId=' + idHTML, {
         method: "DELETE"
