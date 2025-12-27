@@ -71,17 +71,17 @@ function buildPaginacion(data){
 function buildTable(data, currentPageNum) {
 
   const main = document.getElementById("main-container");
-  var newPage = currentPageNum;
+  /*var newPage = currentPageNum;
 
   if(data !== null && data.length > 0 && data.length === 10){
     newPage = currentPageNum + 1;
-  }
+  }*/
 
   var a = document.createElement('a');
   var linkText = document.createTextNode("Create");
   a.appendChild(linkText);
   a.title = "Create";
-  a.href = 'create.html';
+  a.href = 'create.html?page=' + currentPageNum;
   a.className = 'button';
   main.appendChild(a);
 

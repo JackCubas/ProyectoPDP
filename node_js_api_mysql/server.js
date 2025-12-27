@@ -555,6 +555,40 @@ app.get('/users', (req, res) => {
   }
 });
 
+app.get('/countUsers', (req, res) => {
+  console.log("counts all users!");
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+          connection.query("SELECT count(*) as total FROM users", function (err, result, fields) {
+              if (err) throw err;
+              
+              //console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              //console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+});
+
 app.get('/users_pag', (req, res) => {
   console.log("get all users del paginacion!");
 
