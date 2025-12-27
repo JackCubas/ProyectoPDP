@@ -166,7 +166,7 @@ function del(event){
   var datosDelString = idDelString.replace(substringToRemove, '');
   var datosDel = datosDelString.split('-');
 
-  alert("DEL " + datosDel[0] + " " + datosDel[1] + " " + datosDel[2]);
+  //alert("DEL " + datosDel[0] + " " + datosDel[1] + " " + datosDel[2]);
 
   if(!isNaN(datosDel[1]) && !isNaN(datosDel[2])){
 
@@ -179,11 +179,11 @@ function del(event){
       newPageNum = currentPageNum - 1;
     }
 
-    alert("nums: " + currentPageNum + " " + newPageNum + " " + numUsers);
+    //alert("nums: " + currentPageNum + " " + newPageNum + " " + numUsers);
 
   }
 
-  window.location.href = "delete.html?id=" + datosDel[0];
+  window.location.href = "delete.html?id=" + datosDel[0] + "&page=" + currentPageNum + "&new=" + newPageNum;
 }
 
 function stamp(event){
