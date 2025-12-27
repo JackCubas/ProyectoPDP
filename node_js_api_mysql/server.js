@@ -777,6 +777,28 @@ app.delete('/users/:id', (req, res) => {
 
     let con;
     const { id } = req.params;
+    //------------------------------------------
+
+    const pathCarpetaPDF  = CARPETAPDF + "/" + id;
+    const pathStamp = CARPETASTAMP + "/" + id + '.png';
+
+    if (fs.existsSync(pathStamp)) {
+    // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      unlinkFile(pathStamp);
+    }
+
+    if (fs.existsSync(pathCarpetaPDF)){
+
+      if(fs.readdirSync(pathCarpetaPDF).length === 0){
+        fs.rmdir(pathCarpetaPDF)
+      }else{
+        fs.rmSync(pathCarpetaPDF, { recursive: true, force: true });
+      }
+
+    }
+
+    //-------------------------------------------
 
     con = mysql.createConnection({
           host: DBHOST,
