@@ -863,7 +863,7 @@ async function borrarCarpetasPdfs(id, con){
 
 }
 
-function searchPDFsSignedStampedCarpeta(id, con){
+async function searchPDFsSignedStampedCarpeta(id, con){
 
   //var listaDocs = {};
 
