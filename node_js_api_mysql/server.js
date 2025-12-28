@@ -799,11 +799,13 @@ async function borrarUsuario(id, con){
   var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
   if(listaDocs !== null && listaDocs.length > 0){
     await borrarPDFsSignedStampedCarpeta(listaDocs);
+  }else{
+    console.log("no se han encontrado archivos firmados o estampados");
   }
 
   await borrarPdfsSignedBBDD(id, con);
   await borrarPdfsStampedBBDD(id, con);
-  
+
   var response = await borrarUsuarioBBDD(id, con);
   return response;
 
@@ -865,7 +867,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
     }
-    console.log("Connected!");
+    console.log("Connected to busqueda de las carpetas url!");
 
     let sql = `
       select urlCarpeta from pdfs 
@@ -928,7 +930,7 @@ async function borrarPdfsSignedBBDD(id, con){
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
     }
-    console.log("Connected!");
+    console.log("Connected to borrado signed bbdd!");
 
     var signUserId = null;
     var signTimestamp = null;
@@ -962,7 +964,7 @@ async function borrarPdfsStampedBBDD(id, con){
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
     }
-    console.log("Connected!");
+    console.log("Connected to borrado stamped bbdd!");
 
     var stampUserId = null;
     var stampTimestamp = null;
