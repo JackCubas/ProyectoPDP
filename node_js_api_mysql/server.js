@@ -795,14 +795,8 @@ app.delete('/users/:id', (req, res) => {
 async function borrarUsuario(id, con){
 
   var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
-  console.log("lista de docs:");
+  console.log("lista de docs explorado:");
   console.log(listaDocs);
-
-  if(listaDocs !== null && listaDocs.length > 0){
-    var responseBorrarCarpetaSignedStamp = await borrarPDFsSignedStampedCarpeta(listaDocs);
-  }else{
-    console.log("no se han encontrado archivos firmados o estampados");
-  }
 
   var responseBorrarCarpeta = await borrarCarpetasPdfs(id, con);
 
@@ -865,7 +859,7 @@ async function borrarCarpetasPdfs(id, con){
 
 async function searchPDFsSignedStampedCarpeta(id, con){
 
-  var listaDocs = "";
+  var toRet = true;
 
   con.connect(function(err) {
     if (err) {
@@ -878,7 +872,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       select urlCarpeta from pdfs 
       WHERE signUserId = "${id}" or stampUserId = "${id}"
     `;
-    con.query(sql, function (err, result) {
+    con.query(sql, async function (err, result) {
       if (err) {
         console.error('DB search error:', err);
         //return res.status(500).json({ error: 'database update error' });
@@ -886,13 +880,19 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       //console.log("1 record modified");
       console.log(result);
 
-      listaDocs = JSON.stringify(result);
+      var listaDocs = JSON.stringify(result);
+
+      if(listaDocs !== null && listaDocs.length > 0){
+        var responseBorrarCarpetaSignedStamp = await borrarPDFsSignedStampedCarpeta(listaDocs);
+      }else{
+        console.log("no se han encontrado archivos firmados o estampados");
+      }
 
       //res.json(result);
     });
 
   })
-  return listaDocs;
+  return toRet;
 }
 
 async function borrarPDFsSignedStampedCarpeta(listaDocs){
