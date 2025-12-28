@@ -682,8 +682,29 @@ app.get('/users/:id', (req, res) => {
 app.post('/users', (req, res) => {
     // simple validation
     console.log("llega a create users");
+
+    return insertUser(req, res); 
     
-    const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
+});
+
+async function insertUser(req, res){
+
+   var existe = await userExistsByEmail(req);
+
+   if(existe === true){
+    console.log("Usuario ya existe");
+    return res.status(400).json({ error: 'User ya existe' });
+   
+  } else {
+    console.log("Usuario no existe");
+    return await insertUserBBDD(req, res);
+   }
+  
+}
+
+async function insertUserBBDD(req, res){
+
+  const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
     console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + dniUser);
 
@@ -692,6 +713,8 @@ app.post('/users', (req, res) => {
     if (!passUser || passUser.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
     const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
     if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
+
+
 
     passEncrypt = encrypt(passUser);
 
@@ -726,7 +749,57 @@ app.post('/users', (req, res) => {
         return res.json(result);
       });
     });
-});
+
+}
+
+async function userExistsByEmail(req){
+
+  const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
+
+  var toRet = null;
+
+  console.log("checking if user email exists!");
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  await con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "SELECT * from users WHERE email = ?";
+
+    let values = [
+      [emailUser]
+    ]
+
+    con.query(sql, [values], function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+
+        if(resultRows.length === 0){
+          console.log("user does not exists!");
+          toRet = false;
+        }else{
+          console.log("user does exists!");
+          toRet = true;
+        }
+        
+    });
+    
+  });
+
+  return toRet;
+}
 
 app.put('/users/:id', (req, res) => {
 
@@ -771,6 +844,8 @@ app.put('/users/:id', (req, res) => {
   });
     
 });
+
+
 
 app.delete('/users/:id', (req, res) => {
     console.log("delete user!");
@@ -1123,50 +1198,6 @@ app.get('/users/checkUserEMail/:email', (req, res) => {
 
 
 });
-
-function userExistsByEmail(email){
-  console.log("checking if user exists!");
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
-
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-
-    let sql = "SELECT *  from users WHERE email = ?";
-
-    let values = [
-      [email]
-    ]
-
-    con.query(sql, [values], function (err, result, fields) {
-        if (err) throw err;
-        
-        console.log(result);
-
-        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-        console.log(resultRows);
-
-        if(resultRows.length == 0){
-          console.log("user does not exists!");
-          return false;
-        }else{
-          console.log("user does exists!");
-          return true;
-        }
-        
-    });
-    
-  });
-}
-
-
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
