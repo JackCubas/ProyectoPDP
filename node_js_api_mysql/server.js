@@ -815,25 +815,73 @@ app.delete('/users/:id', (req, res) => {
           database: DBNAME
     });
 
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
 
-    let sql = "DELETE FROM users WHERE id = ?";
-
-    let values = [
-      [id]
-    ]
-
-    con.query(sql, [values], function (err, result) {
+    con.connect(function(err) {
       if (err) throw err;
-      console.log("1 record deleted");
-      console.log(result);
+      console.log("Connected to borrado de pdfs del usuario");
 
-      res.json(result);
+      let sql = "DELETE FROM pdf WHERE userId = ?";
+
+      let values = [
+        [id]
+      ]
+
+      con.query(sql, [values], function (err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
+      
     });
-    
-  });
+
+    /*con.connect(function(err) {
+      if (err) {
+        console.error('DB connect error:', err);
+        return res.status(500).json({ error: 'database connection error' });
+      }
+      console.log("Connected!");
+
+      var signUserId = null;
+      var signTimestamp = null;
+
+      let sql = `
+        UPDATE pdfs 
+        SET signUserId = "${signUserId}", 
+        signTimestamp = "${signTimestamp}"
+        WHERE signUserId = "${id}"
+      `;
+      con.query(sql, function (err, result) {
+        if (err) {
+          console.error('DB update error:', err);
+          return res.status(500).json({ error: 'database update error' });
+        }
+        console.log("1 record modified");
+        console.log(result);
+
+        res.json(result);
+      });
+
+    })*/
+
+
+    con.connect(function(err) {
+      if (err) throw err;
+      console.log("Connected to borrado del usuario");
+
+      let sql = "DELETE FROM users WHERE id = ?";
+
+      let values = [
+        [id]
+      ]
+
+      con.query(sql, [values], function (err, result) {
+        if (err) throw err;
+        console.log("1 record deleted");
+        console.log(result);
+
+        res.json(result);
+      });
+      
+    });
 });
 
 
