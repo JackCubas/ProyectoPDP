@@ -867,7 +867,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
 
   //var listaDocs = {};
 
-  con.connect(function(err) {
+  return con.connect(function(err) {
     if (err) {
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
@@ -878,7 +878,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       select urlCarpeta from pdfs 
       WHERE signUserId = "${id}" or stampUserId = "${id}"
     `;
-    con.query(sql, function (err, result) {
+    return con.query(sql, function (err, result) {
       if (err) {
         console.error('DB search error:', err);
         //return res.status(500).json({ error: 'database update error' });
@@ -886,7 +886,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       //console.log("1 record modified");
       console.log(result);
 
-      return result;
+      return JSON.stringify(result);
 
       //res.json(result);
     });
