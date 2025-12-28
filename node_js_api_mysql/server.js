@@ -772,7 +772,7 @@ async function userExistsByEmail(req){
     if (err) throw err;
     console.log("Connected!");
 
-    let sql = "SELECT * from users WHERE email = ?";
+    let sql = "SELECT * from users WHERE emailUser = ?";
 
     let values = [
       [emailUser]
