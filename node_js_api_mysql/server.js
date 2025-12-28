@@ -908,8 +908,8 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
         urlCarpetaOriginal = listaDocs[i].urlCarpeta;
 
         urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
-        urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
-        urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
+        var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
+        var urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
 
         if (fs.existsSync(urlCarpetaSigned)) {
         // delete the file on server after it sends to client
