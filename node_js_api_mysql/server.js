@@ -1023,6 +1023,46 @@ app.get("/pdfs", cors(), (req, res) => {
 
 });
 
+app.get('/pdfs_pag', cors(), (req, res) => {
+  console.log("get all pdfs del paginacion!");
+
+  const page = req.query.page;
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id LIMIT 10";
+
+          if(page > 1){
+            sql = sql + " OFFSET " + ((page-1)*10);
+          }
+          console.log(sql);
+          connection.query(sql, function (err, result, fields) {
+              if (err) throw err;
+              
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              //console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+});
+
 app.get("/pdfsByUser/:userId", cors(), (req, res) => {
 
    console.log("get all pdfs for user!");
@@ -1068,6 +1108,46 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
       console.log("Error al conectar con la base de datos");
   }
 
+});
+
+app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
+  console.log("get all pdfs del paginacion del user!");
+
+  const page = req.query.page;
+
+  let connection;
+  var resultRows;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ? LIMIT 10";
+
+          if(page > 1){
+            sql = sql + " OFFSET " + ((page-1)*10);
+          }
+          console.log(sql);
+          connection.query(sql, function (err, result, fields) {
+              if (err) throw err;
+              
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              //console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
 });
 
 app.get("/pdfs/:id", cors(), (req, res) => {
