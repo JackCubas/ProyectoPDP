@@ -795,6 +795,15 @@ app.delete('/users/:id', (req, res) => {
 async function borrarUsuario(id, con){
 
   await borrarCarpetasPdfs(id, con);
+
+  var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
+  if(listaDocs !== null && listaDocs.length > 0){
+    await borrarPDFsSignedStampedCarpeta(listaDocs);
+  }
+
+  await borrarPdfsSignedBBDD(id, con);
+  await borrarPdfsStampedBBDD(id, con);
+  
   var response = await borrarUsuarioBBDD(id, con);
   return response;
 
@@ -847,14 +856,77 @@ async function borrarCarpetasPdfs(id, con){
 
 }
 
-async function borrarPdfsSignedStamped(id, con){
+async function searchPDFsSignedStampedCarpeta(id, con){
 
-  //------------------------------------------
+  var listaDocs = {};
 
-  /*await con.connect(function(err) {
+  await con.connect(function(err) {
     if (err) {
       console.error('DB connect error:', err);
-      return res.status(500).json({ error: 'database connection error' });
+      //return res.status(500).json({ error: 'database connection error' });
+    }
+    console.log("Connected!");
+
+    let sql = `
+      select urlCarpeta from pdfs 
+      WHERE signUserId = "${id}" or stampUserId = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) {
+        console.error('DB search error:', err);
+        //return res.status(500).json({ error: 'database update error' });
+      }
+      //console.log("1 record modified");
+      console.log(result);
+
+      listaDocs = result;
+
+      //res.json(result);
+    });
+
+  })
+  return listaDocs;
+}
+
+async function borrarPDFsSignedStampedCarpeta(listaDocs){
+
+  if(listaDocs !== null && listaDocs.length > 0){
+
+    console.log(listaDocs);
+
+    for (let i = 0; i < listaDocs.length; i++) {
+
+      urlCarpetaOriginal = listaDocs[i].urlCarpeta;
+
+      urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
+      urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
+      urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
+
+      if (fs.existsSync(urlCarpetaSigned)) {
+      // delete the file on server after it sends to client
+        console.log("eliminando pdf signed");
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        unlinkFile(urlCarpetaSigned);
+      }
+
+      if (fs.existsSync(urlCarpetaStamped)) {
+      // delete the file on server after it sends to client
+        console.log("eliminando pdf stamped");
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        unlinkFile(urlCarpetaStamped);
+      }
+
+    }
+
+  }
+}
+
+async function borrarPdfsSignedBBDD(id, con){
+
+  await con.connect(function(err) {
+    if (err) {
+      console.error('DB connect error:', err);
+      //return res.status(500).json({ error: 'database connection error' });
     }
     console.log("Connected!");
 
@@ -870,15 +942,49 @@ async function borrarPdfsSignedStamped(id, con){
     con.query(sql, function (err, result) {
       if (err) {
         console.error('DB update error:', err);
-        return res.status(500).json({ error: 'database update error' });
+        //return res.status(500).json({ error: 'database update error' });
       }
-      console.log("1 record modified");
+      console.log("pdf sign record modified");
       console.log(result);
 
-      res.json(result);
+      //res.json(result);
     });
 
-  })*/
+  })
+
+
+}
+
+async function borrarPdfsStampedBBDD(id, con){
+
+  await con.connect(function(err) {
+    if (err) {
+      console.error('DB connect error:', err);
+      //return res.status(500).json({ error: 'database connection error' });
+    }
+    console.log("Connected!");
+
+    var stampUserId = null;
+    var stampTimestamp = null;
+
+    let sql = `
+      UPDATE pdfs 
+      SET stampUserId = "${stampUserId}", 
+      stampTimestamp = "${stampTimestamp}"
+      WHERE stampUserId = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) {
+        console.error('DB update error:', err);
+        //return res.status(500).json({ error: 'database update error' });
+      }
+      console.log("pdf stamp record modified");
+      console.log(result);
+
+      //res.json(result);
+    });
+
+  })
 
 
 }
