@@ -777,33 +777,6 @@ app.delete('/users/:id', (req, res) => {
 
     let con;
     const { id } = req.params;
-    //------------------------------------------
-
-    const pathCarpetaPDF  = CARPETAPDF + "/" + id;
-    const pathStamp = CARPETASTAMP + "/" + id + '.png';
-
-    console.log(pathCarpetaPDF + " - " + pathStamp);
-
-    if (fs.existsSync(pathStamp)) {
-    // delete the file on server after it sends to client
-      console.log("eliminando stamp");
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      unlinkFile(pathStamp);
-    }
-
-    if (fs.existsSync(pathCarpetaPDF)){
-
-      if(fs.readdirSync(pathCarpetaPDF).length === 0){
-        console.log("eliminando carpeta vacia");
-        fs.rmdirSync(pathCarpetaPDF);
-      }else{
-        console.log("eliminando carpeta no vacia");
-        fs.rmSync(pathCarpetaPDF, { recursive: true, force: true });
-      }
-
-    }
-
-    //-------------------------------------------
 
     console.log("conectando para borrado");
 
@@ -815,74 +788,125 @@ app.delete('/users/:id', (req, res) => {
           database: DBNAME
     });
 
+    borrarUsuario(id, con);
 
-    con.connect(function(err) {
-      if (err) throw err;
-      console.log("Connected to borrado de pdfs del usuario");
-
-      let sql = "DELETE FROM pdfs WHERE userId = ?";
-
-      let values = [
-        [id]
-      ]
-
-      con.query(sql, [values], function (err, result) {
-        if (err) throw err;
-        console.log(result);
-      });
-      
-    });
-
-    /*con.connect(function(err) {
-      if (err) {
-        console.error('DB connect error:', err);
-        return res.status(500).json({ error: 'database connection error' });
-      }
-      console.log("Connected!");
-
-      var signUserId = null;
-      var signTimestamp = null;
-
-      let sql = `
-        UPDATE pdfs 
-        SET signUserId = "${signUserId}", 
-        signTimestamp = "${signTimestamp}"
-        WHERE signUserId = "${id}"
-      `;
-      con.query(sql, function (err, result) {
-        if (err) {
-          console.error('DB update error:', err);
-          return res.status(500).json({ error: 'database update error' });
-        }
-        console.log("1 record modified");
-        console.log(result);
-
-        res.json(result);
-      });
-
-    })*/
-
-
-    con.connect(function(err) {
-      if (err) throw err;
-      console.log("Connected to borrado del usuario");
-
-      let sql = "DELETE FROM users WHERE id = ?";
-
-      let values = [
-        [id]
-      ]
-
-      con.query(sql, [values], function (err, result) {
-        if (err) throw err;
-        console.log("1 record deleted");
-        console.log(result);
-
-        res.json(result);
-      });
-      
-    });
+    
 });
+
+async function borrarUsuario(id, con){
+
+  await borrarCarpetasPdfs(id, con);
+  var response = await borrarUsuarioBBDD(id, con);
+  return response;
+
+}
+
+async function borrarCarpetasPdfs(id, con){
+
+  const pathCarpetaPDF  = CARPETAPDF + "/" + id;
+  const pathStamp = CARPETASTAMP + "/" + id + '.png';
+
+  console.log(pathCarpetaPDF + " - " + pathStamp);
+
+  if (fs.existsSync(pathStamp)) {
+  // delete the file on server after it sends to client
+    console.log("eliminando stamp");
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathStamp);
+  }
+
+  if (fs.existsSync(pathCarpetaPDF)){
+
+    if(fs.readdirSync(pathCarpetaPDF).length === 0){
+      console.log("eliminando carpeta vacia");
+      fs.rmdirSync(pathCarpetaPDF);
+    }else{
+      console.log("eliminando carpeta no vacia");
+      fs.rmSync(pathCarpetaPDF, { recursive: true, force: true });
+    }
+
+  }
+
+  //-------------------------------------------
+
+  await con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to borrado de pdfs del usuario");
+
+    let sql = "DELETE FROM pdfs WHERE userId = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log(result);
+    });
+    
+  });
+
+}
+
+async function borrarPdfsSignedStamped(id, con){
+
+  //------------------------------------------
+
+  /*await con.connect(function(err) {
+    if (err) {
+      console.error('DB connect error:', err);
+      return res.status(500).json({ error: 'database connection error' });
+    }
+    console.log("Connected!");
+
+    var signUserId = null;
+    var signTimestamp = null;
+
+    let sql = `
+      UPDATE pdfs 
+      SET signUserId = "${signUserId}", 
+      signTimestamp = "${signTimestamp}"
+      WHERE signUserId = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) {
+        console.error('DB update error:', err);
+        return res.status(500).json({ error: 'database update error' });
+      }
+      console.log("1 record modified");
+      console.log(result);
+
+      res.json(result);
+    });
+
+  })*/
+
+
+}
+
+async function borrarUsuarioBBDD(id, con){
+
+  await con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to borrado del usuario");
+
+    let sql = "DELETE FROM users WHERE id = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log("1 record deleted");
+      console.log(result);
+
+      return result;
+    });
+    
+  });
+
+}
 
 
 app.get('/login', (req, res) => {
