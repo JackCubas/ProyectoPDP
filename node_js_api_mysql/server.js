@@ -863,11 +863,11 @@ async function borrarCarpetasPdfs(id, con){
 
 }
 
-async function searchPDFsSignedStampedCarpeta(id, con){
+function searchPDFsSignedStampedCarpeta(id, con){
 
   //var listaDocs = {};
 
-  await con.connect(function(err) {
+  con.connect(function(err) {
     if (err) {
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
