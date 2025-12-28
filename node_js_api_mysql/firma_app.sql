@@ -102,8 +102,8 @@ CREATE TABLE `pdfs` (
 
 -- Como son dentro de carpeta y no sacadas desde archivo, los valores los deje a dafault
 INSERT INTO `pdfs` (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, initialUploadTimestamp, uploadTimestamp, validatorId, validationTimestamp, stampUserId, stampTimestamp, signUserId, signTimestamp) VALUES
-(2, 'pdfPrueba1', './pdfBBDD/2/pdfPrueba1_2025_12_11_21_30_00.pdf', 'VALIDATED', 0, 0, NULL, "2025-12-11 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'pdfPrueba2', './pdfBBDD/2/pdfPrueba2_2025_12_10_21_30_00.pdf', 'PENDING', 0, 0, NULL, "2025-12-10 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'pdfPrueba1', './pdfBBDD/2/pdfPrueba1_2025_12_11_21_30_00.pdf', 'VALIDATED', 0, 0, NULL, "2025-12-11 21:30:00", NOW(), NULL, NULL, NULL, NULL, 1, "2025-12-28 16:54:37"),
+(2, 'pdfPrueba2', './pdfBBDD/2/pdfPrueba2_2025_12_10_21_30_00.pdf', 'PENDING', 0, 0, NULL, "2025-12-10 21:30:00", NOW(), NULL, NULL, 1, "2025-12-28 16:54:49", NULL, NULL),
 (2, 'pdfPrueba3', './pdfBBDD/2/pdfPrueba3_2025_12_09_21_30_00.pdf', 'PENDING', 0, 0, NULL, "2025-12-09 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
 (2, 'probandoPdf_4', './pdfBBDD/2/probandoPdf_4_2025_12_08_21_30_00.pdf', 'REJECTED', 0, 0, NULL, "2025-12-08 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 'probandoPdf5', './pdfBBDD/3/probandoPdf5_2025_12_07_21_30_00.pdf', 'VALIDATED', 0, 0, NULL, "2025-12-07 21:30:00", NOW(), NULL, NULL, NULL, NULL, NULL, NULL),
