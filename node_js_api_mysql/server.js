@@ -903,24 +903,27 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
 
     for (let i = 0; i < listaDocs.length; i++) {
 
-      urlCarpetaOriginal = listaDocs[i].urlCarpeta;
+      if(Object.hasOwn(listaDocs[i], 'urlCarpeta')){
 
-      urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
-      urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
-      urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
+        urlCarpetaOriginal = listaDocs[i].urlCarpeta;
 
-      if (fs.existsSync(urlCarpetaSigned)) {
-      // delete the file on server after it sends to client
-        console.log("eliminando pdf signed");
-        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-        unlinkFile(urlCarpetaSigned);
-      }
+        urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
+        urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
+        urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
 
-      if (fs.existsSync(urlCarpetaStamped)) {
-      // delete the file on server after it sends to client
-        console.log("eliminando pdf stamped");
-        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-        unlinkFile(urlCarpetaStamped);
+        if (fs.existsSync(urlCarpetaSigned)) {
+        // delete the file on server after it sends to client
+          console.log("eliminando pdf signed");
+          const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+          unlinkFile(urlCarpetaSigned);
+        }
+
+        if (fs.existsSync(urlCarpetaStamped)) {
+        // delete the file on server after it sends to client
+          console.log("eliminando pdf stamped");
+          const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+          unlinkFile(urlCarpetaStamped);
+        }
       }
 
     }
