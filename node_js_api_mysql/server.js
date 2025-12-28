@@ -865,9 +865,9 @@ async function borrarCarpetasPdfs(id, con){
 
 async function searchPDFsSignedStampedCarpeta(id, con){
 
-  //var listaDocs = {};
+  var listaDocs = "";
 
-  return con.connect(function(err) {
+  con.connect(function(err) {
     if (err) {
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
@@ -878,7 +878,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       select urlCarpeta from pdfs 
       WHERE signUserId = "${id}" or stampUserId = "${id}"
     `;
-    return con.query(sql, function (err, result) {
+    con.query(sql, function (err, result) {
       if (err) {
         console.error('DB search error:', err);
         //return res.status(500).json({ error: 'database update error' });
@@ -886,13 +886,13 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       //console.log("1 record modified");
       console.log(result);
 
-      return JSON.stringify(result);
+      listaDocs = JSON.stringify(result);
 
       //res.json(result);
     });
 
   })
-  //return listaDocs;
+  return listaDocs;
 }
 
 async function borrarPDFsSignedStampedCarpeta(listaDocs){
