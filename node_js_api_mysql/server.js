@@ -820,7 +820,7 @@ app.delete('/users/:id', (req, res) => {
       if (err) throw err;
       console.log("Connected to borrado de pdfs del usuario");
 
-      let sql = "DELETE FROM pdf WHERE userId = ?";
+      let sql = "DELETE FROM pdfs WHERE userId = ?";
 
       let values = [
         [id]
