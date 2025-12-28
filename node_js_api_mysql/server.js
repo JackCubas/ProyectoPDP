@@ -797,16 +797,17 @@ async function borrarUsuario(id, con){
   var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
   console.log("lista de docs:");
   console.log(listaDocs);
+
   if(listaDocs !== null && listaDocs.length > 0){
-    await borrarPDFsSignedStampedCarpeta(listaDocs);
+    var responseBorrarCarpetaSignedStamp = await borrarPDFsSignedStampedCarpeta(listaDocs);
   }else{
     console.log("no se han encontrado archivos firmados o estampados");
   }
 
-  await borrarCarpetasPdfs(id, con);
+  var responseBorrarCarpeta = await borrarCarpetasPdfs(id, con);
 
-  await borrarPdfsSignedBBDD(id, con);
-  await borrarPdfsStampedBBDD(id, con);
+  var responseBorrarSignedBBDD = await borrarPdfsSignedBBDD(id, con);
+  var responseBorrarStampedBBDD = await borrarPdfsStampedBBDD(id, con);
 
   var response = await borrarUsuarioBBDD(id, con);
   return response;
@@ -854,6 +855,8 @@ async function borrarCarpetasPdfs(id, con){
     con.query(sql, [values], function (err, result) {
       if (err) throw err;
       console.log(result);
+
+      return result;
     });
     
   });
@@ -862,7 +865,7 @@ async function borrarCarpetasPdfs(id, con){
 
 async function searchPDFsSignedStampedCarpeta(id, con){
 
-  var listaDocs = {};
+  //var listaDocs = {};
 
   await con.connect(function(err) {
     if (err) {
@@ -883,13 +886,13 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       //console.log("1 record modified");
       console.log(result);
 
-      listaDocs = result;
+      return result;
 
       //res.json(result);
     });
 
   })
-  return listaDocs;
+  //return listaDocs;
 }
 
 async function borrarPDFsSignedStampedCarpeta(listaDocs){
@@ -923,6 +926,8 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
     }
 
   }
+
+  return true;
 }
 
 async function borrarPdfsSignedBBDD(id, con){
@@ -952,6 +957,7 @@ async function borrarPdfsSignedBBDD(id, con){
       console.log(result);
 
       //res.json(result);
+      return result;
     });
 
   })
@@ -985,15 +991,16 @@ async function borrarPdfsStampedBBDD(id, con){
       console.log("pdf stamp record modified");
       console.log(result);
 
-      //res.json(result);
+      return result;
     });
 
   })
 
-
 }
 
 async function borrarUsuarioBBDD(id, con){
+
+  var toRet = null;
 
   await con.connect(function(err) {
     if (err) throw err;
@@ -1010,11 +1017,12 @@ async function borrarUsuarioBBDD(id, con){
       console.log("1 record deleted");
       console.log(result);
 
-      return result;
+      toRet = result;
+      return toRet;
     });
     
   });
-
+ 
 }
 
 
