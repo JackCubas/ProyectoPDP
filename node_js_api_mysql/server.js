@@ -795,6 +795,8 @@ app.delete('/users/:id', (req, res) => {
 async function borrarUsuario(id, con){
 
   var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
+  console.log("lista de docs:");
+  console.log(listaDocs);
   if(listaDocs !== null && listaDocs.length > 0){
     await borrarPDFsSignedStampedCarpeta(listaDocs);
   }else{
