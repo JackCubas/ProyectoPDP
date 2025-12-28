@@ -911,6 +911,8 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
         var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
         var urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
 
+        console.log("nombres de archivos stamp y sign: " + urlCarpetaSigned + " " + urlCarpetaStamped);
+
         if (fs.existsSync(urlCarpetaSigned)) {
         // delete the file on server after it sends to client
           console.log("eliminando pdf signed");
