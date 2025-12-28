@@ -794,14 +794,14 @@ app.delete('/users/:id', (req, res) => {
 
 async function borrarUsuario(id, con){
 
-  await borrarCarpetasPdfs(id, con);
-
   var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
   if(listaDocs !== null && listaDocs.length > 0){
     await borrarPDFsSignedStampedCarpeta(listaDocs);
   }else{
     console.log("no se han encontrado archivos firmados o estampados");
   }
+
+  await borrarCarpetasPdfs(id, con);
 
   await borrarPdfsSignedBBDD(id, con);
   await borrarPdfsStampedBBDD(id, con);
