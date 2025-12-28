@@ -864,7 +864,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
 
   var listaDocs = {};
 
-  await con.connect(function(err) {
+  con.connect(async function(err) {
     if (err) {
       console.error('DB connect error:', err);
       //return res.status(500).json({ error: 'database connection error' });
@@ -875,7 +875,7 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       select urlCarpeta from pdfs 
       WHERE signUserId = "${id}" or stampUserId = "${id}"
     `;
-    con.query(sql, function (err, result) {
+    await con.query(sql, function (err, result) {
       if (err) {
         console.error('DB search error:', err);
         //return res.status(500).json({ error: 'database update error' });
