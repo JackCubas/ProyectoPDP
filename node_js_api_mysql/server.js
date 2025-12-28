@@ -880,10 +880,10 @@ async function searchPDFsSignedStampedCarpeta(id, con){
       //console.log("1 record modified");
       console.log(result);
 
-      var listaDocs = JSON.stringify(result);
+      //var listaDocs = JSON.stringify(result);
 
-      if(listaDocs !== null && listaDocs.length > 0){
-        var responseBorrarCarpetaSignedStamp = await borrarPDFsSignedStampedCarpeta(listaDocs);
+      if(result !== null && result.length > 0){
+        var responseBorrarCarpetaSignedStamp = await borrarPDFsSignedStampedCarpeta(result);
       }else{
         console.log("no se han encontrado archivos firmados o estampados");
       }
