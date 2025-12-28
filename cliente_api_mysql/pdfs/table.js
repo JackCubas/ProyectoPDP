@@ -15,6 +15,7 @@ if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
 }
 
 if((datosUsuario.rolUser === "CLIENT")){
+  document.getElementById("filterPDF").setAttribute('hidden', "hidden");
   var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser/"
   URLSERVERgetall = URLSERVERgetallAux + datosUsuario.id
 }

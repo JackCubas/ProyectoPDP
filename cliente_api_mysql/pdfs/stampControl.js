@@ -8,9 +8,9 @@ if(localStorage.getItem("usuario") !== null){
     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
 }
 
-if(datosUsuario.rolUser != "ADMIN"){
+/*if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
-}
+}*/
 
 async function checkUserHosting() {
 
