@@ -788,9 +788,8 @@ app.delete('/users/:id', (req, res) => {
           database: DBNAME
     });
 
-    borrarUsuario(id, con);
-
-    
+    response = borrarUsuario(id, con);
+    res.json(response); 
 });
 
 async function borrarUsuario(id, con){
