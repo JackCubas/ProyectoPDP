@@ -697,46 +697,58 @@ async function insertUser(req, res){
         database: DBNAME
   });
 
+   /*var existe = await userExistsByEmail(req, con);
+
+   if(existe === true){
+    console.log("Usuario ya existe");
+    return res.status(400).json({ error: 'User ya existe' });
+   
+  } else {
+    console.log("Usuario no existe");
+    return await insertUserBBDD(req, res, con);
+   }*/
+
+/*getPromise1().then((val1) => {
+  console.log(val1);
+  return getPromise2(); //by returning Promise, you can avoid deep nesting
+}).then((val2) => {
+  console.log(val2);
+  return getPromise3();
+}).then((val3) => {
+  console.log(val3);
+});*/
+
+  await userExistsByEmail(req, con).then(async (toRet) => {
+    //toRet = false;
+    console.log("Consultado toRet");
+    console.log(toRet);
+
+    if((toRet !== null) && (typeof toRet !== "undefined")){
+      if(toRet === true){
+
+        return res.status(400).json({ error: 'Usuario ya existe' });
+
+      }else{
+        return await insertUserBBDD(req, res, con);
+      }
+    }else{
+      console.log("no da leido toRet");
+    }
+  })
+
+}
+
+async function insertUserBBDD(req, res, con){
+
   const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
-  console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + dniUser);
+    console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + dniUser);
 
-  if (!nameUser || nameUser.trim().length < 2) return res.status(400).json({ error: 'Nombre requerido (min 2 chars)' });
-  if (!emailUser || !/^\S+@\S+\.\S+$/.test(emailUser)) return res.status(400).json({ error: 'Mail valido requerido' });
-  if (!passUser || passUser.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
-  const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
-  if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
-
-  console.log("checking if user email exists!");
-  var existe = false;
-  let sql = `SELECT * from users WHERE emailUser = "${emailUser}"`;
-  try{
-    await con.promise().query(sql)
-      .then( ([rows,fields]) => {
-
-          var rowsObject = JSON.stringify(rows);
-          console.log("rows: " + rowsObject);
-          console.log("rows size: " + rowsObject.length);
-
-
-          if(rowsObject === null || rowsObject === "" || rowsObject.length < 3){
-            console.log("Usuario no existe");
-            existe = false;
-            return;
-          }else{
-            console.log("Usuario existe");
-            //res.status(400).json({ error: 'Usuario existe' });
-            existe = true;
-            return;
-          }
-      })
-  }catch(error){
-    console.log(error);
-  }
-
-  if(existe === true){
-    res.status(400).json({ error: 'Usuario existe' });
-  }else{
+    if (!nameUser || nameUser.trim().length < 2) return res.status(400).json({ error: 'Nombre requerido (min 2 chars)' });
+    if (!emailUser || !/^\S+@\S+\.\S+$/.test(emailUser)) return res.status(400).json({ error: 'Mail valido requerido' });
+    if (!passUser || passUser.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
+    const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
+    if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
 
     console.log("llega a encriptar users");
     passEncrypt = encrypt(passUser);
@@ -762,91 +774,121 @@ async function insertUser(req, res){
       });
     });
 
-  }
-
 }
 
+async function userExistsByEmail(req, con){
 
-app.put('/users/:id', (req, res) => {
+  const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
-  console.log("update user!");
-
-  return modifyUser(req, res);  
-});
-
-async function modifyUser(req, res){
-
-  const { id } = req.params;
-  const { nameUser, emailUser, passUser, rolUser, dniUser} = req.body;
-
-  console.log(id + " - " + nameUser + " - " + emailUser + " - " + passUser);
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
+  var toRet = false;
 
   console.log("checking if user email exists!");
-  var existe = false;
+
+  /*await con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = "SELECT * from users WHERE emailUser = ?";
+
+    let values = [
+      [emailUser]
+    ]
+
+    con.query(sql, [values], function (err, result, fields) {
+        if (err) throw err;
+        
+        console.log(result);
+
+        resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+        console.log(resultRows);
+
+        if(resultRows.length === 0){
+          console.log("user does not exists!");
+          toRet = false;
+          return false;
+        }else{
+          console.log("user does exists!");
+          toRet = true;
+          return true;
+        }
+        
+    });
+    
+  });*/
+
   let sql = `SELECT * from users WHERE emailUser = "${emailUser}"`;
+
   try{
     await con.promise().query(sql)
       .then( ([rows,fields]) => {
 
           var rowsObject = JSON.stringify(rows);
           console.log("rows: " + rowsObject);
-          console.log("rows size: " + rowsObject.length);
 
-
-          if(rowsObject === null || rowsObject === "" || rowsObject.length < 3){
-            console.log("Usuario no existe");
-            existe = false;
-            return;
+          if(rowsObject === null || rowsObject === ""){
+            console.log("Object is empty");
+            toRet = false;
           }else{
-            console.log("Usuario existe");
-            //res.status(400).json({ error: 'Usuario existe' });
-            existe = true;
-            return;
+            toRet = true;
           }
-      })
-  }catch(error){
-    console.log(error);
-  }
 
-  if(existe === true){
-    res.status(400).json({ error: 'Usuario existe' });
-  }else{
+          
+          //console.log("fields: " + Object.values(JSON.parse(JSON.stringify(fields))));
+
+          //toRet = rows['total'];
+          //return toRet;
+      })
+    }catch(error){
+      console.log(error);
+    }
+
+  console.log("returning toRet");  
+  return toRet;
+}
+
+app.put('/users/:id', (req, res) => {
+
+  console.log("update user!");
+
+    const { id } = req.params;
+    const { nameUser, emailUser, passUser, rolUser, dniUser} = req.body;
+
+    console.log(id + " - " + nameUser + " - " + emailUser + " - " + passUser);
 
     passEncrypt = encrypt(req.body.passUser);
 
-    con.connect(function(err) {
-      if (err) throw err;
-      console.log("Connected!");
-
-      let sqlModify = `
-        UPDATE users 
-        SET nameUser = "${nameUser}", 
-        emailUser = "${emailUser}",
-        passUser = "${passEncrypt}",
-        rolUser = "${rolUser}",
-        dniUser = "${dniUser}" 
-        WHERE id = "${id}"
-      `;
-      con.query(sqlModify, function (err, result) {
-        if (err) throw err;
-        console.log("1 record modified");
-        console.log(result);
-
-        res.json(result);
-      });
-      
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
     });
 
-  }
-}
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    let sql = `
+      UPDATE users 
+      SET nameUser = "${nameUser}", 
+      emailUser = "${emailUser}",
+      passUser = "${passEncrypt}",
+      rolUser = "${rolUser}",
+      dniUser = "${dniUser}" 
+      WHERE id = "${id}"
+    `;
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("1 record modified");
+      console.log(result);
+
+      res.json(result);
+    });
+    
+  });
+    
+});
 
 
 
