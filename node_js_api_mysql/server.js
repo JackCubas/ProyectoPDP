@@ -689,7 +689,15 @@ app.post('/users', (req, res) => {
 
 async function insertUser(req, res){
 
-   var existe = await userExistsByEmail(req);
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+   var existe = await userExistsByEmail(req, con);
 
    if(existe === true){
     console.log("Usuario ya existe");
@@ -697,12 +705,12 @@ async function insertUser(req, res){
    
   } else {
     console.log("Usuario no existe");
-    return await insertUserBBDD(req, res);
+    return await insertUserBBDD(req, res, con);
    }
   
 }
 
-async function insertUserBBDD(req, res){
+async function insertUserBBDD(req, res, con){
 
   const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
@@ -719,14 +727,6 @@ async function insertUserBBDD(req, res){
     passEncrypt = encrypt(passUser);
 
     console.log("llega a encriptar users");
-
-    const con = mysql.createConnection({
-          host: DBHOST,
-          user: DBUSER,
-          password: DBPASS,
-          port     :DBPORT,
-          database: DBNAME
-    });
 
     console.log("llega a conectar users");
 
@@ -752,21 +752,13 @@ async function insertUserBBDD(req, res){
 
 }
 
-async function userExistsByEmail(req){
+async function userExistsByEmail(req, con){
 
   const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
   var toRet = null;
 
   console.log("checking if user email exists!");
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
 
   await con.connect(function(err) {
     if (err) throw err;
