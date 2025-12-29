@@ -707,6 +707,16 @@ async function insertUser(req, res){
     console.log("Usuario no existe");
     return await insertUserBBDD(req, res, con);
    }
+
+/*getPromise1().then((val1) => {
+  console.log(val1);
+  return getPromise2(); //by returning Promise, you can avoid deep nesting
+}).then((val2) => {
+  console.log(val2);
+  return getPromise3();
+}).then((val3) => {
+  console.log(val3);
+});*/
   
 }
 
