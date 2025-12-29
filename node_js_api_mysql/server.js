@@ -697,7 +697,7 @@ async function insertUser(req, res){
         database: DBNAME
   });
 
-   var existe = await userExistsByEmail(req, con);
+   /*var existe = await userExistsByEmail(req, con);
 
    if(existe === true){
     console.log("Usuario ya existe");
@@ -706,7 +706,7 @@ async function insertUser(req, res){
   } else {
     console.log("Usuario no existe");
     return await insertUserBBDD(req, res, con);
-   }
+   }*/
 
 /*getPromise1().then((val1) => {
   console.log(val1);
@@ -717,7 +717,25 @@ async function insertUser(req, res){
 }).then((val3) => {
   console.log(val3);
 });*/
-  
+
+  await userExistsByEmail(req, con).then(async (toRet) => {
+    toRet = false;
+    console.log("Consultado toRet");
+    console.log(toRet);
+
+    if((toRet !== null) && (typeof toRet !== "undefined")){
+      if(toRet === true){
+
+        return res.status(400).json({ error: 'Usuario ya existe' });
+
+      }else{
+        return insertUserBBDD(req, res, con);
+      }
+    }else{
+      console.log("no da leido toRet");
+    }
+  })
+
 }
 
 async function insertUserBBDD(req, res, con){
@@ -732,14 +750,10 @@ async function insertUserBBDD(req, res, con){
     const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
     if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
 
-
-
+    console.log("llega a encriptar users");
     passEncrypt = encrypt(passUser);
 
-    console.log("llega a encriptar users");
-
     console.log("llega a conectar users");
-
     con.connect(function(err) {
       if (err) {
         console.error('DB connect error:', err);
@@ -766,11 +780,11 @@ async function userExistsByEmail(req, con){
 
   const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
-  var toRet = null;
+  var toRet = false;
 
   console.log("checking if user email exists!");
 
-  await con.connect(function(err) {
+  /*await con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 
@@ -791,15 +805,44 @@ async function userExistsByEmail(req, con){
         if(resultRows.length === 0){
           console.log("user does not exists!");
           toRet = false;
+          return false;
         }else{
           console.log("user does exists!");
           toRet = true;
+          return true;
         }
         
     });
     
-  });
+  });*/
 
+  let sql = `SELECT * from users WHERE emailUser = "${emailUser}"`;
+
+  try{
+    await con.promise().query(sql)
+      .then( ([rows,fields]) => {
+
+          var rowsObject = JSON.stringify(rows);
+          console.log("rows: " + rowsObject);
+
+          if(rowsObject === null || rowsObject === ""){
+            console.log("Object is empty");
+            toRet = false;
+          }else{
+            toRet = true;
+          }
+
+          
+          //console.log("fields: " + Object.values(JSON.parse(JSON.stringify(fields))));
+
+          //toRet = rows['total'];
+          //return toRet;
+      })
+    }catch(error){
+      console.log(error);
+    }
+
+  console.log("returning toRet");  
   return toRet;
 }
 
@@ -3274,5 +3317,3 @@ app.get('/one-movie', (req, res) => {
 //---------------------------------------------------
 //----------------------------------------------------
 //----------------------------------------------------
-
-
