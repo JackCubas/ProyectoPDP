@@ -1345,6 +1345,7 @@ app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
 
   let connection;
   var resultRows;
+  const { userId } = req.params;
 
   try {
       connection = mysql.createConnection({
@@ -1363,8 +1364,13 @@ app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
           if(page > 1){
             sql = sql + " OFFSET " + ((page-1)*10);
           }
+
+          let values = [
+            [userId]
+          ]
+
           console.log(sql);
-          connection.query(sql, function (err, result, fields) {
+          connection.query(sql,[values], function (err, result, fields) {
               if (err) throw err;
               
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));

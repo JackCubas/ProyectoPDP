@@ -73,7 +73,7 @@ function appendData(){
 function onbuttonclicked() {
   //"location.href='table_pag.html?page=' + pageHTML";
   if (onbuttonclicked) {
-    window.location.href = "table_pag.html?page=" + pageHTML;
+    window.location.href = "table.html?page=" + pageHTML;
   }
 }
 
