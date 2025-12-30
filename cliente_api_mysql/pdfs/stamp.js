@@ -274,18 +274,19 @@ async function sendData(){
             window.location.href = "table.html?page=" + pageHTML;
         }else{
 
-            return response.blob().then((data) => {
+            alert("Se ha podido crear documento estampado");
+            window.location.href = "table.html?page=" + pageHTML;
+
+            /*return response.blob().then((data) => {
                 console.log(data);
                 return generateWindow(data);
             }).catch((err) => {
                 console.log(err);
-            })
+            })*/
         } 
 
 
     });
-
-    window.location.href = "table.html?page=" + pageHTML;
 
 }
 
