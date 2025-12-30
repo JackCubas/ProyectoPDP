@@ -1251,6 +1251,53 @@ app.get("/pdfs", cors(), (req, res) => {
 
 });
 
+app.get('/countPDFs/:userId', (req, res) => {
+  console.log("counts all docs!");
+
+  let connection;
+  var resultRows;
+
+  const { userId } = req.params;
+  var numId = null;
+
+  var sql = "SELECT count(*) as total FROM pdfs"
+
+  if(!isNaN(userId)){
+    numId = parseInt(userId)
+  }
+
+  if(numId > 0){
+    sql = sql + " where userId = " + userId;
+  }
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+          
+          connection.query(sql, function (err, result, fields) {
+              if (err) throw err;
+              
+              //console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              //console.log(resultRows);
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+  }
+});
+
 app.get('/pdfs_pag', cors(), (req, res) => {
   console.log("get all pdfs del paginacion!");
 

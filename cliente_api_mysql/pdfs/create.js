@@ -1,5 +1,5 @@
 var datosUsuario = null;
-//const URLSERVERCount = "http://localhost:3000/countPDFs";
+var URLSERVERCount = "";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
@@ -9,13 +9,21 @@ if(localStorage.getItem("usuario") !== null){
     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
 }
 
+if((datosUsuario.rolUser === "CLIENT")){
+    //document.getElementById("filterPDF").setAttribute('hidden', "hidden");
+    var URLSERVERcountAux = "http://localhost:3000/countPDFs/"
+    URLSERVERCount = URLSERVERcountAux + datosUsuario.id
+}else{
+    var URLSERVERcountAux = "http://localhost:3000/countPDFs/"
+    URLSERVERCount = URLSERVERcountAux + 0
+}
+
 var pageHTML = "1";
 var newHTML = 1;
 
 var datosURL = window.location.href.split('?');
 var pageHTML = datosURL[1].replace("page=","");
 
-/*
 function checkUserHosting() {
 
     return fetch(URLSERVERCount)
@@ -28,31 +36,26 @@ function checkUserHosting() {
         });
 
 }
-*/
 
-function appendData(){
-    //console.log("Numero total de usuarios: ");
-    //console.log(data);
 
-    /*
+function appendData(data){
+    console.log("Numero total de docs: ");
+    console.log(data);
 
-    var totalUsuarios = data[0].total;
-    var usuariosDeci = totalUsuarios/10;
+    var totalDocs = data[0].total;
+    var docsDeci = totalDocs/10;
 
-    console.log("Numero total de usuarios: " + totalUsuarios);
+    console.log("Numero total de docs: " + totalDocs);
 
-    if(!Number.isInteger(usuariosDeci)){
+    if(!Number.isInteger(docsDeci)){
         //pageHTML = Math.ceil(totalUsuarios/10);
-        newHTML = Math.ceil(totalUsuarios/10);
+        newHTML = Math.ceil(totalDocs/10);
     }
 
-    if(Number.isInteger(usuariosDeci) && usuariosDeci > 1){
+    if(Number.isInteger(docsDeci) && docsDeci > 1){
         //pageHTML = Math.ceil(totalUsuarios/10);
-        newHTML = Math.ceil(totalUsuarios/10) + 1;
+        newHTML = Math.ceil(totalDocs/10) + 1;
     }
-
-    */
-
 
     console.log("Current page: " + pageHTML);
     console.log("New page: " + newHTML);
@@ -124,4 +127,4 @@ async function sendData(){
 
 }
 
-appendData();
+checkUserHosting();
