@@ -11,10 +11,25 @@ var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";
 
+var URLString = window.location.href.split('?');
+var datosURL = URLString[1].split('&');
+var idHTML = datosURL[0].replace("id=","");
+
+/*if(idHTML === "" || isNaN(idHTML)){
+    window.location.href = 'table_pag.html?page=1';
+}*/
+
+var pageHTML = datosURL[1].replace("page=","");
+var newHTML = datosURL[2].replace("new=","");
+
+console.log("Current page: " + pageHTML);
+console.log("New page: " + newHTML);
+
+
 async function returnData() {
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
@@ -85,7 +100,20 @@ function appendData(data){
         h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
         con.appendChild(h);
     }
+
+    var buttons = document.getElementById("button-container");
+    var button = document.createElement("button");
+    button.innerHTML = "Cancel";
+    button.onclick = onbuttonclicked;
+    buttons.appendChild(button);
     console.log("finalizado generacion de ventana");
+}
+
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table.html?page=" + pageHTML;
+  }
 }
 
 function generateWindow(response){
@@ -97,9 +125,9 @@ function generateWindow(response){
 
 function checkUserHosting(){
 
-    var idHTML = null;
-    var datosURL = window.location.href.split('?');
-    idHTML = datosURL[1].replace("id=","");
+    //var idHTML = null;
+    //var datosURL = window.location.href.split('?');
+    //idHTML = datosURL[1].replace("id=","");
 
     if(idHTML === null || idHTML === ""){
         window.location.href = "table.html";
@@ -117,8 +145,8 @@ checkUserHosting();
 
 async function sendData(){
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     //console.log(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName);
 
@@ -129,6 +157,6 @@ async function sendData(){
         method: "DELETE"
     })
 
-    window.location.href = "table.html";
+    window.location.href = "table.html?page=" + newHTML;
 
 }
