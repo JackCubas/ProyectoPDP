@@ -10,7 +10,7 @@
     <h1>
         This is the create page.
     </h1>
-    <form onsubmit="sendData()" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+    <form accept-charset="utf-8" enctype="multipart/form-data">
         <div class="formgroup container-fluid">
             <label for="name">Name</label>
             <input id="name" type="text" name="name" maxlength="50" required/>
@@ -20,8 +20,13 @@
         </p>
         <input type="file" id="file" />
     </form>
-    <button onclick=sendData()>Submit</button>
-    <button onclick="location.href='table.html'" type="button">Cancel</button>
+    <!--<button onclick=sendData()>Submit</button>
+    <button onclick="location.href='table.html'" type="button">Cancel</button>-->
+
+    <div id="button-container">
+      
+    </div>
+
 <script src="create.js"></script>
 </body>
 </html>

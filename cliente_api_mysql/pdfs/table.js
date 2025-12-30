@@ -15,7 +15,7 @@ if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
 }
 
 if((datosUsuario.rolUser === "CLIENT")){
-  document.getElementById("filterPDF").setAttribute('hidden', "hidden");
+  //document.getElementById("filterPDF").setAttribute('hidden', "hidden");
   var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser_pag/"
   URLSERVERgetall = URLSERVERgetallAux + datosUsuario.id
 }
@@ -75,6 +75,37 @@ function buildPaginacion(data){
 function buildTable(data, currentPageNum) {
 
   const main = document.getElementById("main-container");
+
+  var a = document.createElement('a');
+  var linkTexta = document.createTextNode("Create");
+  a.appendChild(linkTexta);
+  a.title = "Create";
+  a.id = "createPDF";
+  a.href = 'create.html?page=' + currentPageNum;
+  a.className = 'button';
+  main.appendChild(a);
+
+  var b = document.createElement('a');
+  var linkTextb = document.createTextNode("Filter");
+  b.appendChild(linkTextb);
+  b.title = "Filter";
+  b.id = "filterPDF";
+  b.href = "filter.html";
+  b.className = 'button';
+  main.appendChild(b);
+
+  if((datosUsuario.rolUser === "CLIENT")){
+    document.getElementById("filterPDF").setAttribute('hidden', "hidden");
+  }  
+
+  var c = document.createElement('a');
+  var linkTextc = document.createTextNode("Stamp Control");
+  c.appendChild(linkTextc);
+  c.title = "Stamp Control";
+  c.id = "stampControl";
+  c.href = "stampControl.html";
+  c.className = 'button';
+  main.appendChild(c);
 
   console.log(data);
   const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
