@@ -1281,7 +1281,7 @@ app.get('/pdfs_pag', cors(), (req, res) => {
               if (err) throw err;
               
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-              //console.log(resultRows);
+              console.log(resultRows);
               res.json(resultRows);
           });
       });
@@ -1368,7 +1368,7 @@ app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
               if (err) throw err;
               
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-              //console.log(resultRows);
+              console.log(resultRows);
               res.json(resultRows);
           });
       });

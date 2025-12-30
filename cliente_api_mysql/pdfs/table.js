@@ -11,30 +11,68 @@ if(localStorage.getItem("usuario") !== null){
 }
 
 if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
-  URLSERVERgetall = "http://localhost:3000/pdfs"
+  URLSERVERgetall = "http://localhost:3000/pdfs_pag"
 }
 
 if((datosUsuario.rolUser === "CLIENT")){
   document.getElementById("filterPDF").setAttribute('hidden', "hidden");
-  var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser/"
+  var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser_pag/"
   URLSERVERgetall = URLSERVERgetallAux + datosUsuario.id
 }
 
+var datosURL = window.location.href.split('?');
+var page = datosURL[1].replace("page=","");
+
 function checkUserHosting() {
-    return fetch(URLSERVERgetall)
+    return fetch(URLSERVERgetall + '?page=' + page)
         .then((response) => { 
             return response.json().then((data) => {
                 //return appendData(data);
-                return buildTable(data);
+                return buildVentana(data);
             }).catch((err) => {
                 console.log(err);
-                return buildTable(null);
+                return buildVentana(null);
             }) 
         });
 
 }
 
-function buildTable(data) {
+function buildVentana(data){
+  console.log(data);
+  var currentPageNum = buildPaginacion(data);
+  buildTable(data, currentPageNum);
+
+}
+
+
+function buildPaginacion(data){
+  const linkPrev  = document.getElementById("pagePrev");
+  const linkNext  = document.getElementById("pageNext");
+
+  pageNum = parseInt(page);
+  pageNumPrev = pageNum - 1;
+  pageNumNext = pageNum + 1;
+
+  console.log("pageNum " + pageNum);
+  console.log("prev " + pageNumPrev);
+  console.log("next" + pageNumNext);
+  
+  if(pageNumPrev == 0){
+    linkPrev.href = '#';
+  }else{
+    linkPrev.href="table.html?page=" + pageNumPrev;
+  }
+
+  if(data != null && data.length < 10){
+    linkNext.href = '#';
+  }else{
+    linkNext.href="table.html?page=" + pageNumNext;
+  }
+  
+  return pageNum;
+}
+
+function buildTable(data, currentPageNum) {
 
   const main = document.getElementById("main-container");
 
@@ -54,38 +92,38 @@ function buildTable(data) {
       const butID = data[i].pdfId;
 
       const buttonDetail = document.createElement('button');
-      buttonDetail.id = "detailbutton" + butID;
+      buttonDetail.id = "detailbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonDetail.textContent = "Detail";
       buttonDetail.addEventListener('click', detail);
       cell3.appendChild(buttonDetail);
 
       const buttonEdit = document.createElement('button');
-      buttonEdit.id = "editbutton" + butID;
+      buttonEdit.id = "editbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonEdit.textContent = "Edit";
       buttonEdit.addEventListener('click', edit);
       cell3.appendChild(buttonEdit);
 
       const buttonDel = document.createElement('button');
-      buttonDel.id = "delbutton" + butID;
+      buttonDel.id = "delbutton" + butID + "-" + currentPageNum + "-" + data.length;
       buttonDel.textContent = "Delete";
       buttonDel.addEventListener('click', del);
       cell3.appendChild(buttonDel);
 
       if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
         const buttonSign = document.createElement('button');
-        buttonSign.id = "signbutton" + butID;
+        buttonSign.id = "signbutton" + butID + "-" + currentPageNum + "-" + data.length;
         buttonSign.textContent = "Sign";
         buttonSign.addEventListener('click', sign);
         cell3.appendChild(buttonSign);
 
         const buttonStamp = document.createElement('button');
-        buttonStamp.id = "stampbutton" + butID;
+        buttonStamp.id = "stampbutton" + butID + "-" + currentPageNum + "-" + data.length;
         buttonStamp.textContent = "Stamp";
         buttonStamp.addEventListener('click', stamp);
         cell3.appendChild(buttonStamp);
 
         const buttonFD = document.createElement('button');
-        buttonFD.id = "FDbutton" + butID;
+        buttonFD.id = "FDbutton" + butID + "-" + currentPageNum + "-" + data.length;
         buttonFD.textContent = "FD";
         buttonFD.addEventListener('click', firmadoDigital);
         cell3.appendChild(buttonFD);
@@ -108,11 +146,12 @@ function detail(event){
 
   var idDetailString = event.target.id;
   const substringToRemove = "detailbutton";
-  const idDetail = idDetailString.replace(substringToRemove, '');
+  var datosDetailString = idDetailString.replace(substringToRemove, '');
+  var datosDetail = datosDetailString.split('-');
 
   //alert("DETAIL " + idDetail);
 
-  window.location.href = "detail.html?id=" + idDetail;
+  window.location.href = "detail.html?id=" + datosDetail[0];
 }
 
 function edit(event){
@@ -120,11 +159,12 @@ function edit(event){
 
   var idEditString = event.target.id;
   const substringToRemove = "editbutton";
-  const idEdit = idEditString.replace(substringToRemove, '');
+  var datosEditString = idEditString.replace(substringToRemove, '');
+  var datosEdit = datosEditString.split('-');
 
   //alert("EDIT " + idEdit);
 
-  window.location.href = "modify.html?id=" + idEdit;
+  window.location.href = "modify.html?id=" + datosEdit[0];
 }
 
 function del(event){
@@ -133,37 +173,54 @@ function del(event){
 
   var idDelString = event.target.id;
   const substringToRemove = "delbutton";
-  const idDel = idDelString.replace(substringToRemove, '');
+  var datosDelString = idDelString.replace(substringToRemove, '');
+  var datosDel = datosDelString.split('-');
+
+  if(!isNaN(datosDel[1]) && !isNaN(datosDel[2])){
+
+    var currentPageNum = parseInt(datosDel[1]);
+    var numUsers = parseInt(datosDel[2]);
+
+    var newPageNum = currentPageNum;
+
+    if(numUsers === 1 && currentPageNum > 1){
+      newPageNum = currentPageNum - 1;
+    }
+  }
+
 
   //alert("DEL " + idDel);
 
-  window.location.href = "delete.html?id=" + idDel;
+  window.location.href = "delete.html?id=" + datosDel[0];
 }
 
 function sign(event) {
   var idSignString = event.target.id;
   const substringToRemove = "signbutton";
-  const idSign = idSignString.replace(substringToRemove, '');
+  var datosSignString = idSignString.replace(substringToRemove, '');
+  var datosSign = datosSignString.split('-');
 
   //alert("Sign: " + idSign);
 
-  window.location.href = "sign.html?id=" + idSign;
+  window.location.href = "sign.html?id=" + datosSign[0];
 }
 
 function stamp(event) {
   var idStampString = event.target.id;
   const substringToRemove = "stampbutton";
-  const idStamp = idStampString.replace(substringToRemove, '');
+  var datosStampString = idStampString.replace(substringToRemove, '');
+  var datosStamp = datosStampString.split('-');
 
-  window.location.href = "stamp.html?id=" + idStamp;
+  window.location.href = "stamp.html?id=" + datosStamp[0];
 }
 
 function firmadoDigital(event) {
   var idFirmadoDigital = event.target.id;
   const substringToRemove = "FDbutton";
-  const idFD = idFirmadoDigital.replace(substringToRemove, '');
+  var idFDString = idFirmadoDigital.replace(substringToRemove, '');
+  var datosFD = idFDString.split('-');
 
-  alert("Firmado digital: " + idFD);
+  alert("Firmado digital: " + datosFD[0]);
 
   //window.location.href = "firmadoDigital.html?id=" + idFD;
 }
