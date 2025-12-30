@@ -27,10 +27,20 @@ var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";
 
+var URLString = window.location.href.split('?');
+var datosURL = URLString[1].split('&');
+var idHTML = datosURL[0].replace("id=","");
+
+/*if(idHTML === "" || isNaN(idHTML)){
+    window.location.href = 'table_pag.html?page=1';
+}*/
+
+var pageHTML = datosURL[1].replace("page=","");
+
 async function returnDataOriginal() {
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
@@ -93,8 +103,8 @@ function appendDataOriginal(data){
 async function returnDataStamp() {
     const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     //console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
@@ -109,6 +119,26 @@ async function returnDataStamp() {
 }
 
 function appendDataStamp(data){
+
+    var buttons = document.getElementById("button-container");
+
+    var buttonSub = document.createElement("button");
+    buttonSub.innerHTML = "Submit";
+    buttonSub.id = "submit";
+    buttonSub.onclick = sendData;
+    buttons.appendChild(buttonSub);
+    
+    var buttonDel = document.createElement("button");
+    buttonDel.innerHTML = "Delete";
+    buttonDel.id = "delete";
+    buttonDel.onclick =  deleteDocument;
+    buttons.appendChild(buttonDel);
+
+    var buttonCan = document.createElement("button");
+    buttonCan.innerHTML = "Cancel";
+    buttonCan.onclick = onbuttonclicked;
+    buttons.appendChild(buttonCan);
+
     var con=document.getElementById("main-container");
     if(data.length !== 0){
         
@@ -162,6 +192,13 @@ function appendDataStamp(data){
     //console.log("finalizado generacion de ventana");
 }
 
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table.html?page=" + pageHTML;
+  }
+}
+
 function generateWindow(response){
     console.log(response);
 
@@ -173,12 +210,12 @@ function generateWindow(response){
 
 function checkUserHosting(){
 
-    var idHTML = null;
-    var datosURL = window.location.href.split('?');
-    idHTML = datosURL[1].replace("id=","");
+    //var idHTML = null;
+    //var datosURL = window.location.href.split('?');
+    //idHTML = datosURL[1].replace("id=","");
 
     if(idHTML === null || idHTML === ""){
-        window.location.href = "table.html";
+        window.location.href = "table.html?page=1";
     }else{
 
         returnDataOriginal().then(() => {
@@ -194,8 +231,8 @@ checkUserHosting();
 
 async function sendData(){
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     var checkbox = document.getElementById('timeStampCheck');
 
@@ -234,7 +271,7 @@ async function sendData(){
 
         if(response.status === 400 || response.status === 500){
             alert("No se ha podido crear documento estampado");
-            window.location.href = "table.html";
+            window.location.href = "table.html?page=" + pageHTML;
         }else{
 
             return response.blob().then((data) => {
@@ -248,7 +285,7 @@ async function sendData(){
 
     });
 
-    window.location.href = "table.html";
+    window.location.href = "table.html?page=" + pageHTML;
 
 }
 
@@ -257,12 +294,12 @@ async function deleteDocument(){
 
     const URLSERVERDelete = "http://localhost:3000/eliminateDocStamp";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId + '&initialTimestampName=' + initialTimestampName, {
         method: "DELETE"
     })
 
-    window.location.href = "table.html";
+    window.location.href = "table.html?page=" + pageHTML;
 }

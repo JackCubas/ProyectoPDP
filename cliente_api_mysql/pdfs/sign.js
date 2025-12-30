@@ -133,6 +133,16 @@ document.addEventListener('DOMContentLoaded', function () {
 const signatureCanvas = document.getElementById("signature-pad");
 const signaturePad = new SignaturePad(signatureCanvas);
 
+var URLString = window.location.href.split('?');
+var datosURL = URLString[1].split('&');
+var idHTML = datosURL[0].replace("id=","");
+
+/*if(idHTML === "" || isNaN(idHTML)){
+    window.location.href = 'table_pag.html?page=1';
+}*/
+
+var pageHTML = datosURL[1].replace("page=","");
+
 // Function to save the signature as an image and insert it into the PDF.
 async function saveSignatureAndInsertIntoPDF() {
     const signatureDataUrl = signaturePad.toDataURL("image/png");
@@ -228,10 +238,12 @@ function downloadModifiedPDF(modifiedPDFBytes) {
     document.body.removeChild(downloadLink);
 }
 
+
+
 async function sendData(modifiedPDFBytes){
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     //var array = modifiedPDFBytes.toBase64();
 
@@ -263,15 +275,15 @@ async function sendData(modifiedPDFBytes){
 
     //const result = await apiCall.json();
     //console.log(result);
-    window.location.href = "table.html";
+    window.location.href = "table.html?page=" + pageHTML;
 
 }
 
 async function returnDataOriginal() {
     const URLSERVERdetail = "http://localhost:3000/pdfs/";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     //console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
@@ -308,8 +320,8 @@ function appendDataOriginal(data){
 async function returnDataSign() {
     const URLSERVERdetail = "http://localhost:3000/pdfSign/";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     //console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
@@ -404,12 +416,12 @@ async function deleteDocument(){
 
     const URLSERVERDelete = "http://localhost:3000/eliminateDocSign";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId + '&initialTimestampName=' + initialTimestampName, {
         method: "DELETE"
     })
 
-    window.location.href = "table.html";
+    window.location.href = "table.html?page=" + pageHTML;
 }
