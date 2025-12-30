@@ -152,7 +152,7 @@ function detail(event){
 
   //alert("DETAIL " + idDetail);
 
-  window.location.href = "detail.html?id=" + idDetail;
+  window.location.href = "detail.html?id=" + idDetail + "&page=1";
 }
 
 function edit(event){
@@ -164,7 +164,7 @@ function edit(event){
 
   //alert("EDIT " + idEdit);
 
-  window.location.href = "modify.html?id=" + idEdit;
+  window.location.href = "modify.html?id=" + idEdit + "&page=1";
 }
 
 function del(event){
@@ -177,7 +177,7 @@ function del(event){
 
   //alert("DEL " + idDel);
 
-  window.location.href = "delete.html?id=" + idDel;
+  window.location.href = "delete.html?id=" + idDel + "&page=1&new=1";
 }
 
 function sign(event) {
@@ -187,7 +187,7 @@ function sign(event) {
 
   //alert("Sign: " + idSign);
 
-  window.location.href = "sign.html?id=" + idSign;
+  window.location.href = "sign.html?id=" + idSign + "&page=1";
 }
 
 function stamp(event) {
@@ -195,7 +195,7 @@ function stamp(event) {
   const substringToRemove = "stampbutton";
   const idStamp = idStampString.replace(substringToRemove, '');
 
-  window.location.href = "stamp.html?id=" + idStamp;
+  window.location.href = "stamp.html?id=" + idStamp + "&page=1";
 }
 
 function firmadoDigital(event) {
