@@ -48,6 +48,9 @@ function appendData(data){
     let parent = document.getElementById("mytable").getElementsByTagName('tbody')[0];
     empty(parent);
 
+    const mainParent = document.getElementById("main-container");
+    empty(mainParent);
+
     const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
 
     const main = document.getElementById("main-container");
