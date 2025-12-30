@@ -101,6 +101,11 @@ function appendData(data){
         con.appendChild(h);
     }
 
+    var buttonSub = document.createElement("button");
+    buttonSub.innerHTML = "Submit";
+    buttonSub.onclick = sendData;
+    buttons.appendChild(buttonSub);  
+
     var buttons = document.getElementById("button-container");
     var button = document.createElement("button");
     button.innerHTML = "Cancel";
