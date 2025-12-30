@@ -101,17 +101,17 @@ function appendData(data){
         con.appendChild(h);
     }
 
+    var buttons = document.getElementById("button-container");
+
     var buttonSub = document.createElement("button");
     buttonSub.innerHTML = "Submit";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);  
 
-    var buttons = document.getElementById("button-container");
-    var button = document.createElement("button");
-    button.innerHTML = "Cancel";
-    button.onclick = onbuttonclicked;
-    buttons.appendChild(button);
-    console.log("finalizado generacion de ventana");
+    var buttonCan = document.createElement("button");
+    buttonCan.innerHTML = "Cancel";
+    buttonCan.onclick = onbuttonclicked;
+    buttons.appendChild(buttonCan); 
 }
 
 function onbuttonclicked() {
