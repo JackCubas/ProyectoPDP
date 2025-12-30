@@ -15,10 +15,20 @@ var thisDocName = "";
 var userId = null;
 var initialTimestampName = "";
 
+var URLString = window.location.href.split('?');
+var datosURL = URLString[1].split('&');
+var idHTML = datosURL[0].replace("id=","");
+
+/*if(idHTML === "" || isNaN(idHTML)){
+    window.location.href = 'table_pag.html?page=1';
+}*/
+
+var pageHTML = datosURL[1].replace("page=","");
+
 async function returnData() {
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     console.log("return data");
     return fetch(URLSERVERdetail + idHTML)
@@ -68,7 +78,26 @@ function appendData(data){
     if(data && data.length != 0){
         document.getElementById("name").value = data[0].DocName;
         document.getElementById("docEstado").value = data[0].estado;
-    }     
+    }
+    
+    var buttons = document.getElementById("button-container");
+
+    var buttonSub = document.createElement("button");
+    buttonSub.innerHTML = "Submit";
+    buttonSub.onclick = sendData;
+    buttons.appendChild(buttonSub);  
+
+    var buttonCan = document.createElement("button");
+    buttonCan.innerHTML = "Cancel";
+    buttonCan.onclick = onbuttonclicked;
+    buttons.appendChild(buttonCan); 
+}
+
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table.html?page=" + pageHTML;
+  }
 }
 
 
@@ -91,8 +120,8 @@ checkUserHosting();
 async function sendData(){
     const URLSERVERmodifypdf = "http://localhost:3000/modify-pdf/";
 
-    var datosURL = window.location.href.split('?');
-    var idHTML = datosURL[1].replace("id=","");
+    //var datosURL = window.location.href.split('?');
+    //var idHTML = datosURL[1].replace("id=","");
 
     var projectName = document.getElementById("name").value;
     var file = document.getElementById("file").files[0];
@@ -143,6 +172,6 @@ async function sendData(){
         console.log(result);
     }
 
-    window.location.href = "table.html";
+    window.location.href = "table.html?page=" + pageHTML;
 
 }
