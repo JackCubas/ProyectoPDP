@@ -540,7 +540,7 @@ app.get('/users', (req, res) => {
       connection.connect(function(err) {
           if (err) throw err;
           
-          connection.query("SELECT * FROM users", function (err, result, fields) {
+          connection.query("SELECT id, nameUser, rolUser FROM users", function (err, result, fields) {
               if (err) throw err;
               
               //console.log(result);
@@ -610,7 +610,7 @@ app.get('/users_pag', (req, res) => {
       connection.connect(function(err) {
           if (err) throw err;
 
-          var sql = "SELECT * FROM users LIMIT 10";
+          var sql = "SELECT id, nameUser, rolUser FROM users LIMIT 10";
 
           if(page > 1){
             sql = sql + " OFFSET " + ((page-1)*10);
