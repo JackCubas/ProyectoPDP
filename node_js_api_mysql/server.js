@@ -822,7 +822,7 @@ async function modifyUser(req, res){
 
   console.log("checking if user email exists!");
   var existe = false;
-  let sql = `SELECT * from users WHERE emailUser = "${decryptedEmailString}"`;
+  let sql = `SELECT * from users WHERE emailUser = "${decryptedEmailString}" and id not in ("${id}")`;
   try{
     await con.promise().query(sql)
       .then( ([rows,fields]) => {
