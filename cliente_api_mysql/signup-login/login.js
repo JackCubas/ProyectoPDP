@@ -22,6 +22,10 @@ async function sendData(){
 
     var emailUser = document.getElementById("emailUser").value;
     var passUser = document.getElementById("passUser").value;
+
+    var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
+    var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
+
     //?color1=red&color2=blue
 
     //const apiCall = await fetch(URLSERVERlogin + '?email=' + emailUser + '&pass=' + passUser)
@@ -29,12 +33,20 @@ async function sendData(){
     //console.log(apiCall);
     //console.log(result);
     //alert("response");
+
+    const loginUsers = {
+        userEmail: emailCrypt,
+        userPass: passCrypt,
+    }
     
-    return fetch(URLSERVERlogin + '?email=' + emailUser + '&pass=' + passUser, {
-        method: "GET",
+    return fetch(URLSERVERlogin, {
+        //method: "GET",
+        method: "POST",
         headers: {
+            "Content-Type": "application/json",
             "Accept": "application/json"
-        }
+        },
+        body: JSON.stringify(loginUsers)
     })
     .then((response) => {
 

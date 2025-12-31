@@ -1120,15 +1120,29 @@ async function borrarUsuarioBBDD(id, con){
 }
 
 
-app.get('/login', (req, res) => {
-  const userEmail = req.query.email;
-  const userPass = req.query.pass;
+app.post('/login', (req, res) => {
+  //const userEmail = req.query.email;
+  //const userPass = req.query.pass;
 
-  if (!userEmail || !/^\S+@\S+\.\S+$/.test(userEmail) || !userPass) {
+  const { userEmail, userPass} = req.body || {};
+
+  if (!userEmail || !userPass) {
     return res.status(400).json({ error: 'email y contra son requeridos' });
   }
 
   console.log("email: " + userEmail + " userPass: " + userPass);
+
+  var decryptedEmail = CryptoJS.AES.decrypt(userEmail, "firma_app");
+  var decryptedEmailString = decryptedEmail.toString(CryptoJS.enc.Utf8);
+
+  var decryptedPass = CryptoJS.AES.decrypt(userPass, "firma_app");
+  var decryptedPassStringRecieved = decryptedPass.toString(CryptoJS.enc.Utf8);
+
+  console.log("emailDecrypt: " + decryptedEmailString + " userPassDecrypt: " + decryptedPassStringRecieved);
+
+  if(!/^\S+@\S+\.\S+$/.test(decryptedEmailString)){
+    return res.status(400).json({ error: 'email y contra son requeridos' });
+  }
 
   const con = mysql.createConnection({
         host: DBHOST,
@@ -1145,7 +1159,7 @@ app.get('/login', (req, res) => {
     }
 
     const sql = 'SELECT * FROM users WHERE emailUser = ?';
-    con.query(sql, [userEmail.trim()], function (err, result) {
+    con.query(sql, [decryptedEmailString.trim()], function (err, result) {
         if (err) {
           console.error('DB query error:', err);
           return res.status(500).json({ error: 'database query error' });
@@ -1162,7 +1176,7 @@ app.get('/login', (req, res) => {
           console.log(resultFinal);
           passUserDecrypt = decrypt(resultFinal.passUser);
 
-          if(!passUserDecrypt || passUserDecrypt != userPass){
+          if(!passUserDecrypt || passUserDecrypt != decryptedPassStringRecieved){
             return res.status(204).json({ user: 'FALSE' });
           }else{
             rows[0] = resultFinal;
