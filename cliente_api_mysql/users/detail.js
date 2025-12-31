@@ -39,11 +39,15 @@ function appendData(data){
         con.appendChild(d);
 
         var e=document.createElement("div")
-        e.textContent="Email: " + data[i].emailUser                      
+        var decryptedEmail = CryptoJS.AES.decrypt(data[i].emailUser, "firma_app");
+        var decryptedEmailString = decryptedEmail.toString(CryptoJS.enc.Utf8);
+        e.textContent="Email: " + decryptedEmailString                      
         con.appendChild(e);
 
         var f=document.createElement("div")
-        f.textContent="Pass: " + data[i].passUser                      
+        var decryptedPass = CryptoJS.AES.decrypt(data[i].passUser, "firma_app");
+        var decryptedPassString = decryptedPass.toString(CryptoJS.enc.Utf8);
+        f.textContent="Pass: " + decryptedPassString                      
         con.appendChild(f);
 
         var h=document.createElement("div")
@@ -51,7 +55,9 @@ function appendData(data){
         con.appendChild(h);
 
         var g=document.createElement("div")
-        g.textContent="DNI: " + data[i].dniUser                                    
+        var decryptedDNI = CryptoJS.AES.decrypt(data[i].dniUser, "firma_app");
+        var decryptedDNIString = decryptedDNI.toString(CryptoJS.enc.Utf8);
+        g.textContent="DNI: " + decryptedDNIString                      
         con.appendChild(g);
     }
 

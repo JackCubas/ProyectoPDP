@@ -665,11 +665,20 @@ app.get('/users/:id', (req, res) => {
         resultRows = Object.values(JSON.parse(JSON.stringify(result)));
         
         if(resultRows.length > 0){
-          //console.log(resultRows);
           resultFinal = resultRows[0];
-          //console.log(resultFinal);
-          resultFinal.passUser = decrypt(resultFinal.passUser);
-          //console.log(resultFinal);
+
+          var passBBDD = decrypt(resultFinal.passUser);
+          var passCrypt = CryptoJS.AES.encrypt(passBBDD, "firma_app").toString();
+          resultFinal.passUser = passCrypt;
+
+          var emailBBDD = resultFinal.emailUser;
+          var emailCrypt = CryptoJS.AES.encrypt(emailBBDD, "firma_app").toString();
+          resultFinal.emailUser = emailCrypt;
+
+          var dniBBDD = resultFinal.dniUser;
+          var dniCrypt = CryptoJS.AES.encrypt(dniBBDD, "firma_app").toString();
+          resultFinal.dniUser = dniCrypt;
+
           resultRows[0] = resultFinal;
         }
 

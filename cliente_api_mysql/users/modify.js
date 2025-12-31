@@ -40,10 +40,20 @@ function checkUserHosting() {
 function appendData(data){
     if(data && data.length != 0){
         document.getElementById("nameUser").value = data[0].nameUser;
-        document.getElementById("emailUser").value = data[0].emailUser;
-        document.getElementById("passUser").value = data[0].passUser;
+
+        var decryptedEmail = CryptoJS.AES.decrypt(data[0].emailUser, "firma_app");
+        var decryptedEmailString = decryptedEmail.toString(CryptoJS.enc.Utf8);
+        document.getElementById("emailUser").value = decryptedEmailString;
+
+        var decryptedPass = CryptoJS.AES.decrypt(data[0].passUser, "firma_app");
+        var decryptedPassString = decryptedPass.toString(CryptoJS.enc.Utf8);
+        document.getElementById("passUser").value = decryptedPassString;
+
         document.getElementById("rolUser").value = data[0].rolUser;
-        document.getElementById("dniUser").value = data[0].dniUser;
+
+        var decryptedDNI = CryptoJS.AES.decrypt(data[0].dniUser, "firma_app");
+        var decryptedDNIString = decryptedDNI.toString(CryptoJS.enc.Utf8);
+        document.getElementById("dniUser").value = decryptedDNIString;
     }
 
     var buttons = document.getElementById("button-container");
