@@ -58,6 +58,7 @@ const assert = require('assert');
 const { PDFDocument } = require('pdf-lib');
 const { degrees, rgb, StandardFonts } = require('pdf-lib');
 const { Jimp } = require("jimp");
+const CryptoJS = require("crypto-js");
 //const gm = require('gm');
 
 //---------------------------------
@@ -699,17 +700,27 @@ async function insertUser(req, res){
 
   const { nameUser, emailUser, passUser, rolUser, dniUser } = req.body || {};
 
+  var decryptedEmail = CryptoJS.AES.decrypt(emailUser, "firma_app");
+  var decryptedEmailString = decryptedEmail.toString(CryptoJS.enc.Utf8);
+
+  var decryptedPass = CryptoJS.AES.decrypt(passUser, "firma_app");
+  var decryptedPassString = decryptedPass.toString(CryptoJS.enc.Utf8);
+
+  var decryptedDNI = CryptoJS.AES.decrypt(dniUser, "firma_app");
+  var decryptedDNIString = decryptedDNI.toString(CryptoJS.enc.Utf8);
+
   console.log(nameUser + "," + emailUser + "," + passUser + "," + rolUser + "," + dniUser);
+  console.log(decryptedEmailString + "," + decryptedPassString + "," + decryptedDNIString);
 
   if (!nameUser || nameUser.trim().length < 2) return res.status(400).json({ error: 'Nombre requerido (min 2 chars)' });
-  if (!emailUser || !/^\S+@\S+\.\S+$/.test(emailUser)) return res.status(400).json({ error: 'Mail valido requerido' });
-  if (!passUser || passUser.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
+  if (!decryptedEmailString || !/^\S+@\S+\.\S+$/.test(decryptedEmailString)) return res.status(400).json({ error: 'Mail valido requerido' });
+  if (!decryptedPassString || decryptedPassString.length < 6) return res.status(400).json({ error: 'Contraseña requerida (min 6 chars)' });
   const allowedRoles = ['ADMIN', 'CLIENT', 'FIRMA'];
   if (!rolUser || !allowedRoles.includes(rolUser)) return res.status(400).json({ error: 'Rol invalido' });
 
   console.log("checking if user email exists!");
   var existe = false;
-  let sql = `SELECT * from users WHERE emailUser = "${emailUser}"`;
+  let sql = `SELECT * from users WHERE emailUser = "${decryptedEmailString}"`;
   try{
     await con.promise().query(sql)
       .then( ([rows,fields]) => {
@@ -739,7 +750,7 @@ async function insertUser(req, res){
   }else{
 
     console.log("llega a encriptar users");
-    passEncrypt = encrypt(passUser);
+    passEncrypt = encrypt(decryptedPassString);
 
     console.log("llega a conectar users");
     con.connect(function(err) {
@@ -749,7 +760,7 @@ async function insertUser(req, res){
       }
 
       const sql = 'INSERT INTO users (nameUser, emailUser, passUser, rolUser, dniUser) VALUES ?';
-      const values = [[nameUser.trim(), emailUser.trim(), passEncrypt, rolUser, dniUser || null]];
+      const values = [[nameUser.trim(), decryptedEmailString.trim(), passEncrypt, rolUser, decryptedDNIString || null]];
 
       console.log("llega a generar query users");
 

@@ -50,12 +50,17 @@ async function sendData(){
             //event.stopPropagation();
 
             //return false;
-        }else{    
+        }else{
+            
+            var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
+            var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
+            var dniCrypt = CryptoJS.AES.encrypt(dniUser, "firma_app").toString();
+
             const nuevoUsers = {
                 nameUser: nameUser,
-                emailUser: emailUser,
-                passUser: passUser,
-                dniUser: dniUser,
+                emailUser: emailCrypt,
+                passUser: passCrypt,
+                dniUser: dniCrypt,
                 rolUser: rolUser
             }
 
