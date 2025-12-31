@@ -790,7 +790,18 @@ async function modifyUser(req, res){
   const { id } = req.params;
   const { nameUser, emailUser, passUser, rolUser, dniUser} = req.body;
 
+  var decryptedEmail = CryptoJS.AES.decrypt(emailUser, "firma_app");
+  var decryptedEmailString = decryptedEmail.toString(CryptoJS.enc.Utf8);
+
+  var decryptedPass = CryptoJS.AES.decrypt(passUser, "firma_app");
+  var decryptedPassString = decryptedPass.toString(CryptoJS.enc.Utf8);
+
+  var decryptedDNI = CryptoJS.AES.decrypt(dniUser, "firma_app");
+  var decryptedDNIString = decryptedDNI.toString(CryptoJS.enc.Utf8);
+
   console.log(id + " - " + nameUser + " - " + emailUser + " - " + passUser);
+  console.log(decryptedEmailString + "," + decryptedPassString + "," + decryptedDNIString);
+
 
   con = mysql.createConnection({
         host: DBHOST,
@@ -802,7 +813,7 @@ async function modifyUser(req, res){
 
   console.log("checking if user email exists!");
   var existe = false;
-  let sql = `SELECT * from users WHERE emailUser = "${emailUser}"`;
+  let sql = `SELECT * from users WHERE emailUser = "${decryptedEmailString}"`;
   try{
     await con.promise().query(sql)
       .then( ([rows,fields]) => {
@@ -831,7 +842,7 @@ async function modifyUser(req, res){
     res.status(400).json({ error: 'Usuario existe' });
   }else{
 
-    passEncrypt = encrypt(req.body.passUser);
+    passEncrypt = encrypt(decryptedPassString);
 
     con.connect(function(err) {
       if (err) throw err;
@@ -840,10 +851,10 @@ async function modifyUser(req, res){
       let sqlModify = `
         UPDATE users 
         SET nameUser = "${nameUser}", 
-        emailUser = "${emailUser}",
+        emailUser = "${decryptedEmailString}",
         passUser = "${passEncrypt}",
         rolUser = "${rolUser}",
-        dniUser = "${dniUser}" 
+        dniUser = "${decryptedDNIString}" 
         WHERE id = "${id}"
       `;
       con.query(sqlModify, function (err, result) {

@@ -79,12 +79,16 @@ async function sendData(){
     rolUser = document.getElementById("rolUser").value;
     dniUser = document.getElementById("dniUser").value;
 
+    var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
+    var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
+    var dniCrypt = CryptoJS.AES.encrypt(dniUser, "firma_app").toString();
+
     const modUser = {
         nameUser: nameUser,
-        emailUser: emailUser,
-        passUser: passUser,
+        emailUser: emailCrypt,
+        passUser: passCrypt,
         rolUser: rolUser,
-        dniUser: dniUser 
+        dniUser: dniCrypt 
     }
 
     const response = await fetch(URLSERVERModify + idHTML, {
