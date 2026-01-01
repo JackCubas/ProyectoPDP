@@ -964,7 +964,7 @@ async function searchPDFsSignedStampedCarpeta(id){
                 existe = true;
 
                 for (let i = 0; i < rowsObject.length; i++){
-                  listaDocs.push(JSON.stringify(rowsObject[i]));
+                  listaDocs.push(JSON.parse(JSON.stringify(rowsObject[i])));
                 }
               }else{
                 console.log("Docs no existe");
@@ -1015,7 +1015,8 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
     console.log(listaDocs);
 
     for (let i = 0; i < listaDocs.length; i++) {
-      var doc = JSON.parse(listaDocs[i]);
+      //var doc = JSON.parse(listaDocs[i]);
+      var doc = listaDocs[i];
 
       if(Object.hasOwn(doc, "urlCarpeta")){
 
