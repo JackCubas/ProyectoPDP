@@ -909,100 +909,127 @@ async function modifyUser(req, res){
 app.delete('/users/:id', (req, res) => {
     console.log("delete user!");
 
+    let con;
     const { id } = req.params;
 
     console.log("conectando para borrado");
 
-    response = borrarUsuario(id);
-    res.status(200).json(response); 
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+    response = borrarUsuario(id, con);
+    res.json(response); 
 });
 
-//-------------------------------------------
-async function borrarUsuario(id){
+async function borrarUsuario(id, con){
 
-  var listaDocs = await searchPDFsSignedStampedCarpeta(id);
+  var listaDocs = await searchPDFsSignedStampedCarpeta(id, con);
   console.log("lista de docs explorado:");
   console.log(listaDocs);
 
+  var responseBorrarCarpeta = await borrarCarpetasPdfs(id, con);
 
-  //var responseBorrarCarpeta = await borrarCarpetasPdfs(id);
-  //var response = await borrarUsuarioBBDD(id);
+  var responseBorrarSignedBBDD = await borrarPdfsSignedBBDD(id, con);
+  var responseBorrarStampedBBDD = await borrarPdfsStampedBBDD(id, con);
 
-  return {success: 'TRUE'};
+  var response = await borrarUsuarioBBDD(id, con);
+
+  //console.log("Ending connection");
+  //con.end();
+
+  return response;
 
 }
 
-async function searchPDFsSignedStampedCarpeta(id){
+async function borrarCarpetasPdfs(id, con){
 
-  var toRet = true;
-  var existe = false;
-  let con;
+  const pathCarpetaPDF  = CARPETAPDF + "/" + id;
+  const pathStamp = CARPETASTAMP + "/" + id + '.png';
 
-  listaDocs = [];
+  console.log(pathCarpetaPDF + " - " + pathStamp);
 
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
-
-  let sql = `
-    select urlCarpeta from pdfs 
-    WHERE signUserId = "${id}" or stampUserId = "${id}"
-  `;
-  try{
-    await con.promise().query(sql)
-        .then( ([rows,fields]) => {
-
-            var rowsObjectString = JSON.stringify(rows);
-            if(rowsObject !== null && rowsObject !== ""){
-              var rowsObject = JSON.parse(rowsObjectString.toString())
-
-              if(rowsObject.length > 0){
-                console.log("Docs existe");
-                existe = true;
-
-                for (let i = 0; i < rowsObject.length; i++){
-                  listaDocs.push(JSON.stringify(rowsObject[i]));
-                }
-              }else{
-                console.log("Docs no existe");
-                existe = false;
-                return;
-              }
-            }else{
-              console.log("Docs no existe");
-              existe = false;
-              return;
-
-            }
-        })
-  }catch(error){
-    console.log(error);
-
-    console.log("Ending connection");
-    con.end();
+  if (fs.existsSync(pathStamp)) {
+  // delete the file on server after it sends to client
+    console.log("eliminando stamp");
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathStamp);
   }
 
-  if(existe === true){
-    //await borrarPDFsSignedStampedCarpeta(listaDocs);
-    //await borrarPdfsStampedBBDD(id);
-    //await borrarPdfsSignedBBDD(id);
+  if (fs.existsSync(pathCarpetaPDF)){
 
-    console.log("Docs existe...............");
-    console.log(listaDocs);
-    console.log("num docs stamp and signed: " + listaDocs.length);
-    console.log("Ending connection");
-    con.end();
+    if(fs.readdirSync(pathCarpetaPDF).length === 0){
+      console.log("eliminando carpeta vacia");
+      fs.rmdirSync(pathCarpetaPDF);
+    }else{
+      console.log("eliminando carpeta no vacia");
+      fs.rmSync(pathCarpetaPDF, { recursive: true, force: true });
+    }
+
+  }
+
+  //-------------------------------------------
+
+  await con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to borrado de pdfs del usuario");
+
+    let sql = "DELETE FROM pdfs WHERE userId = ?";
+
+    let values = [
+      [id]
+    ]
+
+    con.query(sql, [values], function (err, result) {
+      if (err) throw err;
+      console.log(result);
+
+      return result;
+    });
     
-  }else{
-    console.log("Docs no existe...............");
+  });
 
-    console.log("Ending connection");
-    con.end();
-  }  
+}
+
+async function searchPDFsSignedStampedCarpeta(id, con){
+
+  var toRet = true;
+
+  con.connect(function(err) {
+    if (err) {
+      console.error('DB connect error:', err);
+      //return res.status(500).json({ error: 'database connection error' });
+    }
+    console.log("Connected to busqueda de las carpetas url!");
+
+    let sql = `
+      select urlCarpeta from pdfs 
+      WHERE signUserId = "${id}" or stampUserId = "${id}"
+    `;
+    con.query(sql, async function (err, result) {
+      if (err) {
+        console.error('DB search error:', err);
+        //return res.status(500).json({ error: 'database update error' });
+      }
+      //console.log("1 record modified");
+      console.log(result);
+
+      //var listaDocs = JSON.stringify(result);
+
+      if(result !== null && result.length > 0){
+        var responseBorrarCarpetaSignedStamp = await borrarPDFsSignedStampedCarpeta(result);
+      }else{
+        console.log("no se han encontrado archivos firmados o estampados");
+      }
+
+      //res.json(result);
+    });
+
+  })
   return toRet;
 }
 
@@ -1046,17 +1073,7 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
   return true;
 }
 
-async function borrarPdfsSignedBBDD(id){
-
-  let con;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
+async function borrarPdfsSignedBBDD(id, con){
 
   await con.connect(function(err) {
     if (err) {
@@ -1091,17 +1108,7 @@ async function borrarPdfsSignedBBDD(id){
 
 }
 
-async function borrarPdfsStampedBBDD(id){
-
-  let con;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
+async function borrarPdfsStampedBBDD(id, con){
 
   await con.connect(function(err) {
     if (err) {
@@ -1134,76 +1141,7 @@ async function borrarPdfsStampedBBDD(id){
 
 }
 
-async function borrarCarpetasPdfs(id){
-
-  const pathCarpetaPDF  = CARPETAPDF + "/" + id;
-  const pathStamp = CARPETASTAMP + "/" + id + '.png';
-
-  console.log(pathCarpetaPDF + " - " + pathStamp);
-
-  if (fs.existsSync(pathStamp)) {
-  // delete the file on server after it sends to client
-    console.log("eliminando stamp");
-    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-    unlinkFile(pathStamp);
-  }
-
-  if (fs.existsSync(pathCarpetaPDF)){
-
-    if(fs.readdirSync(pathCarpetaPDF).length === 0){
-      console.log("eliminando carpeta vacia");
-      fs.rmdirSync(pathCarpetaPDF);
-    }else{
-      console.log("eliminando carpeta no vacia");
-      fs.rmSync(pathCarpetaPDF, { recursive: true, force: true });
-    }
-
-  }
-
-  //-------------------------------------------
-
-  let con;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
-
-  await con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected to borrado de pdfs del usuario");
-
-    let sql = "DELETE FROM pdfs WHERE userId = ?";
-
-    let values = [
-      [id]
-    ]
-
-    con.query(sql, [values], function (err, result) {
-      if (err) throw err;
-      console.log(result);
-
-      return result;
-    });
-    
-  });
-
-}
-
-async function borrarUsuarioBBDD(id){
-
-  let con;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
+async function borrarUsuarioBBDD(id, con){
 
   var toRet = null;
 
@@ -1229,8 +1167,6 @@ async function borrarUsuarioBBDD(id){
   });
  
 }
-
-//--------------------------------
 
 
 app.post('/login', (req, res) => {
