@@ -109,12 +109,12 @@ async function sendData(){
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
         alert("No se ha podido borrar usuario");
+        window.location.href = "table_pag.html?page=" + pageHTML;
     }else{
         //console.log(response);
-        alert("Usuario borrado correctamente");        
+        alert("Usuario borrado correctamente");
+        window.location.href = "table_pag.html?page=" + newHTML;        
     } 
-
-    window.location.href = "table_pag.html?page=" + newHTML;
 
 }
 
