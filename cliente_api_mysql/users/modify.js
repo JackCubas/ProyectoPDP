@@ -110,17 +110,23 @@ async function sendData(){
         body: JSON.stringify(modUser)
     })
 
-    const result = await response.json();
-    console.log(result);
-
-    //alert('status:', response.status);
-
-    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+    if(!response.ok){
         alert("No se ha podido modificar usuario");
+        window.location.href = "table_pag.html?page=" + pageHTML;
     }else{
-        //console.log(response);
-        alert("Usuario modificado correctamente");
-    } 
+
+        const result = await response.json();
+        console.log(result);
+
+        //alert('status:', response.status);
+
+        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+            alert("No se ha podido modificar usuario");
+        }else{
+            //console.log(response);
+            alert("Usuario modificado correctamente");
+        }
+    }
 
     window.location.href = 'table_pag.html?page=' + pageHTML;
 

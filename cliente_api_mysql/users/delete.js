@@ -102,18 +102,25 @@ async function sendData(){
         method: "DELETE"
     })
 
-    const result = await response.json();
-    console.log(result);
-
-    //alert('status:', response.status);
-
-    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+    if(!response.ok){
         alert("No se ha podido borrar usuario");
         window.location.href = "table_pag.html?page=" + pageHTML;
+
+    //alert('status:', response.status);
+    
     }else{
-        //console.log(response);
-        alert("Usuario borrado correctamente");
-        window.location.href = "table_pag.html?page=" + newHTML;        
+
+        const result = await response.json();
+        console.log(result);
+
+        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+            alert("No se ha podido borrar usuario");
+            window.location.href = "table_pag.html?page=" + pageHTML;
+        }else{
+            //console.log(response);
+            alert("Usuario borrado correctamente");
+            window.location.href = "table_pag.html?page=" + newHTML;        
+        }
     } 
 
 }

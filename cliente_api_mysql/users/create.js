@@ -112,16 +112,22 @@ async function sendData(){
         body: JSON.stringify(nuevoUsers)
     })
 
-    const result = await apiCall.json();
-    console.log(result);
-
-    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+    if(!apiCall.ok){
         alert("No se ha podido crear usuario");
-        window.location.href = "table_pag.html?page=" + pageHTML; 
-    }else{
-        //console.log(response);
-        alert("Usuario creado correctamente");
-        window.location.href = "table_pag.html?page=" + newHTML;        
+        window.location.href = "table_pag.html?page=" + pageHTML;
+    }else{        
+
+        const result = await apiCall.json();
+        console.log(result);
+
+        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+            alert("No se ha podido crear usuario");
+            window.location.href = "table_pag.html?page=" + pageHTML; 
+        }else{
+            //console.log(response);
+            alert("Usuario creado correctamente");
+            window.location.href = "table_pag.html?page=" + newHTML;        
+        }
     } 
 }
 
