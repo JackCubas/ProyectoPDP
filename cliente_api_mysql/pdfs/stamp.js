@@ -302,5 +302,15 @@ async function deleteDocument(){
         method: "DELETE"
     })
 
+    const result = await response.json();
+    console.log(result);
+
+    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido borrar documento estampado");
+    }else{
+        //console.log(response);
+        alert("Documento estampado borrado correctamente");
+    }
+
     window.location.href = "table.html?page=" + pageHTML;
 }

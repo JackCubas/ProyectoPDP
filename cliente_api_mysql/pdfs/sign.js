@@ -275,6 +275,14 @@ async function sendData(modifiedPDFBytes){
 
     //const result = await apiCall.json();
     //console.log(result);
+
+    /*if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido firmar documento");
+    }else{
+        //console.log(response);
+        alert("Documento firmado correctamente");
+    }*/ 
+
     window.location.href = "table.html?page=" + pageHTML;
 
 }
@@ -422,6 +430,16 @@ async function deleteDocument(){
     const response = await fetch(URLSERVERDelete + '?id=' + idHTML + '&docName=' + thisDocName + '&userId=' + userId + '&initialTimestampName=' + initialTimestampName, {
         method: "DELETE"
     })
+
+    const result = await response.json();
+    console.log(result);
+
+    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido borrar documento firmado");
+    }else{
+        //console.log(response);
+        alert("Documento firmado borrado correctamente");
+    }
 
     window.location.href = "table.html?page=" + pageHTML;
 }
