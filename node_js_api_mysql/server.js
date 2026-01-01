@@ -924,9 +924,8 @@ async function borrarUsuario(id){
   console.log("lista de docs explorado:");
   console.log(listaDocs);
 
-
-  //var responseBorrarCarpeta = await borrarCarpetasPdfs(id);
-  //var response = await borrarUsuarioBBDD(id);
+  var responseBorrarCarpeta = await borrarCarpetasPdfs(id);
+  var response = await borrarUsuarioBBDD(id);
 
   return {success: 'TRUE'};
 
@@ -987,15 +986,16 @@ async function searchPDFsSignedStampedCarpeta(id){
   }
 
   if(existe === true){
-    //await borrarPDFsSignedStampedCarpeta(listaDocs);
-    //await borrarPdfsStampedBBDD(id);
-    //await borrarPdfsSignedBBDD(id);
-
-    console.log("Docs existe...............");
-    console.log(listaDocs);
-    console.log("num docs stamp and signed: " + listaDocs.length);
     console.log("Ending connection");
     con.end();
+
+    await borrarPDFsSignedStampedCarpeta(listaDocs);
+    await borrarPdfsStampedBBDD(id);
+    await borrarPdfsSignedBBDD(id);
+
+    //console.log("Docs existe...............");
+    //console.log(listaDocs);
+    //console.log("num docs stamp and signed: " + listaDocs.length);
     
   }else{
     console.log("Docs no existe...............");
@@ -1082,6 +1082,9 @@ async function borrarPdfsSignedBBDD(id){
       console.log("pdf sign record modified");
       console.log(result);
 
+      console.log("Ending connection");
+      con.end();
+
       //res.json(result);
       return result;
     });
@@ -1126,6 +1129,9 @@ async function borrarPdfsStampedBBDD(id){
       }
       console.log("pdf stamp record modified");
       console.log(result);
+
+      console.log("Ending connection");
+      con.end();
 
       return result;
     });
@@ -1186,6 +1192,9 @@ async function borrarCarpetasPdfs(id){
       if (err) throw err;
       console.log(result);
 
+      console.log("Ending connection");
+      con.end();
+
       return result;
     });
     
@@ -1221,6 +1230,9 @@ async function borrarUsuarioBBDD(id){
       if (err) throw err;
       console.log("1 record deleted");
       console.log(result);
+
+      console.log("Ending connection");
+      con.end();
 
       toRet = result;
       return toRet;
