@@ -986,16 +986,17 @@ async function searchPDFsSignedStampedCarpeta(id){
   }
 
   if(existe === true){
+
+    console.log("Docs existe...............");
+    console.log(listaDocs);
+    console.log("num docs stamp and signed: " + listaDocs.length);
+
     console.log("Ending connection");
     con.end();
 
     await borrarPDFsSignedStampedCarpeta(listaDocs);
     await borrarPdfsStampedBBDD(id);
     await borrarPdfsSignedBBDD(id);
-
-    //console.log("Docs existe...............");
-    //console.log(listaDocs);
-    //console.log("num docs stamp and signed: " + listaDocs.length);
     
   }else{
     console.log("Docs no existe...............");
@@ -1008,13 +1009,15 @@ async function searchPDFsSignedStampedCarpeta(id){
 
 async function borrarPDFsSignedStampedCarpeta(listaDocs){
 
+  console.log("Entrado en borrado de pdfs firmados y estampados");
+
   if(listaDocs !== null && listaDocs.length > 0){
 
     console.log(listaDocs);
 
     for (let i = 0; i < listaDocs.length; i++) {
 
-      if(Object.hasOwn(listaDocs[i], 'urlCarpeta')){
+      if(Object.hasOwn(listaDocs[i], "urlCarpeta")){
 
         urlCarpetaOriginal = listaDocs[i].urlCarpeta;
 
