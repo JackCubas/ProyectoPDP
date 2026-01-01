@@ -115,6 +115,13 @@ async function sendData(){
 
     //alert('status:', response.status);
 
+    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido modificar usuario");
+    }else{
+        //console.log(response);
+        alert("Usuario modificado correctamente");
+    } 
+
     window.location.href = 'table_pag.html?page=' + pageHTML;
 
 }

@@ -115,9 +115,14 @@ async function sendData(){
     const result = await apiCall.json();
     console.log(result);
 
-    //alert("prueba");
-
-    window.location.href = "table_pag.html?page=" + newHTML;
+    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido crear usuario");
+        window.location.href = "table_pag.html?page=" + pageHTML; 
+    }else{
+        //console.log(response);
+        alert("Usuario creado correctamente");
+        window.location.href = "table_pag.html?page=" + newHTML;        
+    } 
 }
 
  checkUserHosting()
