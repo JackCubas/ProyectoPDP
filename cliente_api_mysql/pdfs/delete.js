@@ -162,6 +162,18 @@ async function sendData(){
         method: "DELETE"
     })
 
-    window.location.href = "table.html?page=" + newHTML;
+    const result = await response.json();
+    console.log(result);
+
+    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido modificar documento");
+        window.location.href = "table.html?page=" + pageHTML;
+    }else{
+        //console.log(response);
+        alert("Documento modificado correctamente");
+        window.location.href = "table.html?page=" + newHTML;        
+    }
+
+    //window.location.href = "table.html?page=" + newHTML;
 
 }

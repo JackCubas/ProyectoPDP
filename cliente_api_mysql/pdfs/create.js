@@ -121,9 +121,18 @@ async function sendData(){
 
         const result = await apiCall.json();
         console.log(result);
+
+        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+            alert("No se ha podido crear documento");
+            window.location.href = "table.html?page=" + pageHTML;
+        }else{
+            //console.log(response);
+            alert("Documento creado correctamente");
+            window.location.href = "table.html?page=" + newHTML;        
+        } 
     }
 
-    window.location.href = "table.html?page=" + newHTML;
+    //window.location.href = "table.html?page=" + newHTML;
 
 }
 
