@@ -687,6 +687,9 @@ app.get('/users/:id', (req, res) => {
           resultRows[0] = resultFinal;
         }
 
+        console.log("Ending connection");
+        con.end();
+
         res.json(resultRows);
     });
     
@@ -760,6 +763,8 @@ async function insertUser(req, res){
   }
 
   if(existe === true){
+    console.log("Ending connection");
+    con.end();
     res.status(400).json({ error: 'Usuario existe' });
   }else{
 
@@ -853,6 +858,8 @@ async function modifyUser(req, res){
   }
 
   if(existe === true){
+    console.log("Ending connection");
+    con.end();
     res.status(400).json({ error: 'Usuario existe' });
   }else{
 
@@ -918,6 +925,10 @@ async function borrarUsuario(id, con){
   var responseBorrarStampedBBDD = await borrarPdfsStampedBBDD(id, con);
 
   var response = await borrarUsuarioBBDD(id, con);
+
+  //console.log("Ending connection");
+  //con.end();
+
   return response;
 
 }
@@ -1187,11 +1198,19 @@ app.post('/login', (req, res) => {
     con.query(sql, [decryptedEmailString.trim()], function (err, result) {
         if (err) {
           console.error('DB query error:', err);
+
+          console.log("Ending connection");
+          con.end();
+
           return res.status(500).json({ error: 'database query error' });
         }
 
         const rows = Object.values(JSON.parse(JSON.stringify(result)));
         if (!rows || rows.length === 0){ 
+
+          console.log("Ending connection");
+          con.end();
+
           return res.status(204).json({ user: 'FALSE' });
         }
 
@@ -1202,11 +1221,20 @@ app.post('/login', (req, res) => {
           passUserDecrypt = decrypt(resultFinal.passUser);
 
           if(!passUserDecrypt || passUserDecrypt != decryptedPassStringRecieved){
+
+            
+            console.log("Ending connection");
+            con.end();
+
             return res.status(204).json({ user: 'FALSE' });
+
           }else{
             rows[0] = resultFinal;
           }
         }
+
+        console.log("Ending connection");
+        con.end();
 
         return res.json({ user: rows });
     });
@@ -1339,12 +1367,19 @@ app.get('/countPDFs/:userId', (req, res) => {
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 });
 
@@ -1379,12 +1414,19 @@ app.get('/pdfs_pag', cors(), (req, res) => {
               
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
               console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 });
 
@@ -1425,12 +1467,19 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
               console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 
 });
@@ -1472,12 +1521,19 @@ app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
               
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
               console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 });
 
