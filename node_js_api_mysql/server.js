@@ -995,8 +995,7 @@ async function searchPDFsSignedStampedCarpeta(id){
     con.end();
 
     await borrarPDFsSignedStampedCarpeta(listaDocs);
-    await borrarPdfsStampedBBDD(id);
-    await borrarPdfsSignedBBDD(id);
+    await borrarPdfsSignedStampedBBDD(id);
     
   }else{
     console.log("Docs no existe...............");
@@ -1050,9 +1049,15 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
   return true;
 }
 
-async function borrarPdfsSignedBBDD(id){
+async function borrarPdfsSignedStampedBBDD(id){
 
   let con;
+
+  var signUserId = null;
+  var signTimestamp = null;
+
+  var stampUserId = null;
+  var stampTimestamp = null;
 
   con = mysql.createConnection({
         host: DBHOST,
@@ -1062,87 +1067,46 @@ async function borrarPdfsSignedBBDD(id){
         database: DBNAME
   });
 
-  await con.connect(function(err) {
-    if (err) {
-      console.error('DB connect error:', err);
-      //return res.status(500).json({ error: 'database connection error' });
-    }
-    console.log("Connected to borrado signed bbdd!");
-
-    var signUserId = null;
-    var signTimestamp = null;
-
-    let sql = `
+  let sqlSign = `
       UPDATE pdfs 
       SET signUserId = "${signUserId}", 
       signTimestamp = "${signTimestamp}"
       WHERE signUserId = "${id}"
     `;
-    con.query(sql, function (err, result) {
-      if (err) {
-        console.error('DB update error:', err);
-        //return res.status(500).json({ error: 'database update error' });
-      }
-      console.log("pdf sign record modified");
-      console.log(result);
 
-      console.log("Ending connection");
-      con.end();
-
-      //res.json(result);
-      return result;
-    });
-
-  })
-
-
-}
-
-async function borrarPdfsStampedBBDD(id){
-
-  let con;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
-
-  await con.connect(function(err) {
-    if (err) {
-      console.error('DB connect error:', err);
-      //return res.status(500).json({ error: 'database connection error' });
-    }
-    console.log("Connected to borrado stamped bbdd!");
-
-    var stampUserId = null;
-    var stampTimestamp = null;
-
-    let sql = `
+  let sqlStamp = `
       UPDATE pdfs 
       SET stampUserId = "${stampUserId}", 
       stampTimestamp = "${stampTimestamp}"
       WHERE stampUserId = "${id}"
     `;
-    con.query(sql, function (err, result) {
-      if (err) {
-        console.error('DB update error:', err);
-        //return res.status(500).json({ error: 'database update error' });
-      }
-      console.log("pdf stamp record modified");
-      console.log(result);
+  
+   try{
+    await con.promise().query(sqlSign)
+      .then( ([rows,fields]) => {
 
-      console.log("Ending connection");
-      con.end();
+          var rowsObject = JSON.stringify(rows);
+          console.log("rows signed: " + rowsObject);
+          //console.log("rows signed size: " + rowsObject.length);
+      })
+  }catch(error){
+    console.log(error);
+  }
 
-      return result;
-    });
+  try{
+    await con.promise().query(sqlStamp)
+      .then( ([rows,fields]) => {
 
-  })
+          var rowsObject = JSON.stringify(rows);
+          console.log("rows stamped: " + rowsObject);
+          //console.log("rows stamped size: " + rowsObject.length);
+      })
+  }catch(error){
+    console.log(error);
+  }
 
 }
+
 
 async function borrarCarpetasPdfs(id){
 
