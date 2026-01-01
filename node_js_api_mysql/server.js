@@ -547,6 +547,10 @@ app.get('/users', (req, res) => {
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();          
+
               res.json(resultRows);
           });
       });
@@ -581,6 +585,10 @@ app.get('/countUsers', (req, res) => {
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
@@ -765,6 +773,7 @@ async function insertUser(req, res){
   if(existe === true){
     console.log("Ending connection");
     con.end();
+
     res.status(400).json({ error: 'Usuario existe' });
   }else{
 
@@ -860,6 +869,7 @@ async function modifyUser(req, res){
   if(existe === true){
     console.log("Ending connection");
     con.end();
+
     res.status(400).json({ error: 'Usuario existe' });
   }else{
 
@@ -882,6 +892,9 @@ async function modifyUser(req, res){
         if (err) throw err;
         console.log("1 record modified");
         console.log(result);
+
+        console.log("Ending connection");
+        con.end();
 
         res.json(result);
       });
@@ -1271,6 +1284,10 @@ app.get('/users/checkUserEMail/:email', (req, res) => {
 
         resultRows = Object.values(JSON.parse(JSON.stringify(result)));
         console.log(resultRows);
+
+        console.log("Ending connection");
+        con.end();
+
         res.json(result);
         
     });
@@ -1319,6 +1336,10 @@ app.get("/pdfs", cors(), (req, res) => {
               //var carpetUrl = resultRows[0].urlCarpeta;
 
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
@@ -1572,12 +1593,19 @@ app.get("/pdfs/:id", cors(), (req, res) => {
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 
 });
@@ -1628,14 +1656,20 @@ app.get("/pdfsByCriteria", cors(), (req, res) => {
               //console.log(result);
 
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
-
               console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 
 });
@@ -1707,6 +1741,9 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
         console.log("1 record inserted into pdf");
         console.log(result);
 
+        console.log("Ending connection");
+        con.end();
+
         res.json(result);
       });
       
@@ -1714,6 +1751,10 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
 
   }catch(err){
     console.error('create-pdf error:', err);
+
+    console.log("Ending connection");
+    con.end();
+
     return res.status(500).json({ error: 'failed to save or process pdf' });
   }
 });
@@ -1827,6 +1868,9 @@ app.delete('/eliminateDocOriginal', async function(req, res) {
       if (err) throw err;
       console.log("1 record deleted");
       console.log(result);
+
+      console.log("Ending connection");
+      con.end();
 
       res.json(result);
     });
@@ -2097,10 +2141,17 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       con.query(sql, function (err, result) {
         if (err) {
           console.error('DB update error:', err);
+
+          console.log("Ending connection");
+          con.end();
+
           return res.status(500).json({ error: 'database update error' });
         }
         console.log("1 record modified");
         console.log(result);
+
+        console.log("Ending connection");
+        con.end();
 
         res.json(result);
       });
@@ -2108,6 +2159,10 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
     })
   }catch(err){
     console.error('modify-pdf error:', err);
+
+    console.log("Ending connection");
+    con.end();
+
     return res.status(500).json({ error: 'failed to modify pdf' });
   }
 })
@@ -2156,12 +2211,19 @@ app.get("/pdfStamp/:id", cors(), (req, res) => {
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 
 });
@@ -2215,10 +2277,18 @@ app.put('/stamp/:id', async (req, res) => {
         if (err) throw err;
         console.log("1 record modified");
         console.log(result);
+
+        console.log("Ending connection");
+        con.end();
+
       });
       })
     }catch(err){
       console.error('stamp-pdf error:', err);
+
+      console.log("Ending connection");
+      con.end();
+
       return res.status(500).json({ error: 'failed to stamp pdf' });
     }
 
@@ -2360,10 +2430,17 @@ app.delete('/eliminateDocStamp', async function(req, res) {
       con.query(sql, function (err, result) {
         if (err) {
           console.error('DB update error:', err);
+
+          console.log("Ending connection");
+          con.end();
+
           return res.status(500).json({ error: 'database update error' });
         }
         console.log("1 record modified");
         console.log(result);
+
+        console.log("Ending connection");
+        con.end();
 
         res.json(result);
       });
@@ -2371,6 +2448,10 @@ app.delete('/eliminateDocStamp', async function(req, res) {
     })
   }catch(err){
     console.error('modify-pdf stamp error:', err);
+
+    console.log("Ending connection");
+    con.end();
+
     return res.status(500).json({ error: 'failed to modify stamp pdf' });
   }
 
@@ -2420,12 +2501,19 @@ app.get("/pdfSign/:id", cors(), (req, res) => {
               resultRows = Object.values(JSON.parse(JSON.stringify(result)));
 
               //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
               res.json(resultRows);
           });
       });
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
   }
 
 });
@@ -2481,10 +2569,17 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
         if (err) throw err;
         console.log("1 record modified");
         console.log(result);
+
+        console.log("Ending connection");
+        con.end();
       });
       })
     }catch(err){
       console.error('sign-pdf error:', err);
+
+      console.log("Ending connection");
+      con.end();
+
       return res.status(500).json({ error: 'failed to sign pdf' });
     }
 
@@ -2552,6 +2647,10 @@ app.delete('/eliminateDocSign', async function(req, res) {
     con.connect(function(err) {
       if (err) {
         console.error('DB connect error:', err);
+
+        console.log("Ending connection");
+        con.end();
+
         return res.status(500).json({ error: 'database connection error' });
       }
       console.log("Connected!");
@@ -2568,10 +2667,17 @@ app.delete('/eliminateDocSign', async function(req, res) {
       con.query(sql, function (err, result) {
         if (err) {
           console.error('DB update error:', err);
+
+          console.log("Ending connection");
+          con.end();
+
           return res.status(500).json({ error: 'database update error' });
         }
         console.log("1 record modified");
         console.log(result);
+
+        console.log("Ending connection");
+        con.end();
 
         res.json(result);
       });
@@ -2579,6 +2685,10 @@ app.delete('/eliminateDocSign', async function(req, res) {
     })
   }catch(err){
     console.error('modify-pdf sign error:', err);
+
+    console.log("Ending connection");
+    con.end();
+
     return res.status(500).json({ error: 'failed to modify sign pdf' });
   }
 
