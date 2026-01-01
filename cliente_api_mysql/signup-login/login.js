@@ -50,17 +50,26 @@ async function sendData(){
     })
     .then((response) => {
 
-        if(response.status === 400 || response.status === 500 || response.status === 204){
+        if(!response.ok){
             alert("No se ha podido encontrar usuario");
-                //window.location.href = "../index.html";
         }else{
-            return response.json().then((data) => {
-                return checkData(data);
-            }).catch((err) => {
-                console.log(err);
-            })           
+
+            if(response.status === 400 || response.status === 500 || response.status === 204){
+                alert("No se ha podido encontrar usuario");
+                    //window.location.href = "../index.html";
+            }else{
+                return response.json().then((data) => {
+                    return checkData(data);
+                }).catch((err) => {
+                    console.log(err);
+                })           
+            }
         } 
 
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert("Server is down");   
     });
    
 }
