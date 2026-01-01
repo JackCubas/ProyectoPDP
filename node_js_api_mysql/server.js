@@ -1088,9 +1088,6 @@ async function borrarPdfsSignedStampedBBDD(id){
           var rowsObject = JSON.stringify(rows);
           console.log("rows signed: " + rowsObject);
           //console.log("rows signed size: " + rowsObject.length);
-
-          console.log("Ending connection");
-          con.end();
       })
   }catch(error){
     console.log(error);
@@ -1107,8 +1104,6 @@ async function borrarPdfsSignedStampedBBDD(id){
           console.log("rows stamped: " + rowsObject);
           //console.log("rows stamped size: " + rowsObject.length);
 
-          console.log("Ending connection");
-          con.end();
       })
   }catch(error){
     console.log(error);
@@ -1116,6 +1111,9 @@ async function borrarPdfsSignedStampedBBDD(id){
     console.log("Ending connection");
     con.end();
   }
+
+  console.log("Ending connection");
+  con.end();
 
 }
 
