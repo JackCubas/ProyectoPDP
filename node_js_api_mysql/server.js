@@ -1016,10 +1016,11 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
     console.log(listaDocs);
 
     for (let i = 0; i < listaDocs.length; i++) {
+      var doc = JSON.parse(listaDocs[i]);
 
-      if(Object.hasOwn(listaDocs[i], "urlCarpeta")){
+      if(Object.hasOwn(doc, "urlCarpeta")){
 
-        urlCarpetaOriginal = listaDocs[i].urlCarpeta;
+        urlCarpetaOriginal = doc.urlCarpeta;
 
         urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
         var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
