@@ -273,15 +273,15 @@ async function sendData(modifiedPDFBytes){
     }
     );
 
-    //const result = await apiCall.json();
-    //console.log(result);
+    const result = await apiCall.json();
+    console.log(result);
 
-    /*if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+    if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
         alert("No se ha podido firmar documento");
     }else{
         //console.log(response);
         alert("Documento firmado correctamente");
-    }*/ 
+    } 
 
     window.location.href = "table.html?page=" + pageHTML;
 

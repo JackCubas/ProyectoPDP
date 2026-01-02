@@ -2646,16 +2646,18 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
 
     console.log("Leyendo pdf: " + newFilePath);
 
-    const rs = fs.createReadStream(newFilePath);
+    //const rs = fs.createReadStream(newFilePath);
 
     // get size of the file
-    const { size } = fs.statSync(newFilePath);
+    /*const { size } = fs.statSync(newFilePath);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Length", size);
 
     console.log("Enviando pdf: " + newFilePath);
 
-    rs.pipe(res);
+    rs.pipe(res);*/
+
+    return res.status(200).json({ data: 'pdf signed' });
 
   }else{
     console.warn('Pdf no se ha encontrado o ya se ha firmado');
