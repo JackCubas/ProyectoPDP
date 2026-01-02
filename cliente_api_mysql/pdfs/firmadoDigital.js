@@ -27,6 +27,22 @@ var datosURL = URLString[1].split('&');
 var idHTML = datosURL[0].replace("id=","");
 var pageHTML = datosURL[1].replace("page=","");
 
+function checkUserHosting(){
+
+    var buttons = document.getElementById("button-container");
+    var button = document.createElement("button");
+    button.innerHTML = "Cancel";
+    button.onclick = onbuttonclicked;
+    buttons.appendChild(button);
+}
+
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table.html?page=" + pageHTML;
+  }
+}
+
 async function sendData(){
 
     const fdUser = {
@@ -55,3 +71,5 @@ async function sendData(){
     });
 
 }
+
+checkUserHosting()
