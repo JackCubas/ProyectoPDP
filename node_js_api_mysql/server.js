@@ -948,7 +948,7 @@ async function searchPDFsSignedStampedCarpeta(id){
   });
 
   let sql = `
-    select urlCarpeta from pdfs 
+    select urlCarpeta, stampUserId, signUserId from pdfs 
     WHERE signUserId = "${id}" or stampUserId = "${id}"
   `;
   try{
@@ -994,7 +994,7 @@ async function searchPDFsSignedStampedCarpeta(id){
     console.log("Ending connection");
     con.end();
 
-    await borrarPDFsSignedStampedCarpeta(listaDocs);
+    await borrarPDFsSignedStampedCarpeta(listaDocs, id);
     await borrarPdfsSignedStampedBBDD(id);
     
   }else{
@@ -1006,7 +1006,7 @@ async function searchPDFsSignedStampedCarpeta(id){
   return toRet;
 }
 
-async function borrarPDFsSignedStampedCarpeta(listaDocs){
+async function borrarPDFsSignedStampedCarpeta(listaDocs, id){
 
   console.log("Entrado en borrado de pdfs firmados y estampados");
 
@@ -1018,9 +1018,11 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
       //var doc = JSON.parse(listaDocs[i]);
       var doc = listaDocs[i];
 
-      if(Object.hasOwn(doc, "urlCarpeta")){
+      if(Object.hasOwn(doc, "urlCarpeta") && Object.hasOwn(doc, "stampUserId") && Object.hasOwn(doc, "signUserId")){
 
-        urlCarpetaOriginal = doc.urlCarpeta;
+        var urlCarpetaOriginal = doc.urlCarpeta;
+        var stampUserId = doc.stampUserId;
+        var signUserId = doc.signUserId;
 
         urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
         var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
@@ -1028,14 +1030,14 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs){
 
         console.log("nombres de archivos stamp y sign: " + urlCarpetaSigned + " " + urlCarpetaStamped);
 
-        if (fs.existsSync(urlCarpetaSigned)) {
+        if ((fs.existsSync(urlCarpetaSigned)) && (!isNaN(signUserId)) && (parseInt(id) === parseInt(signUserId))) {
         // delete the file on server after it sends to client
           console.log("eliminando pdf signed");
           const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
           unlinkFile(urlCarpetaSigned);
         }
 
-        if (fs.existsSync(urlCarpetaStamped)) {
+        if ((fs.existsSync(urlCarpetaStamped)) && (!isNaN(stampUserId)) && (parseInt(id) === parseInt(stampUserId))) {
         // delete the file on server after it sends to client
           console.log("eliminando pdf stamped");
           const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
