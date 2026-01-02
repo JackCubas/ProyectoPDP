@@ -313,22 +313,20 @@ async function returnDataOriginal() {
 }
 
 function appendDataOriginal(data){
-    var buttons = document.getElementById("button-container");
+    if(data.length !== 0){
 
-    var buttonCan = document.createElement("button");
-    buttonCan.innerHTML = "Cancel";
-    buttonCan.onclick = onbuttonclicked;
-    buttons.appendChild(buttonCan);
+        for(let i=0;i<data.length;i++){
+            console.log(data[i]);
 
-    for(let i=0;i<data.length;i++){
-        console.log(data[i]);
-        thisDocName = data[i].DocName;
-        userId = data[i].userId;
-        
-        var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
-        var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
-        initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
-    }
+            thisDocName = data[i].DocName;
+            userId = data[i].userId;
+            
+            var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+            var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+            initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+
+        }
+    }    
     //console.log("finalizado generacion de ventana");
 }
 
@@ -358,6 +356,17 @@ async function returnDataSign() {
 }
 
 function appendDataSign(data){
+
+    var buttons = document.getElementById("button-container");
+
+    var buttonCan = document.createElement("button");
+    buttonCan.innerHTML = "Cancel";
+    buttonCan.onclick = onbuttonclicked;
+    buttons.appendChild(buttonCan);
+
+    var con=document.getElementById("main-container");
+
+
     if(data.length !== 0){
 
         document.getElementById("saveServer").disabled = true;
@@ -365,10 +374,40 @@ function appendDataSign(data){
 
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
+
+            var d=document.createElement("div");
+            d.textContent="Doc Name: " + data[i].DocName;
+            thisDocName = data[i].DocName;                     
+            con.appendChild(d);
+
+            var e=document.createElement("div")
+            e.textContent="Doc URL: " + data[i].urlCarpeta                      
+            con.appendChild(e);
+
+            var f=document.createElement("div")
+            f.textContent="Sign User Name: " + data[i].nameUser                      
+            con.appendChild(f);
+
+            var g=document.createElement("div")
+            g.textContent="Estado: " + data[i].estado                      
+            con.appendChild(g);
+
+            var h=document.createElement("div");
+            h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+            con.appendChild(h);
+
+            var k=document.createElement("div");
+            var signTimestampNameAux = data[0].signTimestamp.slice(0, 19).replace('T', ' ');
+            k.textContent="Sign DateTime: " + signTimestampNameAux;                      
+            con.appendChild(k);
         }
     }else{
         document.getElementById("delete").disabled = true;
         console.log("No hay documento firmado");
+
+        var j=document.createElement("div");
+        j.textContent="No hay documento firmado";
+        con.appendChild(j);
     }
     //console.log("finalizado generacion de ventana");
 }
