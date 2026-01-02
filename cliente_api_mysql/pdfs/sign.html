@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="../css/sign.css">
 </head>
 <body>
+    <main id="main-container">
+    
+    </main>
+
     <div class="signature-container">
         <canvas id="signature-pad" width="400" height="200"></canvas>
         <div class="controls">
@@ -16,14 +20,19 @@
                 <option value="pen">Pen</option>
                 <option value="brush">Brush</option>
             </select>
+
             <button id="clear">Clear</button>
             <button id="export-png">Export as PNG</button>
             <button id="export-jpeg">Export as JPEG</button>
         </div>
     </div>
-    <button id="savePDF" onclick="saveSignatureAndInsertIntoPDF()">Save Signature and Insert into PDF</button>
-    <button id="saveServer" onclick="saveToServer()">Save to Server</button>
-    <button id="delete" onclick="deleteDocument()">Delete</button>
+
+    <div id="button-container">
+        <button id="savePDF" onclick="saveSignatureAndInsertIntoPDF()">Save Signature and Insert into PDF</button>
+        <button id="saveServer" onclick="saveToServer()">Save to Server</button>
+        <button id="delete" onclick="deleteDocument()">Delete</button>   
+    </div>
+    
     <script src="sign.js"></script>
 </body>
 </html>

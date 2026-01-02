@@ -313,6 +313,13 @@ async function returnDataOriginal() {
 }
 
 function appendDataOriginal(data){
+    var buttons = document.getElementById("button-container");
+
+    var buttonCan = document.createElement("button");
+    buttonCan.innerHTML = "Cancel";
+    buttonCan.onclick = onbuttonclicked;
+    buttons.appendChild(buttonCan);
+
     for(let i=0;i<data.length;i++){
         console.log(data[i]);
         thisDocName = data[i].DocName;
@@ -323,6 +330,13 @@ function appendDataOriginal(data){
         initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
     }
     //console.log("finalizado generacion de ventana");
+}
+
+function onbuttonclicked() {
+  //"location.href='table_pag.html?page=' + pageHTML";
+  if (onbuttonclicked) {
+    window.location.href = "table.html?page=" + pageHTML;
+  }
 }
 
 async function returnDataSign() {
