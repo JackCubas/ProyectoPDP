@@ -2934,6 +2934,122 @@ async function transformStampType(fileName, fileType){
   console.log("finalizado transformacion del tipo de archivo");
 }
 
+//--------------------------------------
+//--------------------------------------
+//--------------------------------------
+
+app.put('/firmadoDigital/:id', async (req, res) => {
+
+  console.log("llegado al firmado digital pdf");
+
+  const { id } = req.params;
+  const idUserFirmadoDigital = req.body.fdUserId;
+
+  console.log("ID Doc: " + id + " ID User: " + idUserFirmadoDigital);
+
+  let con;
+
+  con = mysql.createConnection({
+        host: DBHOST,
+        user: DBUSER,
+        password: DBPASS,
+        port     :DBPORT,
+        database: DBNAME
+  });
+
+  var listaDocs = [];
+  var listaUsers = [];
+
+  let sqlUserDNI = `
+      Select dniUser from Users 
+      WHERE id = "${idUserFirmadoDigital}"
+    `;
+
+  let sqlPdfUrl = `
+      Select urlCarpeta from pdfs
+      WHERE id = "${id}"
+    `;
+  
+   try{
+    await con.promise().query(sqlUserDNI)
+      .then( ([rows,fields]) => {
+
+          var rowsObjectString = JSON.stringify(rows);
+            if(rowsObject !== null && rowsObject !== ""){
+              var rowsObject = JSON.parse(rowsObjectString.toString())
+
+              if(rowsObject.length > 0){
+                console.log("user existe");
+                //existe = true;
+
+                for (let i = 0; i < rowsObject.length; i++){
+                  listaUsers.push(JSON.parse(JSON.stringify(rowsObject[i])));
+                }
+              }else{
+                console.log("user no existe");
+                //existe = false;
+                return;
+              }
+            }else{
+              console.log("user no existe");
+              //existe = false;
+              return;
+
+            }
+          
+      })
+  }catch(error){
+    console.log(error);
+
+    console.log("Ending connection");
+    con.end();
+  }
+
+  try{
+    await con.promise().query(sqlPdfUrl)
+      .then( ([rows,fields]) => {
+
+          var rowsObjectString = JSON.stringify(rows);
+            if(rowsObject !== null && rowsObject !== ""){
+              var rowsObject = JSON.parse(rowsObjectString.toString())
+
+              if(rowsObject.length > 0){
+                console.log("doc existe");
+                //existe = true;
+
+                for (let i = 0; i < rowsObject.length; i++){
+                  listaDocs.push(JSON.parse(JSON.stringify(rowsObject[i])));
+                }
+              }else{
+                console.log("doc no existe");
+                //existe = false;
+                return;
+              }
+            }else{
+              console.log("doc no existe");
+              //existe = false;
+              return;
+
+            }
+          
+
+      })
+  }catch(error){
+    console.log(error);
+
+    console.log("Ending connection");
+    con.end();
+  }
+
+  console.log(listaDocs);
+  console.log(listaUsers);
+
+  console.log("Ending connection");
+  con.end();
+  
+})  
+
+
 //-----------------------
 app.listen(APIPORT, () => {
   console.log(`Firma app listening at http://localhost:${APIPORT}`);

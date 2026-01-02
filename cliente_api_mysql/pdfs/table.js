@@ -251,9 +251,9 @@ function firmadoDigital(event) {
   var idFDString = idFirmadoDigital.replace(substringToRemove, '');
   var datosFD = idFDString.split('-');
 
-  alert("Firmado digital: " + datosFD[0]);
+  //alert("Firmado digital: " + datosFD[0]);
 
-  //window.location.href = "firmadoDigital.html?id=" + idFD;
+  window.location.href = "firmadoDigital.html?id=" + datosFD[0] + "&page=" + datosFD[1];
 }
 
 
