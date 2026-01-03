@@ -375,7 +375,7 @@ function appendDataSign(data){
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
 
-            /*var d=document.createElement("div");
+            var d=document.createElement("div");
             d.textContent="Doc Name: " + data[i].DocName;
             thisDocName = data[i].DocName;                     
             con.appendChild(d);
@@ -392,6 +392,10 @@ function appendDataSign(data){
             g.textContent="Estado: " + data[i].estado                      
             con.appendChild(g);
 
+            var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+            var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
+            initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
+
             var h=document.createElement("div");
             h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
             con.appendChild(h);
@@ -399,16 +403,16 @@ function appendDataSign(data){
             var k=document.createElement("div");
             var signTimestampNameAux = data[0].signTimestamp.slice(0, 19).replace('T', ' ');
             k.textContent="Sign DateTime: " + signTimestampNameAux;                      
-            con.appendChild(k);*/
+            con.appendChild(k);
         }
     }else{
         document.getElementById("delete").disabled = true;
         console.log("No hay documento firmado");
-        alert("No hay documento firmado");
+        //alert("No hay documento firmado");
 
-        /*var j=document.createElement("div");
+        var j=document.createElement("div");
         j.textContent="No hay documento firmado";
-        con.appendChild(j);*/
+        con.appendChild(j);
     }
     //console.log("finalizado generacion de ventana");
 }

@@ -14,18 +14,19 @@
     </main>
 
     <hr>
+    <div id="signature-body">
+        <div class="signature-container">
+            <canvas id="signature-pad" width="400" height="200"></canvas>
+            <div class="controls">
+                <select id="stroke-style">
+                    <option value="pen">Pen</option>
+                    <option value="brush">Brush</option>
+                </select>
 
-    <div class="signature-container">
-        <canvas id="signature-pad" width="400" height="200"></canvas>
-        <div class="controls">
-            <select id="stroke-style">
-                <option value="pen">Pen</option>
-                <option value="brush">Brush</option>
-            </select>
-
-            <button id="clear">Clear</button>
-            <button id="export-png">Export as PNG</button>
-            <button id="export-jpeg">Export as JPEG</button>
+                <button id="clear">Clear</button>
+                <button id="export-png">Export as PNG</button>
+                <button id="export-jpeg">Export as JPEG</button>
+            </div>
         </div>
     </div>
 
