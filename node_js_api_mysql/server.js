@@ -3051,7 +3051,7 @@ app.put('/firmadoDigital/:id', async (req, res) => {
 
 
 //------------------------------
-
+require('crypto').webcrypto
 // Ejemplo conceptual de uso de Web Crypto (tras obtener el certificado del DNIe)
 async function firmarConDNIe(datos) {
   // Obtener la clave privada y el certificado del DNIe (requiere un proveedor externo)
