@@ -3052,6 +3052,23 @@ app.put('/firmadoDigital/:id', async (req, res) => {
 
 //------------------------------
 
+// Ejemplo conceptual de uso de Web Crypto (tras obtener el certificado del DNIe)
+async function firmarConDNIe(datos) {
+  // Obtener la clave privada y el certificado del DNIe (requiere un proveedor externo)
+  // Esto NO es nativo de Web Crypto, se integra con el sistema
+  const { privateKey, certificate } = await obtenerCertificadoDNIe();
+
+  const data = new TextEncoder().encode(datos);
+  const signature = await crypto.subtle.sign(
+    { name: "ECDSA", hash: { name: "SHA-256" } },
+    privateKey, // La clave privada obtenida del DNIe
+    data
+  );
+
+  // Enviar la firma (buffer) para verificar
+  return { signature, certificate };
+}
+
 
 // Código conceptual, la implementación real depende de la API usada
 function leerDNIe() {
