@@ -3050,7 +3050,10 @@ app.put('/firmadoDigital/:id', async (req, res) => {
 }) 
 
 
+//-------------------------------
 //------------------------------
+//------------------------------
+
 require('crypto').webcrypto
 // Ejemplo conceptual de uso de Web Crypto (tras obtener el certificado del DNIe)
 async function firmarConDNIe(datos) {
@@ -3121,7 +3124,7 @@ async function leerDNIe() {
   }
 }
 
-
+/*
 var pcsc = require('pcsclite');
 var pcsc = pcsc();
 pcsc.on('reader', function(reader) {
@@ -3134,11 +3137,11 @@ pcsc.on('reader', function(reader) {
 
     reader.on('status', function(status) {
         console.log('Status(', this.name, '):', status);
-        /* check what has changed */
+        // check what has changed
         var changes = this.state ^ status.state;
         if (changes) {
             if ((changes & this.SCARD_STATE_EMPTY) && (status.state & this.SCARD_STATE_EMPTY)) {
-                console.log("card removed");/* card removed */
+                console.log("card removed");// card removed
                 reader.disconnect(reader.SCARD_LEAVE_CARD, function(err) {
                     if (err) {
                         console.log(err);
@@ -3147,7 +3150,7 @@ pcsc.on('reader', function(reader) {
                     }
                 });
             } else if ((changes & this.SCARD_STATE_PRESENT) && (status.state & this.SCARD_STATE_PRESENT)) {
-                console.log("card inserted");/* card inserted */
+                console.log("card inserted");// card inserted
                 reader.connect({ share_mode : this.SCARD_SHARE_SHARED }, function(err, protocol) {
                     if (err) {
                         console.log(err);
@@ -3173,8 +3176,75 @@ pcsc.on('reader', function(reader) {
     });
 });
 
+*/
+
+/*
+
+pcsc.on('reader', function(reader) {
+
+    function exit() {
+        reader.close();
+        pcsc.close();
+    }
+
+    cmd_select = new Buffer([0x00, 0xA4, 0x04, 0x00, 0x0A, 0xA0, 0x00, 0x00, 0x00, 0x62, 0x03, 0x01, 0x0C, 0x06, 0x01]);
+    cmd_command = new Buffer([0x00, 0x00, 0x00, 0x00]);
+
+    console.log('Using:', reader.name);
+
+    reader.connect(function(err, protocol) {
+        if (err) {
+            console.log(err);
+            return exit();
+        }
+        reader.transmit(cmd_select, 255, protocol, function(err, data) {
+            if (err) {
+                console.log(err);
+                return exit();
+            }
+            console.log('Data received', data);
+            reader.transmit(cmd_command, 255, protocol, function(err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('Data received', data);
+                    console.log('Data received', data.toString());
+                }
+                return exit();
+            });
+        });
+    });
+});
+
+
+*/
+
+/*
 pcsc.on('error', function(err) {
     console.log('PCSC error', err.message);
+});
+*/
+
+
+const { Devices } = require('smartcard'); // Or 'nfc-pcsc'
+const devices = new Devices();
+devices.on('reader', async (reader) => {
+  console.log(`Reader connected: ${reader.name}`);
+  // Now you can listen for cards on this specific reader
+  reader.on('card-inserted', async (card) => {
+    console.log(`Card detected in ${reader.name}`);
+    // Handle the inserted card (e.g., read its ATR, UID)
+    const response = await card.transmit([0xFF, 0xCA, 0x00, 0o0, 0o0]); // APDU to get UID
+    console.log(`Card UID: ${response.slice(0, -2).toString('hex')}`);
+  });
+
+  reader.on('card-removed', (card) => {
+    console.log(`Card removed from ${reader.name}`);
+  });
+});
+
+devices.on('reader-removed', (reader) => {
+  console.log(`Reader disconnected: ${reader.name}`);
 });
 
 
