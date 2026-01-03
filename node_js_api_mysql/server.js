@@ -3124,6 +3124,8 @@ async function leerDNIe() {
   }
 }
 
+//-----------------------------------
+
 /*
 var pcsc = require('pcsclite');
 var pcsc = pcsc();
@@ -3225,6 +3227,7 @@ pcsc.on('error', function(err) {
 });
 */
 
+//------------------------------------
 
 const { Devices } = require('smartcard'); // Or 'nfc-pcsc'
 const devices = new Devices();
@@ -3246,6 +3249,84 @@ devices.on('reader', async (reader) => {
 devices.on('reader-removed', (reader) => {
   console.log(`Reader disconnected: ${reader.name}`);
 });
+
+
+//----------------------
+
+/*
+const { NFC } = require('nfc-pcsc');
+
+const nfc = new NFC();
+const key = 'FFFFFFFFFFFF';
+const keyType = 0x60;
+
+nfc.on('reader', async reader => {
+    reader.autoProcessing = false;
+    
+	console.log(`${reader.reader.name}  device attached`);
+
+	reader.on('card', async card => {
+        
+        try {
+            await reader.authenticate(4, keyType, key);
+            await reader.authenticate(5, keyType, key);
+            await reader.authenticate(6, keyType, key);
+            await reader.authenticate(7, keyType, key);
+
+            console.log(`Successfully authenticated`);
+        
+        } catch (err) {
+        console.error(`Error when authenticating card`, { reader: reader.name, card, err });
+        return;
+        }
+
+        console.log();
+        console.log(`card detected`, card);
+
+        try {
+            const data = Buffer.allocUnsafe(16);
+            data.fill(0);
+            const text = "" + Math.floor(10000 + Math.random() * 90000);
+            data.write(text); 
+     
+            await reader.write(4, data, 16); 
+            console.log(`data written`);
+
+        } catch (err) {
+            console.error(`error when writing data`, err);
+        }
+    
+        try {
+            const data = await reader.read(4, 16); 
+            console.log(`data read`, data);
+            const payload = data.toString(); 
+            console.log(`data converted`, payload);
+    
+        } catch (err) {
+            console.error(`error when reading data`, err);
+        }
+    
+
+	});
+
+	reader.on('card.off', card => {
+		console.log(`${reader.reader.name}  card removed`, card);
+	});
+
+	reader.on('error', err => {
+		console.log(`${reader.reader.name}  an error occurred`, err);
+	});
+
+	reader.on('end', () => {
+		console.log(`${reader.reader.name}  device removed`);
+	});
+
+});
+
+nfc.on('error', err => {
+	console.log('an error occurred', err);
+});
+*/
 
 
 //-----------------------
