@@ -3060,17 +3060,17 @@ function leerDNIe() {
     try {
         // Llamar a la función de la biblioteca que interactúa con el DNIe
         // Por ejemplo, usando un servicio como YOiD o una API de DNIe
-        // apiDNIe.iniciarLectura({ tipo: 'datos', pin: true })
-        // .then(resultado => {
-        //     console.log("Datos leídos:", resultado.datos);
-        //     console.log("Certificado:", resultado.certificado);
-        // });
+        apiDNIe.iniciarLectura({ tipo: 'datos', pin: true })
+         .then(resultado => {
+             console.log("Datos leídos:", resultado.datos);
+             console.log("Certificado:", resultado.certificado);
+        });
 
         // O iniciar autenticación
-        // apiDNIe.autenticar()
-        // .then(resultado => {
-        //     console.log("Autenticación exitosa:", resultado.success);
-        // });
+        apiDNIe.autenticar()
+         .then(resultado => {
+             console.log("Autenticación exitosa:", resultado.success);
+        });
 
         // Si es un proceso más directo usando la API criptográfica del navegador (PCSC/PKCS#11)
         // Se requiere más código para interactuar con el hardware
@@ -3081,8 +3081,31 @@ function leerDNIe() {
     }
 }
 
-var pcsc = require('pcsclite');
 
+// Esto es conceptual, la implementación real requiere librerías específicas
+async function leerDNIe() {
+  try {
+    // 1. Comprobar si el navegador soporta WebCrypto (para operaciones básicas)
+    if (window.crypto && window.crypto.subtle) {
+      // 2. Usar un middleware/librería para acceder al lector
+      // (Esto no es JavaScript puro, se comunica con el software de DNIe)
+      const datosDNI = await apiDNIe.leerDatos(); 
+      console.log("Datos leídos:", datosDNI);
+
+      // 3. Usar certificados para firma/autenticación
+      const firma = await apiDNIe.firmar(datosParaFirmar); 
+      console.log("Firma generada:", firma);
+
+    } else {
+      console.log("WebCrypto no soportado.");
+    }
+  } catch (error) {
+    console.error("Error al leer DNIe:", error);
+  }
+}
+
+
+var pcsc = require('pcsclite');
 var pcsc = pcsc();
 pcsc.on('reader', function(reader) {
 
