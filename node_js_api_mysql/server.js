@@ -3127,8 +3127,8 @@ async function leerDNIe() {
 //-----------------------------------
 
 
-var pcsc = require('pcsclite'); //pcsclite@1.0.1
-var pcsc = pcsc();
+//var pcsc = require('pcsclite'); //pcsclite@1.0.1
+//var pcsc = pcsc();
 
 /*pcsc.on('reader', function(reader) {
 
@@ -3188,7 +3188,7 @@ pcsc.on('error', function(err) {
 
 //-----------------------------------
 
-pcsc.on('reader', function(reader) {
+/*pcsc.on('reader', function(reader) {
 
     console.log("pcsc reader 2...");
 
@@ -3229,7 +3229,7 @@ pcsc.on('reader', function(reader) {
 
 pcsc.on('error', function(err) {
     console.log('PCSC error', err.message);
-});
+});*/
 
 
 //------------------------------------
