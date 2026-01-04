@@ -99,6 +99,16 @@ async function sendData(){
         var projectName = document.getElementById("name").value;
         var file = document.getElementById("file").files[0];
 
+        if(projectName === ""){
+            alert("Todos los campos son obligatorios.");
+
+        }else if(projectName.length>50){
+            alert("El nombre debe tener menos de 51 caracteres.");
+
+		    document.getElementById("name").focus();
+            document.getElementById("name").value = "";
+        }else{    
+
         var formData = new FormData();
         formData.append("filename", projectName);
         formData.append("estado", "PENDING");
@@ -134,6 +144,7 @@ async function sendData(){
 
     //window.location.href = "table.html?page=" + newHTML;
 
+    }
 }
 
 checkUserHosting();

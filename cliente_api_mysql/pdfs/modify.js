@@ -139,48 +139,59 @@ async function sendData(){
         return false;
     
     }else{
-         
-        if(file === undefined){
-            file = null;
-        }
 
-        console.log("filename2: " + projectName + " filenameOriginal: " + thisDocName + " estado2: " + docEstado + " uploadedFile2: " + file);
+        if(projectName === ""){
+            alert("Todos los campos son obligatorios.");
 
-        var formData = new FormData();
-        formData.append("filename", projectName);
-        formData.append("filenameOriginal", thisDocName);
-        formData.append("initialTimestampName", initialTimestampName);
-        formData.append("estado", docEstado);
-        formData.append("uploadedFile", file);
-        formData.append("userIdOriginal", userId);
-        formData.append("userIdNuevo", datosUsuario.id);
-        //formData.append("userIdNuevo", 1);
+        }else if(projectName.length>50){
+            alert("El nombre debe tener menos de 51 caracteres.");
 
-        //alert("prueba");
-
-
-        const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
-            method: "PUT",
-            headers: {
-                "Accept": "application/json"
-            },
-            body: formData,
-        }
-        );
-
-        const result = await apiCall.json();
-        console.log(result);
-
-        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-            alert("No se ha podido modificar documento");
-            window.location.href = "table.html?page=" + pageHTML;
+		    document.getElementById("name").focus();
+            document.getElementById("name").value = "";
         }else{
-            //console.log(response);
-            alert("Documento modificado correctamente");
-            window.location.href = "table.html?page=" + pageHTML;        
+         
+            if(file === undefined){
+                file = null;
+            }
+
+            console.log("filename2: " + projectName + " filenameOriginal: " + thisDocName + " estado2: " + docEstado + " uploadedFile2: " + file);
+
+            var formData = new FormData();
+            formData.append("filename", projectName);
+            formData.append("filenameOriginal", thisDocName);
+            formData.append("initialTimestampName", initialTimestampName);
+            formData.append("estado", docEstado);
+            formData.append("uploadedFile", file);
+            formData.append("userIdOriginal", userId);
+            formData.append("userIdNuevo", datosUsuario.id);
+            //formData.append("userIdNuevo", 1);
+
+            //alert("prueba");
+
+
+            const apiCall = await fetch(URLSERVERmodifypdf + idHTML, {
+                method: "PUT",
+                headers: {
+                    "Accept": "application/json"
+                },
+                body: formData,
+            }
+            );
+
+            const result = await apiCall.json();
+            console.log(result);
+
+            if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+                alert("No se ha podido modificar documento");
+                window.location.href = "table.html?page=" + pageHTML;
+            }else{
+                //console.log(response);
+                alert("Documento modificado correctamente");
+                window.location.href = "table.html?page=" + pageHTML;        
+            }
         }
+
+        //window.location.href = "table.html?page=" + pageHTML;
+
     }
-
-    //window.location.href = "table.html?page=" + pageHTML;
-
 }

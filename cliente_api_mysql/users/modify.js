@@ -82,6 +82,8 @@ async function sendData(){
     //var prodIdHTML = document.getElementById("prodId").value;
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
+    const emailPattern = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/;
+    const dniPattern = /^[0-9]{8}[A-Z]{1}$/;
 
     nameUser = document.getElementById("nameUser").value;
     emailUser = document.getElementById("emailUser").value;
@@ -89,47 +91,95 @@ async function sendData(){
     rolUser = document.getElementById("rolUser").value;
     dniUser = document.getElementById("dniUser").value;
 
-    var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
-    var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
-    var dniCrypt = CryptoJS.AES.encrypt(dniUser, "firma_app").toString();
+    if(nameUser === "" || emailUser === "" || passUser === "" || dniUser === ""){
+        alert("Todos los campos son obligatorios.");
 
-    const modUser = {
-        nameUser: nameUser,
-        emailUser: emailCrypt,
-        passUser: passCrypt,
-        rolUser: rolUser,
-        dniUser: dniCrypt 
-    }
+    }else if(!emailPattern.test(emailUser)){
+        alert('No es un correo electronico adecuado');
 
-    const response = await fetch(URLSERVERModify + idHTML, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(modUser)
-    })
+        document.getElementById("emailUser").focus();
+        document.getElementById("emailUser").value = "";
 
-    if(!response.ok){
-        alert("No se ha podido modificar usuario");
-        window.location.href = "table_pag.html?page=" + pageHTML;
+    }else if (nameUser.length>50){
+        alert("El nombre debe tener menos de 51 caracteres.");
+
+		document.getElementById("nameUser").focus();
+        document.getElementById("nameUser").value = "";
+
+    }else if (nameUser.length<2){ 
+        alert("El nombre debe tener al menos 2 caracteres.");
+
+		document.getElementById("nameUser").focus();
+        document.getElementById("nameUser").value = "";
+
+    }else if (passUser.length>50){
+        alert("El pass debe tener menos de 51 caracteres.");
+
+		document.getElementById("passUser").focus();
+        document.getElementById("passUserRepeat").focus();
+
+        document.getElementById("passUser").value = "";
+        document.getElementById("passUserRepeat").value = "";
+
+    }else if (passUser.length<6){ 
+        alert("El pass debe tener al menos 6 caracteres.");
+
+		document.getElementById("passUser").focus();
+        document.getElementById("passUserRepeat").focus();
+
+        document.getElementById("passUser").value = "";
+        document.getElementById("passUserRepeat").value = "";   
+
+    }else if(!dniPattern.test(dniUser)){
+        alert('No es un dni adecuado');
+
+        document.getElementById("dniUser").focus();
+        document.getElementById("dniUser").value = "";
+
     }else{
 
-        const result = await response.json();
-        console.log(result);
+        var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
+        var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
+        var dniCrypt = CryptoJS.AES.encrypt(dniUser, "firma_app").toString();
 
-        //alert('status:', response.status);
-
-        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-            alert("No se ha podido modificar usuario");
-        }else{
-            //console.log(response);
-            alert("Usuario modificado correctamente");
+        const modUser = {
+            nameUser: nameUser,
+            emailUser: emailCrypt,
+            passUser: passCrypt,
+            rolUser: rolUser,
+            dniUser: dniCrypt 
         }
+
+        const response = await fetch(URLSERVERModify + idHTML, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(modUser)
+        })
+
+        if(!response.ok){
+            alert("No se ha podido modificar usuario");
+            window.location.href = "table_pag.html?page=" + pageHTML;
+        }else{
+
+            const result = await response.json();
+            console.log(result);
+
+            //alert('status:', response.status);
+
+            if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+                alert("No se ha podido modificar usuario");
+            }else{
+                //console.log(response);
+                alert("Usuario modificado correctamente");
+            }
+        }
+
+        window.location.href = 'table_pag.html?page=' + pageHTML;
+
     }
-
-    window.location.href = 'table_pag.html?page=' + pageHTML;
-
 }
 
 checkUserHosting();

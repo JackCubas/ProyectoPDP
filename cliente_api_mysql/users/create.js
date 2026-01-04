@@ -83,7 +83,9 @@ async function sendData(){
 
     //event.preventDefault();
 
-    returnToTable = true;
+    //returnToTable = true;
+    const emailPattern = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/;
+    const dniPattern = /^[0-9]{8}[A-Z]{1}$/;
 
     var nameUser = document.getElementById("nameUser").value;
     var emailUser = document.getElementById("emailUser").value;
@@ -91,44 +93,92 @@ async function sendData(){
     var rolUser = document.getElementById("rolUser").value;
     var dniUser = document.getElementById("dniUser").value;
 
-    var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
-    var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
-    var dniCrypt = CryptoJS.AES.encrypt(dniUser, "firma_app").toString();
+    if(nameUser === "" || emailUser === "" || passUser === "" || dniUser === ""){
+        alert("Todos los campos son obligatorios.");
 
-    const nuevoUsers = {
-        nameUser: nameUser,
-        emailUser: emailCrypt,
-        passUser: passCrypt,
-        rolUser: rolUser,
-        dniUser: dniCrypt
-    }
+    }else if(!emailPattern.test(emailUser)){
+        alert('No es un correo electronico adecuado');
 
-    const apiCall = await fetch(URLSERVERCreate, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(nuevoUsers)
-    })
+        document.getElementById("emailUser").focus();
+        document.getElementById("emailUser").value = "";
 
-    if(!apiCall.ok){
-        alert("No se ha podido crear usuario");
-        window.location.href = "table_pag.html?page=" + pageHTML;
-    }else{        
+    }else if (nameUser.length>50){
+        alert("El nombre debe tener menos de 51 caracteres.");
 
-        const result = await apiCall.json();
-        console.log(result);
+		document.getElementById("nameUser").focus();
+        document.getElementById("nameUser").value = "";
 
-        if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-            alert("No se ha podido crear usuario");
-            window.location.href = "table_pag.html?page=" + pageHTML; 
-        }else{
-            //console.log(response);
-            alert("Usuario creado correctamente");
-            window.location.href = "table_pag.html?page=" + newHTML;        
+    }else if (nameUser.length<2){ 
+        alert("El nombre debe tener al menos 2 caracteres.");
+
+		document.getElementById("nameUser").focus();
+        document.getElementById("nameUser").value = "";
+
+    }else if (passUser.length>50){
+        alert("El pass debe tener menos de 51 caracteres.");
+
+		document.getElementById("passUser").focus();
+        document.getElementById("passUserRepeat").focus();
+
+        document.getElementById("passUser").value = "";
+        document.getElementById("passUserRepeat").value = "";
+
+    }else if (passUser.length<6){ 
+        alert("El pass debe tener al menos 6 caracteres.");
+
+		document.getElementById("passUser").focus();
+        document.getElementById("passUserRepeat").focus();
+
+        document.getElementById("passUser").value = "";
+        document.getElementById("passUserRepeat").value = "";   
+
+    }else if(!dniPattern.test(dniUser)){
+        alert('No es un dni adecuado');
+
+        document.getElementById("dniUser").focus();
+        document.getElementById("dniUser").value = "";
+
+    }else{
+
+        var emailCrypt = CryptoJS.AES.encrypt(emailUser, "firma_app").toString();
+        var passCrypt = CryptoJS.AES.encrypt(passUser, "firma_app").toString();
+        var dniCrypt = CryptoJS.AES.encrypt(dniUser, "firma_app").toString();
+
+        const nuevoUsers = {
+            nameUser: nameUser,
+            emailUser: emailCrypt,
+            passUser: passCrypt,
+            rolUser: rolUser,
+            dniUser: dniCrypt
         }
-    } 
+
+        const apiCall = await fetch(URLSERVERCreate, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(nuevoUsers)
+        })
+
+        if(!apiCall.ok){
+            alert("No se ha podido crear usuario");
+            window.location.href = "table_pag.html?page=" + pageHTML;
+        }else{        
+
+            const result = await apiCall.json();
+            console.log(result);
+
+            if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+                alert("No se ha podido crear usuario");
+                window.location.href = "table_pag.html?page=" + pageHTML; 
+            }else{
+                //console.log(response);
+                alert("Usuario creado correctamente");
+                window.location.href = "table_pag.html?page=" + newHTML;        
+            }
+        } 
+    }
 }
 
  checkUserHosting()
