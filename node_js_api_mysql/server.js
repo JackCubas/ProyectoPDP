@@ -3127,8 +3127,11 @@ async function leerDNIe() {
 //-----------------------------------
 
 /*
-var pcsc = require('pcsclite');
+var pcsc = require('pcsclite'); //pcsclite@1.0.1
 var pcsc = pcsc();
+*/
+
+/*
 pcsc.on('reader', function(reader) {
 
     console.log('New reader detected', reader.name);
@@ -3177,11 +3180,9 @@ pcsc.on('reader', function(reader) {
         console.log('Reader',  this.name, 'removed');
     });
 });
-
 */
 
 /*
-
 pcsc.on('reader', function(reader) {
 
     function exit() {
@@ -3217,8 +3218,6 @@ pcsc.on('reader', function(reader) {
         });
     });
 });
-
-
 */
 
 /*
@@ -3229,7 +3228,7 @@ pcsc.on('error', function(err) {
 
 //------------------------------------
 
-const { Devices } = require('smartcard'); // Or 'nfc-pcsc'
+const { Devices } = require('smartcard'); //smartcard@3.7.0  // Or 'nfc-pcsc'
 const devices = new Devices();
 devices.on('reader', async (reader) => {
   console.log(`Reader connected: ${reader.name}`);
@@ -3254,8 +3253,7 @@ devices.on('reader-removed', (reader) => {
 //----------------------
 
 /*
-const { NFC } = require('nfc-pcsc');
-
+const { NFC } = require('nfc-pcsc'); //nfc-pcsc@0.8.1
 const nfc = new NFC();
 const key = 'FFFFFFFFFFFF';
 const keyType = 0x60;
