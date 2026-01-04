@@ -3126,13 +3126,13 @@ async function leerDNIe() {
 
 //-----------------------------------
 
-/*
+
 var pcsc = require('pcsclite'); //pcsclite@1.0.1
 var pcsc = pcsc();
-*/
 
-/*
-pcsc.on('reader', function(reader) {
+/*pcsc.on('reader', function(reader) {
+
+    console.log("pcsc reader...");
 
     console.log('New reader detected', reader.name);
 
@@ -3161,7 +3161,7 @@ pcsc.on('reader', function(reader) {
                         console.log(err);
                     } else {
                         console.log('Protocol(', reader.name, '):', protocol);
-                        reader.transmit(new Buffer([0x00, 0xB0, 0x00, 0x00, 0x20]), 40, protocol, function(err, data) {
+                        reader.transmit(Buffer.from([0x00, 0xB0, 0x00, 0x00, 0x20]), 40, protocol, function(err, data) {
                             if (err) {
                                 console.log(err);
                             } else {
@@ -3180,18 +3180,23 @@ pcsc.on('reader', function(reader) {
         console.log('Reader',  this.name, 'removed');
     });
 });
-*/
 
-/*
+pcsc.on('error', function(err) {
+    console.log('PCSC error', err.message);
+});*/
+
+
 pcsc.on('reader', function(reader) {
+
+    console.log("pcsc reader 2...");
 
     function exit() {
         reader.close();
         pcsc.close();
     }
 
-    cmd_select = new Buffer([0x00, 0xA4, 0x04, 0x00, 0x0A, 0xA0, 0x00, 0x00, 0x00, 0x62, 0x03, 0x01, 0x0C, 0x06, 0x01]);
-    cmd_command = new Buffer([0x00, 0x00, 0x00, 0x00]);
+    cmd_select = Buffer.from([0x00, 0xA4, 0x04, 0x00, 0x0A, 0xA0, 0x00, 0x00, 0x00, 0x62, 0x03, 0x01, 0x0C, 0x06, 0x01]);
+    cmd_command = Buffer.from([0x00, 0x00, 0x00, 0x00]);
 
     console.log('Using:', reader.name);
 
@@ -3218,19 +3223,21 @@ pcsc.on('reader', function(reader) {
         });
     });
 });
-*/
 
-/*
+
 pcsc.on('error', function(err) {
     console.log('PCSC error', err.message);
 });
-*/
+
 
 //------------------------------------
 
-const { Devices } = require('smartcard'); //smartcard@3.7.0  // Or 'nfc-pcsc'
+/*const { Devices } = require('smartcard'); //smartcard@3.7.0  // Or 'nfc-pcsc'
 const devices = new Devices();
 devices.on('reader', async (reader) => {
+
+  console.log("smartcard reader...");
+
   console.log(`Reader connected: ${reader.name}`);
   // Now you can listen for cards on this specific reader
   reader.on('card-inserted', async (card) => {
@@ -3247,29 +3254,33 @@ devices.on('reader', async (reader) => {
 
 devices.on('reader-removed', (reader) => {
   console.log(`Reader disconnected: ${reader.name}`);
-});
+});*/
 
 
 //----------------------
 
-/*
-const { NFC } = require('nfc-pcsc'); //nfc-pcsc@0.8.1
+
+/*const { NFC } = require('nfc-pcsc'); //nfc-pcsc@0.8.1
 const nfc = new NFC();
-const key = 'FFFFFFFFFFFF';
+
+const NFCkey = 'FFFFFFFFFFFF';
 const keyType = 0x60;
 
 nfc.on('reader', async reader => {
-    reader.autoProcessing = false;
+  
+  console.log("nfc reader...");
+
+  reader.autoProcessing = false;
     
 	console.log(`${reader.reader.name}  device attached`);
 
 	reader.on('card', async card => {
         
         try {
-            await reader.authenticate(4, keyType, key);
-            await reader.authenticate(5, keyType, key);
-            await reader.authenticate(6, keyType, key);
-            await reader.authenticate(7, keyType, key);
+            await reader.authenticate(4, keyType, NFCkey);
+            await reader.authenticate(5, keyType, NFCkey);
+            await reader.authenticate(6, keyType, NFCkey);
+            await reader.authenticate(7, keyType, NFCkey);
 
             console.log(`Successfully authenticated`);
         
@@ -3323,16 +3334,67 @@ nfc.on('reader', async reader => {
 
 nfc.on('error', err => {
 	console.log('an error occurred', err);
+});*/
+
+//----------------------
+
+/*const { NFC } = require('nfc-pcsc');
+const KEY_TYPE_A = 0x60;
+const KEY_TYPE_B = 0x61; // key types from nfc-pcsc/src/Reader.js
+var nfc = new NFC();
+
+///NFC HANDLER 
+nfc.on('reader', reader => {
+ 
+    console.log("NFC HANDLER",`${reader.reader.name}  device attached`);
+    
+    reader.on('card', async card => {
+     console.log("NFC HANDLER","Card detected" + card.uid);
+    
+        try {
+	    // For MiFare Classic we need to authenticate every read+write
+	    await reader.authenticate(4, KEY_TYPE_A, 'ffffffffffff'); // THIS LINE FAILS
+	    // In MiFare Classic, the record type starts at block 4 but has
+	    // non-text at the start. Jump to block 5 instead, which is
+	    // partway through the text but still has what we're after.
+            const ndchunck = await reader.read(5,32,16);
+	    console.log(`NFC RAW`, ndchunck);
+            const ndpayload = ndchunck.toString(); // utf8 is default encoding
+	    console.log("NFC DATA", `data: ` + ndpayload);
+        } catch (err) {
+            console.log("NFC HANDLER",`error when reading data in try` + err);
+        }
+    });
+ 
+    reader.on('card.off', card => {  
+        console.log("NFC HANDLER",`Card removed ` + card.uid);
+    });
+ 
+    reader.on('error', async err => {
+        console.log("NFC HANDLER",`error when reading data` + err);
+    });
+ 
+    reader.on('end', () => {
+        console.log("NFC HANDLER",`${reader.reader.name}  device removed`);
+    });
+ 
 });
-*/
+
+nfc.on('error', err => {
+    console.log("NFC HANDLER",`an error occurred` + err);
+});*/
+
 
 //-----------------------
-/*
 
-const usb = require('usb'); // usb@2.16.0
-const devices = usb.getDeviceList();
 
-devices.forEach((device) => {
+/*const usb = require('usb'); // usb@2.16.0
+const devicesUSB = usb.getDeviceList();
+
+devicesUSB.forEach((device) => {
+
+    console.log("usb reader...");
+  
     console.log(`Device: ${device.deviceDescriptor.idVendor}:
                          ${device.deviceDescriptor.idProduct}`);
     console.log(`  Type: ${device.deviceDescriptor.iProduct}`);
@@ -3343,9 +3405,9 @@ devices.forEach((device) => {
         ${device.deviceDescriptor.iManufacturer}`);
     console.log(`  Serial Number: 
         ${device.deviceDescriptor.iSerialNumber}`);
-});
+});*/
 
-*/
+
 //-----------------------
 app.listen(APIPORT, () => {
   console.log(`Firma app listening at http://localhost:${APIPORT}`);
