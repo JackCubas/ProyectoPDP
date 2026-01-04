@@ -3186,6 +3186,8 @@ pcsc.on('error', function(err) {
 });*/
 
 
+//-----------------------------------
+
 pcsc.on('reader', function(reader) {
 
     console.log("pcsc reader 2...");
