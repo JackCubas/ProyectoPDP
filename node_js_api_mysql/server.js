@@ -3124,13 +3124,81 @@ async function leerDNIe() {
   }
 }
 
+//---------------------------------
+/*var pcsc = require('pcsclite');
+var pcsc = pcsc();
+
+pcsc.on('reader', reader => {
+
+    function exit() {
+        reader.close();
+        pcsc.close();
+    }
+
+    reader.on('status', status => {
+        if (status.state & 0x0002) { // Tarjeta presente
+            console.log('DNIe insertado. Leyendo...');
+            // Aquí iría el código para interactuar con la tarjeta, obtener datos, etc.
+            // Usando APDUs para leer certificados y datos (requiere más lógica)
+
+            reader.connect({ share_mode : this.SCARD_SHARE_SHARED }, function(err, protocol) {
+              if (err) {
+                  console.log(err);
+              } else {
+
+                  console.log('Protocol(', reader.name, '):', protocol);
+
+                  //cmd_select = Buffer.from([0x00, 0xA4, 0x04, 0x00, 0x0A, 0xA0, 0x00, 0x00, 0x00, 0x62, 0x03, 0x01, 0x0C, 0x06, 0x01]);
+                  //cmd_command = Buffer.from([0x00, 0x00, 0x00, 0x00]);
+
+                  //reader.transmit(cmd_select, 255, 1, function(err, data) {
+                  //    if (err) {
+                  //        console.log(err);
+                  //        return exit();
+                  //    }
+                  //    console.log('Data received', data);
+                  //    reader.transmit(cmd_command, 255, 1, function(err, data) {
+                  //        if (err) {
+                  //            console.log(err);
+                  //        } else {
+                  //            console.log('Data received', data);
+                  //            console.log('Data received', data.toString());
+                  //        }
+                  //        return exit();
+                  //    });
+                  //});
+
+                  reader.transmit(Buffer.from([0x00, 0xB0, 0x00, 0x00, 0x20]), 40, 1, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('Data received', data);
+                        reader.close();
+                        pcsc.close();
+                    }
+                });
+
+
+
+              }
+          });
+
+
+          
+        }
+    });
+    
+});
+
+pcsc.on('error', err => console.error(err));*/
+
 //-----------------------------------
 
 
-//var pcsc = require('pcsclite'); //pcsclite@1.0.1
-//var pcsc = pcsc();
+var pcsc = require('pcsclite'); //pcsclite@1.0.1
+var pcsc = pcsc();
 
-/*pcsc.on('reader', function(reader) {
+pcsc.on('reader', function(reader) {
 
     console.log("pcsc reader...");
 
@@ -3183,7 +3251,7 @@ async function leerDNIe() {
 
 pcsc.on('error', function(err) {
     console.log('PCSC error', err.message);
-});*/
+});
 
 
 //-----------------------------------
@@ -3385,6 +3453,8 @@ nfc.on('reader', reader => {
 nfc.on('error', err => {
     console.log("NFC HANDLER",`an error occurred` + err);
 });*/
+
+//----------------------------------------------
 
 
 //-----------------------
