@@ -3194,6 +3194,24 @@ pcsc.on('error', err => console.error(err));*/
 
 //-----------------------------------
 
+userArray = []; //Insertar el array de datos ATR del usuario 
+// -- este array deberia llegar del frontend, cuando se crea el usuario por primera vez
+
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+  // Please note that calling sort on an array will modify that array.
+  // you might want to clone your array first.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
 
 var pcsc = require('pcsclite'); //pcsclite@1.0.1
 var pcsc = pcsc();
@@ -3215,6 +3233,8 @@ pcsc.on('reader', function(reader) {
 
         var arrByte= new Uint8Array(status.atr)
         console.log(arrByte)
+
+        console.log("arrays are equal: " + arraysEqual(arrByte, userArray))
         
         var binaryData= new Blob([arrByte])
         console.log(binaryData)
