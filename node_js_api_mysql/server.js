@@ -3209,7 +3209,16 @@ pcsc.on('reader', function(reader) {
     });
 
     reader.on('status', function(status) {
+
         console.log('Status(', this.name, '):', status);
+        console.log("ATR: " + status.atr);
+
+        var arrByte= new Uint8Array(status.atr)
+        console.log(arrByte)
+        
+        var binaryData= new Blob([arrByte])
+        console.log(binaryData)
+
         // check what has changed
         var changes = this.state ^ status.state;
         if (changes) {
