@@ -2938,6 +2938,19 @@ async function transformStampType(fileName, fileType){
 //--------------------------------------
 //--------------------------------------
 
+app.put('/lecturaTarjeta', async (req, res) => {
+
+  console.log("llegado al lectura del tarjeta");
+
+  const idUserFirmadoDigital = req.body.fdUserId;
+
+  console.log(" ID User: " + idUserFirmadoDigital);
+
+  var userArray = await readSmartCard();
+
+  
+}) 
+
 app.put('/firmadoDigital/:id', async (req, res) => {
 
   console.log("llegado al firmado digital pdf");
@@ -3053,8 +3066,125 @@ app.put('/firmadoDigital/:id', async (req, res) => {
 //-------------------------------
 //------------------------------
 //------------------------------
+async function readSmartCard(){
 
-require('crypto').webcrypto
+userArray = [];
+
+var pcsc = require('pcsclite'); //pcsclite@1.0.1
+var pcsc = pcsc();
+
+pcsc.on('reader', function(reader) {
+
+    console.log("pcsc reader...");
+
+    console.log('New reader detected', reader.name);
+
+    reader.on('error', function(err) {
+        console.log('Error(', this.name, '):', err.message);
+    });
+
+    reader.on('status', function(status) {
+
+        console.log('Status(', this.name, '):', status);
+        console.log("ATR: " + status.atr);
+
+        var arrByte= new Uint8Array(status.atr)
+        //console.log(arrByte)
+
+        userArray = arrByte;
+
+        //console.log("arrays are equal: " + arraysEqual(arrByte, userArray))
+
+        console.log("pcsc reader... already read card: " + userArray);
+        
+        //var binaryData= new Blob([arrByte])
+        //console.log(binaryData)
+
+        // check what has changed
+        var changes = this.state ^ status.state;
+        if (changes) {
+            if ((changes & this.SCARD_STATE_EMPTY) && (status.state & this.SCARD_STATE_EMPTY)) {
+                console.log("card removed");// card removed
+                reader.disconnect(reader.SCARD_LEAVE_CARD, function(err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('Disconnected');
+                    }
+                });
+            } else if ((changes & this.SCARD_STATE_PRESENT) && (status.state & this.SCARD_STATE_PRESENT)) {
+                console.log("card inserted");// card inserted
+                reader.connect({ share_mode : this.SCARD_SHARE_SHARED }, function(err, protocol) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('Protocol(', reader.name, '):', protocol);
+                        reader.transmit(Buffer.from([0x00, 0xB0, 0x00, 0x00, 0x20]), 40, protocol, function(err, data) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log('Data received', data);
+                                reader.close();
+                                pcsc.close();
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+
+    reader.on('end', function() {
+        console.log('Reader',  this.name, 'removed');
+    });
+});
+
+pcsc.on('error', function(err) {
+    console.log('PCSC error', err.message);
+});
+
+
+return userArray;
+
+
+}
+
+
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+  // Please note that calling sort on an array will modify that array.
+  // you might want to clone your array first.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+//-----------------------
+app.listen(APIPORT, () => {
+  console.log(`Firma app listening at http://localhost:${APIPORT}`);
+});
+
+function emptyOrRows(rows) {
+  if (!rows) {
+    return [];
+  }
+  return rows;
+}
+
+
+
+//-------------------------
+//-------------------------
+//-------------------------
+
+/*require('crypto').webcrypto
 // Ejemplo conceptual de uso de Web Crypto (tras obtener el certificado del DNIe)
 async function firmarConDNIe(datos) {
   // Obtener la clave privada y el certificado del DNIe (requiere un proveedor externo)
@@ -3122,7 +3252,7 @@ async function leerDNIe() {
   } catch (error) {
     console.error("Error al leer DNIe:", error);
   }
-}
+}*/
 
 //---------------------------------
 /*var pcsc = require('pcsclite');
@@ -3194,24 +3324,11 @@ pcsc.on('error', err => console.error(err));*/
 
 //-----------------------------------
 
-userArray = []; //Insertar el array de datos ATR del usuario 
+ //Insertar el array de datos ATR del usuario 
 // -- este array deberia llegar del frontend, cuando se crea el usuario por primera vez
 
-function arraysEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
 
-  // If you don't care about the order of the elements inside
-  // the array, you should sort both arrays here.
-  // Please note that calling sort on an array will modify that array.
-  // you might want to clone your array first.
-
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
-}
+/*userArray = [];
 
 var pcsc = require('pcsclite'); //pcsclite@1.0.1
 var pcsc = pcsc();
@@ -3280,7 +3397,7 @@ pcsc.on('reader', function(reader) {
 
 pcsc.on('error', function(err) {
     console.log('PCSC error', err.message);
-});
+});*/
 
 
 //-----------------------------------
@@ -3509,17 +3626,6 @@ devicesUSB.forEach((device) => {
 });*/
 
 
-//-----------------------
-app.listen(APIPORT, () => {
-  console.log(`Firma app listening at http://localhost:${APIPORT}`);
-});
-
-function emptyOrRows(rows) {
-  if (!rows) {
-    return [];
-  }
-  return rows;
-}
 
 //---------------------
 //--------------------
