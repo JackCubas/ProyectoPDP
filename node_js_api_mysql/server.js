@@ -2942,11 +2942,11 @@ app.put('/lecturaTarjeta', async (req, res) => {
 
   console.log("llegado al lectura del tarjeta");
 
-  const idUserFirmadoDigital = req.body.fdUserId;
+  const idUser = req.body.fdUserId;
 
-  console.log(" ID User: " + idUserFirmadoDigital);
+  console.log(" ID User: " + idUser);
 
-  var userArray = await insertSmartCardInfo();
+  var userArray = await insertSmartCardInfo(idUser);
 
   
 }) 
@@ -2958,7 +2958,7 @@ app.put('/firmadoDigital/:id', async (req, res) => {
   const { id } = req.params;
   const idUserFirmadoDigital = req.body.fdUserId;
 
-  console.log("ID Doc: " + id + " ID User: " + idUserFirmadoDigital);
+  /*console.log("ID Doc: " + id + " ID User: " + idUserFirmadoDigital);
 
   let con;
 
@@ -3060,8 +3060,8 @@ app.put('/firmadoDigital/:id', async (req, res) => {
   console.log("Ending connection");
   con.end();
 
-  var userArray = [];
-  compareSmartCardInfo(userArray);
+  var userArray = [];*/
+  compareSmartCardInfo(idUserFirmadoDigital);
   
 }) 
 
@@ -3069,7 +3069,7 @@ app.put('/firmadoDigital/:id', async (req, res) => {
 //-------------------------------
 //------------------------------
 //------------------------------
-async function insertSmartCardInfo(){
+async function insertSmartCardInfo(idUser){
 
 userArray = [];
 
@@ -3086,22 +3086,51 @@ pcsc.on('reader', function(reader) {
         console.log('Error(', this.name, '):', err.message);
     });
 
-    reader.on('status', function(status) {
+    reader.on('status', async function(status) {
 
         console.log('Status(', this.name, '):', status);
         console.log("ATR: " + status.atr);
 
         var arrByte= new Uint8Array(status.atr)
-        //console.log(arrByte)
-
         userArray = arrByte;
-
-        //console.log("arrays are equal: " + arraysEqual(arrByte, userArray))
-
         console.log("pcsc reader... already read card: " + userArray);
-        
-        //var binaryData= new Blob([arrByte])
-        //console.log(binaryData)
+
+        let con;
+
+        if(userArray !== null && userArray.length > 0){
+
+          con = mysql.createConnection({
+                host: DBHOST,
+                user: DBUSER,
+                password: DBPASS,
+                port     :DBPORT,
+                database: DBNAME
+          });
+
+          //arrayEncrypt = encrypt(userArray.toString());
+
+          let sql = `
+            UPDATE Users 
+            SET atr = "${userArray.toString()}" 
+            WHERE id = "${idUser}"
+          `;
+
+          console.log("sql: " + sql);
+
+          try{
+          await con.promise().query(sql)
+            .then( ([rows,fields]) => {
+
+              console.log("Ending connection");
+              con.end();
+          })
+          }catch(error){
+            console.log(error);
+
+            console.log("Ending connection");
+            con.end();
+          }
+        }
 
         // check what has changed
         var changes = this.state ^ status.state;
@@ -3152,7 +3181,9 @@ return userArray;
 
 }
 
-async function compareSmartCardInfo(userArray){
+async function compareSmartCardInfo(idUserFirmadoDigital){
+
+userArray = [];
 
 var pcsc = require('pcsclite'); //pcsclite@1.0.1
 var pcsc = pcsc();
@@ -3167,20 +3198,84 @@ pcsc.on('reader', function(reader) {
         console.log('Error(', this.name, '):', err.message);
     });
 
-    reader.on('status', function(status) {
+    reader.on('status', async function(status) {
 
         console.log('Status(', this.name, '):', status);
         console.log("ATR: " + status.atr);
 
         var arrByte= new Uint8Array(status.atr)
-        //console.log(arrByte)
-
-        console.log("arrays are equal: " + arraysEqual(arrByte, userArray))
-
+        userArray = arrByte;
         console.log("pcsc reader... already read card: " + userArray);
-        
-        //var binaryData= new Blob([arrByte])
-        //console.log(binaryData)
+
+        let con;
+
+        con = mysql.createConnection({
+              host: DBHOST,
+              user: DBUSER,
+              password: DBPASS,
+              port     :DBPORT,
+              database: DBNAME
+        });
+
+        let sqlUserAtr = `
+          Select atr from Users 
+          WHERE id = "${idUserFirmadoDigital}"
+        `;
+
+        console.log("sql: " + sqlUserAtr);
+
+        try{
+
+          await con.promise().query(sqlUserAtr)
+          .then( ([rows,fields]) => {
+
+            var rowsObjectString = JSON.stringify(rows);
+            if(rowsObject !== null && rowsObject !== ""){
+              var rowsObject = JSON.parse(rowsObjectString.toString())
+
+              if(rowsObject.length > 0){
+                console.log("doc existe");
+                //existe = true;
+
+                var jsonObject = JSON.parse(JSON.stringify(rowsObject[0]))
+
+                //decrypt(jsonObject.atr);
+                
+                console.log(jsonObject.atr);
+                console.log(userArray.toString());
+
+                if(jsonObject.atr === userArray.toString()){
+                  console.log("DOC FIRMADO...");
+                }
+
+
+                
+              }else{
+                console.log("doc no existe");
+                //existe = false;
+                return;
+              }
+            }else{
+              console.log("doc no existe");
+              //existe = false;
+              return;
+
+            }
+
+
+
+            console.log("Ending connection");
+            con.end();
+        })
+
+
+         
+        }catch(error){
+          console.log(error);
+
+          console.log("Ending connection");
+          con.end();
+        }
 
         // check what has changed
         var changes = this.state ^ status.state;
