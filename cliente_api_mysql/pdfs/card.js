@@ -29,7 +29,7 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            alert("No se ha podido hacer lectura de tarjega");
+            alert("No se ha podido hacer lectura de tarjeta");
             window.location.href = "table.html?page=1";
         }else{
 

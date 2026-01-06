@@ -2948,6 +2948,8 @@ app.put('/lecturaTarjeta', async (req, res) => {
 
   var userArray = await insertSmartCardInfo(idUser);
 
+  return res.status(200).json({ responseData: 'lectura de tarjetas' });
+
   
 }) 
 
@@ -3061,7 +3063,9 @@ app.put('/firmadoDigital/:id', async (req, res) => {
   con.end();
 
   var userArray = [];*/
-  compareSmartCardInfo(idUserFirmadoDigital);
+  await compareSmartCardInfo(idUserFirmadoDigital);
+
+  return res.status(200).json({ responseData: 'hecho firma' });
   
 }) 
 
