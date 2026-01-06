@@ -3063,7 +3063,7 @@ app.put('/firmadoDigital/:id', async (req, res) => {
   con.end();
 
   var userArray = [];*/
-  await compareSmartCardInfo(idUserFirmadoDigital);
+  await compareSmartCardInfo(idUserFirmadoDigital, id);
 
   return res.status(200).json({ responseData: 'hecho firma' });
   
@@ -3122,7 +3122,7 @@ pcsc.on('reader', function(reader) {
           console.log("sql: " + sql);
 
           try{
-          await con.promise().query(sql)
+            await con.promise().query(sql)
             .then( ([rows,fields]) => {
 
               console.log("Ending connection");
@@ -3190,7 +3190,7 @@ return userArray;
 
 }
 
-async function compareSmartCardInfo(idUserFirmadoDigital){
+async function compareSmartCardInfo(idUserFirmadoDigital, idPdf){
 
 userArray = [];
 
@@ -3216,6 +3216,7 @@ pcsc.on('reader', function(reader) {
         userArray = arrByte;
         console.log("pcsc reader... already read card: " + userArray);
 
+        var existe = false;
         let con;
 
         con = mysql.createConnection({
@@ -3243,8 +3244,8 @@ pcsc.on('reader', function(reader) {
               var rowsObject = JSON.parse(rowsObjectString.toString())
 
               if(rowsObject.length > 0){
-                console.log("doc existe");
-                //existe = true;
+                console.log("user existe");
+                existe = true;
 
                 var jsonObject = JSON.parse(JSON.stringify(rowsObject[0]))
 
@@ -3254,24 +3255,71 @@ pcsc.on('reader', function(reader) {
                 console.log(userArray.toString());
 
                 if(jsonObject.atr === userArray.toString()){
-                  console.log("DOC FIRMADO...");
+                  console.log("FIRMADO COINCIDE...");
                 }
 
 
                 
               }else{
-                console.log("doc no existe");
-                //existe = false;
+                console.log("firmado no coincide");
+                existe = false;
                 return;
               }
             }else{
-              console.log("doc no existe");
-              //existe = false;
+              console.log("firmado no coincide");
+              existe = false;
               return;
 
             }
+        })         
+        }catch(error){
+          console.log(error);
 
+          console.log("Ending connection");
+          con.end();
 
+          //Anhadido a posteriori
+          reader.close();
+          pcsc.close();
+        }
+
+        if(existe !== true){
+
+          console.log("No se ha firmado");
+          console.log("Ending connection");
+          con.end();
+
+          //Anhadido a posteriori
+          reader.close();
+          pcsc.close();
+
+        }else{
+
+          /*con = mysql.createConnection({
+              host: DBHOST,
+              user: DBUSER,
+              password: DBPASS,
+              port     :DBPORT,
+              database: DBNAME
+          });*/
+
+          let sqlPdfUrl = `
+            UPDATE pdfs 
+            SET estado = "VALIDATED"
+            WHERE id = "${idPdf}"
+          `;
+
+          console.log("sql: " + sqlPdfUrl);
+
+          try{
+            await con.promise().query(sqlPdfUrl)
+              .then( ([rows,fields]) => {
+
+                console.log(JSON.stringify(rows));     
+
+              })
+          }catch(error){
+            console.log(error);
 
             console.log("Ending connection");
             con.end();
@@ -3279,12 +3327,8 @@ pcsc.on('reader', function(reader) {
             //Anhadido a posteriori
             reader.close();
             pcsc.close();
-        })
+          }
 
-
-         
-        }catch(error){
-          console.log(error);
 
           console.log("Ending connection");
           con.end();
