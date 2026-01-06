@@ -3245,7 +3245,7 @@ pcsc.on('reader', function(reader) {
 
               if(rowsObject.length > 0){
                 console.log("user existe");
-                existe = true;
+                
 
                 var jsonObject = JSON.parse(JSON.stringify(rowsObject[0]))
 
@@ -3256,6 +3256,7 @@ pcsc.on('reader', function(reader) {
 
                 if(jsonObject.atr === userArray.toString()){
                   console.log("FIRMADO COINCIDE...");
+                  existe = true;
                 }
 
 
