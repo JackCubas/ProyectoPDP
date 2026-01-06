@@ -3130,6 +3130,11 @@ pcsc.on('reader', function(reader) {
             console.log("Ending connection");
             con.end();
           }
+
+          //Anhadido a posteriori
+          reader.close();
+          pcsc.close();
+
         }
 
         // check what has changed
@@ -3266,6 +3271,10 @@ pcsc.on('reader', function(reader) {
 
             console.log("Ending connection");
             con.end();
+
+            //Anhadido a posteriori
+            reader.close();
+            pcsc.close();
         })
 
 
@@ -3275,6 +3284,10 @@ pcsc.on('reader', function(reader) {
 
           console.log("Ending connection");
           con.end();
+
+          //Anhadido a posteriori
+          reader.close();
+          pcsc.close();
         }
 
         // check what has changed
