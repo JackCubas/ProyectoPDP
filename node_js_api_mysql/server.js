@@ -664,7 +664,7 @@ app.get('/users/:id', (req, res) => {
     if (err) throw err;
     console.log("Connected!");
 
-    let sql = "SELECT *  from users WHERE id = ?";
+    let sql = "SELECT id, nameUser, emailUser, passUser, rolUser, dniUser, IF(atr IS NULL,0,1) AS atrexists from users WHERE id = ?";
 
     let values = [
       [id]

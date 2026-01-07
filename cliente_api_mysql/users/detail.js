@@ -59,6 +59,17 @@ function appendData(data){
         var decryptedDNIString = decryptedDNI.toString(CryptoJS.enc.Utf8);
         g.textContent="DNI: " + decryptedDNIString                      
         con.appendChild(g);
+
+        var j=document.createElement("div")
+        var estadoATR = "No Existe";
+        if(data[i].atrexists === 0){
+            estadoATR = "No Existe";
+        }
+        if(data[i].atrexists === 1){
+            estadoATR = "Existe";
+        }
+        j.textContent="ATR: " + estadoATR                      
+        con.appendChild(j);
     }
 
     var buttons = document.getElementById("button-container");

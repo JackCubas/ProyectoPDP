@@ -1,3 +1,5 @@
+const URLSERVERdetail = "http://localhost:3000/users/";
+
 var datosUsuario = null;
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -7,6 +9,40 @@ if(localStorage === null || localStorage.getItem("usuario") === null){
 if(localStorage.getItem("usuario") !== null){
     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
 }
+
+function checkUserHosting() {
+
+    return fetch(URLSERVERdetail + datosUsuario.id)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return appendData(data);
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+
+}
+
+function appendData(data){
+    var con=document.getElementById("main-container")
+    for(let i=0;i<data.length;i++){
+
+        var j=document.createElement("div")
+        var estadoATR = "No Existe";
+        if(data[i].atrexists === 0){
+            estadoATR = "No Existe";
+        }
+        if(data[i].atrexists === 1){
+            estadoATR = "Existe";
+        }
+        j.textContent="ATR: " + estadoATR                      
+        con.appendChild(j);
+    }
+
+}
+
+
+checkUserHosting();
 
 
 async function sendData(){
