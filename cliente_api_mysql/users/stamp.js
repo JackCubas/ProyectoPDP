@@ -106,6 +106,8 @@ async function deleteStamp(){
     const result = await response.json();
     console.log(result);
 
+    alert("Se ha borrado el estampado");
+
     window.location.href = "table_pag.html?page=" + pageHTML;
 
 }
