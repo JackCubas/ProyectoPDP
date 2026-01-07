@@ -161,7 +161,7 @@ function appendDataStamp(data){
 
             document.getElementById("submit").disabled = false;
 
-            if(data[0].stampUserId !== datosUsuario.id){
+            if(data[0].stampUserId !== datosUsuario.id || data[0].atrexists === 0){
                 document.getElementById("submit").disabled = true;
             }
         }
