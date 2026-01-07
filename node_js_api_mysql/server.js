@@ -3111,11 +3111,11 @@ pcsc.on('reader', function(reader) {
                 database: DBNAME
           });
 
-          //arrayEncrypt = encrypt(userArray.toString());
+          arrayEncrypt = encrypt(userArray.toString());
 
           let sql = `
             UPDATE Users 
-            SET atr = "${userArray.toString()}" 
+            SET atr = "${arrayEncrypt}" 
             WHERE id = "${idUser}"
           `;
 
@@ -3249,12 +3249,12 @@ pcsc.on('reader', function(reader) {
 
                 var jsonObject = JSON.parse(JSON.stringify(rowsObject[0]))
 
-                //decrypt(jsonObject.atr);
+                atrDecript = decrypt(jsonObject.atr);
                 
-                console.log(jsonObject.atr);
+                console.log(atrDecript);
                 console.log(userArray.toString());
 
-                if(jsonObject.atr === userArray.toString()){
+                if(atrDecript === userArray.toString()){
                   console.log("FIRMADO COINCIDE...");
                   existe = true;
                 }
