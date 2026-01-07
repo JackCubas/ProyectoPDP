@@ -161,6 +161,9 @@ function appendDataStamp(data){
 
             document.getElementById("submit").disabled = false;
 
+            if(data[0].stampUserId !== datosUsuario.id){
+                document.getElementById("submit").disabled = true;
+            }
         }
     }else{
         console.log("No hay documento estampado");
