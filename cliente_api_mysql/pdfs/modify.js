@@ -91,6 +91,10 @@ function appendData(data){
     buttonCan.innerHTML = "Cancel";
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan); 
+
+    if(datosUsuario.rolUser !== "ADMIN"){
+        document.getElementById("docEstado").disabled = true;
+    }
 }
 
 function onbuttonclicked() {
