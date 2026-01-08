@@ -2157,6 +2157,8 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
       fs.writeFileSync(archivoNombreNuevo, pdfFile.data);
       console.log('File written successfully:', archivoNombreNuevo);
+
+      estado = 'PENDING';
     }
 
     // compute metadata for the new file
