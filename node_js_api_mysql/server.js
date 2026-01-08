@@ -2093,7 +2093,7 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
   const initialTimestampName = req.body.initialTimestampName;
 
-  const estado = req.body.estado || 'PENDING';
+  var estado = req.body.estado || 'PENDING';
 
   const userIdNuevo = req.body.userIdNuevo;
   const userIdOriginal = req.body.userIdOriginal;
