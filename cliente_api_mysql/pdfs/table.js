@@ -158,6 +158,12 @@ function buildTable(data, currentPageNum) {
         buttonFD.textContent = "FD";
         buttonFD.addEventListener('click', firmadoDigital);
         cell3.appendChild(buttonFD);
+
+        const buttonFDCliente = document.createElement('button');
+        buttonFDCliente.id = "FDClientebutton" + butID + "-" + currentPageNum + "-" + data.length;
+        buttonFDCliente.textContent = "FD Cliente";
+        buttonFDCliente.addEventListener('click', firmadoDigitalCliente);
+        cell3.appendChild(buttonFDCliente);
       }
     }
   }else{
@@ -254,6 +260,17 @@ function firmadoDigital(event) {
   //alert("Firmado digital: " + datosFD[0]);
 
   window.location.href = "firmadoDigital.html?id=" + datosFD[0] + "&page=" + datosFD[1];
+}
+
+function firmadoDigitalCliente(event) {
+  var idFirmadoDigitalCli = event.target.id;
+  const substringToRemove = "FDClientebutton";
+  var idFDCliString = idFirmadoDigitalCli.replace(substringToRemove, '');
+  var datosFDCli = idFDCliString.split('-');
+
+  //alert("Firmado digital: " + datosFD[0]);
+
+  window.location.href = "firmadoDigitalCliente.html?id=" + datosFDCli[0] + "&page=" + datosFDCli[1];
 }
 
 
