@@ -1,7 +1,14 @@
 //import * as webeid from '@web-eid/web-eid-library/web-eid.js';
 
-import * as webeid from '../node_modules/@web-eid/web-eid-library/web-eid';
+//import * as webeid from '../node_modules/@web-eid/web-eid-library/web-eid';
 //import * as webeid from '@web-eid/web-eid-library';
+//import * as webeid from 'web-eid.js';
+
+//webeid = require('web-eid');
+
+//webeid = require('@web-eid/web-eid-library/web-eid');
+
+import * as webeid from './bundle.js';
 
 const lang = navigator.language.substr(0, 2);
 const authButton = document.querySelector("#webeid-auth-button");
