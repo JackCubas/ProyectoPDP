@@ -345,7 +345,12 @@ authButton.addEventListener("click", async () => {
     try {
 
       //webeid.authenticate(string nonce, object options);
-       console.log(webeid.authenticate("prueba"));
+      let autent = webeid.authenticate("prueba");
+
+      autent.then(function(result) {
+        console.log(result);
+      })
+      .catch(console.error)
         
     } catch (error) {
         console.log("Authentication failed! Error:", error);
@@ -363,7 +368,13 @@ signButton.addEventListener("click", async () => {
       let array  = new Uint8Array(buffer);
       //Array.from(array);
 
-      console.log(webeid.sign(webeid.getCertificate(), buffer, "SHA256"));
+      let sign = webeid.sign(webeid.getCertificate(), buffer, "SHA256")
+
+      sign.then(function(result) {
+        console.log(result);
+      })
+      .catch(console.error)
+      
         
     } catch (error) {
         console.log("Signing failed! Error:", error);
