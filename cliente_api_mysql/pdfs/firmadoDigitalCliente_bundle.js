@@ -387,7 +387,7 @@ signButton.addEventListener("click", async () => {
 
 const certButton = document.querySelector("#webeid-cert-button");
 
-signButton.addEventListener("click", async () => {
+certButton.addEventListener("click", async () => {
     try {
 
       //webeid.getCertificate(object options);
