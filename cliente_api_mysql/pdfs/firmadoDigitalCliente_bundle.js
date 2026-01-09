@@ -348,10 +348,24 @@ authButton.addEventListener("click", async () => {
       var ranNum = Math.random();
       let autent = webeid.authenticate(ranNum.toString());
 
-      autent.then(function(result) {
+      let res = autent.then(function(result) {
         console.log(result);
+
+        /*result.then(function(result_2){
+            console.log(result_2);
+        })*/
+
+      })
+      .then(function(result_2){
+          console.log(result_2);
       })
       .catch(console.error)
+
+      /*res.then(function(result_2){
+          console.log(result_2);
+      })
+      .catch(console.error)*/
+
         
     } catch (error) {
         console.log("Authentication failed! Error:", error);
