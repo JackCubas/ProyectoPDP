@@ -391,7 +391,13 @@ certButton.addEventListener("click", async () => {
     try {
 
       //webeid.getCertificate(object options);
-      console.log(webeid.getCertificate());
+
+      let cert = webeid.getCertificate()
+
+      cert.then(function(result) {
+        console.log(result);
+      })
+      .catch(console.error)
         
     } catch (error) {
         console.log("Certificate failed! Error:", error);
