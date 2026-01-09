@@ -369,6 +369,7 @@ signButton.addEventListener("click", async () => {
       let array  = new Uint8Array(buffer);
       //Array.from(array);
 
+      //webeid.sign(ArrayBuffer certificate, ArrayBuffer hash, object options)
       let sign = webeid.sign(webeid.getCertificate(), buffer, "SHA256")
 
       sign.then(function(result) {
