@@ -345,7 +345,8 @@ authButton.addEventListener("click", async () => {
     try {
 
       //webeid.authenticate(string nonce, object options);
-      let autent = webeid.authenticate("prueba");
+      var ranNum = Math.random();
+      let autent = webeid.authenticate(ranNum.toString());
 
       autent.then(function(result) {
         console.log(result);
