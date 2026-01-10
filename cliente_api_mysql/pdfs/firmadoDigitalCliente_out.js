@@ -379,12 +379,25 @@
   }
 
   // firmadoDigitalCliente.jsx
+
+  if(localStorage.getItem("usuario") !== null){
+    datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+  }
+
+  var URLString = window.location.href.split('?');
+  var datosURL = URLString[1].split('&');
+  var idHTML = datosURL[0].replace("id=","");
+  var pageHTML = datosURL[1].replace("page=","");
+
+  var idUser = datosUsuario.id;
+
+
   var lang = navigator.language.substr(0, 2);
 
   var authButton = document.querySelector("#webeid-auth-button");
   authButton.addEventListener("click", async () => {
     try {
-      const challengeResponse = await fetch("/auth/challenge", {
+      const challengeResponse = await fetch("http://localhost:3000/auth/challenge/" + idUser, {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
@@ -395,7 +408,7 @@
       }
       const { nonce } = await challengeResponse.json();
       const authToken = await authenticate(nonce, { lang });
-      const authTokenResponse = await fetch("/auth/login", {
+      const authTokenResponse = await fetch("http://localhost:3000/auth/login/" + idUser, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -408,7 +421,7 @@
       }
       const authTokenResult = await authTokenResponse.json();
       console.log("Authentication successful! Result:", authTokenResult);
-      window.location.href = "table.html?page=1";
+      window.location.href = "table.html?page=" + pageHTML;
     } catch (error) {
       console.log("Authentication failed! Error:", error);
       throw error;
@@ -416,50 +429,50 @@
   });
 
   var signButton = document.querySelector("#webeid-sign-button");
-signButton.addEventListener("click", async () => {
-    try {
-        const {
-            certificate,
-            supportedSignatureAlgorithms
-        } = await getSigningCertificate({ lang });
+  signButton.addEventListener("click", async () => {
+      try {
+          const {
+              certificate,
+              supportedSignatureAlgorithms
+          } = await getSigningCertificate({ lang });
 
-        const prepareSigningResponse = await fetch("/sign/prepare", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                [csrfHeaderName]: csrfToken
-            },
-            body: JSON.stringify({ certificate, supportedSignatureAlgorithms })
-        });
+          const prepareSigningResponse = await fetch("http://localhost:3000/sign/prepare/" + idHTML, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  [csrfHeaderName]: csrfToken
+              },
+              body: JSON.stringify({ certificate, supportedSignatureAlgorithms })
+          });
 
-        if (!prepareSigningResponse.ok) {
-            throw new Error("POST /sign/prepare server error: " + prepareSigningResponse.status);
-        }
+          if (!prepareSigningResponse.ok) {
+              throw new Error("POST /sign/prepare server error: " + prepareSigningResponse.status);
+          }
 
-        const { hash, hashFunction } = await prepareSigningResponse.json();
+          const { hash, hashFunction } = await prepareSigningResponse.json();
 
-        const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
+          const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
 
-        const finalizeSigningResponse = await fetch("/sign/finalize", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                [csrfHeaderName]: csrfToken
-            },
-            body: JSON.stringify({ signature, signatureAlgorithm })
-        });
+          const finalizeSigningResponse = await fetch("http://localhost:3000/sign/finalize/" + idHTML, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  [csrfHeaderName]: csrfToken
+              },
+              body: JSON.stringify({ signature, signatureAlgorithm })
+          });
 
-        if (!finalizeSigningResponse.ok) {
-            throw new Error("POST /sign/finalize server error: " + finalizeSigningResponse.status);
-        }
+          if (!finalizeSigningResponse.ok) {
+              throw new Error("POST /sign/finalize server error: " + finalizeSigningResponse.status);
+          }
 
-        const signResult = await finalizeSigningResponse.json();
-        console.log("Signing successful! Response:", signResult);
-    } catch (error) {
-        console.log("Signing failed! Error:", error);
-        throw error;
-    }
-});
+          const signResult = await finalizeSigningResponse.json();
+          console.log("Signing successful! Response:", signResult);
+      } catch (error) {
+          console.log("Signing failed! Error:", error);
+          throw error;
+      }
+  });
 
 
   var certButton = document.querySelector("#webeid-cert-button");
