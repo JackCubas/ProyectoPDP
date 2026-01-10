@@ -416,62 +416,63 @@
   });
 
   var signButton = document.querySelector("#webeid-sign-button");
-  signButton.addEventListener("click", async () => {
+signButton.addEventListener("click", async () => {
     try {
-      const {
-        certificate,
-        supportedSignatureAlgorithms
-      } = await getSigningCertificate({ lang });
-      const prepareSigningResponse = await fetch("/sign/prepare", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          [csrfHeaderName]: csrfToken
-        },
-        body: JSON.stringify({ certificate, supportedSignatureAlgorithms })
-      });
-      if (!prepareSigningResponse.ok) {
-        throw new Error("POST /sign/prepare server error: " + prepareSigningResponse.status);
-      }
-      const {
-        hash,
-        hashFunction
-      } = await prepareSigningResponse.json();
-      const {
-        signature,
-        signatureAlgorithm
-      } = await sign(certificate, hash, hashFunction, { lang });
-      const finalizeSigningResponse = await fetch("/sign/finalize", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          [csrfHeaderName]: csrfToken
-        },
-        body: JSON.stringify({ signature, signatureAlgorithm })
-      });
-      if (!finalizeSigningResponse.ok) {
-        throw new Error("POST /sign/finalize server error: " + finalizeSigningResponse.status);
-      }
-      const signResult = await finalizeSigningResponse.json();
-      console.log("Signing successful! Response:", response);
+        const {
+            certificate,
+            supportedSignatureAlgorithms
+        } = await getSigningCertificate({ lang });
+
+        const prepareSigningResponse = await fetch("/sign/prepare", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeaderName]: csrfToken
+            },
+            body: JSON.stringify({ certificate, supportedSignatureAlgorithms })
+        });
+
+        if (!prepareSigningResponse.ok) {
+            throw new Error("POST /sign/prepare server error: " + prepareSigningResponse.status);
+        }
+
+        const { hash, hashFunction } = await prepareSigningResponse.json();
+
+        const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
+
+        const finalizeSigningResponse = await fetch("/sign/finalize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeaderName]: csrfToken
+            },
+            body: JSON.stringify({ signature, signatureAlgorithm })
+        });
+
+        if (!finalizeSigningResponse.ok) {
+            throw new Error("POST /sign/finalize server error: " + finalizeSigningResponse.status);
+        }
+
+        const signResult = await finalizeSigningResponse.json();
+        console.log("Signing successful! Response:", signResult);
     } catch (error) {
-      console.log("Signing failed! Error:", error);
-      throw error;
+        console.log("Signing failed! Error:", error);
+        throw error;
     }
-  });
+});
+
 
   var certButton = document.querySelector("#webeid-cert-button");
   certButton.addEventListener("click", async () => {
-      try {
+  try {
+    const { certificate, supportedSignatureAlgorithms } = await getSigningCertificate({ lang });
+    console.log("Certificate obtained:", certificate);
+    //TODO mostrar el certificado en pantalla?
+  } catch (error) {
+    console.log("Certificate failed! Error:", error);
+  }
+});
 
-        //webeid.getCertificate(object options);
-        console.log("webeid.getCertificate()");
-          
-      } catch (error) {
-          console.log("Certificate failed! Error:", error);
-          throw error;
-      }
-  });
 
 })();
 

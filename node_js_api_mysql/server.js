@@ -2816,7 +2816,120 @@ app.put('/firmadoDigital/:id', async (req, res) => {
   
 }) 
 
-// meter aqui el sign/prepare
+app.post('/sign/prepare/:id', async (req, res) => {
+
+    const { id } = req.params;
+    const { userId, fileName, initialTimestampName } = req.body;
+
+    if (!userId || !fileName || !initialTimestampName) {
+        return res.status(400).json({ error: 'userId, fileName y initialTimestampName son requeridos' });
+    }
+
+    const archivoPdf = CARPETAPDF + `/${userId}/${fileName}_${initialTimestampName}.pdf`;
+
+    if (!fs.existsSync(archivoPdf)) {
+        return res.status(404).json({ error: 'PDF no encontrado' });
+    }
+
+    try {
+        // Leer el original
+        const pdfBytes = fs.readFileSync(archivoPdf);
+
+        const hash = crypto.createHash('sha256').update(pdfBytes).digest('base64');
+
+        console.log(`PDF ${archivoPdf} preparado para firma. Hash generado.`);
+
+        // TODO CAMBIAR ESTADO EN LA DB? 
+
+        return res.status(200).json({
+            message: 'PDF preparado para firma digital',
+            pdfId: id,
+            hash: hash
+        });
+
+    } catch (err) {
+        console.error('Error preparando PDF para Web eID:', err);
+        return res.status(500).json({ error: 'failed to prepare PDF for digital signing' });
+    }
+
+});
+
+const forge = require('node-forge'); //TODO moverlo junto a las otras depedencias
+app.post('/sign/finalize/:id', async (req, res) => {
+  const { id } = req.params;
+  const { signature, signatureAlgorithm, certificate } = req.body;
+
+  if (!signature || !signatureAlgorithm || !certificate) {
+    return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
+  }
+
+  const con = mysql.createConnection({
+    host: DBHOST,
+    user: DBUSER,
+    password: DBPASS,
+    port: DBPORT,
+    database: DBNAME
+  });
+
+  con.connect(async (err) => {
+    if (err) return res.status(500).json({ error: 'DB connection error' });
+
+    try {
+      const [rows] = await con.promise().query(`SELECT name, userId, initialUploadTimestamp FROM pdfs WHERE id = ?`, [id]);
+      if (!rows || rows.length === 0) {
+        con.end();
+        return res.status(404).json({ error: 'PDF not found' });
+      }
+
+      const pdfData = rows[0];
+      const archivoPdf = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}.pdf`;
+      if (!fs.existsSync(archivoPdf)) {
+        con.end();
+        return res.status(404).json({ error: 'PDF file not found' });
+      }
+
+      const pdfBytes = fs.readFileSync(archivoPdf);
+
+      const md = forge.md.sha256.create();
+      md.update(pdfBytes.toString('binary'));
+
+      const sigBytes = forge.util.decode64(signature);
+      const cert = forge.pki.certificateFromPem(certificate);
+
+      let verified = false;
+      try {
+        verified = cert.publicKey.verify(md.digest().getBytes(), sigBytes);
+      } catch (e) {
+        console.error('Signature verification error', e);
+      }
+
+      if (!verified) {
+        con.end();
+        return res.status(400).json({ error: 'Firma no válida' });
+      }
+
+      // Guardar PDF firmado
+      const newFilePath = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-sign.pdf`;
+      fs.writeFileSync(newFilePath, pdfBytes);
+
+      //TODO actualizar estado en la DB?
+      // const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+      // await con.promise().query(
+      //   `UPDATE pdfs SET signUserId = ?, signTimestamp = ?, estado = "VALIDATED" WHERE id = ?`,
+      //   [pdfData.userId, signTimestamp, id]
+      // );
+
+      con.end();
+      return res.status(200).json({ message: 'PDF firmado correctamente', file: newFilePath });
+
+    } catch (error) {
+      console.error(error);
+      con.end();
+      return res.status(500).json({ error: 'Error al procesar la firma' });
+    }
+  });
+});
+
 
 
 //-------------------------------
