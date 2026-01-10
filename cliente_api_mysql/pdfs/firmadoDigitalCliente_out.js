@@ -408,7 +408,7 @@
       }
       const authTokenResult = await authTokenResponse.json();
       console.log("Authentication successful! Result:", authTokenResult);
-      window.location.href = "/welcome";
+      window.location.href = "table.html?page=1";
     } catch (error) {
       console.log("Authentication failed! Error:", error);
       throw error;
