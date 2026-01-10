@@ -2882,7 +2882,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       }
 
       const pdfData = rows[0];
-      const archivoPdf = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}.pdf`;
+      const archivoPdf = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-stamp.pdf`;
       if (!fs.existsSync(archivoPdf)) {
         con.end();
         return res.status(404).json({ error: 'PDF file not found' });
@@ -2909,7 +2909,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       }
 
       // Guardar PDF firmado
-      const newFilePath = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-sign.pdf`;
+      const newFilePath = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-signFD.pdf`;
       fs.writeFileSync(newFilePath, pdfBytes);
 
       //TODO actualizar estado en la DB?
