@@ -407,7 +407,23 @@
         throw new Error("GET /auth/challenge server error: " + challengeResponse.status);
       }
       const { nonce } = await challengeResponse.json();
-      const authToken = await authenticate(nonce, { lang });
+
+      try {
+        const authToken = await authenticate(nonce, { lang });
+      } catch (error) {
+
+        if (error.code === "ERR_WEBEID_USER_CANCELLED") {
+          alert("Debe introducir la contraseña de la tarjeta para autenticarse.");
+        } else if (error.code === "ERR_WEBEID_USER_TIMEOUT") {
+          alert("No respondió a tiempo. Intente nuevamente con su tarjeta.");
+        } else {
+          alert("Error en la autenticación: " + error.message);
+    }
+    console.error(error);
+    return;// Salir de la funcion si hay un error de autenticacion
+}
+
+
       const authTokenResponse = await fetch("http://localhost:3000/auth/login/", {
         method: "POST",
         headers: {

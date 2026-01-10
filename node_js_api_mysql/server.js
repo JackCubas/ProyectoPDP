@@ -2931,15 +2931,36 @@ app.post('/sign/finalize/:id', async (req, res) => {
 });
 
 
-const validNonces = new Set();
+const challenges = {}; //Nonces
 
 app.get("/auth/challenge", (req, res) => {
   const nonce = crypto.randomBytes(16).toString("hex");
-
-  validNonces.add(nonce);
-  setTimeout(() => validNonces.delete(nonce), 5 * 60 * 1000);
+  challenges[nonce] = true;
 
   res.json({ nonce });
+});
+
+
+app.post("/auth/login", (req, res) => {
+  const { authToken } = req.body;
+
+  if (!authToken) {
+    return res.status(400).json({ error: "authToken missing" });
+  }
+
+  const { nonce, certificate, signature } = authToken;
+
+  if (!nonce || !challenges[nonce]) {
+    return res.status(400).json({ error: "Invalid or expired nonce" });
+  }
+
+  delete challenges[nonce];
+
+  if (!certificate || !signature) {
+    return res.status(400).json({ error: "Invalid token data" });
+  }
+
+  res.json({ success: true });
 });
 
 
