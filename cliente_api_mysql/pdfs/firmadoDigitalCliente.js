@@ -1,4 +1,6 @@
 import * as webeid from '@web-eid/web-eid-library/web-eid.js';
+import * as webeid from "web-eid";
+
 
 const lang = navigator.language.substr(0, 2);
 const authButton = document.querySelector("#webeid-auth-button");
