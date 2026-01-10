@@ -2931,6 +2931,17 @@ app.post('/sign/finalize/:id', async (req, res) => {
 });
 
 
+const validNonces = new Set();
+
+app.get("/auth/challenge", (req, res) => {
+  const nonce = crypto.randomBytes(16).toString("hex");
+
+  validNonces.add(nonce);
+  setTimeout(() => validNonces.delete(nonce), 5 * 60 * 1000);
+
+  res.json({ nonce });
+});
+
 
 //-------------------------------
 //------------------------------
