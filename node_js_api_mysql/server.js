@@ -2812,11 +2812,11 @@ app.post('/sign/prepare/:id', async (req, res) => {
 const forge = require('node-forge'); //TODO moverlo junto a las otras depedencias
 app.post('/sign/finalize/:id', async (req, res) => {
   const { id } = req.params;
-  const { signature, signatureAlgorithm, certificate } = req.body;
+  const { signature, signatureAlgorithm, certificate, hash } = req.body;
 
-  console.log(id + " - " + signature + " - " + signatureAlgorithm + " - " + certificate);
+  console.log(id + " - " + signature + " - " + signatureAlgorithm + " - " + certificate + " - " + hash);
 
-  if (!signature || !signatureAlgorithm || !certificate) {
+  if (!signature || !signatureAlgorithm || !certificate || !hash) {
     return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
   }
 
@@ -2856,6 +2856,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
       const md = forge.md.sha256.create();
       md.update(pdfBytes.toString('binary'));
+      //md.update(forge.util.decode64(hash));
 
       const sigBytes = forge.util.decode64(signature);
       //const cert = forge.pki.certificateFromPem(certificate);
@@ -2879,6 +2880,13 @@ app.post('/sign/finalize/:id', async (req, res) => {
       // Guardar PDF firmado
       const newFilePath = urlCarpetaOriginal + "-signFD.pdf";
       console.log(newFilePath);
+
+      if (fs.existsSync(newFilePath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(newFilePath);
+      }
+
       fs.writeFileSync(newFilePath, pdfBytes);
 
       //TODO actualizar estado en la DB?
