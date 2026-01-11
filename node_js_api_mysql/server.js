@@ -2796,7 +2796,9 @@ app.post('/sign/prepare/:id', async (req, res) => {
         return res.status(200).json({
             message: 'PDF preparado para firma digital',
             pdfId: id,
-            hash: hash
+            hash: hash,
+            hashFunction: 'sha256'
+
         });
 
     } catch (err) {

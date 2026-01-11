@@ -514,6 +514,9 @@ const csrfToken = getCookie('CSRF-TOKEN');
 
           const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
 
+          console.log("signature: " + signature);
+          console.log("signatureAlgorithm: " + signatureAlgorithm);
+
           const finalizeSigningResponse = await fetch("http://localhost:3000/sign/finalize/" + idHTML, {
               method: "POST",
               headers: {
