@@ -2634,28 +2634,8 @@ async function modifyImage(imageName){
   }
 
   await image.opacity(0.3);
-  //await image.resize(256, 256);
-  //await image.color('#000000ff');
-
-  /*
-  const colorArray = [{r: 0, g: 0, b: 0, a: 255}];
-  await image.color(colorArray);
-
-  if(image.hasAlpha()){
-    //const colorArray = [{r: 0, g: 0, b: 0, a: 0}];
-    //await image.color(colorArray);
-    image.background = 0x000000ff;
-  }
-  */
 
   await image.write(imageName); // save
-
-  /*Jimp.read(imageName, function (err, img) {
-        if (err) throw err;
-        img.resize(256, 256)
-             .opacity(0.7)                 
-             .write(imageName); 
-  });*/
 
   console.log("Finalizado modificacion de stamp");
 }
@@ -2707,109 +2687,6 @@ app.put('/firmadoDigital/:id', async (req, res) => {
   const { id } = req.params;
   const idUserFirmadoDigital = req.body.fdUserId;
 
-  /*console.log("ID Doc: " + id + " ID User: " + idUserFirmadoDigital);
-
-  let con;
-
-  con = mysql.createConnection({
-        host: DBHOST,
-        user: DBUSER,
-        password: DBPASS,
-        port     :DBPORT,
-        database: DBNAME
-  });
-
-  var listaDocs = [];
-  var listaUsers = [];
-
-  let sqlUserDNI = `
-      Select dniUser from Users 
-      WHERE id = "${idUserFirmadoDigital}"
-    `;
-
-  let sqlPdfUrl = `
-      Select urlCarpeta from pdfs
-      WHERE id = "${id}"
-    `;
-  
-   try{
-    await con.promise().query(sqlUserDNI)
-      .then( ([rows,fields]) => {
-
-          var rowsObjectString = JSON.stringify(rows);
-            if(rowsObject !== null && rowsObject !== ""){
-              var rowsObject = JSON.parse(rowsObjectString.toString())
-
-              if(rowsObject.length > 0){
-                console.log("user existe");
-                //existe = true;
-
-                for (let i = 0; i < rowsObject.length; i++){
-                  listaUsers.push(JSON.parse(JSON.stringify(rowsObject[i])));
-                }
-              }else{
-                console.log("user no existe");
-                //existe = false;
-                return;
-              }
-            }else{
-              console.log("user no existe");
-              //existe = false;
-              return;
-
-            }
-          
-      })
-  }catch(error){
-    console.log(error);
-
-    console.log("Ending connection");
-    con.end();
-  }
-
-  try{
-    await con.promise().query(sqlPdfUrl)
-      .then( ([rows,fields]) => {
-
-          var rowsObjectString = JSON.stringify(rows);
-            if(rowsObject !== null && rowsObject !== ""){
-              var rowsObject = JSON.parse(rowsObjectString.toString())
-
-              if(rowsObject.length > 0){
-                console.log("doc existe");
-                //existe = true;
-
-                for (let i = 0; i < rowsObject.length; i++){
-                  listaDocs.push(JSON.parse(JSON.stringify(rowsObject[i])));
-                }
-              }else{
-                console.log("doc no existe");
-                //existe = false;
-                return;
-              }
-            }else{
-              console.log("doc no existe");
-              //existe = false;
-              return;
-
-            }
-          
-
-      })
-  }catch(error){
-    console.log(error);
-
-    console.log("Ending connection");
-    con.end();
-  }
-
-  console.log(listaDocs);
-  console.log(listaUsers);
-
-  console.log("Ending connection");
-  con.end();
-
-  var userArray = [];*/
   await compareSmartCardInfo(idUserFirmadoDigital, id);
 
   return res.status(200).json({ responseData: 'hecho firma' });
