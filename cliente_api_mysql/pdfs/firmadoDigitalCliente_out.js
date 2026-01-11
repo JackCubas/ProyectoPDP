@@ -506,16 +506,23 @@ const csrfToken = getCookie('CSRF-TOKEN');
               throw new Error("POST /sign/prepare server error: " + prepareSigningResponse.status);
           }
 
-          const { hash, hashFunction } = await prepareSigningResponse.json();
+            const prepareSigningJson = await prepareSigningResponse.json();
+            const { hash, hashFunction } = prepareSigningJson;
 
-          console.log("Certificate: " + certificate);
-          console.log("Hash: " + hash);
-          console.log("Hash: " + hashFunction);
+            console.log("Certificate: " + certificate);
+            console.log("Hash: " + hash);
+            console.log("Hash function: " + hashFunction);
 
-          const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
+            if (!hash) {
+              console.error("Server returned null/empty hash for signing:", prepareSigningJson);
+              alert("Signing aborted: server returned an empty hash. Check server logs or try again.");
+              return;
+            }
 
-          console.log("signature: " + signature);
-          console.log("signatureAlgorithm: " + signatureAlgorithm);
+            const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
+
+            console.log("signature: " + signature);
+            console.log("signatureAlgorithm: " + signatureAlgorithm);
 
           const finalizeSigningResponse = await fetch("http://localhost:3000/sign/finalize/" + idHTML, {
               method: "POST",
@@ -525,7 +532,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
                   "csrfHeaderName": csrfToken
 
               },
-              body: JSON.stringify({ signature, signatureAlgorithm })
+              body: JSON.stringify({ signature, signatureAlgorithm, certificate})
           });
 
           if (!finalizeSigningResponse.ok) {
@@ -534,10 +541,15 @@ const csrfToken = getCookie('CSRF-TOKEN');
 
           const signResult = await finalizeSigningResponse.json();
           console.log("Signing successful! Response:", signResult);
-      } catch (error) {
+        } catch (error) {
           console.log("Signing failed! Error:", error);
-          throw error;
-      }
+          try {
+            alert("Signing failed: " + (error && error.message ? error.message : error));
+          } catch (e) {
+            // ignore alert failures
+          }
+          return;
+        }
   });
 
 

@@ -2814,7 +2814,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
   const { id } = req.params;
   const { signature, signatureAlgorithm, certificate } = req.body;
 
-  console.log(id + " - " + userId + " - " + fileName + " - " + initialTimestampName);
+  console.log(id + " - " + signature + " - " + signatureAlgorithm + " - " + certificate);
 
   if (!signature || !signatureAlgorithm || !certificate) {
     return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
@@ -2832,14 +2832,21 @@ app.post('/sign/finalize/:id', async (req, res) => {
     if (err) return res.status(500).json({ error: 'DB connection error' });
 
     try {
-      const [rows] = await con.promise().query(`SELECT name, userId, initialUploadTimestamp FROM pdfs WHERE id = ?`, [id]);
+      const [rows] = await con.promise().query(`SELECT name, userId, initialUploadTimestamp, urlCarpeta FROM pdfs WHERE id = ?`, [id]);
       if (!rows || rows.length === 0) {
         con.end();
         return res.status(404).json({ error: 'PDF not found' });
       }
 
       const pdfData = rows[0];
-      const archivoPdf = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-stamp.pdf`;
+      //const archivoPdf = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-stamp.pdf`;
+      const archivoPdfOriginal = pdfData.urlCarpeta;
+
+      var urlCarpetaOriginal = archivoPdfOriginal.slice(0,-4);
+      //var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
+      var archivoPdf = urlCarpetaOriginal + "-stamp" + ".pdf";
+
+      console.log(archivoPdf);
       if (!fs.existsSync(archivoPdf)) {
         con.end();
         return res.status(404).json({ error: 'PDF file not found' });
@@ -2866,7 +2873,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
       }
 
       // Guardar PDF firmado
-      const newFilePath = `${CARPETAPDF}/${pdfData.userId}/${pdfData.name}_${pdfData.initialUploadTimestamp}-signFD.pdf`;
+      const newFilePath = urlCarpetaOriginal + "-signFD.pdf";
+      console.log(newFilePath);
       fs.writeFileSync(newFilePath, pdfBytes);
 
       //TODO actualizar estado en la DB?
