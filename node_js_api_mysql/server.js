@@ -2858,7 +2858,11 @@ app.post('/sign/finalize/:id', async (req, res) => {
       md.update(pdfBytes.toString('binary'));
 
       const sigBytes = forge.util.decode64(signature);
-      const cert = forge.pki.certificateFromPem(certificate);
+      //const cert = forge.pki.certificateFromPem(certificate);
+
+      const certDer = forge.util.decode64(certificate);
+      const certAsn1 = forge.asn1.fromDer(certDer);
+      const cert = forge.pki.certificateFromAsn1(certAsn1);
 
       let verified = false;
       try {
