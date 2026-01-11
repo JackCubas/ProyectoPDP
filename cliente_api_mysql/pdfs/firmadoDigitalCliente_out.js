@@ -411,7 +411,7 @@
 
       const { nonce } = await challengeResponse.json();
 
-      console.log("challengeResponse json: " + challengeResponse.json());
+      //console.log("challengeResponse json: " + challengeResponse.json());
       console.log("nonce: " + nonce);
       console.log("lang: " + lang);
 
