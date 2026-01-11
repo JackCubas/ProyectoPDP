@@ -392,7 +392,8 @@
   var idUser = datosUsuario.id;
 
 
-  var lang = navigator.language.substr(0, 2);
+  //var lang = navigator.language.substr(0, 2);
+  var lang = "en"
 
   var authButton = document.querySelector("#webeid-auth-button");
   authButton.addEventListener("click", async () => {
