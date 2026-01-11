@@ -397,7 +397,7 @@
   var authButton = document.querySelector("#webeid-auth-button");
   authButton.addEventListener("click", async () => {
     try {
-      const challengeResponse = await fetch("http://localhost:3000/auth/challenge/", {
+      const challengeResponse = await fetch("http://localhost:3000/auth/challenge", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
@@ -424,7 +424,7 @@
 }
 
 
-      const authTokenResponse = await fetch("http://localhost:3000/auth/login/", {
+      const authTokenResponse = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
