@@ -2797,7 +2797,7 @@ app.post('/sign/prepare/:id', async (req, res) => {
             message: 'PDF preparado para firma digital',
             pdfId: id,
             hash: hash,
-            hashFunction: 'sha256'
+            hashFunction: 'SHA-256'
 
         });
 
