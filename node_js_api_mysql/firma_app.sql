@@ -2,45 +2,6 @@ DROP DATABASE IF EXISTS `firma_app`;
 CREATE DATABASE IF NOT EXISTS `firma_app`;
 USE `firma_app`;
 
-DROP TABLE IF EXISTS `Movies`;
-
-CREATE TABLE `Movies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `prodId` int(11) NOT NULL,
-  `price` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `Movies` (prodId, price, quantity) VALUES
-	(100,20,125),
-	(101,10,234),
-	(102,15,432),
-	(103,17,320),
-	(104,70,240),
-  (105,21,125),
-	(106,11,234),
-	(107,16,432),
-	(108,18,320),
-	(109,71,240),
-  (110,22,125),
-	(111,12,234),
-	(112,17,432),
-	(113,19,320),
-	(114,72,240),
-  (115,23,125),
-	(116,13,234),
-	(117,18,432),
-	(118,10,320),
-	(119,73,240),
-  (120,72,240),
-  (121,23,125),
-	(122,13,234),
-	(123,18,432),
-	(124,10,320),
-	(125,73,240);
-
-
 DROP TABLE IF EXISTS `Users`;
 
 CREATE TABLE `Users` (
