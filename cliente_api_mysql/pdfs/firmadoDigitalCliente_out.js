@@ -403,13 +403,22 @@
           "Content-Type": "application/json"
         }
       });
+      console.log("challengeResponse: " + challengeResponse);
       if (!challengeResponse.ok) {
         throw new Error("GET /auth/challenge server error: " + challengeResponse.status);
       }
+
       const { nonce } = await challengeResponse.json();
+
+      console.log("challengeResponse json: " + challengeResponse.json());
+      console.log("nonce: " + nonce);
+      console.log("lang: " + lang);
 
       try {
         const authToken = await authenticate(nonce, { lang });
+
+        console.log("authToken: " + authToken);
+
       } catch (error) {
 
         if (error.code === "ERR_WEBEID_USER_CANCELLED") {
@@ -418,10 +427,10 @@
           alert("No respondió a tiempo. Intente nuevamente con su tarjeta.");
         } else {
           alert("Error en la autenticación: " + error.message);
-    }
-    console.error(error);
-    return;// Salir de la funcion si hay un error de autenticacion
-}
+        }
+          console.error(error);
+          return;// Salir de la funcion si hay un error de autenticacion
+      }
 
 
       const authTokenResponse = await fetch("http://localhost:3000/auth/login", {
@@ -432,10 +441,12 @@
         },
         body: JSON.stringify({ authToken })
       });
+      console.log("authTokenResponse: " + authTokenResponse);
       if (!authTokenResponse.ok) {
         throw new Error("POST /auth/login server error: " + authTokenResponse.status);
       }
       const authTokenResult = await authTokenResponse.json();
+      console.log("authTokenResult: " + authTokenResult);
       console.log("Authentication successful! Result:", authTokenResult);
       window.location.href = "table.html?page=" + pageHTML;
     } catch (error) {
@@ -451,6 +462,10 @@
               certificate,
               supportedSignatureAlgorithms
           } = await getSigningCertificate({ lang });
+
+          console.log("Lang: " + lang);
+          console.log("Certificate: " + certificate);
+          console.log("Signature Algoritm: " + supportedSignatureAlgorithms);
 
           const prepareSigningResponse = await fetch("http://localhost:3000/sign/prepare/" + idHTML, {
               method: "POST",
@@ -495,6 +510,11 @@
   certButton.addEventListener("click", async () => {
   try {
     const { certificate, supportedSignatureAlgorithms } = await getSigningCertificate({ lang });
+
+    console.log("Lang: " + lang);
+    console.log("Certificate: " + certificate);
+    console.log("Signature Algoritm: " + supportedSignatureAlgorithms);
+
     console.log("Certificate obtained:", certificate);
     //TODO mostrar el certificado en pantalla?
   } catch (error) {
