@@ -395,6 +395,29 @@
   //var lang = navigator.language.substr(0, 2);
   var lang = "en"
 
+  function getCookie(name) {
+  if (!document.cookie) {
+    return null;
+  }
+
+  const xsrfCookies = document.cookie.split(';')
+    .map(c => c.trim())
+    .filter(c => c.startsWith(name + '='));
+
+  if (xsrfCookies.length === 0) {
+    return null;
+  }
+  return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+}
+
+const csrfToken = getCookie('CSRF-TOKEN');
+
+/*const headers = new Headers({
+        'Content-Type': 'x-www-form-urlencoded',
+        'X-CSRF-TOKEN': csrfToken
+    });*/
+
+
   var authButton = document.querySelector("#webeid-auth-button");
   authButton.addEventListener("click", async () => {
     try {
@@ -438,7 +461,8 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          [csrfHeaderName]: csrfToken
+          //[csrfHeaderName]: csrfToken
+          "csrfHeaderName": csrfToken
         },
         body: JSON.stringify({ authToken })
       });
@@ -472,7 +496,8 @@
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
-                  [csrfHeaderName]: csrfToken
+                  //[csrfHeaderName]: csrfToken
+                  "csrfHeaderName": csrfToken
               },
               body: JSON.stringify({ certificate, supportedSignatureAlgorithms })
           });
@@ -483,13 +508,19 @@
 
           const { hash, hashFunction } = await prepareSigningResponse.json();
 
+          console.log("Certificate: " + certificate);
+          console.log("Hash: " + hash);
+          console.log("Hash: " + hashFunction);
+
           const { signature, signatureAlgorithm } = await sign(certificate, hash, hashFunction, { lang });
 
           const finalizeSigningResponse = await fetch("http://localhost:3000/sign/finalize/" + idHTML, {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
-                  [csrfHeaderName]: csrfToken
+                  //[csrfHeaderName]: csrfToken
+                  "csrfHeaderName": csrfToken
+
               },
               body: JSON.stringify({ signature, signatureAlgorithm })
           });
@@ -527,7 +558,6 @@
 })();
 
 //-------------------------------------------
-
 const URLSERVERFirmadoDigital = "http://localhost:3000/firmadoDigital/";
 const URLSERVERdetail = "http://localhost:3000/pdfs/";
 

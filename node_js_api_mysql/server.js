@@ -2694,15 +2694,90 @@ app.put('/firmadoDigital/:id', async (req, res) => {
 }) 
 
 app.post('/sign/prepare/:id', async (req, res) => {
-
     const { id } = req.params;
-    const { userId, fileName, initialTimestampName } = req.body;
+    //const { userId, fileName, initialTimestampName } = req.body;
 
-    if (!userId || !fileName || !initialTimestampName) {
-        return res.status(400).json({ error: 'userId, fileName y initialTimestampName son requeridos' });
+    //console.log(id + " - " + userId + " - " + fileName + " - " + initialTimestampName);
+
+    if (!id) {
+        return res.status(400).json({ error: 'id son requeridos' });
     }
 
-    const archivoPdf = CARPETAPDF + `/${userId}/${fileName}_${initialTimestampName}.pdf`;
+    var existe = false;
+    let con;
+
+    listaDocs = [];
+
+    con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+    });
+
+    let sql = `
+      select urlCarpeta, stampUserId from pdfs 
+      WHERE id = "${id}"
+    `;
+  try{
+    await con.promise().query(sql)
+        .then( ([rows,fields]) => {
+
+            var rowsObjectString = JSON.stringify(rows);
+            if(rowsObject !== null && rowsObject !== ""){
+              var rowsObject = JSON.parse(rowsObjectString.toString())
+
+              if(rowsObject.length > 0){
+                console.log("Docs existe");
+                existe = true;
+
+                for (let i = 0; i < rowsObject.length; i++){
+                  listaDocs.push(JSON.parse(JSON.stringify(rowsObject[i])));
+                }
+              }else{
+                console.log("Docs no existe");
+                existe = false;
+                return;
+              }
+            }else{
+              console.log("Docs no existe");
+              existe = false;
+              return;
+
+            }
+        })
+  }catch(error){
+    console.log(error);
+
+    console.log("Ending connection");
+    con.end();
+  }
+
+  if(existe === true){
+
+    if(listaDocs !== null && listaDocs.length > 0){
+
+    console.log(listaDocs);
+
+    for (let i = 0; i < listaDocs.length; i++) {
+      //var doc = JSON.parse(listaDocs[i]);
+      var doc = listaDocs[i];
+
+      if(Object.hasOwn(doc, "urlCarpeta") && Object.hasOwn(doc, "stampUserId")){
+
+        var urlCarpetaOriginal = doc.urlCarpeta;
+        var stampUserId = doc.stampUserId;
+        //var signUserId = doc.signUserId;
+
+        urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
+        //var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
+        var urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
+      }
+    }
+  }        
+
+    const archivoPdf = urlCarpetaStamped;
 
     if (!fs.existsSync(archivoPdf)) {
         return res.status(404).json({ error: 'PDF no encontrado' });
@@ -2728,6 +2803,7 @@ app.post('/sign/prepare/:id', async (req, res) => {
         console.error('Error preparando PDF para Web eID:', err);
         return res.status(500).json({ error: 'failed to prepare PDF for digital signing' });
     }
+  }   
 
 });
 
@@ -2735,6 +2811,8 @@ const forge = require('node-forge'); //TODO moverlo junto a las otras depedencia
 app.post('/sign/finalize/:id', async (req, res) => {
   const { id } = req.params;
   const { signature, signatureAlgorithm, certificate } = req.body;
+
+  console.log(id + " - " + userId + " - " + fileName + " - " + initialTimestampName);
 
   if (!signature || !signatureAlgorithm || !certificate) {
     return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
