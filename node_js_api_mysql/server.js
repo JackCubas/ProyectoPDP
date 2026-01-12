@@ -2809,6 +2809,8 @@ app.post('/sign/prepare/:id', async (req, res) => {
 
 });
 
+const signer = require('node-signpdf').default;
+const { plainAddPlaceholder } = require('node-signpdf/dist/helpers');
 const forge = require('node-forge'); //TODO moverlo junto a las otras depedencias
 app.post('/sign/finalize/:id', async (req, res) => {
   const { id } = req.params;
@@ -2852,30 +2854,52 @@ app.post('/sign/finalize/:id', async (req, res) => {
         return res.status(404).json({ error: 'PDF file not found' });
       }
 
-      const pdfBytes = fs.readFileSync(archivoPdf);
+      var pdfBytes = null;
 
-      const md = forge.md.sha256.create();
-      md.update(pdfBytes.toString('binary'));
+      if (fs.existsSync(archivoPdf)) {
+        pdfBytes = await fs.readFileSync(archivoPdf);
+      }
+
+      console.log("XXXXXXXXXXXXXXXXXXXXX");
+      console.log(pdfBytes);
+      console.log("XXXXXXXXXXXXXXXXXXXXX");
+
+      //const md = forge.md.sha256.create();
+      //md.update(pdfBytes.toString('binary'));
+      
       //md.update(forge.util.decode64(hash));
 
-      const sigBytes = forge.util.decode64(signature);
+      const pdfWithPlaceholder = plainAddPlaceholder({
+        pdfBytes,
+        reason: 'Firma de prueba',
+        signatureLength: 8192
+      });
+
+      //const sigBytes = forge.util.decode64(signature);
       //const cert = forge.pki.certificateFromPem(certificate);
 
+      // Certificado en base64
       const certDer = forge.util.decode64(certificate);
       const certAsn1 = forge.asn1.fromDer(certDer);
       const cert = forge.pki.certificateFromAsn1(certAsn1);
 
-      let verified = false;
-      try {
-        verified = cert.publicKey.verify(md.digest().getBytes(), sigBytes);
-      } catch (e) {
-        console.error('Signature verification error', e);
-      }
+      // Hash del PDF y firma externa (ya generada)
+      const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
+      const signatureBytes = forge.util.decode64(signature); // tu firma externa
 
-      if (!verified) {
-        con.end();
-        return res.status(400).json({ error: 'Firma no válida' });
-      }
+      // Crear PKCS#7 “vacío” con certificado
+      const p7 = forge.pkcs7.createSignedData();
+      p7.content = contentBuffer;
+      p7.addCertificate(cert);
+
+      // Exportamos la firma externa como Buffer para SignPdf
+      const pkcs7Buffer = Buffer.from(signatureBytes, 'binary');
+
+      // Crear el signer
+      //const signer = new SignPdf();
+
+      // Firmar el PDF usando tu PKCS#7 externo
+      const signedPdf = signer.sign(pdfWithPlaceholder, pkcs7Buffer);
 
       // Guardar PDF firmado
       const newFilePath = urlCarpetaOriginal + "-signFD.pdf";
@@ -2887,7 +2911,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
         await unlinkFile(newFilePath);
       }
 
-      fs.writeFileSync(newFilePath, pdfBytes);
+      fs.writeFileSync(newFilePath, signedPdf);
 
       //TODO actualizar estado en la DB?
       // const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
