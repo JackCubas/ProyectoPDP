@@ -3048,7 +3048,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //--------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------
 
-    const command1 = `openssl pkcs12 -export -out certificado.pfx -inkey forge_private_key.key -in certificate.crt`;
+    /*const command1 = `openssl pkcs12 -export -out certificado.pfx -inkey forge_private_key.key -in certificate.crt`;
 
     await execSync(command1, (error, stdout, stderr) => {
         if (error) {
@@ -3059,7 +3059,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
             console.error(`OpenSSL stderr: ${stderr}`);
         }
         console.log(`cmd 1 hecho`);
-    })
+    })*/
 
     
 
