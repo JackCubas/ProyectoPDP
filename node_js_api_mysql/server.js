@@ -2996,6 +2996,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //const privateKeyPath = "./private.key";
     const privateKeyPath = "./id_rsa_priv.pem";
     const forgeprivateKeyPath = "./forge_private_key.pem";
+    const forgeprivateKeyPath2 = "./forge_private_key.key";
     const certificatePath = "./certificate.crt";
     const outputP12Path = "./output.p12";
     const p12Password = "firma_app";
@@ -3018,6 +3019,12 @@ app.post('/sign/finalize/:id', async (req, res) => {
       await unlinkFile(forgeprivateKeyPath);
     }
 
+    if (fs.existsSync(forgeprivateKeyPath2)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(forgeprivateKeyPath2);
+    }
+
     // Hash del PDF y firma externa (ya generada)
     const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
     const signatureBytes = forge.util.decode64(signature); // tu firma externa
@@ -3028,14 +3035,38 @@ app.post('/sign/finalize/:id', async (req, res) => {
     
     var keysForge = forge.pki.rsa.generateKeyPair(2048);
     const privateKeyPem = forge.pki.privateKeyToPem(keysForge.privateKey);
-    fs.writeFileSync(forgeprivateKeyPath, privateKeyPem);
     var keys = await genKeyPairStrong()
+
+    //const privatePem = forge.pki.encryptPrivateKey(keysForge.privateKey);
+    const md = forge.md.sha256.create();
+    md.update(String(Date.now())); // Data to be signed
+    const signaturePrivateKey = keysForge.privateKey.sign(md);
+
+    fs.writeFileSync(forgeprivateKeyPath, privateKeyPem);
+    fs.writeFileSync(forgeprivateKeyPath2, privateKeyPem, { encoding: 'utf8'});
+
+    //--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------
+
+    const command1 = `openssl pkcs12 -export -out certificado.pfx -inkey forge_private_key.key -in certificate.crt`;
+
+    await execSync(command1, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error creating .p12: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`OpenSSL stderr: ${stderr}`);
+        }
+        console.log(`cmd 1 hecho`);
+    })
+
     
 
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------
 
-    if (fs.existsSync("./dump_pem.pem")) { 
+    /*if (fs.existsSync("./dump_pem.pem")) { 
       // delete the file on server after it sends to client
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
       await unlinkFile("./dump_pem.pem");
@@ -3097,7 +3128,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //var crt = forge.pki.certificateFromPem(fs.readFileSync("./dump_crt.crt",'ascii'));
     //var key = forge.pki.privateKeyFromPem(fs.readFileSync("./id_rsa_priv.pem",'ascii'));
     const key = forge.pki.privateKeyToPem(keysForge.privateKey);
-
+    */
 
 
     /*var asn1 = forge.pkcs12.toPkcs12Asn1(key,[cert],'firma_app',{algorithm:'3des'});
