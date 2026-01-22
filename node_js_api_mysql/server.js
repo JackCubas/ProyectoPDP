@@ -3048,6 +3048,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     fs.chmodSync('forge_private_key.key', '644');
     fs.chmodSync('certificate.crt', '644');
+    fs.chmodSync('forge_private_key.pem', '644');
+    fs.chmodSync('id_rsa_priv.pem', '644');
 
     if (fs.existsSync('certificate.pem')) { 
       // delete the file on server after it sends to client
