@@ -3029,7 +3029,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
     const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
     const signatureBytes = forge.util.decode64(signature); // tu firma externa
     const certDecode = forge.util.decode64(certificate);
-    const certDer = "-----BEGIN CERTIFICATE-----" + "\n" + certificate + "\n" + "-----END CERTIFICATE-----";
+    var certificateProcess = await processCertLines(certificate)
+    const certDer = "-----BEGIN CERTIFICATE-----" + "\n" + certificateProcess + "\n" + "-----END CERTIFICATE-----";
     fs.writeFileSync(certificatePath, certDer);
     //fs.writeFileSync(privateKeyPath, Buffer.from(keys.privateKey));
     
@@ -3044,6 +3045,93 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     fs.writeFileSync(forgeprivateKeyPath, privateKeyPem);
     fs.writeFileSync(forgeprivateKeyPath2, privateKeyPem, { encoding: 'utf8'});
+
+    fs.chmodSync('forge_private_key.key', '644');
+    fs.chmodSync('certificate.crt', '644');
+
+    if (fs.existsSync('certificate.pem')) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile('certificate.pem');
+    }
+
+    fs.copyFileSync("certificate.crt", "certificate.pem");
+    fs.chmodSync('certificate.pem', '644');
+
+    //--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------
+
+    //----------------------
+
+    //const command1 = `openssl x509 -inform DER -outform PEM -in certificate.crt -out certificate.pem`;
+
+    //await execSync(command1, (error, stdout, stderr) => {
+    //    if (error) {
+    //        console.error(`Error creating .p12: ${error.message}`);
+    //        return;
+    //    }
+    //    if (stderr) {
+    //        console.error(`OpenSSL stderr: ${stderr}`);
+    //    }
+    //    console.log(`cmd 1 hecho`);
+    //})
+
+    //--------------------
+
+    //var certPem = forge.pki.certificateToPem(certDer);
+
+    //if (fs.existsSync('certificate.pem')) { 
+      // delete the file on server after it sends to client
+    //  const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    //  await unlinkFile('certificate.pem');
+    //}
+
+    //fs.writeFileSync('certificate.pem', certPem);
+
+    //--------------------------
+    //--------------------------
+
+    //const command2 = `chmod 644 forge_private_key.key certificate.pem`;
+
+    //await execSync(command2, (error, stdout, stderr) => {
+    //    if (error) {
+    //        console.error(`Error creating .p12: ${error.message}`);
+    //        return;
+    //    }
+    //    if (stderr) {
+    //        console.error(`OpenSSL stderr: ${stderr}`);
+    //    }
+    //    console.log(`cmd 2 hecho`);
+    //})
+
+    //---------------------------
+    //---------------------------
+
+    /*const command3 = `openssl rsa -noout -modulus -in forge_private_key.key | openssl md5`;
+    const command4 = `openssl x509 -noout -modulus -in certificate.pem | openssl md5`;
+
+    const command5 = `openssl pkcs12 -export -out certificado.pfx -inkey forge_private_key.key -in certificate.crt`;
+
+    var compareKey = execSync(command3).toString();
+    console.log(`cmd 3 hecho`);
+    var comparePem = execSync(command4).toString();
+    console.log(`cmd 4 hecho`);
+
+    if(compareKey === comparePem){
+      console.log(`comparacion hecho`);
+
+      await execSync(command5, (error, stdout, stderr) => {
+          if (error) {
+              console.error(`Error creating .p12: ${error.message}`);
+              return;
+          }
+          if (stderr) {
+              console.error(`OpenSSL stderr: ${stderr}`);
+          }
+          console.log(`cmd 5 hecho`);
+      })
+
+    }*/
 
     //--------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------
@@ -3354,6 +3442,17 @@ app.post('/sign/finalize/:id', async (req, res) => {
     }
   });
 });
+
+async function processCertLines(certString){
+
+  var lineLength = 64;
+  let result = '';
+  for (let i = 0; i < certString.length; i += lineLength) {
+      result += certString.slice(i, i + lineLength) + '\n';
+  }
+  return result.trim();
+
+}
 
 
 const challenges = {}; //Nonces
