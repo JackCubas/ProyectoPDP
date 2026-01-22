@@ -3060,6 +3060,62 @@ app.post('/sign/finalize/:id', async (req, res) => {
     fs.copyFileSync("certificate.crt", "certificate.pem");
     fs.chmodSync('certificate.pem', '644');
 
+    //----------------------------------------------
+
+    /*const crtData = fs.readFileSync('./certificate.pem', 'utf8');
+    const existingCert = forge.pki.certificateFromPem(crtData);
+
+    existingCert.publicKey = keysForge.publicKey;
+
+    if (fs.existsSync('certificate.pem')) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile('certificate.pem');
+    }
+
+    fs.writeFileSync("certificate.pem", Buffer.from(JSON.stringify(existingCert)));
+    fs.chmodSync('certificate.pem', '644');*/
+
+    //----------------------------------------------
+    //The private key must match with the certificate('s public key) you use. Otherwise you won't be able to use them together.
+
+    const command3 = `openssl rsa -noout -modulus -in forge_private_key.key | openssl md5`;
+    const command4 = `openssl x509 -noout -modulus -in certificate.pem | openssl md5`;
+
+    const command5 = `openssl pkcs12 -export -out certificado.pfx -inkey forge_private_key.key -in certificate.crt`;
+
+    console.log("ejecutando cmd3: ")
+    var compareKey = execSync(command3).toString();
+    console.log("cmd3 ejecutado ")
+
+    console.log("ejecutando cmd4: ")
+    var comparePem = execSync(command4).toString();
+    console.log("cmd4 ejecutado ")
+
+    console.log("compareKey: ")
+    console.log(compareKey)
+
+    console.log("comparePem: ")
+    console.log(comparePem)
+
+    if(compareKey === comparePem){
+      console.log(`comparacion hecho`);
+
+      await execSync(command5, (error, stdout, stderr) => {
+          if (error) {
+              console.error(`Error creating .p12: ${error.message}`);
+              return;
+          }
+          if (stderr) {
+              console.error(`OpenSSL stderr: ${stderr}`);
+          }
+          console.log(`cmd 5 hecho`);
+      })
+
+    }
+
+
+
     //--------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------
 
@@ -3328,9 +3384,9 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //----------------------------------------------
     //----------------------------------------------
 
-    /*
+    
     // Read the existing .crt file
-    const crtData = fs.readFileSync('./certificate.crt', 'utf8');
+    /*const crtData = fs.readFileSync('./certificate.crt', 'utf8');
 
     // Convert PEM string to a Forge certificate object
     const existingCert = forge.pki.certificateFromPem(crtData);
@@ -3359,8 +3415,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
     const key = forge.pki.privateKeyToPem(keysForge.privateKey);
 
     var asn1 = forge.pkcs12.toPkcs12Asn1(key,pem,'password',{algorithm:'3des'});
-    var newPkcs12Der = forge.asn1.toDer(asn1).getBytes();
-    */
+    var newPkcs12Der = forge.asn1.toDer(asn1).getBytes();*/
+    
 
     //----------------------------------------------
     //---------------------------------------------
