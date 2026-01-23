@@ -3007,24 +3007,13 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //----------------------------------
 
     // Crear el signer
-    //const privateKeyPath = "./private.key";
-    const privateKeyPath = "./id_rsa_priv.pem";
-    const forgeprivateKeyPath = "./forge_private_key.pem";
-    const forgeprivateKeyPath2 = "./forge_private_key.key";
+    const forgeprivateKeyPath = "./forge_private_key.key";
     const certificatePath = "./certificate.crt";
-    const outputP12Path = "./output.p12";
-    const p12Password = "firma_app";
 
     if (fs.existsSync(certificatePath)) { 
       // delete the file on server after it sends to client
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
       await unlinkFile(certificatePath);
-    }
-
-    if (fs.existsSync(privateKeyPath)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(privateKeyPath);
     }
 
     if (fs.existsSync(forgeprivateKeyPath)) { 
@@ -3033,37 +3022,28 @@ app.post('/sign/finalize/:id', async (req, res) => {
       await unlinkFile(forgeprivateKeyPath);
     }
 
-    if (fs.existsSync(forgeprivateKeyPath2)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(forgeprivateKeyPath2);
-    }
-
     // Hash del PDF y firma externa (ya generada)
-    const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
-    const signatureBytes = forge.util.decode64(signature); // tu firma externa
-    const certDecode = forge.util.decode64(certificate);
+    //const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
+    //const signatureBytes = forge.util.decode64(signature); // tu firma externa
+    //const certDecode = forge.util.decode64(certificate);
     var certificateProcess = await processCertLines(certificate)
     const certDer = "-----BEGIN CERTIFICATE-----" + "\n" + certificateProcess + "\n" + "-----END CERTIFICATE-----";
     fs.writeFileSync(certificatePath, certDer);
-    //fs.writeFileSync(privateKeyPath, Buffer.from(keys.privateKey));
     
     var keysForge = forge.pki.rsa.generateKeyPair(2048);
     const privateKeyPem = forge.pki.privateKeyToPem(keysForge.privateKey);
-    var keys = await genKeyPairStrong()
+    //var keys = await genKeyPairStrong()
 
     //const privatePem = forge.pki.encryptPrivateKey(keysForge.privateKey);
-    const md = forge.md.sha256.create();
-    md.update(String(Date.now())); // Data to be signed
-    const signaturePrivateKey = keysForge.privateKey.sign(md);
+    //const md = forge.md.sha256.create();
+    //md.update(String(Date.now())); // Data to be signed
+    //const signaturePrivateKey = keysForge.privateKey.sign(md);
 
-    fs.writeFileSync(forgeprivateKeyPath, privateKeyPem);
-    fs.writeFileSync(forgeprivateKeyPath2, privateKeyPem, { encoding: 'utf8'});
+    fs.writeFileSync(forgeprivateKeyPath, privateKeyPem, { encoding: 'utf8'});
 
     fs.chmodSync('forge_private_key.key', '644');
     fs.chmodSync('certificate.crt', '644');
-    fs.chmodSync('forge_private_key.pem', '644');
-    fs.chmodSync('id_rsa_priv.pem', '644');
+
 
     if (fs.existsSync('certificate.pem')) { 
       // delete the file on server after it sends to client
@@ -3076,21 +3056,20 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     // Read the certificate file (PEM or DER format)
     // Example: certificate.pem should contain -----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----
-    const certPem = fs.readFileSync('certificate.pem', 'utf8');
-
+    /*const certPem = fs.readFileSync('certificate.pem', 'utf8');
+    
     // Create an X509Certificate instance
     const certCrypto = new crypto.X509Certificate(certPem);
-
+    
     // Get the public key in PEM format
     const publicKeyPem = certCrypto.publicKey.export({ type: 'spki', format: 'pem' });
-    console.log('Public Key (PEM):\n', publicKeyPem);
-
-    console.log('Signature:\n', signature);
+    
+    console.log('Public Key (PEM):\n', publicKeyPem);*/
 
     //-------------------------------------------------------------
 
     // Read the existing .crt file
-    const crtData = fs.readFileSync('./certificate.crt', 'utf8');
+    const crtData = fs.readFileSync(certificatePath, 'utf8');
 
     // Convert PEM string to a Forge certificate object
     const existingCert = forge.pki.certificateFromPem(crtData);
@@ -3131,29 +3110,22 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     fs.writeFileSync('new_certificate.crt', pem);
 
-    /*const key = forge.pki.privateKeyToPem(keysForge.privateKey);
-
-    var asn1 = forge.pkcs12.toPkcs12Asn1(key,pem,'password',{algorithm:'3des'});
-    var newPkcs12Der = forge.asn1.toDer(asn1).getBytes();*/
-
-
     //----------------------------------------------
     //----------------------------------------------
     //The private key must match with the certificate('s public key) you use. Otherwise you won't be able to use them together.
 
-    const command3 = `openssl rsa -noout -modulus -in forge_private_key.key | openssl md5`;
-    const command4 = `openssl x509 -noout -modulus -in new_certificate.pem | openssl md5`;
     const forge_pass = "";
+    const command1 = `openssl rsa -noout -modulus -in forge_private_key.key | openssl md5`;
+    const command2 = `openssl x509 -noout -modulus -in new_certificate.pem | openssl md5`;
+    const command3 = `openssl pkcs12 -export -out new_certificado.p12 -inkey forge_private_key.key -in new_certificate.crt -passout pass:"${forge_pass}"`;
 
-    const command5 = `openssl pkcs12 -export -out new_certificado.p12 -inkey forge_private_key.key -in new_certificate.crt -passout pass:"${forge_pass}"`;
-
-    var compareKey = execSync(command3).toString();
-    var comparePem = execSync(command4).toString();
+    var compareKey = execSync(command1).toString();
+    var comparePem = execSync(command2).toString();
 
     if(compareKey === comparePem){
       console.log(`comparacion hecho`);
 
-      await execSync(command5, (error, stdout, stderr) => {
+      await execSync(command3, (error, stdout, stderr) => {
           if (error) {
               console.error(`Error creating .p12: ${error.message}`);
               return;
@@ -3161,7 +3133,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
           if (stderr) {
               console.error(`OpenSSL stderr: ${stderr}`);
           }
-          console.log(`cmd 5 hecho`);
+          console.log(`cmd 3 hecho`);
       })
 
     }
@@ -3190,9 +3162,6 @@ app.post('/sign/finalize/:id', async (req, res) => {
           fs.writeFileSync(newFilePath, signedPdf);
       })
 
-
-
-    //fs.writeFileSync(newFilePath, signedPdfBuffer);
 
     //TODO actualizar estado en la DB?
     // const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
