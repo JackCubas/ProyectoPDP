@@ -961,7 +961,7 @@ async function borrarPdfsSignedStampedBBDD(id){
       .then( ([rows,fields]) => {
 
           var rowsObject = JSON.stringify(rows);
-          console.log("rows stamped: " + rowsObject);
+          console.log("rows fd: " + rowsObject);
           //console.log("rows stamped size: " + rowsObject.length);
 
       })
