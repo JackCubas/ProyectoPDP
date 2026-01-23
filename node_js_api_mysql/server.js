@@ -196,6 +196,20 @@ async function genKeyPairStrong() {
   fs.writeFileSync("./id_rsa_pub.pem", keyPair.publicKey);
   fs.writeFileSync("./id_rsa_priv.pem", keyPair.privateKey);
 
+  // Borrar archivos viejos si existen
+  if (fs.existsSync('./id_rsa_pub.key')) { 
+    const unlinkFile = util.promisify(fs.unlink);
+    await unlinkFile('./id_rsa_pub.key');
+  }
+  if (fs.existsSync('./id_rsa_priv.key')) { 
+    const unlinkFile = util.promisify(fs.unlink);
+    await unlinkFile('./id_rsa_priv.key');
+  }
+
+  // Guardar nuevos archivos
+  fs.writeFileSync("./id_rsa_pub.key", keyPair.publicKey);
+  fs.writeFileSync("./id_rsa_priv.key", keyPair.privateKey);
+
   return keyPair;
 }
 
@@ -3073,27 +3087,68 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     console.log('Signature:\n', signature);
 
+    //-------------------------------------------------------------
+
+    // Read the existing .crt file
+    const crtData = fs.readFileSync('./certificate.crt', 'utf8');
+
+    // Convert PEM string to a Forge certificate object
+    const existingCert = forge.pki.certificateFromPem(crtData);
+
+    // 1. Create a new certificate instance
+    const newCert = forge.pki.createCertificate();
+
+    // 2. Insert data from the existing certificate
+    newCert.publicKey = keysForge.publicKey; // Use the same public key
+    newCert.setSubject(existingCert.subject.attributes); // Copy subject details
+    newCert.setIssuer(existingCert.issuer.attributes);   // Copy issuer details
+
+    // 3. Set required new metadata
+    newCert.serialNumber = '01'; // Hex encoded ASN.1 INTEGER
+    newCert.validity.notBefore = new Date();
+    newCert.validity.notAfter = new Date();
+    newCert.validity.notAfter.setFullYear(newCert.validity.notBefore.getFullYear() + 1);
+
+    // 4. Self-sign or sign with a CA private key
+    // Note: You need a private key to sign the certificate
+    newCert.sign(keysForge.privateKey); 
+
+    const pem = forge.pki.certificateToPem(newCert);
+
+    if (fs.existsSync('new_certificate.pem')) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile('new_certificate.pem');
+    }
+
+    fs.writeFileSync('new_certificate.pem', pem);
+
+    if (fs.existsSync('new_certificate.crt')) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile('new_certificate.crt');
+    }
+
+    fs.writeFileSync('new_certificate.crt', pem);
+
+    /*const key = forge.pki.privateKeyToPem(keysForge.privateKey);
+
+    var asn1 = forge.pkcs12.toPkcs12Asn1(key,pem,'password',{algorithm:'3des'});
+    var newPkcs12Der = forge.asn1.toDer(asn1).getBytes();*/
+
+
+    //----------------------------------------------
     //----------------------------------------------
     //The private key must match with the certificate('s public key) you use. Otherwise you won't be able to use them together.
 
     const command3 = `openssl rsa -noout -modulus -in forge_private_key.key | openssl md5`;
-    const command4 = `openssl x509 -noout -modulus -in certificate.pem | openssl md5`;
+    const command4 = `openssl x509 -noout -modulus -in new_certificate.pem | openssl md5`;
+    const forge_pass = "";
 
-    const command5 = `openssl pkcs12 -export -out certificado.pfx -inkey forge_private_key.key -in certificate.crt`;
+    const command5 = `openssl pkcs12 -export -out new_certificado.p12 -inkey forge_private_key.key -in new_certificate.crt -passout pass:"${forge_pass}"`;
 
-    console.log("ejecutando cmd3: ")
     var compareKey = execSync(command3).toString();
-    console.log("cmd3 ejecutado ")
-
-    console.log("ejecutando cmd4: ")
     var comparePem = execSync(command4).toString();
-    console.log("cmd4 ejecutado ")
-
-    console.log("compareKey: ")
-    console.log(compareKey)
-
-    console.log("comparePem: ")
-    console.log(comparePem)
 
     if(compareKey === comparePem){
       console.log(`comparacion hecho`);
@@ -3124,7 +3179,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       await unlinkFile(newFilePath);
     }
 
-    var certificateBuffer = fs.readFileSync("./certificate.p12");
+    var certificateBuffer = fs.readFileSync("./new_certificado.p12");
     var p12signer = new P12Signer(certificateBuffer);
 
     signpdf
