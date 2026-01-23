@@ -155,7 +155,7 @@ function buildTable(data, currentPageNum) {
 
         const buttonFD = document.createElement('button');
         buttonFD.id = "FDbutton" + butID + "-" + currentPageNum + "-" + data.length;
-        buttonFD.textContent = "FD";
+        buttonFD.textContent = "FD ATR";
         buttonFD.addEventListener('click', firmadoDigital);
         cell3.appendChild(buttonFD);
 
