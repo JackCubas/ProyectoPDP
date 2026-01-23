@@ -636,8 +636,8 @@ async function returnDataOriginal() {
 
 async function retrievePDF() {
 
-    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "STAMP");
-    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "STAMP", {
+    console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "FD");
+    return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "FD", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -750,6 +750,8 @@ function appendDataStamp(data){
         var j=document.createElement("div");
         j.textContent="No hay documento estampado";
         con.appendChild(j);
+
+        document.getElementById("webeid-sign-button").disabled = true;
 
         //document.getElementById("submit").disabled = true;
     }

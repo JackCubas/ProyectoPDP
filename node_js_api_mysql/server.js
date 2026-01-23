@@ -1648,6 +1648,7 @@ app.get('/retrieve/:thisDocName/:userId/:initialTimestampName/:docStatus', funct
   const pathRetrieveOriginal = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + '.pdf'; // path where to file is stored in server
   const pathRetrieveSign = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + "-sign" + '.pdf';
   const pathRetrieveStamp = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + "-stamp" + '.pdf';
+  const pathRetrieveFD = CARPETAPDF + "/" + userId + "/" + thisDocName + "_" + initialTimestampName + "-signFD" + '.pdf';
 
   var pathRetrieve = pathRetrieveOriginal;
 
@@ -1662,6 +1663,19 @@ app.get('/retrieve/:thisDocName/:userId/:initialTimestampName/:docStatus', funct
   if((docStatus === "STAMP") && fs.existsSync(pathRetrieveStamp)){
     pathRetrieve = pathRetrieveStamp;
   }
+
+  if((docStatus === "FD")){
+
+    if(fs.existsSync(pathRetrieveStamp) && fs.existsSync(pathRetrieveFD)){
+        pathRetrieve = pathRetrieveFD;
+    }
+
+    if(fs.existsSync(pathRetrieveStamp) && !fs.existsSync(pathRetrieveFD)){
+        pathRetrieve = pathRetrieveStamp;
+    }
+
+  }
+  
 
   if (fs.existsSync(pathRetrieve)) {
     //console.log("llegado al retrieve puro");
