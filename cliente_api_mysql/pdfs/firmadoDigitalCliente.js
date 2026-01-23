@@ -540,7 +540,16 @@ const csrfToken = getCookie('CSRF-TOKEN');
           }
 
           const signResult = await finalizeSigningResponse.json();
-          console.log("Signing successful! Response:", signResult);
+
+          if(signResult.status === 400 || signResult.status === 500 || signResult.status === 404){
+            alert("No se ha podido hacer firmado digital");
+            window.location.href = "table.html?page=" + pageHTML;
+          }else{
+            console.log("Signing successful! Response:", signResult);
+            alert("Se ha podido hacer firmado digital");
+            window.location.href = "table.html?page=" + pageHTML;
+          }
+
         } catch (error) {
           console.log("Signing failed! Error:", error);
           try {
