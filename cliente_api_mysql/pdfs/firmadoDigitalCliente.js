@@ -743,6 +743,10 @@ function appendDataStamp(data){
             //    document.getElementById("submit").disabled = true;
             //}
 
+            if(data[0].stampUserId !== datosUsuario.id){
+                document.getElementById("webeid-sign-button").disabled = true;
+            }
+
         }
     }else{
         console.log("No hay documento estampado");
