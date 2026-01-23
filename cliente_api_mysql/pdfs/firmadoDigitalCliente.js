@@ -589,17 +589,17 @@ const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 var datosUsuario = null;
 
-//if(localStorage === null || localStorage.getItem("usuario") === null){
-//  window.location.href = "../404.html";
-//}
+if(localStorage === null || localStorage.getItem("usuario") === null){
+  window.location.href = "../404.html";
+}
 
 if(localStorage.getItem("usuario") !== null){
     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
 }
 
-//if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
-//    window.location.href = "../404.html";
-//}
+if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
+    window.location.href = "../404.html";
+}
 
 var thisDocName = "";
 var userId = null;
