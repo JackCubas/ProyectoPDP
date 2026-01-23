@@ -532,7 +532,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
                   "csrfHeaderName": csrfToken
 
               },
-              body: JSON.stringify({ signature, signatureAlgorithm, certificate, hash})
+              body: JSON.stringify({ signature, signatureAlgorithm, certificate, hash, idUser})
           });
 
           if (!finalizeSigningResponse.ok) {

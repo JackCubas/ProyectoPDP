@@ -2906,11 +2906,11 @@ const openssl = require('async-openssl');
 
 app.post('/sign/finalize/:id', async (req, res) => {
   const { id } = req.params;
-  const { signature, signatureAlgorithm, certificate, hash } = req.body;
+  const { signature, signatureAlgorithm, certificate, hash, idUser } = req.body;
 
   //console.log(id + " - " + signature + " - " + signatureAlgorithm + " - " + certificate + " - " + hash);
 
-  if (!signature || !signatureAlgorithm || !certificate || !hash) {
+  if (!signature || !signatureAlgorithm || !certificate || !hash || !idUser) {
     return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
   }
 
@@ -3164,11 +3164,11 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
 
     //TODO actualizar estado en la DB?
-    // const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-    // await con.promise().query(
-    //   `UPDATE pdfs SET signUserId = ?, signTimestamp = ?, estado = "VALIDATED" WHERE id = ?`,
-    //   [pdfData.userId, signTimestamp, id]
-    // );
+    const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+    await con.promise().query(
+       `UPDATE pdfs SET firmaDigitalUserId = ?, firmaDigitalTimestamp = ?, estado = "VALIDATED" WHERE id = ?`,
+       [idUser, signTimestamp, id]
+    );
 
     con.end();
     return res.status(200).json({ message: 'PDF firmado correctamente', file: newFilePath });
