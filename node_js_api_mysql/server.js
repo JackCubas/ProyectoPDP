@@ -770,8 +770,8 @@ async function searchPDFsSignedStampedCarpeta(id){
   });
 
   let sql = `
-    select urlCarpeta, stampUserId, signUserId from pdfs 
-    WHERE signUserId = "${id}" or stampUserId = "${id}"
+    select urlCarpeta, stampUserId, signUserId, firmaDigitalUserId from pdfs 
+    WHERE signUserId = "${id}" or stampUserId = "${id}" or firmaDigitalUserId = "${id}"
   `;
   try{
     await con.promise().query(sql)
@@ -840,15 +840,17 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs, id){
       //var doc = JSON.parse(listaDocs[i]);
       var doc = listaDocs[i];
 
-      if(Object.hasOwn(doc, "urlCarpeta") && Object.hasOwn(doc, "stampUserId") && Object.hasOwn(doc, "signUserId")){
+      if(Object.hasOwn(doc, "urlCarpeta") && Object.hasOwn(doc, "stampUserId") && Object.hasOwn(doc, "signUserId") && Object.hasOwn(doc, "firmaDigitalUserId")){
 
         var urlCarpetaOriginal = doc.urlCarpeta;
         var stampUserId = doc.stampUserId;
         var signUserId = doc.signUserId;
+        var fdUserID = doc.firmaDigitalUserId;
 
         urlCarpetaOriginal = urlCarpetaOriginal.slice(0,-4);
         var urlCarpetaSigned = urlCarpetaOriginal + "-sign" + ".pdf";
         var urlCarpetaStamped = urlCarpetaOriginal + "-stamp" + ".pdf";
+        var urlCarpetaFD = urlCarpetaOriginal + "-signFD" + ".pdf";
 
         console.log("nombres de archivos stamp y sign: " + urlCarpetaSigned + " " + urlCarpetaStamped);
 
@@ -864,6 +866,13 @@ async function borrarPDFsSignedStampedCarpeta(listaDocs, id){
           console.log("eliminando pdf stamped");
           const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
           unlinkFile(urlCarpetaStamped);
+        }
+
+        if ((fs.existsSync(urlCarpetaFD)) && (!isNaN(fdUserID)) && (parseInt(id) === parseInt(fdUserID))) {
+        // delete the file on server after it sends to client
+          console.log("eliminando pdf firmado digital");
+          const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+          unlinkFile(urlCarpetaFD);
         }
       }
 
@@ -883,6 +892,9 @@ async function borrarPdfsSignedStampedBBDD(id){
 
   var stampUserId = null;
   var stampTimestamp = null;
+
+  var fdUserId = null;
+  var fdTimestamp = null;
 
   con = mysql.createConnection({
         host: DBHOST,
@@ -905,6 +917,13 @@ async function borrarPdfsSignedStampedBBDD(id){
       stampTimestamp = "${stampTimestamp}"
       WHERE stampUserId = "${id}"
     `;
+
+  let sqlFD = `
+      UPDATE pdfs 
+      SET firmaDigitalUserId = "${fdUserId}", 
+      firmaDigitalTimestamp = "${fdTimestamp}"
+      WHERE firmaDigitalUserId = "${id}"
+    `;
   
    try{
     await con.promise().query(sqlSign)
@@ -923,6 +942,22 @@ async function borrarPdfsSignedStampedBBDD(id){
 
   try{
     await con.promise().query(sqlStamp)
+      .then( ([rows,fields]) => {
+
+          var rowsObject = JSON.stringify(rows);
+          console.log("rows stamped: " + rowsObject);
+          //console.log("rows stamped size: " + rowsObject.length);
+
+      })
+  }catch(error){
+    console.log(error);
+
+    console.log("Ending connection");
+    con.end();
+  }
+
+  try{
+    await con.promise().query(sqlFD)
       .then( ([rows,fields]) => {
 
           var rowsObject = JSON.stringify(rows);
