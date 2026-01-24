@@ -153,11 +153,11 @@ function buildTable(data, currentPageNum) {
         buttonStamp.addEventListener('click', stamp);
         cell3.appendChild(buttonStamp);
 
-        const buttonFD = document.createElement('button');
-        buttonFD.id = "FDbutton" + butID + "-" + currentPageNum + "-" + data.length;
-        buttonFD.textContent = "FD ATR";
-        buttonFD.addEventListener('click', firmadoDigital);
-        cell3.appendChild(buttonFD);
+        const buttonFDATR = document.createElement('button');
+        buttonFDATR.id = "FDATRbutton" + butID + "-" + currentPageNum + "-" + data.length;
+        buttonFDATR.textContent = "FD ATR";
+        buttonFDATR.addEventListener('click', firmadoDigitalATR);
+        cell3.appendChild(buttonFDATR);
 
         const buttonFDCliente = document.createElement('button');
         buttonFDCliente.id = "FDClientebutton" + butID + "-" + currentPageNum + "-" + data.length;
@@ -251,15 +251,15 @@ function stamp(event) {
   window.location.href = "stamp.html?id=" + datosStamp[0] + "&page=" + datosStamp[1];
 }
 
-function firmadoDigital(event) {
-  var idFirmadoDigital = event.target.id;
-  const substringToRemove = "FDbutton";
-  var idFDString = idFirmadoDigital.replace(substringToRemove, '');
-  var datosFD = idFDString.split('-');
+function firmadoDigitalATR(event) {
+  var idFirmadoDigitalATR = event.target.id;
+  const substringToRemove = "FDATRbutton";
+  var idFDATRString = idFirmadoDigitalATR.replace(substringToRemove, '');
+  var datosFDATR = idFDATRString.split('-');
 
   //alert("Firmado digital: " + datosFD[0]);
 
-  window.location.href = "firmadoDigital.html?id=" + datosFD[0] + "&page=" + datosFD[1];
+  window.location.href = "firmadoDigitalATR.html?id=" + datosFDATR[0] + "&page=" + datosFDATR[1];
 }
 
 function firmadoDigitalCliente(event) {
