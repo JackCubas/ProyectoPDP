@@ -1749,6 +1749,7 @@ app.delete('/eliminateDocOriginal', async function(req, res) {
 
   const pathDeleteStamp = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-stamp" + '.pdf';
   const pathDeleteSign = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-sign" + '.pdf';
+  const pathDeleteFD = CARPETAPDF + "/" + userId + "/" + docName + "_" + initialTimestampName + "-signFD" + '.pdf';
 
   if (fs.existsSync(pathDelete)) {
     // delete the file on server after it sends to client
@@ -1766,6 +1767,12 @@ app.delete('/eliminateDocOriginal', async function(req, res) {
     // delete the file on server after it sends to client
     const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
     unlinkFile(pathDeleteSign);
+  }
+
+  if (fs.existsSync(pathDeleteFD)) {
+    // delete the file on server after it sends to client
+    const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+    unlinkFile(pathDeleteFD);
   }
 
   //-----------------------------------------------
