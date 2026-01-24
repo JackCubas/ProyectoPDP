@@ -2074,7 +2074,7 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       //const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
 
       const uploadTs = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
-      let sql = "";
+      var sql = "";
       
       if(pdfFile === null){
         sql = `
