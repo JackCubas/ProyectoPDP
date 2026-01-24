@@ -748,7 +748,7 @@ function appendDataStamp(data){
         j.textContent="No hay documento firmado digitalmente";
         con.appendChild(j);
 
-        document.getElementById("webeid-sign-button").disabled = true;
+        //document.getElementById("webeid-sign-button").disabled = true;
 
         //document.getElementById("submit").disabled = true;
     }
