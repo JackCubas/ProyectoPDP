@@ -3124,7 +3124,6 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     //----------------------------------
     //----------------------------------
-    //Modify pdf to insert placeholders for the certificate
 
     const SIGNATURE_LENGTH = 4540;
 
@@ -3202,20 +3201,49 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
     //const signatureBytes = forge.util.decode64(signature); // tu firma externa
     //const certDecode = forge.util.decode64(certificate);
-
-    //Process certificate to be readable by forge
     var certificateProcess = await processCertLines(certificate)
     const certDer = "-----BEGIN CERTIFICATE-----" + "\n" + certificateProcess + "\n" + "-----END CERTIFICATE-----";
     fs.writeFileSync(certificateOriginalPath, certDer);
     fs.chmodSync(certificateOriginalPath, '644');
 
-    //Generate keys for new certificate to be able to create .p12
+    
+    //var keys = await genKeyPairStrong()
     var keysForge = forge.pki.rsa.generateKeyPair(2048);
     const privateKeyPem = forge.pki.privateKeyToPem(keysForge.privateKey);
+
+    //const privatePem = forge.pki.encryptPrivateKey(keysForge.privateKey);
+    //const md = forge.md.sha256.create();
+    //md.update(String(Date.now())); // Data to be signed
+    //const signaturePrivateKey = keysForge.privateKey.sign(md);
+
     fs.writeFileSync(forgeprivateKeyPath, privateKeyPem, { encoding: 'utf8'});
     fs.chmodSync(forgeprivateKeyPath, '644');
-    //var keys = await genKeyPairStrong()
     
+
+    //---------------------------------------------------------------
+    //---------------------------------------------------------------
+
+    /*const certificateOriginalPemPath = "./certificate.pem";
+    if (fs.existsSync(certificateOriginalPemPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateOriginalPemPath);
+    }
+
+    fs.copyFileSync("certificate.crt", certificateOriginalPemPath);
+    fs.chmodSync(certificateOriginalPemPath, '644');
+
+    // Read the certificate file (PEM or DER format)
+    // Example: certificate.pem should contain -----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----
+    const certPem = fs.readFileSync('certificate.pem', 'utf8');
+    
+    // Create an X509Certificate instance
+    const certCrypto = new crypto.X509Certificate(certPem);
+    
+    // Get the public key in PEM format
+    const publicKeyPem = certCrypto.publicKey.export({ type: 'spki', format: 'pem' });
+    
+    console.log('Public Key (PEM):\n', publicKeyPem);*/
 
     //-------------------------------------------------------------
     //-------------------------------------------------------------
@@ -3231,7 +3259,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     const newCert = forge.pki.createCertificate();
 
     // 2. Insert data from the existing certificate
-    newCert.publicKey = keysForge.publicKey; // Use new public key
+    newCert.publicKey = keysForge.publicKey; // Use the same public key
     newCert.setSubject(existingCert.subject.attributes); // Copy subject details
     newCert.setIssuer(existingCert.issuer.attributes);   // Copy issuer details
 
@@ -3298,8 +3326,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     }
 
     //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
-    //Sign placeholder pdf with .p12  
+    //--------------------------------------------------------------------------  
 
     // Guardar PDF firmado
     const newFilePath = urlCarpetaOriginal + "-signFD.pdf";
