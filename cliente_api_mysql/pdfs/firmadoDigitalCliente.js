@@ -582,7 +582,6 @@ const csrfToken = getCookie('CSRF-TOKEN');
 })();
 
 //-------------------------------------------
-const URLSERVERFirmadoDigital = "http://localhost:3000/firmadoDigital/";
 const URLSERVERdetail = "http://localhost:3000/pdfs/";
 
 const URLSERVERretrieve = "http://localhost:3000/retrieve/";
@@ -674,7 +673,7 @@ function appendDataOriginal(data){
 }
 
 async function returnDataStamp() {
-    const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
+    const URLSERVERdetail = "http://localhost:3000/pdfFD/";
 
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
@@ -716,7 +715,7 @@ function appendDataStamp(data){
             con.appendChild(e);
 
             var f=document.createElement("div")
-            f.textContent="Stamp User Name: " + data[i].nameUser                      
+            f.textContent="Firmado Digital User Name: " + data[i].nameUser                      
             con.appendChild(f);
 
             var g=document.createElement("div")
@@ -733,15 +732,9 @@ function appendDataStamp(data){
             con.appendChild(h);
 
             var k=document.createElement("div");
-            var stampTimestampNameAux = data[0].stampTimestamp.slice(0, 19).replace('T', ' ');
-            k.textContent="Stamp DateTime: " + stampTimestampNameAux;                      
+            var firmaDigitalTimestampAux = data[0].firmaDigitalTimestamp.slice(0, 19).replace('T', ' ');
+            k.textContent="Firmado Digital DateTime: " + firmaDigitalTimestampAux;                      
             con.appendChild(k);
-
-            //document.getElementById("submit").disabled = false;
-
-            //if(data[0].stampUserId !== datosUsuario.id || data[0].atrexists === 0){
-            //    document.getElementById("submit").disabled = true;
-            //}
 
             if(data[0].stampUserId !== datosUsuario.id){
                 document.getElementById("webeid-sign-button").disabled = true;
@@ -749,10 +742,10 @@ function appendDataStamp(data){
 
         }
     }else{
-        console.log("No hay documento estampado");
+        console.log("No hay documento firmado digitalmente");
 
         var j=document.createElement("div");
-        j.textContent="No hay documento estampado";
+        j.textContent="No hay documento firmado digitalmente";
         con.appendChild(j);
 
         document.getElementById("webeid-sign-button").disabled = true;

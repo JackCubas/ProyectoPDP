@@ -2791,6 +2791,60 @@ async function transformStampType(fileName, fileType){
 //--------------------------------------
 //--------------------------------------
 
+app.get("/pdfFD/:id", cors(), (req, res) => {
+
+  //console.log("get pdf by id!");
+
+  let connection;
+  var resultRows;
+  const { id } = req.params;
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, firmaDigitalUserId, DATE_ADD(firmaDigitalTimestamp, INTERVAL 1 HOUR) as firmaDigitalTimestamp FROM pdfs INNER JOIN users ON pdfs.firmaDigitalUserId = users.id WHERE pdfs.id = ?"
+
+          let values = [
+            [id]
+          ]
+
+          connection.query(queryBusqueda,[values], function (err, result, fields) {
+              if (err) throw err;
+              
+              //console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+
+              //console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
+  }
+
+});
+
+
+
 app.put('/lecturaTarjeta', async (req, res) => {
 
   console.log("llegado al lectura del tarjeta");
