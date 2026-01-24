@@ -2074,19 +2074,47 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       //const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
 
       const uploadTs = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+      let sql = "";
+      
+      if(pdfFile === null){
+        sql = `
+          UPDATE pdfs 
+          SET userId = "${userIdNuevo}", 
+          name = "${nombreFileNuevo}",
+          urlCarpeta = "${archivoNombreNuevo}",
+          estado = "${estado}",
+          fileSize = ${metadata.fileSize},
+          numPages = ${metadata.numPages},
+          sha256 = "${metadata.sha256}",
+          uploadTimestamp = "${uploadTs}"
+          WHERE id = "${id}"
+        `;
+      }
 
-      let sql = `
-        UPDATE pdfs 
-        SET userId = "${userIdNuevo}", 
-        name = "${nombreFileNuevo}",
-        urlCarpeta = "${archivoNombreNuevo}",
-        estado = "${estado}",
-        fileSize = ${metadata.fileSize},
-        numPages = ${metadata.numPages},
-        sha256 = "${metadata.sha256}",
-        uploadTimestamp = "${uploadTs}"
-        WHERE id = "${id}"
-      `;
+      if(pdfFile !== null){
+        var modValue = null; 
+        sql = `
+          UPDATE pdfs 
+          SET userId = "${userIdNuevo}", 
+          name = "${nombreFileNuevo}",
+          urlCarpeta = "${archivoNombreNuevo}",
+          estado = "${estado}",
+          fileSize = ${metadata.fileSize},
+          numPages = ${metadata.numPages},
+          sha256 = "${metadata.sha256}",
+          uploadTimestamp = "${uploadTs}",
+          validatorId  = "${modValue}",
+          validationTimestamp = "${modValue}",
+          stampUserId = "${modValue}",
+          stampTimestamp = "${modValue}",
+          signUserId = "${modValue}",
+          signTimestamp = "${modValue}",
+          firmaDigitalUserId = "${modValue}",
+          firmaDigitalTimestamp = "${modValue}"
+          WHERE id = "${id}"
+        `;
+      }
+
       con.query(sql, function (err, result) {
         if (err) {
           console.error('DB update error:', err);
