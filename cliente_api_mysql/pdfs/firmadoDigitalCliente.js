@@ -736,9 +736,9 @@ function appendDataStamp(data){
             k.textContent="Firmado Digital DateTime: " + firmaDigitalTimestampAux;                      
             con.appendChild(k);
 
-            if(data[0].stampUserId !== datosUsuario.id){
+            /*if(data[0].stampUserId !== datosUsuario.id){
                 document.getElementById("webeid-sign-button").disabled = true;
-            }
+            }*/
 
         }
     }else{
