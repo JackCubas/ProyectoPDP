@@ -3177,14 +3177,18 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //----------------------------------
     //----------------------------------
 
-    // Crear el signer
+    // Crear el signer y los archivos necesarios para generar .p12
     const forgeprivateKeyPath = "./forge_private_key.key";
-    const certificatePath = "./certificate.crt";
+    const certificateOriginalPath = "./certificate.crt";
 
-    if (fs.existsSync(certificatePath)) { 
+    const certificateNuevoCRTPath = "./new_certificate.crt";
+    const certificateNuevoPEMPath = "./new_certificate.pem";
+    const certificateNuevoP12Path = "./new_certificado.p12";
+
+    if (fs.existsSync(certificateOriginalPath)) { 
       // delete the file on server after it sends to client
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(certificatePath);
+      await unlinkFile(certificateOriginalPath);
     }
 
     if (fs.existsSync(forgeprivateKeyPath)) { 
@@ -3199,11 +3203,13 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //const certDecode = forge.util.decode64(certificate);
     var certificateProcess = await processCertLines(certificate)
     const certDer = "-----BEGIN CERTIFICATE-----" + "\n" + certificateProcess + "\n" + "-----END CERTIFICATE-----";
-    fs.writeFileSync(certificatePath, certDer);
+    fs.writeFileSync(certificateOriginalPath, certDer);
+    fs.chmodSync(certificateOriginalPath, '644');
+
     
+    //var keys = await genKeyPairStrong()
     var keysForge = forge.pki.rsa.generateKeyPair(2048);
     const privateKeyPem = forge.pki.privateKeyToPem(keysForge.privateKey);
-    //var keys = await genKeyPairStrong()
 
     //const privatePem = forge.pki.encryptPrivateKey(keysForge.privateKey);
     //const md = forge.md.sha256.create();
@@ -3211,23 +3217,25 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //const signaturePrivateKey = keysForge.privateKey.sign(md);
 
     fs.writeFileSync(forgeprivateKeyPath, privateKeyPem, { encoding: 'utf8'});
+    fs.chmodSync(forgeprivateKeyPath, '644');
+    
 
-    fs.chmodSync('forge_private_key.key', '644');
-    fs.chmodSync('certificate.crt', '644');
+    //---------------------------------------------------------------
+    //---------------------------------------------------------------
 
-
-    if (fs.existsSync('certificate.pem')) { 
+    /*const certificateOriginalPemPath = "./certificate.pem";
+    if (fs.existsSync(certificateOriginalPemPath)) { 
       // delete the file on server after it sends to client
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile('certificate.pem');
+      await unlinkFile(certificateOriginalPemPath);
     }
 
-    fs.copyFileSync("certificate.crt", "certificate.pem");
-    fs.chmodSync('certificate.pem', '644');
+    fs.copyFileSync("certificate.crt", certificateOriginalPemPath);
+    fs.chmodSync(certificateOriginalPemPath, '644');
 
     // Read the certificate file (PEM or DER format)
     // Example: certificate.pem should contain -----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----
-    /*const certPem = fs.readFileSync('certificate.pem', 'utf8');
+    const certPem = fs.readFileSync('certificate.pem', 'utf8');
     
     // Create an X509Certificate instance
     const certCrypto = new crypto.X509Certificate(certPem);
@@ -3238,9 +3246,11 @@ app.post('/sign/finalize/:id', async (req, res) => {
     console.log('Public Key (PEM):\n', publicKeyPem);*/
 
     //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    //Create new certificate, using original certificate's data, but inserting new keys
 
     // Read the existing .crt file
-    const crtData = fs.readFileSync(certificatePath, 'utf8');
+    const crtData = fs.readFileSync(certificateOriginalPath, 'utf8');
 
     // Convert PEM string to a Forge certificate object
     const existingCert = forge.pki.certificateFromPem(crtData);
@@ -3265,24 +3275,24 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     const pem = forge.pki.certificateToPem(newCert);
 
-    if (fs.existsSync('new_certificate.pem')) { 
+    if (fs.existsSync(certificateNuevoPEMPath)) { 
       // delete the file on server after it sends to client
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile('new_certificate.pem');
+      await unlinkFile(certificateNuevoPEMPath);
     }
 
-    fs.writeFileSync('new_certificate.pem', pem);
+    fs.writeFileSync(certificateNuevoPEMPath, pem);
 
-    if (fs.existsSync('new_certificate.crt')) { 
+    if (fs.existsSync(certificateNuevoCRTPath)) { 
       // delete the file on server after it sends to client
       const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile('new_certificate.crt');
+      await unlinkFile(certificateNuevoCRTPath);
     }
 
-    fs.writeFileSync('new_certificate.crt', pem);
+    fs.writeFileSync(certificateNuevoCRTPath, pem);
 
-    //----------------------------------------------
-    //----------------------------------------------
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //The private key must match with the certificate('s public key) you use. Otherwise you won't be able to use them together.
 
     const forge_pass = "";
@@ -3295,6 +3305,12 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     if(compareKey === comparePem){
       console.log(`comparacion hecho`);
+
+      if (fs.existsSync(certificateNuevoP12Path)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoP12Path);
+      }
 
       await execSync(command3, (error, stdout, stderr) => {
           if (error) {
@@ -3309,8 +3325,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     }
 
-    //----------------------------------
-    //----------------------------------  
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------  
 
     // Guardar PDF firmado
     const newFilePath = urlCarpetaOriginal + "-signFD.pdf";
@@ -3322,7 +3338,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       await unlinkFile(newFilePath);
     }
 
-    var certificateBuffer = fs.readFileSync("./new_certificado.p12");
+    var certificateBuffer = fs.readFileSync(certificateNuevoP12Path);
     var p12signer = new P12Signer(certificateBuffer);
 
     signpdf
@@ -3333,6 +3349,42 @@ app.post('/sign/finalize/:id', async (req, res) => {
           fs.writeFileSync(newFilePath, signedPdf);
       })
 
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    //Delete all archives for security reasons
+
+    if (fs.existsSync(certificateOriginalPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateOriginalPath);
+    }
+
+    if (fs.existsSync(forgeprivateKeyPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(forgeprivateKeyPath);
+    }
+
+    if (fs.existsSync(certificateNuevoPEMPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateNuevoPEMPath);
+    }
+
+    if (fs.existsSync(certificateNuevoCRTPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateNuevoCRTPath);
+    }
+
+    if (fs.existsSync(certificateNuevoP12Path)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateNuevoP12Path);
+    }
+
+    //--------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
 
     //TODO actualizar estado en la DB?
     const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
