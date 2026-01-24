@@ -699,41 +699,39 @@ function appendDataStamp(data){
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);
 
+    document.getElementById("webeid-sign-button").disabled = true;
+
     var con=document.getElementById("main-container");
     if(data.length !== 0 && (data.stamp !== null || data.firmado_digital !== null)){
         console.log(data);
 
         if(data.stamp !== null){
           console.log(data.stamp);
-        }
 
-        if(data.firmado_digital !== null){
-          console.log(data.firmado_digital);
-        }
-        
-        /*for(let i=0;i<data.length;i++){
-            console.log(data[i]);
+          if(data.stamp.stampUserId === datosUsuario.id){
+            document.getElementById("webeid-sign-button").disabled = false;
+          }
 
-            var d=document.createElement("div");
-            d.textContent="Doc Name: " + data[i].DocName;
-            thisDocName = data[i].DocName;                     
+          var d=document.createElement("div");
+            d.textContent="Doc Name: " + data.stamp.DocName;
+            thisDocName = data.stamp.DocName;                     
             con.appendChild(d);
 
             var e=document.createElement("div")
-            e.textContent="Doc URL: " + data[i].urlCarpeta                      
+            e.textContent="Doc URL: " + data.stamp.urlCarpeta                      
             con.appendChild(e);
 
             var f=document.createElement("div")
-            f.textContent="Firmado Digital User Name: " + data[i].nameUser                      
+            f.textContent="Stamp User Name: " + data.stamp.nameUser                      
             con.appendChild(f);
 
             var g=document.createElement("div")
-            g.textContent="Estado: " + data[i].estado                      
+            g.textContent="Estado: " + data.stamp.estado                      
             con.appendChild(g);
 
             var h=document.createElement("div");
 
-            var initialTimestampNameAux = data[0].initialUploadTimestamp.slice(0, 19).replace('T', ' ');
+            var initialTimestampNameAux = data.stamp.initialUploadTimestamp.slice(0, 19).replace('T', ' ');
             var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
             initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
@@ -741,20 +739,43 @@ function appendDataStamp(data){
             con.appendChild(h);
 
             var k=document.createElement("div");
-            var firmaDigitalTimestampAux = data[0].firmaDigitalTimestamp.slice(0, 19).replace('T', ' ');
-            k.textContent="Firmado Digital DateTime: " + firmaDigitalTimestampAux;                      
+            var stampTimestampAux = data.stamp.stampTimestamp.slice(0, 19).replace('T', ' ');
+            k.textContent="Stamp DateTime: " + stampTimestampAux;                      
             con.appendChild(k);
 
-            //if(data[0].stampUserId !== datosUsuario.id){
-            //    document.getElementById("webeid-sign-button").disabled = true;
-            //}
+        }
 
-        }*/
+        if(data.firmado_digital !== null){
+          console.log(data.firmado_digital);
+
+          var w=document.createElement("div")
+          w.textContent="Firmado Digital User Name: " + data.firmado_digital.nameUser                      
+          con.appendChild(w);
+
+          var v=document.createElement("div");
+          var firmaDigitalTimestampAux = data.firmado_digital.firmaDigitalTimestamp.slice(0, 19).replace('T', ' ');
+          v.textContent="Firmado Digital DateTime: " + firmaDigitalTimestampAux;                      
+          con.appendChild(v);
+
+        }
+
+        if(data.firmado_digital === null){
+
+          var y=document.createElement("div")
+          y.textContent="Firmado Digital User Name: " + "N/A"                      
+          con.appendChild(y);
+
+          var z=document.createElement("div");
+          z.textContent="Firmado Digital DateTime: " + "N/A";                      
+          con.appendChild(z);
+          
+        }
+        
     }else{
-        console.log("No hay documento firmado digitalmente");
+        console.log("No hay documento estampado o firmado digitalmente");
 
         var j=document.createElement("div");
-        j.textContent="No hay documento firmado digitalmente";
+        j.textContent="No hay documento estampado o firmado digitalmente";
         con.appendChild(j);
 
         //document.getElementById("webeid-sign-button").disabled = true;
