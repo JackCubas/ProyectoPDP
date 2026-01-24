@@ -2791,16 +2791,16 @@ async function transformStampType(fileName, fileType){
 //--------------------------------------
 //--------------------------------------
 
-app.get("/pdfFD/:id", cors(), (req, res) => {
+app.get("/pdfFD/:id", cors(), async (req, res) => {
 
   //console.log("get pdf by id!");
 
-  let connection;
-  var resultRows;
+  var toRet = {"firmado_digital": null, "stamp": null};
+  let con;
   const { id } = req.params;
 
   try {
-      connection = mysql.createConnection({
+      con = mysql.createConnection({
           host: DBHOST,
           user: DBUSER,
           password: DBPASS,
@@ -2808,37 +2808,105 @@ app.get("/pdfFD/:id", cors(), (req, res) => {
           database: DBNAME
       });
 
-      connection.connect(function(err) {
-          if (err) throw err;
+      let sqlFirmadoDigital = `
+          SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
+          DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, 
+          userId, firmaDigitalUserId, DATE_ADD(firmaDigitalTimestamp, INTERVAL 1 HOUR) as firmaDigitalTimestamp 
+          FROM pdfs INNER JOIN users ON pdfs.firmaDigitalUserId = users.id WHERE pdfs.id = "${id}"
+        `;
 
-          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, firmaDigitalUserId, DATE_ADD(firmaDigitalTimestamp, INTERVAL 1 HOUR) as firmaDigitalTimestamp FROM pdfs INNER JOIN users ON pdfs.firmaDigitalUserId = users.id WHERE pdfs.id = ?"
+        console.log("sql: " + sqlFirmadoDigital);
 
-          let values = [
-            [id]
-          ]
+        try{
 
-          connection.query(queryBusqueda,[values], function (err, result, fields) {
-              if (err) throw err;
-              
-              //console.log(result);
+          await con.promise().query(sqlFirmadoDigital)
+          .then( ([rows,fields]) => {
 
-              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+            var rowsObjectString = JSON.stringify(rows);
+            if(rowsObject !== null && rowsObject !== ""){
+              var rowsObject = JSON.parse(rowsObjectString.toString())
 
-              //console.log(resultRows);
+              if(rowsObject.length > 0){
+                console.log("fd existe");
+                var jsonObjectFD = JSON.parse(JSON.stringify(rowsObject[0]))
+                toRet.firmado_digital = jsonObjectFD;
+                
+              }else{
+                console.log("fd no coincide");
+                return;
+              }
+            }else{
+              console.log("fd no coincide");
+              return;
 
-              console.log("Ending connection");
-              connection.end();
+            }
+        })         
+        }catch(error){
+          console.log(error);
 
-              res.json(resultRows);
-          });
+          console.log("Ending connection");
+          con.end();
+
+        }
+        con.end();
+
+      con = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
       });
+
+      let sqlStamp = `
+          SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
+          DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, 
+          userId, stampUserId, DATE_ADD(stampTimestamp, INTERVAL 1 HOUR) as stampTimestamp 
+          FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = "${id}"
+        `;
+
+        console.log("sql: " + sqlStamp);
+
+        try{
+
+          await con.promise().query(sqlStamp)
+          .then( ([rows,fields]) => {
+
+            var rowsObjectString = JSON.stringify(rows);
+            if(rowsObject !== null && rowsObject !== ""){
+              var rowsObject = JSON.parse(rowsObjectString.toString())
+
+              if(rowsObject.length > 0){
+                console.log("stamp existe");
+                var jsonObjectStamp = JSON.parse(JSON.stringify(rowsObject[0]))
+                toRet.stamp = jsonObjectStamp;
+                
+              }else{
+                console.log("stamp no coincide");
+                return;
+              }
+            }else{
+              console.log("stamp no coincide");
+              return;
+
+            }
+        })         
+        }catch(error){
+          console.log(error);
+
+          console.log("Ending connection");
+          con.end();
+
+        }
+        con.end();
+
+        res.json(toRet);
 
   } catch (error) {
       console.log("Error al conectar con la base de datos");
 
       console.log("Ending connection");
-      connection.end();
+      con.end();
   }
 
 });

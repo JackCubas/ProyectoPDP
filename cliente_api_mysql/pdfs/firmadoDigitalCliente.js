@@ -700,9 +700,18 @@ function appendDataStamp(data){
     buttons.appendChild(buttonCan);
 
     var con=document.getElementById("main-container");
-    if(data.length !== 0){
+    if(data.length !== 0 && (data.stamp !== null || data.firmado_digital !== null)){
+        console.log(data);
+
+        if(data.stamp !== null){
+          console.log(data.stamp);
+        }
+
+        if(data.firmado_digital !== null){
+          console.log(data.firmado_digital);
+        }
         
-        for(let i=0;i<data.length;i++){
+        /*for(let i=0;i<data.length;i++){
             console.log(data[i]);
 
             var d=document.createElement("div");
@@ -736,11 +745,11 @@ function appendDataStamp(data){
             k.textContent="Firmado Digital DateTime: " + firmaDigitalTimestampAux;                      
             con.appendChild(k);
 
-            /*if(data[0].stampUserId !== datosUsuario.id){
-                document.getElementById("webeid-sign-button").disabled = true;
-            }*/
+            //if(data[0].stampUserId !== datosUsuario.id){
+            //    document.getElementById("webeid-sign-button").disabled = true;
+            //}
 
-        }
+        }*/
     }else{
         console.log("No hay documento firmado digitalmente");
 
