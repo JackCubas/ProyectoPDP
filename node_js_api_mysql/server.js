@@ -1982,9 +1982,12 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
 
   const pathStampOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + "-stamp" + '.pdf';
   const pathSignOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + "-sign" + '.pdf';
+  const pathFDOriginal = CARPETAPDF + "/" + userIdOriginal + "/" + nombreFileOriginal + "_" + initialTimestampName + "-signFD" + '.pdf';
+
 
   const pathStampNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + "-stamp" + '.pdf';
   const pathSignNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + "-sign" + '.pdf';
+  const pathFDNuevo = CARPETAPDF + "/" + userIdNuevo + "/" + nombreFileNuevo + "_" + initialTimestampName + "-signFD" + '.pdf';
   
   var pdfFile = (req.files && req.files.uploadedFile) ? req.files.uploadedFile : null;
 
@@ -2011,6 +2014,10 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
           fs.renameSync(pathSignOriginal, pathSignNuevo);
         }
 
+        if(fs.existsSync(pathFDOriginal)){
+          fs.renameSync(pathFDOriginal, pathFDNuevo);
+        }
+
       }else{
         console.warn('Original file not found for rename:', archivoNombreOriginal);
       }
@@ -2018,6 +2025,11 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
     
     if(pdfFile !== null){
       // replace file
+      if (fs.existsSync(pathFDOriginal)) {
+        const unlinkFile = util.promisify(fs.unlink);
+        await unlinkFile(pathFDOriginal);       
+      }
+
       if (fs.existsSync(archivoNombreOriginal)) {
         const unlinkFile = util.promisify(fs.unlink);
         await unlinkFile(archivoNombreOriginal);       
