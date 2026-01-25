@@ -3199,7 +3199,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       ByteRange,
       Contents: PDFHexString.of('A'.repeat(SIGNATURE_LENGTH)),
       Reason: PDFString.of('Motive: Internal testing only'),
-      //M: PDFString.of(pdfDateCertificate),
+      //M: PDFString.of(pdfDatePlaceHolder),
       M: PDFString.fromDate(new Date()),
     });
     const signatureDictRef = pdfDoc.context.register(signatureDict);
@@ -3478,7 +3478,7 @@ async function processCertLines(certString){
 
 }
 
-async function pdfDateCertificate(date = new Date()) {
+async function pdfDatePlaceHolder(date) {
   const pad = n => String(n).padStart(2, '0');
   return (
     'D:' +
