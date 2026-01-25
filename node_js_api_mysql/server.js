@@ -3132,6 +3132,14 @@ app.post('/sign/finalize/:id', async (req, res) => {
     return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
   }
 
+  //Declare all needed archives to create signing certificate .p12
+  const forgeprivateKeyPath = "./forge_private_key.key";
+  const certificateOriginalPath = "./certificate.crt";
+
+  const certificateNuevoCRTPath = "./new_certificate.crt";
+  const certificateNuevoPEMPath = "./new_certificate.pem";
+  const certificateNuevoP12Path = "./new_certificado.p12";
+
   const con = mysql.createConnection({
     host: DBHOST,
     user: DBUSER,
@@ -3224,14 +3232,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     //----------------------------------
     //----------------------------------
-
     // Crear el signer y los archivos necesarios para generar .p12
-    const forgeprivateKeyPath = "./forge_private_key.key";
-    const certificateOriginalPath = "./certificate.crt";
 
-    const certificateNuevoCRTPath = "./new_certificate.crt";
-    const certificateNuevoPEMPath = "./new_certificate.pem";
-    const certificateNuevoP12Path = "./new_certificado.p12";
 
     if (fs.existsSync(certificateOriginalPath)) { 
       // delete the file on server after it sends to client
@@ -3419,6 +3421,37 @@ app.post('/sign/finalize/:id', async (req, res) => {
     } catch (error) {
       console.error(error);
       con.end();
+
+      if (fs.existsSync(certificateOriginalPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateOriginalPath);
+      }
+
+      if (fs.existsSync(forgeprivateKeyPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(forgeprivateKeyPath);
+      }
+
+      if (fs.existsSync(certificateNuevoPEMPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoPEMPath);
+      }
+
+      if (fs.existsSync(certificateNuevoCRTPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoCRTPath);
+      }
+
+      if (fs.existsSync(certificateNuevoP12Path)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoP12Path);
+      }
+
       return res.status(500).json({ error: 'Error al procesar la firma' });
     }
   });
