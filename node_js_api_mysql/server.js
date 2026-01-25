@@ -3199,7 +3199,6 @@ app.post('/sign/finalize/:id', async (req, res) => {
       ByteRange,
       Contents: PDFHexString.of('A'.repeat(SIGNATURE_LENGTH)),
       Reason: PDFString.of('Motive: Internal testing only'),
-      //M: PDFString.of(pdfDatePlaceHolder),
       M: PDFString.fromDate(new Date()),
     });
     const signatureDictRef = pdfDoc.context.register(signatureDict);
@@ -3285,9 +3284,13 @@ app.post('/sign/finalize/:id', async (req, res) => {
     newCert.setSubject(existingCert.subject.attributes); // Copy subject details
     newCert.setIssuer(existingCert.issuer.attributes);   // Copy issuer details
 
+    const now = new Date();
+    const oneMinuteAgo = new Date(now);
+    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+
     // 3. Set required new metadata
     newCert.serialNumber = '01'; // Hex encoded ASN.1 INTEGER
-    newCert.validity.notBefore = new Date();
+    newCert.validity.notBefore = oneMinuteAgo; //Necessary to avoid conflicts between certificate validity and rute validity
     newCert.validity.notAfter = new Date();
     newCert.validity.notAfter.setFullYear(newCert.validity.notBefore.getFullYear() + 1);
 
