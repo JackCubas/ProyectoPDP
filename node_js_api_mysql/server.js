@@ -3198,7 +3198,8 @@ app.post('/sign/finalize/:id', async (req, res) => {
       SubFilter: 'adbe.pkcs7.detached',
       ByteRange,
       Contents: PDFHexString.of('A'.repeat(SIGNATURE_LENGTH)),
-      Reason: PDFString.of('We need your signature for reasons...'),
+      Reason: PDFString.of('Motive: Internal testing only'),
+      //M: PDFString.of(pdfDateCertificate),
       M: PDFString.fromDate(new Date()),
     });
     const signatureDictRef = pdfDoc.context.register(signatureDict);
@@ -3289,6 +3290,15 @@ app.post('/sign/finalize/:id', async (req, res) => {
     newCert.validity.notBefore = new Date();
     newCert.validity.notAfter = new Date();
     newCert.validity.notAfter.setFullYear(newCert.validity.notBefore.getFullYear() + 1);
+
+    // Add a custom extension for "motive"
+    newCert.setExtensions([
+      {
+        id: '1.3.6.1.4.1.99999.1', // Private OID for custom use
+        critical: false,
+        value: forge.util.encodeUtf8('Motive: Internal testing only')
+      }
+    ]);
 
     // 4. Self-sign or sign with a CA private key
     // Note: You need a private key to sign the certificate
@@ -3467,6 +3477,21 @@ async function processCertLines(certString){
   return result.trim();
 
 }
+
+async function pdfDateCertificate(date = new Date()) {
+  const pad = n => String(n).padStart(2, '0');
+  return (
+    'D:' +
+    date.getFullYear() +
+    pad(date.getMonth() + 1) +
+    pad(date.getDate()) +
+    pad(date.getHours()) +
+    pad(date.getMinutes()) +
+    pad(date.getSeconds()) +
+    'Z'
+  );
+}
+
 
 
 const challenges = {}; //Nonces
