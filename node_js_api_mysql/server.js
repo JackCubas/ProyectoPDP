@@ -3376,13 +3376,14 @@ app.post('/sign/finalize/:id', async (req, res) => {
     var certificateBuffer = fs.readFileSync(certificateNuevoP12Path);
     var p12signer = new P12Signer(certificateBuffer);
 
-    signpdf
+    await signpdf
       .sign(modifiedPdfBuffer, p12signer)
       .then(function (signedPdf) {
           // signedPdf is a Buffer of an electronically signed PDF. Store it.
-          //var targetPath = path.join(__dirname, '/../output/javascript.pdf');
           fs.writeFileSync(newFilePath, signedPdf);
       })
+
+    fs.chmodSync(newFilePath, '644');
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
