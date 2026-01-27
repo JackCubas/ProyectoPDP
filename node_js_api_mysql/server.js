@@ -3350,7 +3350,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     var comparePem = execSync(command2).toString();
 
     if(compareKey === comparePem){
-      console.log(`comparacion hecho`);
+      console.log(`comparacion hecho y es valido`);
 
       if (fs.existsSync(certificateNuevoP12Path)) { 
         // delete the file on server after it sends to client
@@ -3369,6 +3369,41 @@ app.post('/sign/finalize/:id', async (req, res) => {
           console.log(`cmd 3 hecho`);
       })
 
+    }else{
+      console.log(`comparacion hecho y no es valido`);
+
+      if (fs.existsSync(certificateOriginalPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateOriginalPath);
+    }
+
+    if (fs.existsSync(forgeprivateKeyPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(forgeprivateKeyPath);
+    }
+
+    if (fs.existsSync(certificateNuevoPEMPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateNuevoPEMPath);
+    }
+
+    if (fs.existsSync(certificateNuevoCRTPath)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateNuevoCRTPath);
+    }
+
+    if (fs.existsSync(certificateNuevoP12Path)) { 
+      // delete the file on server after it sends to client
+      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+      await unlinkFile(certificateNuevoP12Path);
+    }
+
+    con.end();
+    return res.status(500).json({ message: 'PDF no firmado correctamente' });
     }
 
     //--------------------------------------------------------------------------
