@@ -3140,6 +3140,21 @@ app.post('/sign/finalize/:id', async (req, res) => {
   const certificateNuevoPEMPath = "./new_certificate.pem";
   const certificateNuevoP12Path = "./new_certificado.p12";
 
+  /*// Hash del PDF y firma externa (ya generada)
+  //const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
+  const contentBuffer = forge.util.decode64(hash);
+  const signatureBytes = forge.util.decode64(signature); // tu firma externa
+  const certDecode = forge.util.decode64(certificate);
+
+  //Experimentos consola
+  console.log("hash: \n " + hash);
+  console.log("certificate: \n " + certificate);
+  console.log("signature: \n " + signature);
+
+  console.log("hash decocde: \n " + contentBuffer);
+  console.log("certificate decode: \n " + certDecode);
+  console.log("signature decode: \n " + signatureBytes);*/
+
   const con = mysql.createConnection({
     host: DBHOST,
     user: DBUSER,
@@ -3203,8 +3218,6 @@ app.post('/sign/finalize/:id', async (req, res) => {
     });
     const signatureDictRef = pdfDoc.context.register(signatureDict);
 
-    //const signatureDictRef = pdfDoc.context.register(signature);
-
     const widgetDict = pdfDoc.context.obj({
       Type: 'Annot',
       Subtype: 'Widget',
@@ -3249,10 +3262,6 @@ app.post('/sign/finalize/:id', async (req, res) => {
       await unlinkFile(forgeprivateKeyPath);
     }
 
-    // Hash del PDF y firma externa (ya generada)
-    //const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
-    //const signatureBytes = forge.util.decode64(signature); // tu firma externa
-    //const certDecode = forge.util.decode64(certificate);
 
     //Process certificate to be readable by forge
     var certificateProcess = await processCertLines(certificate)
