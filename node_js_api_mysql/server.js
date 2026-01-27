@@ -3373,37 +3373,37 @@ app.post('/sign/finalize/:id', async (req, res) => {
       console.log(`comparacion hecho y no es valido`);
 
       if (fs.existsSync(certificateOriginalPath)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(certificateOriginalPath);
-    }
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateOriginalPath);
+      }
 
-    if (fs.existsSync(forgeprivateKeyPath)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(forgeprivateKeyPath);
-    }
+      if (fs.existsSync(forgeprivateKeyPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(forgeprivateKeyPath);
+      }
 
-    if (fs.existsSync(certificateNuevoPEMPath)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(certificateNuevoPEMPath);
-    }
+      if (fs.existsSync(certificateNuevoPEMPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoPEMPath);
+      }
 
-    if (fs.existsSync(certificateNuevoCRTPath)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(certificateNuevoCRTPath);
-    }
+      if (fs.existsSync(certificateNuevoCRTPath)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoCRTPath);
+      }
 
-    if (fs.existsSync(certificateNuevoP12Path)) { 
-      // delete the file on server after it sends to client
-      const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
-      await unlinkFile(certificateNuevoP12Path);
-    }
+      if (fs.existsSync(certificateNuevoP12Path)) { 
+        // delete the file on server after it sends to client
+        const unlinkFile = util.promisify(fs.unlink); // to del file from local storage
+        await unlinkFile(certificateNuevoP12Path);
+      }
 
-    con.end();
-    return res.status(500).json({ message: 'PDF no firmado correctamente' });
+      con.end();
+      return res.status(500).json({ message: 'PDF no firmado correctamente' });
     }
 
     //--------------------------------------------------------------------------
