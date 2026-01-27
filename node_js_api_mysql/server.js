@@ -3292,6 +3292,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     // 2. Insert data from the existing certificate
     newCert.publicKey = keysForge.publicKey; // Use new public key
+    newCert.privateKey = keysForge.privateKey;
     newCert.setSubject(existingCert.subject.attributes); // Copy subject details
     newCert.setIssuer(existingCert.issuer.attributes);   // Copy issuer details
 
