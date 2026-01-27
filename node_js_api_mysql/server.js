@@ -3224,7 +3224,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       FT: 'Sig',
       Rect: [0, 0, 0, 0],
       V: signatureDictRef,
-      T: PDFString.of('Signature from Firma App'),
+      T: PDFString.of('Signature implemented by Firma Segura App'),
       F: 4,
       P: pages[0].ref,
     });
