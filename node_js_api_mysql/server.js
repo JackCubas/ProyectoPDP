@@ -3203,13 +3203,15 @@ app.post('/sign/finalize/:id', async (req, res) => {
     });
     const signatureDictRef = pdfDoc.context.register(signatureDict);
 
+    //const signatureDictRef = pdfDoc.context.register(signature);
+
     const widgetDict = pdfDoc.context.obj({
       Type: 'Annot',
       Subtype: 'Widget',
       FT: 'Sig',
       Rect: [0, 0, 0, 0],
       V: signatureDictRef,
-      T: PDFString.of('Signature1'),
+      T: PDFString.of('Signature from Firma App'),
       F: 4,
       P: pages[0].ref,
     });
