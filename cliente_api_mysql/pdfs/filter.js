@@ -103,11 +103,17 @@ function appendData(data){
             buttonStamp.addEventListener('click', stamp);
             cell4.appendChild(buttonStamp);
 
-            const buttonFD = document.createElement('button');
-            buttonFD.id = "FDbutton" + butID;
-            buttonFD.textContent = "FD";
-            buttonFD.addEventListener('click', firmadoDigital);
-            cell4.appendChild(buttonFD);
+            const buttonFDATR = document.createElement('button');
+            buttonFDATR.id = "FDATRbutton" + butID;
+            buttonFDATR.textContent = "FD ATR";
+            buttonFDATR.addEventListener('click', firmadoDigitalATR);
+            cell4.appendChild(buttonFDATR);
+
+            const buttonFDCliente = document.createElement('button');
+            buttonFDCliente.id = "FDClientebutton" + butID;
+            buttonFDCliente.textContent = "FD Cliente";
+            buttonFDCliente.addEventListener('click', firmadoDigitalCliente);
+            cell4.appendChild(buttonFDCliente);
         
         }
     }else{
@@ -198,14 +204,24 @@ function stamp(event) {
   window.location.href = "stamp.html?id=" + idStamp + "&page=1";
 }
 
-function firmadoDigital(event) {
-  var idFirmadoDigital = event.target.id;
-  const substringToRemove = "FDbutton";
-  const idFD = idFirmadoDigital.replace(substringToRemove, '');
+function firmadoDigitalATR(event) {
+  var idFirmadoDigitalATR = event.target.id;
+  const substringToRemove = "FDATRbutton";
+  const idFDATR = idFirmadoDigitalATR.replace(substringToRemove, '');
 
-  alert("Firmado digital: " + idFD);
+  //alert("Firmado digital: " + idFDATR);
 
-  //window.location.href = "firmadoDigital.html?id=" + idFD;
+  window.location.href = "firmadoDigitalATR.html?id=" + idFDATR + "&page=1";
+}
+
+function firmadoDigitalCliente(event) {
+  var idFirmadoDigitalCli = event.target.id;
+  const substringToRemove = "FDClientebutton";
+  const idFDCli = idFirmadoDigitalCli.replace(substringToRemove, '');
+
+  //alert("Firmado digital: " + datosFD[0]);
+
+  window.location.href = "firmadoDigitalCliente.html?id=" + idFDCli + "&page=1";
 }
 
 
