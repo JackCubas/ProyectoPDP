@@ -3124,13 +3124,21 @@ const openssl = require('async-openssl');
 
 app.post('/sign/finalize/:id', async (req, res) => {
   const { id } = req.params;
-  const { signature, signatureAlgorithm, certificate, hash, idUser } = req.body;
+  const { signatureEncrypt, signatureAlgorithm, certificateEncrypt, hash, idUser } = req.body;
 
-  //console.log(id + " - " + signature + " - " + signatureAlgorithm + " - " + certificate + " - " + hash);
-
-  if (!signature || !signatureAlgorithm || !certificate || !hash || !idUser) {
+  if (!signatureEncrypt || !signatureAlgorithm || !certificateEncrypt || !hash || !idUser) {
     return res.status(400).json({ error: 'signature, signatureAlgorithm y certificate son requeridos' });
   }
+
+  /*console.log(id + " - " + signatureAlgorithm + " - " + hash);
+  console.log("signature encrypt: \n " + signatureEncrypt);
+  console.log("certificate encrypt: \n " + certificateEncrypt);*/
+
+  var decryptedSignature = CryptoJS.AES.decrypt(signatureEncrypt, "firma_app");
+  const signature = decryptedSignature.toString(CryptoJS.enc.Utf8);
+
+  var decryptedCertificate = CryptoJS.AES.decrypt(certificateEncrypt, "firma_app");
+  const certificate = decryptedCertificate.toString(CryptoJS.enc.Utf8);
 
   //Declare all needed archives to create signing certificate .p12
   const forgeprivateKeyPath = "./forge_private_key.key";
@@ -3144,14 +3152,14 @@ app.post('/sign/finalize/:id', async (req, res) => {
   //const contentBuffer = forge.util.createBuffer(forge.util.decode64(hash), 'binary');
   const contentBuffer = forge.util.decode64(hash);
   const signatureBytes = forge.util.decode64(signature); // tu firma externa
-  const certDecode = forge.util.decode64(certificate);
+  const certDecode = forge.util.decode64(certificate);*/
 
   //Experimentos consola
-  console.log("hash: \n " + hash);
+  /*console.log("hash: \n " + hash);
   console.log("certificate: \n " + certificate);
-  console.log("signature: \n " + signature);
+  console.log("signature: \n " + signature);*/
 
-  console.log("hash decocde: \n " + contentBuffer);
+  /*console.log("hash decocde: \n " + contentBuffer);
   console.log("certificate decode: \n " + certDecode);
   console.log("signature decode: \n " + signatureBytes);*/
 

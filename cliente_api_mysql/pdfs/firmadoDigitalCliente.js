@@ -492,6 +492,8 @@ const csrfToken = getCookie('CSRF-TOKEN');
           console.log("Certificate: " + certificate);
           console.log("Signature Algoritm: " + supportedSignatureAlgorithms);
 
+          var certificateEncrypt = CryptoJS.AES.encrypt(certificate, "firma_app").toString();
+
           const prepareSigningResponse = await fetch("http://localhost:3000/sign/prepare/" + idHTML, {
               method: "POST",
               headers: {
@@ -499,7 +501,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
                   //[csrfHeaderName]: csrfToken
                   "csrfHeaderName": csrfToken
               },
-              body: JSON.stringify({ certificate, supportedSignatureAlgorithms })
+              body: JSON.stringify({ certificateEncrypt, supportedSignatureAlgorithms })
           });
 
           if (!prepareSigningResponse.ok) {
@@ -524,6 +526,8 @@ const csrfToken = getCookie('CSRF-TOKEN');
             console.log("signature: " + signature);
             console.log("signatureAlgorithm: " + signatureAlgorithm);
 
+            var signatureEncrypt = CryptoJS.AES.encrypt(signature, "firma_app").toString();
+
           const finalizeSigningResponse = await fetch("http://localhost:3000/sign/finalize/" + idHTML, {
               method: "POST",
               headers: {
@@ -532,7 +536,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
                   "csrfHeaderName": csrfToken
 
               },
-              body: JSON.stringify({ signature, signatureAlgorithm, certificate, hash, idUser})
+              body: JSON.stringify({ signatureEncrypt, signatureAlgorithm, certificateEncrypt, hash, idUser})
           });
 
           if (!finalizeSigningResponse.ok) {
