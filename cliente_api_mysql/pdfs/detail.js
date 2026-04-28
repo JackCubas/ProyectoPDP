@@ -1,5 +1,9 @@
-const URLSERVERdetail = "http://localhost:3000/pdfs/";
-const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERdetail = backendUrl + "/pdfs/";
+const URLSERVERretrieve = backendUrl + "/retrieve/";
+
+//const URLSERVERdetail = "http://localhost:3000/pdfs/";
+//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";

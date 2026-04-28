@@ -1,3 +1,5 @@
+const backendUrl = localStorage.getItem("backendUrl");
+
 var datosUsuario = null;
 var URLSERVERCount = "";
 
@@ -11,10 +13,14 @@ if(localStorage.getItem("usuario") !== null){
 
 if((datosUsuario.rolUser === "CLIENT")){
     //document.getElementById("filterPDF").setAttribute('hidden', "hidden");
-    var URLSERVERcountAux = "http://localhost:3000/countPDFs/"
+    //var URLSERVERcountAux = "http://localhost:3000/countPDFs/"
+    
+    var URLSERVERcountAux = backendUrl + "/countPDFs/"
     URLSERVERCount = URLSERVERcountAux + datosUsuario.id
 }else{
-    var URLSERVERcountAux = "http://localhost:3000/countPDFs/"
+    //var URLSERVERcountAux = "http://localhost:3000/countPDFs/"
+
+    var URLSERVERcountAux = backendUrl + "/countPDFs/"
     URLSERVERCount = URLSERVERcountAux + 0
 }
 
@@ -81,7 +87,9 @@ function onbuttonclicked() {
 }
 
 async function sendData(){
-    const URLSERVERUpload = "http://localhost:3000/create-pdf";
+    
+    const URLSERVERUpload = backendUrl + "/create-pdf";
+    //const URLSERVERUpload = "http://localhost:3000/create-pdf";
 
     var fileInput = document.getElementById('file');
 			

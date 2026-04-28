@@ -378,6 +378,7 @@
     };
   }
 //-------------------------------------------------
+const backendUrl = localStorage.getItem("backendUrl");
 
 var datosUsuarioATR = null;
 
@@ -396,7 +397,8 @@ certButton.addEventListener("click", async () => {
   try {
     const { certificate, supportedSignatureAlgorithms } = await getSigningCertificate({ lang });
 
-    const URLSERVERlecturatarjeta = "http://localhost:3000/lecturaTarjeta";
+    //const URLSERVERlecturatarjeta = "http://localhost:3000/lecturaTarjeta";
+    const URLSERVERlecturatarjeta = backendUrl + "/lecturaTarjeta";
 
     const fdUser = {
         fdUserId: datosUsuarioATR.id,
@@ -434,8 +436,11 @@ certButton.addEventListener("click", async () => {
 
 //-----------------------------------
 //-----------------------------------
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERdetail = backendUrl + "/users/";
 
-const URLSERVERdetail = "http://localhost:3000/users/";
+
+//const URLSERVERdetail = "http://localhost:3000/users/";
 
 var datosUsuario = null;
 

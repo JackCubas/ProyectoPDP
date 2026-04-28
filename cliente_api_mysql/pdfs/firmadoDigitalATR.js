@@ -1,7 +1,12 @@
-const URLSERVERFirmadoDigital = "http://localhost:3000/firmadoDigital/";
-const URLSERVERdetail = "http://localhost:3000/pdfs/";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERFirmadoDigital = backendUrl + "/firmadoDigital/";
+const URLSERVERdetail = backendUrl + "/pdfs/";
+const URLSERVERretrieve = backendUrl + "/retrieve/";
 
-const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+
+//const URLSERVERFirmadoDigital = "http://localhost:3000/firmadoDigital/";
+//const URLSERVERdetail = "http://localhost:3000/pdfs/";
+//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 var datosUsuario = null;
 
@@ -90,7 +95,9 @@ function appendDataOriginal(data){
 }
 
 async function returnDataStamp() {
-    const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
+    
+    const URLSERVERdetail = backendUrl + "/pdfStamp/";
+    //const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
 
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");

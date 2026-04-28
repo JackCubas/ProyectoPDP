@@ -1,4 +1,7 @@
-const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERpdfcriteria = backendUrl + "/pdfsByCriteria";
+
+//const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
 var emailUser = "";
 var nameUser = "";
 var docName = "";

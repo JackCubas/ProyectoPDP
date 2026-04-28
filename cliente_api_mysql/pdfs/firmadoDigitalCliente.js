@@ -417,11 +417,11 @@ const csrfToken = getCookie('CSRF-TOKEN');
         'X-CSRF-TOKEN': csrfToken
     });*/
 
-
+  const backendUrl = localStorage.getItem("backendUrl");
   var authButton = document.querySelector("#webeid-auth-button");
   authButton.addEventListener("click", async () => {
     try {
-      const challengeResponse = await fetch("http://localhost:3000/auth/challenge", {
+      const challengeResponse = await fetch(backendUrl + "/auth/challenge", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
@@ -457,7 +457,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
       }
 
 
-      const authTokenResponse = await fetch("http://localhost:3000/auth/login", {
+      const authTokenResponse = await fetch(backendUrl + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -494,7 +494,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
 
           var certificateEncrypt = CryptoJS.AES.encrypt(certificate, "firma_app").toString();
 
-          const prepareSigningResponse = await fetch("http://localhost:3000/sign/prepare/" + idHTML, {
+          const prepareSigningResponse = await fetch(backendUrl + "/sign/prepare/" + idHTML, {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -528,7 +528,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
 
             var signatureEncrypt = CryptoJS.AES.encrypt(signature, "firma_app").toString();
 
-          const finalizeSigningResponse = await fetch("http://localhost:3000/sign/finalize/" + idHTML, {
+          const finalizeSigningResponse = await fetch(backendUrl + "/sign/finalize/" + idHTML, {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -586,9 +586,12 @@ const csrfToken = getCookie('CSRF-TOKEN');
 })();
 
 //-------------------------------------------
-const URLSERVERdetail = "http://localhost:3000/pdfs/";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERdetail = backendUrl + "/pdfs/";
+const URLSERVERretrieve = backendUrl + "/retrieve/";
 
-const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+//const URLSERVERdetail = "http://localhost:3000/pdfs/";
+//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 var datosUsuario = null;
 
@@ -677,8 +680,9 @@ function appendDataOriginal(data){
 }
 
 async function returnDataStamp() {
-    const URLSERVERdetail = "http://localhost:3000/pdfFD/";
+    const URLSERVERdetail = backendUrl + "/pdfFD/";
 
+    //const URLSERVERdetail = "http://localhost:3000/pdfFD/";
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
 
