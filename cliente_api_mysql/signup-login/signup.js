@@ -1,4 +1,7 @@
-const URLSERVERCreate = "http://localhost:3000/users";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERCreate = backendUrl + "/users";
+
+//const URLSERVERCreate = "http://localhost:3000/users";
 
 //create.html?prodId=34&price=34&quantity=34
 //?prodId=34&price=34&quantity=34

@@ -1,5 +1,9 @@
-const URLSERVERdetail = "http://localhost:3000/users/";
-const URLSERVERModify = "http://localhost:3000/users/";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERdetail = backendUrl + "/users/";
+const URLSERVERModify = backendUrl + "/users/";
+
+//const URLSERVERdetail = "http://localhost:3000/users/";
+//const URLSERVERModify = "http://localhost:3000/users/";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";

@@ -1,4 +1,7 @@
-const URLSERVERretrieve = "http://localhost:3000/get-stamp/";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERretrieve = backendUrl + "/get-stamp/";
+
+//const URLSERVERretrieve = "http://localhost:3000/get-stamp/";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
@@ -94,7 +97,10 @@ function onbuttonclicked() {
 }
 
 async function deleteStamp(){
-    const URLSERVERDelete = "http://localhost:3000/delete-stamp";
+    //const URLSERVERDelete = "http://localhost:3000/delete-stamp";
+
+    const URLSERVERDelete = backendUrl + "/delete-stamp";
+    
 
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
@@ -113,7 +119,9 @@ async function deleteStamp(){
 }
 
 async function createStamp(){
-    const URLSERVERUpload = "http://localhost:3000/create-stamp";
+    //const URLSERVERUpload = "http://localhost:3000/create-stamp";
+
+    const URLSERVERUpload = backendUrl + "/create-stamp";
 
     var fileInput = document.getElementById('file');		
 	var filePath = fileInput.value;
