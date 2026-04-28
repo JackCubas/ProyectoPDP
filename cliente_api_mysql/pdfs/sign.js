@@ -1,3 +1,5 @@
+const backendUrl = localStorage.getItem("backendUrl");
+
 var thisDocName = "";
 var userId = null;
 var pdfBuffer = null;
@@ -254,7 +256,8 @@ async function sendData(modifiedPDFBytes){
     //console.log(pdfBlob);
     //console.log(thisDocName);
 
-    const URLSERVERsign = "http://localhost:3000/sign/";
+    const URLSERVERsign = backendUrl + "/sign/";
+    //const URLSERVERsign = "http://localhost:3000/sign/";
 
     var formData = new FormData();
     formData.append("filename", thisDocName);
@@ -288,7 +291,8 @@ async function sendData(modifiedPDFBytes){
 }
 
 async function returnDataOriginal() {
-    const URLSERVERdetail = "http://localhost:3000/pdfs/";
+    const URLSERVERdetail = backendUrl + "/pdfs/";
+    //const URLSERVERdetail = "http://localhost:3000/pdfs/";
 
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
@@ -338,7 +342,8 @@ function onbuttonclicked() {
 }
 
 async function returnDataSign() {
-    const URLSERVERdetail = "http://localhost:3000/pdfSign/";
+    const URLSERVERdetail = backendUrl + "/pdfSign/";
+    //const URLSERVERdetail = "http://localhost:3000/pdfSign/";
 
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
@@ -418,8 +423,8 @@ function appendDataSign(data){
 }
 
 async function retrievePDF() {
-
-    const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+    const URLSERVERretrieve = backendUrl + "/retrieve/";
+    //const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
     //console.log("retrieve pdf: " + URLSERVERretrieve + thisDocName);
     return fetch(URLSERVERretrieve + thisDocName + "/" + userId + "/" + initialTimestampName + "/" + "SIGN", {
@@ -480,7 +485,8 @@ checkUserHosting();
 async function deleteDocument(){
     //alert("delete document");
 
-    const URLSERVERDelete = "http://localhost:3000/eliminateDocSign";
+    const URLSERVERDelete = backendUrl + "/eliminateDocSign";
+    //const URLSERVERDelete = "http://localhost:3000/eliminateDocSign";
 
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");

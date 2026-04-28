@@ -1,3 +1,5 @@
+const backendUrl = localStorage.getItem("backendUrl");
+
 var URLSERVERgetall = ""; //"http://localhost:3000/pdfs";
 
 var datosUsuario = null;
@@ -11,12 +13,15 @@ if(localStorage.getItem("usuario") !== null){
 }
 
 if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
-  URLSERVERgetall = "http://localhost:3000/pdfs_pag"
+  //URLSERVERgetall = "http://localhost:3000/pdfs_pag"
+  URLSERVERgetall = backendUrl + "/pdfs_pag"
 }
 
 if((datosUsuario.rolUser === "CLIENT")){
   //document.getElementById("filterPDF").setAttribute('hidden', "hidden");
-  var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser_pag/"
+  //var URLSERVERgetallAux = "http://localhost:3000/pdfsByUser_pag/"
+
+  var URLSERVERgetallAux = backendUrl + "/pdfsByUser_pag/"
   URLSERVERgetall = URLSERVERgetallAux + datosUsuario.id
 }
 

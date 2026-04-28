@@ -1,7 +1,11 @@
-const URLSERVERStamp = "http://localhost:3000/stamp/";
+const backendUrl = localStorage.getItem("backendUrl");
+const URLSERVERStamp = backendUrl + "/stamp/";
+const URLSERVERdetail = backendUrl + "/pdfs/";
+const URLSERVERretrieve = backendUrl + "/retrieve/";
 
-const URLSERVERdetail = "http://localhost:3000/pdfs/";
-const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+//const URLSERVERStamp = "http://localhost:3000/stamp/";
+//const URLSERVERdetail = "http://localhost:3000/pdfs/";
+//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 /*var datosURL = window.location.href;
 
@@ -101,8 +105,9 @@ function appendDataOriginal(data){
 }
 
 async function returnDataStamp() {
-    const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
+    const URLSERVERdetail = backendUrl + "/pdfStamp/";
 
+    //const URLSERVERdetail = "http://localhost:3000/pdfStamp/";
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
 
@@ -293,8 +298,9 @@ async function sendData(){
 async function deleteDocument(){
     //alert("delete document");
 
-    const URLSERVERDelete = "http://localhost:3000/eliminateDocStamp";
+    const URLSERVERDelete = backendUrl + "/eliminateDocStamp";
 
+    //const URLSERVERDelete = "http://localhost:3000/eliminateDocStamp";
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
 
