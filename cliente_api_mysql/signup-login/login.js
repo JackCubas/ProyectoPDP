@@ -1,5 +1,5 @@
-import config from "../config.js"; 
-const backendUrl = config.backendUrl;
+import CONFIG from "../config.js"; 
+const backendUrl = CONFIG.backendUrl;
 
 const URLSERVERlogin = backendUrl + "/login";
 //const URLSERVERlogin = "http://localhost:3000/login";
