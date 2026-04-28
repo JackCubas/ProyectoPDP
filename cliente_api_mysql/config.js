@@ -1,8 +1,11 @@
-const CONFIG = {
+localStorage.setItem("backendUrl", "http://localhost:3000");
+
+
+/*const CONFIG = {
   backendUrl: "http://localhost:3000"
 };
 
-export default CONFIG;
+export default CONFIG;*/
 
 /*
 const isProd = process.env.NODE_ENV === "production";

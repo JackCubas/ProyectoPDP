@@ -1,5 +1,4 @@
-import CONFIG from "../config.js"; 
-const backendUrl = CONFIG.backendUrl;
+const backendUrl = localStorage.getItem("backendUrl");
 
 const URLSERVERlogin = backendUrl + "/login";
 //const URLSERVERlogin = "http://localhost:3000/login";
