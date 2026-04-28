@@ -1,7 +1,7 @@
 import config from "../config.js"; 
 const backendUrl = config.backendUrl;
 
-const URLSERVERlogin = backendUrl + "login";
+const URLSERVERlogin = backendUrl + "/login";
 //const URLSERVERlogin = "http://localhost:3000/login";
 
 var datosURL = window.location.href;
