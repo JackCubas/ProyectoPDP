@@ -44,7 +44,26 @@ const { degrees, rgb, StandardFonts } = require('pdf-lib');
 const { Jimp } = require("jimp");
 const CryptoJS = require("crypto-js");
 //const gm = require('gm');
+const { DateTime: LuxonDateTime } = require("luxon");
 
+//---------------------
+function now() {
+  return LuxonDateTime.now().setZone(TIMEZONE);
+}
+
+function fromISO(iso) {
+  return LuxonDateTime.fromISO(iso, { zone: TIMEZONE });
+}
+
+function nowMySql() {
+  return LuxonDateTime.now().setZone(TIMEZONE).toFormat("yyyy-LL-dd HH:mm:ss");
+}
+
+function nowPDF() {
+  return LuxonDateTime.now().setZone(TIMEZONE).toFormat("yyyy_LL_dd_HH_mm_ss");
+}
+
+//---------------------
 
 
 app.use((req, res, next) => {
