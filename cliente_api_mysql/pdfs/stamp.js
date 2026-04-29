@@ -1,11 +1,7 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERStamp = backendUrl + "/stamp/";
-const URLSERVERdetail = backendUrl + "/pdfs/";
-const URLSERVERretrieve = backendUrl + "/retrieve/";
-
-//const URLSERVERStamp = "http://localhost:3000/stamp/";
-//const URLSERVERdetail = "http://localhost:3000/pdfs/";
-//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+var backendUrl = "";
+var URLSERVERStamp = "";
+var URLSERVERdetail = "";
+var URLSERVERretrieve = "";
 
 /*var datosURL = window.location.href;
 
@@ -25,6 +21,17 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERStamp = backendUrl + "/stamp/";
+    URLSERVERdetail = backendUrl + "/pdfs/";
+    URLSERVERretrieve = backendUrl + "/retrieve/";
+
+    //const URLSERVERStamp = "http://localhost:3000/stamp/";
+    //const URLSERVERdetail = "http://localhost:3000/pdfs/";
+    //const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 }
 
 var thisDocName = "";

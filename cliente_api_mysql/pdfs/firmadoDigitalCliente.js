@@ -391,6 +391,10 @@
 
   var idUser = datosUsuario.id;
 
+  var backendUrl = "";
+  if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    backendUrl = localStorage.getItem("backendUrl");
+  }
 
   //var lang = navigator.language.substr(0, 2);
   var lang = "en"
@@ -417,7 +421,6 @@ const csrfToken = getCookie('CSRF-TOKEN');
         'X-CSRF-TOKEN': csrfToken
     });*/
 
-  const backendUrl = localStorage.getItem("backendUrl");
   var authButton = document.querySelector("#webeid-auth-button");
   authButton.addEventListener("click", async () => {
     try {
@@ -586,13 +589,9 @@ const csrfToken = getCookie('CSRF-TOKEN');
 })();
 
 //-------------------------------------------
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERdetail = backendUrl + "/pdfs/";
-const URLSERVERretrieve = backendUrl + "/retrieve/";
-
-//const URLSERVERdetail = "http://localhost:3000/pdfs/";
-//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
-
+var backendUrl = "";
+var URLSERVERdetail = "";
+var URLSERVERretrieve = "";
 var datosUsuario = null;
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -605,6 +604,15 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+  backendUrl = localStorage.getItem("backendUrl");
+  URLSERVERdetail = backendUrl + "/pdfs/";
+  URLSERVERretrieve = backendUrl + "/retrieve/";
+
+  //const URLSERVERdetail = "http://localhost:3000/pdfs/";
+  //const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 }
 
 var thisDocName = "";

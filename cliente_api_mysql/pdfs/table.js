@@ -1,7 +1,5 @@
-const backendUrl = localStorage.getItem("backendUrl");
-
+var backendUrl = "";
 var URLSERVERgetall = ""; //"http://localhost:3000/pdfs";
-
 var datosUsuario = null;
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -10,6 +8,10 @@ if(localStorage === null || localStorage.getItem("usuario") === null){
 
 if(localStorage.getItem("usuario") !== null){
      datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+  backendUrl = localStorage.getItem("backendUrl");
 }
 
 if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){

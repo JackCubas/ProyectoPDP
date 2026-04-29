@@ -1,5 +1,4 @@
-const backendUrl = localStorage.getItem("backendUrl");
-
+var backendUrl = "";
 var thisDocName = "";
 var userId = null;
 var pdfBuffer = null;
@@ -17,6 +16,10 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    backendUrl = localStorage.getItem("backendUrl");
 }
 
 document.getElementById("stroke-style").style.display = 'none';

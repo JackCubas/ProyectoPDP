@@ -1,12 +1,17 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERdetail = backendUrl + "/pdfs/";
-const URLSERVERretrieve = backendUrl + "/retrieve/";
-
-//const URLSERVERdetail = "http://localhost:3000/pdfs/";
-//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+var URLSERVERdetail = "";
+var URLSERVERretrieve = "";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    const backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERdetail = backendUrl + "/pdfs/";
+    URLSERVERretrieve = backendUrl + "/retrieve/";
+
+    //const URLSERVERdetail = "http://localhost:3000/pdfs/";
+    //const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 }
 
 var thisDocName = "";

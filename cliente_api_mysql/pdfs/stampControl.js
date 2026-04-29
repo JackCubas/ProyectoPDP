@@ -1,4 +1,5 @@
-const URLSERVERretrieve = "http://localhost:3000/get-stamp/";
+var URLSERVERretrieve = "";
+var backendUrl = "";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
@@ -11,6 +12,11 @@ if(localStorage.getItem("usuario") !== null){
 /*if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
 }*/
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERretrieve = backendUrl + "/get-stamp/";
+}
 
 async function checkUserHosting() {
 
@@ -80,8 +86,9 @@ function generateWindow(blob){
 }
 
 async function deleteStamp(){
-    const URLSERVERDelete = "http://localhost:3000/delete-stamp";
+    const URLSERVERDelete = backendUrl + "/delete-stamp";
 
+    //const URLSERVERDelete = "http://localhost:3000/delete-stamp";
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
 
@@ -101,8 +108,9 @@ async function deleteStamp(){
 }
 
 async function createStamp(){
-    const URLSERVERUpload = "http://localhost:3000/create-stamp";
-
+    const URLSERVERUpload = backendUrl + "/create-stamp";
+    
+    //const URLSERVERUpload = "http://localhost:3000/create-stamp";
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
 

@@ -378,8 +378,7 @@
     };
   }
 //-------------------------------------------------
-const backendUrl = localStorage.getItem("backendUrl");
-
+var backendUrl = "";
 var datosUsuarioATR = null;
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -388,6 +387,10 @@ if(localStorage === null || localStorage.getItem("usuario") === null){
 
 if(localStorage.getItem("usuario") !== null){
     datosUsuarioATR = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+  backendUrl = localStorage.getItem("backendUrl");
 }
 
 var lang = "en"
@@ -436,12 +439,8 @@ certButton.addEventListener("click", async () => {
 
 //-----------------------------------
 //-----------------------------------
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERdetail = backendUrl + "/users/";
-
-
-//const URLSERVERdetail = "http://localhost:3000/users/";
-
+var backendUrl = "";
+var URLSERVERdetail = "";
 var datosUsuario = null;
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -450,6 +449,13 @@ if(localStorage === null || localStorage.getItem("usuario") === null){
 
 if(localStorage.getItem("usuario") !== null){
     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+  backendUrl = localStorage.getItem("backendUrl");
+  URLSERVERdetail = backendUrl + "/users/";
+
+  //const URLSERVERdetail = "http://localhost:3000/users/";
 }
 
 function checkUserHosting() {

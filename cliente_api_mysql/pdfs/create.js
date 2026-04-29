@@ -1,5 +1,4 @@
-const backendUrl = localStorage.getItem("backendUrl");
-
+var backendUrl = "";
 var datosUsuario = null;
 var URLSERVERCount = "";
 
@@ -9,6 +8,10 @@ if(localStorage === null || localStorage.getItem("usuario") === null){
 
 if(localStorage.getItem("usuario") !== null){
     datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    backendUrl = localStorage.getItem("backendUrl");
 }
 
 if((datosUsuario.rolUser === "CLIENT")){

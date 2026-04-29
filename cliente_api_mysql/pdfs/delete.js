@@ -1,14 +1,22 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERDelete = backendUrl + "/eliminateDocOriginal";
-const URLSERVERdetail = backendUrl + "/pdfs/";
-const URLSERVERretrieve = backendUrl + "/retrieve/";
+var URLSERVERDelete = "";
+var URLSERVERdetail = "";
+var URLSERVERretrieve = "";
 
-//const URLSERVERDelete = "http://localhost:3000/eliminateDocOriginal";
-//const URLSERVERdetail = "http://localhost:3000/pdfs/";
-//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    const backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERDelete = backendUrl + "/eliminateDocOriginal";
+    URLSERVERdetail = backendUrl + "/pdfs/";
+    URLSERVERretrieve = backendUrl + "/retrieve/";
+
+    //const URLSERVERDelete = "http://localhost:3000/eliminateDocOriginal";
+    //const URLSERVERdetail = "http://localhost:3000/pdfs/";
+    //const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+
 }
 
 var thisDocName = "";

@@ -1,7 +1,4 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERpdfcriteria = backendUrl + "/pdfsByCriteria";
-
-//const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
+var URLSERVERpdfcriteria = "";
 var emailUser = "";
 var nameUser = "";
 var docName = "";
@@ -17,6 +14,13 @@ if(localStorage.getItem("usuario") !== null){
 
 if((datosUsuario.rolUser === "CLIENT")){
   window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+  const backendUrl = localStorage.getItem("backendUrl");
+  URLSERVERpdfcriteria = backendUrl + "/pdfsByCriteria";
+
+  //const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
 }
 
 /*var datosURL = window.location.href;

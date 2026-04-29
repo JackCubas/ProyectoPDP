@@ -1,13 +1,7 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERFirmadoDigital = backendUrl + "/firmadoDigital/";
-const URLSERVERdetail = backendUrl + "/pdfs/";
-const URLSERVERretrieve = backendUrl + "/retrieve/";
-
-
-//const URLSERVERFirmadoDigital = "http://localhost:3000/firmadoDigital/";
-//const URLSERVERdetail = "http://localhost:3000/pdfs/";
-//const URLSERVERretrieve = "http://localhost:3000/retrieve/";
-
+var backendUrl = "";
+var URLSERVERFirmadoDigital = "";
+var URLSERVERdetail = "";
+var URLSERVERretrieve = "";
 var datosUsuario = null;
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -20,6 +14,20 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN" && datosUsuario.rolUser != "FIRMA"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+
+    backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERFirmadoDigital = backendUrl + "/firmadoDigital/";
+    URLSERVERdetail = backendUrl + "/pdfs/";
+    URLSERVERretrieve = backendUrl + "/retrieve/";
+
+
+    //const URLSERVERFirmadoDigital = "http://localhost:3000/firmadoDigital/";
+    //const URLSERVERdetail = "http://localhost:3000/pdfs/";
+    //const URLSERVERretrieve = "http://localhost:3000/retrieve/";
+
 }
 
 var thisDocName = "";
