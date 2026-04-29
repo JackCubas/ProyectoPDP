@@ -48,19 +48,19 @@ const { DateTime: LuxonDateTime } = require("luxon");
 
 //---------------------
 function now() {
-  return LuxonDateTime.now().setZone(TIMEZONE);
+  return LuxonDateTime.now().setZone("Europe/Madrid");
 }
 
 function fromISO(iso) {
-  return LuxonDateTime.fromISO(iso, { zone: TIMEZONE });
+  return LuxonDateTime.fromISO(iso, { zone: "Europe/Madrid" });
 }
 
 function nowMySql() {
-  return LuxonDateTime.now().setZone(TIMEZONE).toFormat("yyyy-LL-dd HH:mm:ss");
+  return LuxonDateTime.now().setZone("Europe/Madrid").toFormat("yyyy-LL-dd HH:mm:ss");
 }
 
 function nowPDF() {
-  return LuxonDateTime.now().setZone(TIMEZONE).toFormat("yyyy_LL_dd_HH_mm_ss");
+  return LuxonDateTime.now().setZone("Europe/Madrid").toFormat("yyyy_LL_dd_HH_mm_ss");
 }
 
 function setToMySql(datetime) {
@@ -1258,16 +1258,19 @@ app.get("/pdfs", cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
           if (err) throw err;
           
-        //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
-        //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
-        //SELECT id, userId, name, urlCarpeta FROM pdfs                                                     //Anadir una hora
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id"
+          //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
+          //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
+          //SELECT id, userId, name, urlCarpeta FROM pdfs                                                     //Anadir una hora
+          //var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id"
+          
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id"
           connection.query(queryBusqueda, function (err, result, fields) {
               if (err) throw err;
               
@@ -1360,14 +1363,16 @@ app.get('/pdfs_pag', cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
           if (err) throw err;
                                                                                                   //Anadir una hora
-          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id LIMIT 10";
+          //var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id LIMIT 10";
 
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id LIMIT 10";
           if(page > 1){
             sql = sql + " OFFSET " + ((page-1)*10);
           }
@@ -1407,7 +1412,8 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
@@ -1416,7 +1422,8 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
                                                                                                   //Anadir una hora
-          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ?";
+          //var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ?";
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ?";
 
           let values = [
             [userId]
@@ -1462,14 +1469,16 @@ app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
           if (err) throw err;
                                                                                                   //Anadir una hora
-          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ? LIMIT 10";
-
+          //var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ? LIMIT 10";
+          var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ? LIMIT 10";
+          
           if(page > 1){
             sql = sql + " OFFSET " + ((page-1)*10);
           }
@@ -1514,14 +1523,16 @@ app.get("/pdfs/:id", cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
           if (err) throw err;
 
           //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";                         //Anadir una hora
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
+          //var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
 
           let values = [
             [id]
@@ -1627,9 +1638,13 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
   const userId = req.body.userId;
 
   //Anhadir una hora
-  const initialTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
+  /*const initialTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
   const initialTimestampNameAux = initialTimestamp.replace(" ","_").replaceAll(":","-");
-  const initialTimestampName = initialTimestampNameAux.replaceAll("-","_");
+  const initialTimestampName = initialTimestampNameAux.replaceAll("-","_");*/
+
+  const initialTimestampAux = LuxonDateTime.now().setZone("Europe/Madrid");
+  const initialTimestamp = initialTimestampAux.toFormat("yyyy-LL-dd HH:mm:ss");
+  const initialTimestampName = initialTimestampAux.toFormat("yyyy_LL_dd_HH_mm_ss");
 
   const archivoNombre = CARPETAPDF + "/" + userId + "/" + nombreFile + "_" + initialTimestampName + '.pdf';
   const carpetaNombre  = CARPETAPDF + "/" + userId;
@@ -1673,7 +1688,7 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
       let sql = "INSERT INTO pdfs (userId, name, urlCarpeta, estado, fileSize, numPages, sha256, uploadTimestamp, initialUploadTimestamp) VALUES ?";
 
       let values = [
-        [req.body.userId, nombreFile, archivoNombre, estado, metadata.fileSize, metadata.numPages, metadata.sha256, metadata.uploadTimestamp, initialTimestamp]
+        [req.body.userId, nombreFile, archivoNombre, estado, metadata.fileSize, metadata.numPages, metadata.sha256, initialTimestamp, initialTimestamp]
       ]
 
       con.query(sql, [values], function (err, result) {
