@@ -1238,7 +1238,7 @@ app.get("/pdfs", cors(), (req, res) => {
           
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
-        //SELECT id, userId, name, urlCarpeta FROM pdfs
+        //SELECT id, userId, name, urlCarpeta FROM pdfs                                                     //Anadir una hora
           var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id"
           connection.query(queryBusqueda, function (err, result, fields) {
               if (err) throw err;
@@ -1337,7 +1337,7 @@ app.get('/pdfs_pag', cors(), (req, res) => {
 
       connection.connect(function(err) {
           if (err) throw err;
-
+                                                                                                  //Anadir una hora
           var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id LIMIT 10";
 
           if(page > 1){
@@ -1387,7 +1387,7 @@ app.get("/pdfsByUser/:userId", cors(), (req, res) => {
           
         //SELECT id, name, CONCAT('data:image/jpeg;base64,', CAST(blob_data AS CHAR CHARSET utf8mb4)) AS base64_data FROM blob_table;
         //SELECT id, name, TO_BASE64(blob_data) AS base64_data FROM pdfs
-
+                                                                                                  //Anadir una hora
           var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ?";
 
           let values = [
@@ -1439,7 +1439,7 @@ app.get('/pdfsByUser_pag/:userId', cors(), (req, res) => {
 
       connection.connect(function(err) {
           if (err) throw err;
-
+                                                                                                  //Anadir una hora
           var sql = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, estado, nameUser, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE userId = ? LIMIT 10";
 
           if(page > 1){
@@ -1492,7 +1492,7 @@ app.get("/pdfs/:id", cors(), (req, res) => {
       connection.connect(function(err) {
           if (err) throw err;
 
-          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";                         //Anadir una hora
           var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId FROM pdfs INNER JOIN users ON pdfs.userId = users.id WHERE pdfs.id = ?"
 
           let values = [
@@ -1598,6 +1598,7 @@ app.post('/create-pdf', fileUpload(), async (req, res) => {
   const estado = req.body.estado || 'PENDING';
   const userId = req.body.userId;
 
+  //Anhadir una hora
   const initialTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
   const initialTimestampNameAux = initialTimestamp.replace(" ","_").replaceAll(":","-");
   const initialTimestampName = initialTimestampNameAux.replaceAll("-","_");
@@ -2073,6 +2074,7 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       // Format uploadTimestamp for MySQL DATETIME
       //const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
 
+      //Anhadir una hora
       const uploadTs = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
       var sql = "";
       
@@ -2173,7 +2175,7 @@ app.get("/pdfStamp/:id", cors(), (req, res) => {
       connection.connect(function(err) {
           if (err) throw err;
 
-          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";                         //Anadir una hora                                                                                 //Anadir una hora
           var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, stampUserId, DATE_ADD(stampTimestamp, INTERVAL 1 HOUR) as stampTimestamp, IF(atr IS NULL,0,1) AS atrexists FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = ?"
 
           let values = [
@@ -2219,6 +2221,7 @@ app.put('/stamp/:id', async (req, res) => {
   const archivoStampJPG = CARPETASTAMP + "/" + stampUserId + '.jpg';
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
 
+  //Anhadir una hora
   var stampTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
 
   const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + "-stamp" + '.pdf';
@@ -2463,7 +2466,7 @@ app.get("/pdfSign/:id", cors(), (req, res) => {
       connection.connect(function(err) {
           if (err) throw err;
 
-          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";
+          //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";                         //Anadir una hora                                                                                //Anadir una hora
           var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, signUserId, DATE_ADD(signTimestamp, INTERVAL 1 HOUR) as signTimestamp FROM pdfs INNER JOIN users ON pdfs.signUserId = users.id WHERE pdfs.id = ?"
 
           let values = [
@@ -2533,6 +2536,7 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
       if (err) throw err;
       console.log("Connected!");
 
+      //Anhadir una hora
       const signTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
 
       let sql = `
@@ -2855,6 +2859,7 @@ app.get("/pdfFD/:id", cors(), async (req, res) => {
           database: DBNAME
       });
 
+      //Anadir una hora
       let sqlFirmadoDigital = `
           SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
           DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, 
@@ -2905,6 +2910,7 @@ app.get("/pdfFD/:id", cors(), async (req, res) => {
           database: DBNAME
       });
 
+      //Anadir una hora
       let sqlStamp = `
           SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
           DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, 
@@ -3478,6 +3484,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //---------------------------------------------------------------------------
 
     //TODO actualizar estado en la DB?
+    //Anadir una hora
     const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
     await con.promise().query(
        `UPDATE pdfs SET firmaDigitalUserId = ?, firmaDigitalTimestamp = ?, estado = "VALIDATED" WHERE id = ?`,
