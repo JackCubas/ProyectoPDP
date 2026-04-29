@@ -1,9 +1,5 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERCreate = backendUrl + "/users";
-const URLSERVERCount = backendUrl + "/countUsers";
-
-//const URLSERVERCreate = "http://localhost:3000/users";
-//const URLSERVERCount = "http://localhost:3000/countUsers";
+var URLSERVERCreate = "";
+var URLSERVERCount = "";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
@@ -15,6 +11,15 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    const backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERCreate = backendUrl + "/users";
+    URLSERVERCount = backendUrl + "/countUsers";
+
+    //const URLSERVERCreate = "http://localhost:3000/users";
+    //const URLSERVERCount = "http://localhost:3000/countUsers";
 }
 
 var datosURL = window.location.href;

@@ -1,7 +1,10 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERCreate = backendUrl + "/users";
+var URLSERVERCreate = "";
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    const backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERCreate = backendUrl + "/users";
 
-//const URLSERVERCreate = "http://localhost:3000/users";
+    //const URLSERVERCreate = "http://localhost:3000/users";
+}
 
 //create.html?prodId=34&price=34&quantity=34
 //?prodId=34&price=34&quantity=34

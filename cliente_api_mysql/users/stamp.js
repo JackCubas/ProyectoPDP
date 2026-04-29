@@ -1,7 +1,5 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERretrieve = backendUrl + "/get-stamp/";
-
-//const URLSERVERretrieve = "http://localhost:3000/get-stamp/";
+var URLSERVERretrieve = "";
+var backendUrl = "";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
@@ -13,6 +11,13 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERretrieve = backendUrl + "/get-stamp/";
+
+    //const URLSERVERretrieve = "http://localhost:3000/get-stamp/";
 }
 
 var URLString = window.location.href.split('?');

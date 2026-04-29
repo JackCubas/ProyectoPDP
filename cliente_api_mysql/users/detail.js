@@ -1,7 +1,4 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERdetail = backendUrl + "/users/";
-
-//const URLSERVERdetail = "http://localhost:3000/users/";
+var URLSERVERdetail = "";
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
@@ -13,6 +10,13 @@ if(localStorage.getItem("usuario") !== null){
 
 if(datosUsuario.rolUser != "ADMIN"){
     window.location.href = "../404.html";
+}
+
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    const backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERdetail = backendUrl + "/users/";
+
+    //const URLSERVERdetail = "http://localhost:3000/users/";
 }
 
 var URLString = window.location.href.split('?');

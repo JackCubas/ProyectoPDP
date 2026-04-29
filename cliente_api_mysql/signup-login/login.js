@@ -1,7 +1,10 @@
-const backendUrl = localStorage.getItem("backendUrl");
-const URLSERVERlogin = backendUrl + "/login";
+var URLSERVERlogin = "";
+if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
+    const backendUrl = localStorage.getItem("backendUrl");
+    URLSERVERlogin = backendUrl + "/login";
 
-//const URLSERVERlogin = "http://localhost:3000/login";
+    //const URLSERVERlogin = "http://localhost:3000/login";
+}
 
 var datosURL = window.location.href;
 
