@@ -63,6 +63,14 @@ function nowPDF() {
   return LuxonDateTime.now().setZone(TIMEZONE).toFormat("yyyy_LL_dd_HH_mm_ss");
 }
 
+function setToMySql(datetime) {
+  return datetime.toFormat("yyyy-LL-dd HH:mm:ss");
+}
+
+function setToPDF(datetime) {
+  return datetime.toFormat("yyyy_LL_dd_HH_mm_ss");
+}
+
 //---------------------
 
 
@@ -3504,7 +3512,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
     //---------------------------------------------------------------------------
 
     //TODO actualizar estado en la DB?
-    //Anadir una hora
+    //Anhadir una hora
     const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
     await con.promise().query(
        `UPDATE pdfs SET firmaDigitalUserId = ?, firmaDigitalTimestamp = ?, estado = "VALIDATED" WHERE id = ?`,
