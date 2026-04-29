@@ -2118,7 +2118,9 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       //const uploadTs = metadata.uploadTimestamp.toISOString().slice(0, 19).replace('T', ' ');
 
       //Anhadir una hora
-      const uploadTs = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+      //const uploadTs = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+      const initialTimestampAuxLuxon = LuxonDateTime.now().setZone("Europe/Madrid");
+      const uploadTs = initialTimestampAuxLuxon.toFormat("yyyy-LL-dd HH:mm:ss");
       var sql = "";
       
       if(pdfFile === null){
@@ -2212,14 +2214,17 @@ app.get("/pdfStamp/:id", cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
           if (err) throw err;
 
           //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";                         //Anadir una hora                                                                                 //Anadir una hora
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, stampUserId, DATE_ADD(stampTimestamp, INTERVAL 1 HOUR) as stampTimestamp, IF(atr IS NULL,0,1) AS atrexists FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = ?"
+          //var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, stampUserId, DATE_ADD(stampTimestamp, INTERVAL 1 HOUR) as stampTimestamp, IF(atr IS NULL,0,1) AS atrexists FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = ?"
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, initialUploadTimestamp, userId, stampUserId, stampTimestamp, IF(atr IS NULL,0,1) AS atrexists FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = ?"
+
 
           let values = [
             [id]
@@ -2265,7 +2270,9 @@ app.put('/stamp/:id', async (req, res) => {
   const archivoStampJPEG = CARPETASTAMP + "/" + stampUserId + '.jpeg';
 
   //Anhadir una hora
-  var stampTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+  //var stampTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+  const initialTimestampAuxLuxon = LuxonDateTime.now().setZone("Europe/Madrid");
+  var stampTimestamp = initialTimestampAuxLuxon.toFormat("yyyy-LL-dd HH:mm:ss");
 
   const newFilePath = CARPETAPDF + "/" + originalUserId + "/" + filename + "_" + initialTimestampName + "-stamp" + '.pdf';
 
@@ -2503,14 +2510,16 @@ app.get("/pdfSign/:id", cors(), (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       connection.connect(function(err) {
           if (err) throw err;
 
           //var sql = "SELECT id, userId, name, urlCarpeta FROM pdfs WHERE id = ?";                         //Anadir una hora                                                                                //Anadir una hora
-          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, signUserId, DATE_ADD(signTimestamp, INTERVAL 1 HOUR) as signTimestamp FROM pdfs INNER JOIN users ON pdfs.signUserId = users.id WHERE pdfs.id = ?"
+          //var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, userId, signUserId, DATE_ADD(signTimestamp, INTERVAL 1 HOUR) as signTimestamp FROM pdfs INNER JOIN users ON pdfs.signUserId = users.id WHERE pdfs.id = ?"
+          var queryBusqueda = "SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, initialUploadTimestamp, userId, signUserId, signTimestamp FROM pdfs INNER JOIN users ON pdfs.signUserId = users.id WHERE pdfs.id = ?"
 
           let values = [
             [id]
@@ -2580,7 +2589,9 @@ app.put('/sign/:id', fileUpload(), async (req, res) => {
       console.log("Connected!");
 
       //Anhadir una hora
-      const signTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
+      //const signTimestamp = new Date(Date.now() + 1 * (60 * 60 * 1000) ).toISOString().slice(0, 19).replace('T', ' ');
+      const initialTimestampAuxLuxon = LuxonDateTime.now().setZone("Europe/Madrid");
+      const signTimestamp = initialTimestampAuxLuxon.toFormat("yyyy-LL-dd HH:mm:ss");
 
       let sql = `
         UPDATE pdfs 
@@ -2899,14 +2910,21 @@ app.get("/pdfFD/:id", cors(), async (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       //Anadir una hora
-      let sqlFirmadoDigital = `
+      /*let sqlFirmadoDigital = `
           SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
           DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, 
           userId, firmaDigitalUserId, DATE_ADD(firmaDigitalTimestamp, INTERVAL 1 HOUR) as firmaDigitalTimestamp 
+          FROM pdfs INNER JOIN users ON pdfs.firmaDigitalUserId = users.id WHERE pdfs.id = "${id}"
+        `;*/
+
+        let sqlFirmadoDigital = `
+          SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
+          initialUploadTimestamp, userId, firmaDigitalUserId, firmaDigitalTimestamp 
           FROM pdfs INNER JOIN users ON pdfs.firmaDigitalUserId = users.id WHERE pdfs.id = "${id}"
         `;
 
@@ -2950,14 +2968,21 @@ app.get("/pdfFD/:id", cors(), async (req, res) => {
           user: DBUSER,
           password: DBPASS,
           port     :DBPORT,
-          database: DBNAME
+          database: DBNAME,
+          dateStrings: true
       });
 
       //Anadir una hora
-      let sqlStamp = `
+      /*let sqlStamp = `
           SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
           DATE_ADD(initialUploadTimestamp, INTERVAL 1 HOUR) as initialUploadTimestamp, 
           userId, stampUserId, DATE_ADD(stampTimestamp, INTERVAL 1 HOUR) as stampTimestamp 
+          FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = "${id}"
+        `;*/
+
+        let sqlStamp = `
+          SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
+          initialUploadTimestamp, userId, stampTimestamp 
           FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = "${id}"
         `;
 
@@ -3528,7 +3553,10 @@ app.post('/sign/finalize/:id', async (req, res) => {
 
     //TODO actualizar estado en la DB?
     //Anhadir una hora
-    const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+    //const signTimestamp = new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+    const initialTimestampAuxLuxon = LuxonDateTime.now().setZone("Europe/Madrid");
+    const signTimestamp = initialTimestampAuxLuxon.toFormat("yyyy-LL-dd HH:mm:ss");
+
     await con.promise().query(
        `UPDATE pdfs SET firmaDigitalUserId = ?, firmaDigitalTimestamp = ?, estado = "VALIDATED" WHERE id = ?`,
        [idUser, signTimestamp, id]
