@@ -35,9 +35,9 @@ unzip -q main.zip
 
 ##############################################################
 echo "Quieres installar el frontend?(yes/no)"
-read input
+read inputFront
 
-if [ "$input" == "yes" ]; then
+if [ "$inputFront" == "yes" ]; then
 
 #Instalando servidor frontend
 echo "Instalando servidor frontend"
@@ -91,9 +91,9 @@ fi
 
 ##############################################################
 echo "Quieres installar el backend y base de datos?(yes/no)"
-read input
+read inputBack
 
-if [ "$input" == "yes" ]; then
+if [ "$inputBack" == "yes" ]; then
 
     #Instalando y ejecutando servidor backend node js y base de datos
     echo "Instalando y ejecutando servidor backend node js y base de datos"
