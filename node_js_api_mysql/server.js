@@ -88,7 +88,7 @@ function getLocalTimeForge(){
     });
 
     // 3. Convert to JS Date for Forge
-    const forgeDate = naive.toUTC().toJSDate();
+    const forgeDate = naive.toJSDate();
 
     return forgeDate;
 }
@@ -109,7 +109,7 @@ function getLocalTimeMinusOneForge(){
     });
 
     // 3. Convert to JS Date for Forge
-    const forgeDate = naive.toUTC().toJSDate();
+    const forgeDate = naive.toJSDate();
 
     return forgeDate;
 }
