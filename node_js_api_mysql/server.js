@@ -71,6 +71,49 @@ function setToPDF(datetime) {
   return datetime.toFormat("yyyy_LL_dd_HH_mm_ss");
 }
 
+
+function getLocalTimeForge(){
+    // 1. Get local time
+    const horaLocal = LuxonDateTime.now().setZone("Europe/Madrid");
+
+    // 2. Remove the offset by rebuilding a naive datetime
+    const naive = LuxonDateTime.fromObject({
+      year: horaLocal.year,
+      month: horaLocal.month,
+      day: horaLocal.day,
+      hour: horaLocal.hour,
+      minute: horaLocal.minute,
+      second: horaLocal.second,
+      millisecond: horaLocal.millisecond
+    });
+
+    // 3. Convert to JS Date for Forge
+    const forgeDate = naive.toUTC().toJSDate();
+
+    return forgeDate;
+}
+
+function getLocalTimeMinusOneForge(){
+    // 1. Get local time
+    const horaLocal = LuxonDateTime.now().setZone("Europe/Madrid").minus({ minutes: 1 });
+
+    // 2. Remove the offset by rebuilding a naive datetime
+    const naive = LuxonDateTime.fromObject({
+      year: horaLocal.year,
+      month: horaLocal.month,
+      day: horaLocal.day,
+      hour: horaLocal.hour,
+      minute: horaLocal.minute,
+      second: horaLocal.second,
+      millisecond: horaLocal.millisecond
+    });
+
+    // 3. Convert to JS Date for Forge
+    const forgeDate = naive.toUTC().toJSDate();
+
+    return forgeDate;
+}
+
 //---------------------
 
 
@@ -3296,7 +3339,7 @@ app.post('/sign/finalize/:id', async (req, res) => {
       ByteRange,
       Contents: PDFHexString.of('A'.repeat(SIGNATURE_LENGTH)),
       Reason: PDFString.of('Motive: Internal testing only'),
-      M: PDFString.fromDate(new Date()),
+      M: PDFString.fromDate(getLocalTimeForge(), { useUTC: true }),
     });
     const signatureDictRef = pdfDoc.context.register(signatureDict);
 
@@ -3378,14 +3421,19 @@ app.post('/sign/finalize/:id', async (req, res) => {
     newCert.setSubject(existingCert.subject.attributes); // Copy subject details
     newCert.setIssuer(existingCert.issuer.attributes);   // Copy issuer details
 
-    const now = new Date();
+    /*const now = new Date();
     const oneMinuteAgo = new Date(now);
-    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);*/
+
+    //const now = LuxonDateTime.now().setZone("Europe/Madrid").toJSDate();
+    //const oneMinuteAgo = LuxonDateTime.now().setZone("Europe/Madrid").minus({ minutes: 1 }).toUTC().toJSDate();
+
+    const oneMinuteAgo = getLocalTimeMinusOneForge();
 
     // 3. Set required new metadata
     newCert.serialNumber = '01'; // Hex encoded ASN.1 INTEGER
     newCert.validity.notBefore = oneMinuteAgo; //Necessary to avoid conflicts between certificate validity and rute validity
-    newCert.validity.notAfter = new Date();
+    newCert.validity.notAfter = getLocalTimeForge();
     newCert.validity.notAfter.setFullYear(newCert.validity.notBefore.getFullYear() + 1);
 
     // Add a custom extension for "motive"

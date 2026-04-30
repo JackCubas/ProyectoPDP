@@ -715,7 +715,7 @@ function appendDataStamp(data){
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);
 
-    document.getElementById("webeid-sign-button").disabled = true;
+    document.getElementById("webeid-sign-button").disabled = false;
 
     var con=document.getElementById("main-container");
     if(data.length !== 0 && (data.stamp !== null || data.firmado_digital !== null)){
