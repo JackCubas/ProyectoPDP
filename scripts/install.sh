@@ -141,6 +141,7 @@ else
     echo "Saltado installacion de backend y base de datos... "
 fi
 
+##############################################################
 echo "=============================="
 echo " Instalación completada"
 echo " En caso de haber installado el frontend y backend: "
