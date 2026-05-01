@@ -688,14 +688,14 @@ function appendDataOriginal(data){
 }
 
 async function returnDataStamp() {
-    const URLSERVERdetail = backendUrl + "/pdfFD/";
+    const URLSERVERdetailFD = backendUrl + "/pdfFD/";
 
-    //const URLSERVERdetail = "http://localhost:3000/pdfFD/";
+    //const URLSERVERdetailFD = "http://localhost:3000/pdfFD/";
     //var datosURL = window.location.href.split('?');
     //var idHTML = datosURL[1].replace("id=","");
 
     //console.log("return data");
-    return fetch(URLSERVERdetail + idHTML)
+    return fetch(URLSERVERdetailFD + idHTML)
         .then((response) => { 
             return response.json().then((data) => {
                 return appendDataStamp(data);
@@ -715,7 +715,7 @@ function appendDataStamp(data){
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);
 
-    document.getElementById("webeid-sign-button").disabled = false;
+    document.getElementById("webeid-sign-button").disabled = true;
 
     var con=document.getElementById("main-container");
     if(data.length !== 0 && (data.stamp !== null || data.firmado_digital !== null)){
@@ -723,8 +723,10 @@ function appendDataStamp(data){
 
         if(data.stamp !== null){
           console.log(data.stamp);
+          console.log(datosUsuario);
+          console.log(data.stamp.stampUserId === datosUsuario.id)
 
-          if(data.stamp.stampUserId === datosUsuario.id){
+          if(data.stamp.stampUserId == datosUsuario.id){
             document.getElementById("webeid-sign-button").disabled = false;
           }
 

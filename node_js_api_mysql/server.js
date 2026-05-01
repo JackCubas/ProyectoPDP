@@ -3025,7 +3025,7 @@ app.get("/pdfFD/:id", cors(), async (req, res) => {
 
         let sqlStamp = `
           SELECT pdfs.id as pdfId, pdfs.name AS DocName, urlCarpeta, nameUser, estado, 
-          initialUploadTimestamp, userId, stampTimestamp 
+          initialUploadTimestamp, userId, stampUserId, stampTimestamp 
           FROM pdfs INNER JOIN users ON pdfs.stampUserId = users.id WHERE pdfs.id = "${id}"
         `;
 
