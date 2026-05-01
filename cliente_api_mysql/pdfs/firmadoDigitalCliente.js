@@ -706,6 +706,8 @@ async function returnDataStamp() {
 
 }
 
+var estaFirmadoDigital = false;
+
 function appendDataStamp(data){
 
     var buttons = document.getElementById("button-container");
@@ -766,6 +768,8 @@ function appendDataStamp(data){
         if(data.firmado_digital !== null){
           console.log(data.firmado_digital);
 
+          estaFirmadoDigital = true;
+
           var w=document.createElement("div")
           w.textContent="Firmado Digital User Name: " + data.firmado_digital.nameUser                      
           con.appendChild(w);
@@ -778,6 +782,8 @@ function appendDataStamp(data){
         }
 
         if(data.firmado_digital === null){
+
+          estaFirmadoDigital = false;
 
           var y=document.createElement("div")
           y.textContent="Firmado Digital User Name: " + "N/A"                      
@@ -814,11 +820,24 @@ function onbuttonclicked() {
   }
 }
 
+function downloadPDF(blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "signed.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 function generateWindow(response){
     console.log(response);
-
     const fileURL = URL.createObjectURL(response);
     console.log(fileURL);
+
+    if(estaFirmadoDigital){
+      downloadPDF(response)
+    }
+
     window.open(fileURL);
 
 }
