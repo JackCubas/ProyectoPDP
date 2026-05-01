@@ -27,6 +27,30 @@ node -v
 npm -v
 git --version
 
+##############################################################
+echo "Por favor, escoja el directorio donde quieres instalar el backend..."
+read directorioBack
+
+if [ -d "${directorioBack}" ]; then
+    echo "Directorio ${directorioBack} existe"
+else
+    echo "Directorio ${directorioBack} no existe. Creandolo.."
+    mkdir -p "$directorioBack"  # Use -p to handle nested paths
+    
+    # Verify creation
+    if [ -d "$directorioBack" ]; then
+        chmod -R 755 "$directorioBack"
+        echo "Directorio '$directorioBack' creado con exito!"
+    else
+        echo "ERROR: No se ha podido crear el directorio '$directorioBack'."
+        exit 1  # Exit script with error code
+    fi
+fi
+
+if [ -d "${directorioBack}" ]; then
+    cd directorioBack
+fi    
+
 echo "Descargando proyecto..."
 cd /tmp
 wget -q https://github.com/JackCubas/ProyectoFigma/archive/refs/heads/main.zip
