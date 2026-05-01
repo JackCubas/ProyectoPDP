@@ -34,6 +34,11 @@ unzip -q main.zip
 
 
 ##############################################################
+echo "Quieres installar el frontend?(yes/no)"
+read inputFront
+
+if [ "$inputFront" == "yes" ]; then
+
 #Instalando servidor frontend
 echo "Instalando servidor frontend"
 
@@ -79,51 +84,67 @@ a2ensite localhost-ssl.conf
 echo "Reiniciando Apache..."
 systemctl reload apache2
 
+else
+    echo "Saltado installacion de frontend... "
+
+fi
+
 ##############################################################
-#Instalando y ejecutando servidor backend node js y base de datos
-echo "Instalando y ejecutando servidor backend node js y base de datos"
+echo "Quieres installar el backend y base de datos?(yes/no)"
+read inputBack
 
-echo "Instalando base de datos..."
-cd /tmp/ProyectoFigma-main/node_js_api_mysql
-XAMPP_URL="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
-INSTALLER="xampp-installer.run"
-XAMPP_PATH="/opt/lampp"
-MYSQL_USER="root"
-MYSQL_PASS="admin"
-DB_NAME="firma_app"
+if [ "$inputBack" == "yes" ]; then
 
-apt-get update -y
-apt-get install -y wget net-tools
+    #Instalando y ejecutando servidor backend node js y base de datos
+    echo "Instalando y ejecutando servidor backend node js y base de datos"
 
-wget -O $INSTALLER $XAMPP_URL
+    echo "Instalando base de datos..."
+    cd /tmp/ProyectoFigma-main/node_js_api_mysql
+    XAMPP_URL="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
+    INSTALLER="xampp-installer.run"
+    XAMPP_PATH="/opt/lampp"
+    MYSQL_USER="root"
+    MYSQL_PASS="admin"
+    DB_NAME="firma_app"
 
-chmod a+x $INSTALLER
+    apt-get update -y
+    apt-get install -y wget net-tools
 
-./$INSTALLER --mode unattended
+    wget -O $INSTALLER $XAMPP_URL
 
-chmod a+x $XAMPP_PATH/lampp
+    chmod a+x $INSTALLER
 
-echo "STARTING LAMPP (THIS WILL TAKE A WHILE)"
+    ./$INSTALLER --mode unattended
 
-$XAMPP_PATH/lampp start
+    chmod a+x $XAMPP_PATH/lampp
 
-echo "WAITING FOR LAMPP"
-sleep 8
-echo "LAMPP STARTED"
+    echo "STARTING LAMPP (THIS WILL TAKE A WHILE)"
 
-$XAMPP_PATH/bin/mysqladmin -u root password $MYSQL_PASS 2>/dev/null
+    $XAMPP_PATH/lampp start
 
-$XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+    echo "WAITING FOR LAMPP"
+    sleep 8
+    echo "LAMPP STARTED"
 
-$XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
+    $XAMPP_PATH/bin/mysqladmin -u root password $MYSQL_PASS 2>/dev/null
+
+    $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+
+    $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
 
 
-echo "Instalando dependencias..."
-npm install
-npm start
+    echo "Instalando dependencias..."
+    npm install
+    npm start
 
+else
+    echo "Saltado installacion de backend y base de datos... "
+fi
+
+##############################################################
 echo "=============================="
 echo " Instalación completada"
+echo " En caso de haber installado el frontend y backend: "
 echo " Accede en:"
 echo " https://localhost"
 echo "=============================="
