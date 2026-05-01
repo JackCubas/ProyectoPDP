@@ -48,6 +48,7 @@ else
 fi
 
 if [ -d "${directorioBack}" ]; then
+    chmod -R 755 "$directorioBack"
     cd directorioBack
 fi    
 
