@@ -1,19 +1,14 @@
 #!/bin/bash
 
-#set -e  # Detiene el script si ocurre un error
-
 echo "=============================="
 echo " Instalación automática proyecto"
 echo "=============================="
 
-# Verificar si es root
+# Verificar root
 if [ "$EUID" -ne 0 ]; then
   echo "Por favor ejecuta como root: sudo ./install.sh"
   exit 1
 fi
-
-#echo "Actualizando sistema..."
-#apt update -y && apt upgrade -y
 
 echo "Instalando dependencias básicas..."
 apt install -y curl git build-essential unzip wget
@@ -28,75 +23,54 @@ npm -v
 git --version
 
 ##############################################################
-echo "Por favor, escoja el directorio donde quieres instalar el backend..."
-read directorioBack
+echo "Por favor, escoja el directorio donde quieres descargar el app..."
+read directorio
 
-if [ -d "${directorioBack}" ]; then
-    echo "Directorio ${directorioBack} existe"
-else
-    echo "Directorio ${directorioBack} no existe. Creandolo.."
-    mkdir -p "$directorioBack"  # Use -p to handle nested paths
-    
-    # Verify creation
-    if [ -d "$directorioBack" ]; then
-        chmod -R 755 "$directorioBack"
-        echo "Directorio '$directorioBack' creado con exito!"
-    else
-        echo "ERROR: No se ha podido crear el directorio '$directorioBack'."
-        exit 1
-    fi
+if [ ! -d "$directorio" ]; then
+    echo "Creando directorio..."
+    mkdir -p "$directorio" || { echo "ERROR creando directorio"; exit 1; }
 fi
 
-# Second check (redundant but valid)
-if [ -d "${directorioBack}" ]; then
-    chmod -R 755 "$directorioBack"
-    cd "$directorioBack"
-fi    
+chmod -R 755 "$directorio"
 
 echo "Descargando proyecto..."
-cd /tmp
+cd "$directorio"
+
 wget -q https://github.com/JackCubas/ProyectoFigma/archive/refs/heads/main.zip
 unzip -q main.zip
 
+PROYECTO="$directorio/ProyectoFigma-main"
 
 ##############################################################
-echo "Quieres installar el frontend?(yes/no)"
+echo "Quieres instalar el frontend? (yes/no)"
 read inputFront
 
 if [ "$inputFront" == "yes" ]; then
 
-#Instalando servidor frontend
-echo "Instalando servidor frontend"
+    echo "Instalando Apache..."
+    apt install -y apache2
 
-echo "Instalando Apache..."
-apt install -y apache2
+    echo "Copiando frontend..."
+    rm -rf /var/www/html/*
+    cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
 
-echo "Copiando archivos al directorio web..."
-rm -rf /var/www/html/*
-mv ProyectoFigma-main/cliente_api_mysql/* /var/www/html/
+    echo "Habilitando SSL..."
+    a2enmod ssl
+    mkdir -p /etc/apache2/ssl
 
-echo "Habilitando módulo SSL..."
-a2enmod ssl
+    openssl req -x509 -nodes -days 365 \
+    -newkey rsa:2048 \
+    -keyout /etc/apache2/ssl/apache.key \
+    -out /etc/apache2/ssl/apache.crt \
+    -subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
 
-echo "Creando certificado SSL autofirmado..."
-mkdir -p /etc/apache2/ssl
-
-openssl req -x509 -nodes -days 365 \
--newkey rsa:2048 \
--keyout /etc/apache2/ssl/apache.key \
--out /etc/apache2/ssl/apache.crt \
--subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
-
-echo "Creando VirtualHost HTTPS..."
-cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
+    cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
 <VirtualHost *:443>
     ServerName localhost
     DocumentRoot /var/www/html
-
     SSLEngine on
     SSLCertificateFile /etc/apache2/ssl/apache.crt
     SSLCertificateKeyFile /etc/apache2/ssl/apache.key
-
     <Directory /var/www/html>
         AllowOverride All
         Require all granted
@@ -104,15 +78,8 @@ cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
 </VirtualHost>
 EOF
 
-echo "Habilitando sitio HTTPS..."
-a2ensite localhost-ssl.conf
-
-echo "Reiniciando Apache..."
-systemctl reload apache2
-
-else
-    echo "Saltado installacion de frontend... "
-
+    a2ensite localhost-ssl.conf
+    systemctl reload apache2
 fi
 
 ##############################################################
@@ -125,7 +92,7 @@ if [ "$inputBack" == "yes" ]; then
     echo "Instalando y ejecutando servidor backend node js y base de datos"
 
     echo "Instalando base de datos..."
-    cd /tmp/ProyectoFigma-main/node_js_api_mysql
+    cd "$PROYECTO/node_js_api_mysql"
     XAMPP_URL="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
     INSTALLER="xampp-installer.run"
     XAMPP_PATH="/opt/lampp"
@@ -174,4 +141,3 @@ echo " En caso de haber installado el frontend y backend: "
 echo " Accede en:"
 echo " https://localhost"
 echo "=============================="
-
