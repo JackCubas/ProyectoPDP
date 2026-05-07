@@ -43,13 +43,14 @@ else
         echo "Directorio '$directorioBack' creado con exito!"
     else
         echo "ERROR: No se ha podido crear el directorio '$directorioBack'."
-        exit 1  # Exit script with error code
+        exit 1
     fi
 fi
 
+# Second check (redundant but valid)
 if [ -d "${directorioBack}" ]; then
     chmod -R 755 "$directorioBack"
-    cd directorioBack
+    cd "$directorioBack"
 fi    
 
 echo "Descargando proyecto..."
