@@ -85,6 +85,11 @@ else
     echo "Saltado installacion de frontend... "
 fi
 
+#Para desbloquear firewall
+#sudo ufw allow 80/tcp
+#sudo ufw allow 443/tcp
+#sudo ufw reload
+
 ##############################################################
 echo "Quieres installar el backend y base de datos?(yes/no)"
 read inputBack
