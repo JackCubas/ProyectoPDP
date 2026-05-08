@@ -33,13 +33,19 @@ fi
 
 chmod -R 755 "$directorio"
 
+##############################################################
+### DESCARGA SEGURA EN DIRECTORIO TEMPORAL
+##############################################################
 echo "Descargando proyecto..."
-cd "$directorio"
 
-wget -q https://github.com/JackCubas/ProyectoFigma/archive/refs/heads/main.zip
-unzip -q main.zip
+TMPDIR=$(mktemp -d)
+wget -q -O "$TMPDIR/proyecto.zip" https://github.com/JackCubas/ProyectoFigma/archive/refs/heads/main.zip
+unzip -q "$TMPDIR/proyecto.zip" -d "$TMPDIR"
 
-PROYECTO="$directorio/ProyectoFigma-main"
+PROYECTO="$TMPDIR/ProyectoFigma-main"
+
+# Copiar proyecto al directorio final
+cp -r "$PROYECTO"/* "$directorio"/
 
 ##############################################################
 echo "Quieres instalar el frontend? (yes/no)"
@@ -52,7 +58,7 @@ if [ "$inputFront" == "yes" ]; then
 
     echo "Copiando frontend..."
     rm -rf /var/www/html/*
-    cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
+    cp -r "$directorio/cliente_api_mysql/"* /var/www/html/
 
     echo "Habilitando SSL..."
     a2enmod ssl
@@ -82,11 +88,11 @@ EOF
     systemctl reload apache2
 
 else
-    echo "Saltado installacion de frontend... "
+    echo "Saltado instalación de frontend..."
 fi
+
 ##############################################################
-#Para desbloquear firewall
-echo "Quieres deshabilitar el firewall?(yes/no)"
+echo "Quieres deshabilitar el firewall? (yes/no)"
 read deshabitFire
 
 if [ "$deshabitFire" == "yes" ]; then
@@ -95,8 +101,8 @@ if [ "$deshabitFire" == "yes" ]; then
     ufw reload
 fi
 
-#cambiar hora a Europe/Madrid:
-echo "Quieres cambiar la hora a hora local Madrid?(yes/no)"
+##############################################################
+echo "Quieres cambiar la hora a hora local Madrid? (yes/no)"
 read horaLocalMadrid
 
 if [ "$horaLocalMadrid" == "yes" ]; then
@@ -104,15 +110,15 @@ if [ "$horaLocalMadrid" == "yes" ]; then
 fi
 
 ##############################################################
-echo "Quieres installar el backend y base de datos?(yes/no)"
+echo "Quieres instalar el backend y base de datos? (yes/no)"
 read inputBack
 
 if [ "$inputBack" == "yes" ]; then
 
-    echo "Instalando y ejecutando servidor backend node js y base de datos"
+    echo "Instalando y configurando backend + base de datos..."
 
-    echo "Instalando base de datos..."
-    cd "$PROYECTO/node_js_api_mysql"
+    cd "$directorio/node_js_api_mysql"
+
     XAMPP_URL="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
     INSTALLER="xampp-installer.run"
     XAMPP_PATH="/opt/lampp"
@@ -123,46 +129,59 @@ if [ "$inputBack" == "yes" ]; then
     apt-get update -y
     apt-get install -y wget net-tools
 
+    echo "Descargando instalador XAMPP..."
     wget -O $INSTALLER $XAMPP_URL
     chmod a+x $INSTALLER
+
+    echo "Instalando XAMPP..."
     ./$INSTALLER --mode unattended
     chmod a+x $XAMPP_PATH/lampp
 
-    echo "STARTING LAMPP (THIS WILL TAKE A WHILE)"
-    $XAMPP_PATH/lampp start
-    sleep 8
-    echo "LAMPP STARTED"
+    ##############################################################
+    ### DESHABILITAR APACHE DE XAMPP *ANTES* DE INICIARLO
+    ##############################################################
+    echo "Deshabilitando Apache de XAMPP antes de iniciar LAMPP..."
+
+    sed -i 's/startApache/#startApache/' /opt/lampp/lampp
+    sed -i 's/stopApache/#stopApache/' /opt/lampp/lampp
+    /opt/lampp/lampp stopapache 2>/dev/null
+
+    echo "Apache de XAMPP deshabilitado."
+
+    ##############################################################
+    ### INICIAR SOLO MYSQL
+    ##############################################################
+    echo "Iniciando XAMPP (solo MySQL)..."
+    /opt/lampp/lampp startmysql
+    sleep 5
+
+    ##############################################################
+    ### CONFIGURAR BASE DE DATOS
+    ##############################################################
+    echo "Configurando base de datos..."
 
     $XAMPP_PATH/bin/mysqladmin -u root password $MYSQL_PASS 2>/dev/null
     $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
     $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
 
-    echo "Instalando dependencias..."
+    ##############################################################
+    ### INSTALAR DEPENDENCIAS BACKEND
+    ##############################################################
+    echo "Instalando dependencias backend..."
     npm install
-
-    ##############################################################
-    ###  DESHABILITAR APACHE DE XAMPP
-    ##############################################################
-    echo "Deshabilitando Apache de XAMPP para evitar conflictos..."
-    /opt/lampp/lampp stopapache 2>/dev/null
-    sed -i 's/startApache/#startApache/' /opt/lampp/lampp
-    sed -i 's/stopApache/#stopApache/' /opt/lampp/lampp
-    echo "Apache de XAMPP deshabilitado."
 
     ##############################################################
     ### DETECTAR IP DE LA VM
     ##############################################################
     get_vm_ip() {
-        ip addr show | awk '/inet / && $2 !~ /^127/ {print $2}' | cut -d/ -f1 | head -n 1
+        ip -4 addr show | awk '/inet / && $2 !~ /^127/ && $NF !~ /docker|vboxnet/ {print $2}' | cut -d/ -f1 | head -n 1
     }
     VM_IP=$(get_vm_ip)
     echo "IP detectada de la máquina virtual: $VM_IP"
 
     ##############################################################
     echo "=============================="
-    echo " Instalación finalizandose"
-    echo " En caso de haber installado el frontend y backend: "
-    echo " Accede en:"
+    echo " Instalación finalizada"
     echo ""
     echo "Si usas NAT + Port Forwarding:"
     echo "  https://localhost"
@@ -172,8 +191,9 @@ if [ "$inputBack" == "yes" ]; then
     echo "=============================="
     ##############################################################
 
-    npm start
+    # No bloquear el script
+    nohup npm start >/var/log/backend.log 2>&1 &
 
 else
-    echo "Saltado installacion de backend y base de datos... "
+    echo "Saltado instalación de backend y base de datos..."
 fi
