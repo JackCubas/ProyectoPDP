@@ -90,6 +90,9 @@ fi
 #sudo ufw allow 443/tcp
 #sudo ufw reload
 
+#cambiar hora a Europe/Madrid:
+#sudo timedatectl set-timezone Europe/Madrid
+
 ##############################################################
 echo "Quieres installar el backend y base de datos?(yes/no)"
 read inputBack
