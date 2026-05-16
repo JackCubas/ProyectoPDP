@@ -172,7 +172,7 @@ if [ "$inputBack" == "yes" ]; then
     if [ "$AUTH_STRING" = "invalid" ]; then
         echo "Root está roto (authentication_string=invalid) → reparando..."
         sudo $DB_BIN <<EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
+    ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('$MYSQL_PASS');
     FLUSH PRIVILEGES;
 EOF
     fi
@@ -181,7 +181,7 @@ EOF
     if [ "$AUTH_PLUGIN" = "unix_socket" ]; then
         echo "Root usa unix_socket → cambiando a contraseña..."
         sudo $DB_BIN <<EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
+    ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('$MYSQL_PASS');
     FLUSH PRIVILEGES;
 EOF
     fi
@@ -191,7 +191,7 @@ EOF
     if ! $DB_BIN -u root -p"$MYSQL_PASS" -e "SELECT 1;" >/dev/null 2>&1; then
         echo "Root aún no tiene contraseña válida → forzando..."
         sudo $DB_BIN <<EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
+    ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('$MYSQL_PASS');
     FLUSH PRIVILEGES;
 EOF
     fi
