@@ -50,10 +50,13 @@ chmod -R 755 "$directorio"
 echo "Descargando proyecto..."
 cd "$directorio" || { echo "ERROR: no se pudo acceder al directorio"; exit 1; }
 
-wget -q https://github.com/JackCubas/ProyectoPDP/archive/refs/heads/intento_refinado1.zip -O proyecto.zip
-unzip -q proyecto.zip
+#wget -q https://github.com/JackCubas/ProyectoPDP/archive/refs/heads/intento_refinado1.zip -O proyecto.zip
+#unzip -q proyecto.zip
+#PROYECTO="$directorio/ProyectoPDP-intento_refinado1"
 
-PROYECTO="$directorio/ProyectoPDP-intento_refinado1"
+wget -q https://github.com/JackCubas/ProyectoFigma/archive/refs/heads/main.zip
+unzip -q main.zip
+PROYECTO="$directorio/ProyectoFigma-main"
 
 ##############################################################
 echo "Quieres instalar el frontend? (yes/no)"
