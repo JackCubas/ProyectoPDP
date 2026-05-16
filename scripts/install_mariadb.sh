@@ -162,21 +162,35 @@ if [ "$inputBack" == "yes" ]; then
         DB_BIN="mysql"
     fi
 
-    echo "Detectando método de autenticación de root..."
+    echo "Detectando plugin de root..."
     AUTH_PLUGIN=$($DB_BIN -u root -N -e "SELECT plugin FROM mysql.user WHERE User='root' AND Host='localhost';" 2>/dev/null)
 
-    if [ "$AUTH_PLUGIN" = "unix_socket" ]; then
-        echo "Root usa unix_socket → cambiando a contraseña..."
-        $DB_BIN -u root <<EOF
+    echo "Detectando authentication_string..."
+    AUTH_STRING=$($DB_BIN -u root -N -e "SELECT authentication_string FROM mysql.user WHERE User='root' AND Host='localhost';" 2>/dev/null)
+
+    # --- CASO CRÍTICO: root roto (authentication_string = invalid) ---
+    if [ "$AUTH_STRING" = "invalid" ]; then
+        echo "Root está roto (authentication_string=invalid) → reparando..."
+        sudo $DB_BIN <<EOF
     ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('$MYSQL_PASS');
     FLUSH PRIVILEGES;
 EOF
     fi
 
-    echo "Comprobando si root ya tiene contraseña..."
+    # --- CASO: root usa unix_socket ---
+    if [ "$AUTH_PLUGIN" = "unix_socket" ]; then
+        echo "Root usa unix_socket → cambiando a contraseña..."
+        sudo $DB_BIN <<EOF
+    ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('$MYSQL_PASS');
+    FLUSH PRIVILEGES;
+EOF
+    fi
+
+    # --- Verificar que root ya funciona con contraseña ---
+    echo "Comprobando acceso root con contraseña..."
     if ! $DB_BIN -u root -p"$MYSQL_PASS" -e "SELECT 1;" >/dev/null 2>&1; then
-        echo "Estableciendo contraseña root..."
-        $DB_BIN -u root <<EOF
+        echo "Root aún no tiene contraseña válida → forzando..."
+        sudo $DB_BIN <<EOF
     ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('$MYSQL_PASS');
     FLUSH PRIVILEGES;
 EOF
@@ -187,7 +201,7 @@ EOF
     DELETE FROM mysql.user WHERE User='';
     DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
     DROP DATABASE IF EXISTS test;
-    DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+    DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';
     FLUSH PRIVILEGES;
 EOF
 
@@ -198,6 +212,7 @@ EOF
     $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
 
     echo "Base de datos configurada correctamente."
+
 
 
     echo "Instalando dependencias..."
