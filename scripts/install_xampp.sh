@@ -50,8 +50,8 @@ chmod -R 755 "$directorio"
 echo "Descargando proyecto..."
 cd "$directorio" || { echo "ERROR: no se pudo acceder al directorio"; exit 1; }
 
-wget -q https://github.com/JackCubas/ProyectoPDP/tree/intento_refinado1.zip
-unzip -q main.zip
+wget -q https://github.com/JackCubas/ProyectoPDP/tree/intento_refinado1.zip -O proyecto.zip
+unzip -q proyecto.zip
 
 PROYECTO="$directorio/ProyectoPDP-intento_refinado1"
 
