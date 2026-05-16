@@ -136,69 +136,43 @@ if [ "$inputBack" == "yes" ]; then
     apt-get install -y wget net-tools
 
     echo "Instalando MariaDB..."
-    apt-get install -y mariadb-server mariadb-client
+    apt-get install mariadb-server mariadb-client
 
-    echo "Detectando servicio MariaDB..."
-    if systemctl list-unit-files | grep -q mariadb.service; then
-        DB_SERVICE="mariadb"
-    else
-        DB_SERVICE="mysql"
-    fi
+    echo "Iniciando y habilitando MariaDB..."
+    systemctl start mysql
+    systemctl enable mysql
 
-    echo "Iniciando y habilitando servicio $DB_SERVICE..."
-    systemctl start $DB_SERVICE
-    systemctl enable $DB_SERVICE
-
-    echo "Verificando que MariaDB está activo..."
-    if ! systemctl is-active --quiet $DB_SERVICE; then
-        echo "ERROR: MariaDB no pudo iniciarse."
-        exit 1
-    fi
-
-    echo "Detectando binario MariaDB/MySQL..."
-    if command -v mariadb >/dev/null 2>&1; then
-        DB_BIN="mariadb"
-    else
-        DB_BIN="mysql"
-    fi
-
-    echo "Detectando método de autenticación de root..."
-    AUTH_PLUGIN=$($DB_BIN -u root -N -e "SELECT plugin FROM mysql.user WHERE User='root' AND Host='localhost';" 2>/dev/null)
-
-    if [ "$AUTH_PLUGIN" = "unix_socket" ]; then
-        echo "Root usa unix_socket → cambiando a contraseña..."
-        $DB_BIN -u root <<EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
-    FLUSH PRIVILEGES;
-EOF
-    fi
-
-    echo "Comprobando si root ya tiene contraseña..."
-    if ! $DB_BIN -u root -p"$MYSQL_PASS" -e "SELECT 1;" >/dev/null 2>&1; then
-        echo "Estableciendo contraseña root..."
-        $DB_BIN -u root <<EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
-    FLUSH PRIVILEGES;
-EOF
-    fi
+    #n → Do NOT switch to unix_socket authentication
+    #y → Set root password (or confirm it)
+    #y → Remove anonymous users
+    #y → Disallow remote root login
+    #y → Remove test database and access to it
 
     echo "Asegurando MariaDB..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS <<EOF
-    DELETE FROM mysql.user WHERE User='';
-    DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
-    DROP DATABASE IF EXISTS test;
-    DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
-    FLUSH PRIVILEGES;
+    mysql_secure_installation <<EOF
+n 
+y
+y
+y
+y
+EOF
+
+    #echo "Asegurando MariaDB..."
+    #sudo mysql_secure_installation
+
+    echo "Creand users y permisos de MariaDB..."
+    mysql -u root <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'admin';
+FLUSH PRIVILEGES;
 EOF
 
     echo "Creando base de datos si no existe..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+    mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
 
     echo "Importando base de datos..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
+    mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
 
     echo "Base de datos configurada correctamente."
-
 
     echo "Instalando dependencias..."
     npm install
