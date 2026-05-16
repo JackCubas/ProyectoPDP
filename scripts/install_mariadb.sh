@@ -50,10 +50,10 @@ chmod -R 755 "$directorio"
 echo "Descargando proyecto..."
 cd "$directorio" || { echo "ERROR: no se pudo acceder al directorio"; exit 1; }
 
-wget -q https://github.com/JackCubas/ProyectoFigma/archive/refs/heads/main.zip
+wget -q https://github.com/JackCubas/ProyectoPDP/tree/intento_refinado1.zip
 unzip -q main.zip
 
-PROYECTO="$directorio/ProyectoFigma-main"
+PROYECTO="$directorio/ProyectoPDP-intento_refinado1"
 
 ##############################################################
 echo "Quieres instalar el frontend? (yes/no)"
@@ -214,8 +214,6 @@ EOF
     $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
 
     echo "Base de datos configurada correctamente."
-
-
 
     echo "Instalando dependencias..."
     npm install
