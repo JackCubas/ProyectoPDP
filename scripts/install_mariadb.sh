@@ -142,17 +142,23 @@ if [ "$inputBack" == "yes" ]; then
     systemctl start mariadb
     systemctl enable mariadb
 
-    #echo "Asegurando MariaDB..."
-    #mysql_secure_installation <<EOF
-#n
-#y
-#y
-#y
-#y
-#EOF
+    #n → Do NOT switch to unix_socket authentication
+    #y → Set root password (or confirm it)
+    #y → Remove anonymous users
+    #y → Disallow remote root login
+    #y → Remove test database and access to it
 
     echo "Asegurando MariaDB..."
-    sudo mysql_secure_installation
+    mysql_secure_installation <<EOF
+n 
+y
+y
+y
+y
+EOF
+
+    #echo "Asegurando MariaDB..."
+    #sudo mysql_secure_installation
 
     echo "Creand users y permisos de MariaDB..."
     mysql -u root <<EOF
@@ -200,3 +206,53 @@ EOF
 else
     echo "Saltado installacion de backend y base de datos... "
 fi
+
+
+
+############################################
+
+##############################################################
+### BLOQUE MARIADB SEGURO E IDEMPOTENTE
+##############################################################
+
+#echo "Configurando MariaDB de forma segura..."
+
+#MYSQL_USER="root"
+#MYSQL_PASS="admin"
+#DB_NAME="firma_app"
+
+# 1. Asegurar que MariaDB está corriendo
+#systemctl start mariadb
+
+# 2. Crear archivo temporal con comandos SQL seguros
+#SQL_TMP=$(mktemp)
+
+#cat > "$SQL_TMP" <<EOF
+#-- Crear root@localhost si no existe y asignar contraseña
+#CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
+#ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS';
+
+#-- Eliminar usuarios anónimos
+#DELETE FROM mysql.user WHERE User='';
+
+#-- Deshabilitar root remoto
+#DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
+
+#-- Eliminar base de datos de pruebas
+#DROP DATABASE IF EXISTS test;
+#DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+#-- Crear base de datos si no existe
+#CREATE DATABASE IF NOT EXISTS $DB_NAME;
+
+#-- Aplicar cambios
+#FLUSH PRIVILEGES;
+#EOF
+
+# 3. Ejecutar SQL de forma segura
+#mariadb -u root < "$SQL_TMP" 2>/dev/null || mariadb -u root -p"$MYSQL_PASS" < "$SQL_TMP"
+
+# 4. Limpiar archivo temporal
+#rm -f "$SQL_TMP"
+
+#echo "MariaDB configurado de forma segura."
