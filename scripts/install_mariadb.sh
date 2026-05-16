@@ -127,9 +127,7 @@ if [ "$inputBack" == "yes" ]; then
 
     echo "Instalando base de datos..."
     cd "$PROYECTO/node_js_api_mysql"
-    XAMPP_URL="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
-    INSTALLER="xampp-installer.run"
-    XAMPP_PATH="/opt/lampp"
+
     MYSQL_USER="root"
     MYSQL_PASS="admin"
     DB_NAME="firma_app"
@@ -137,32 +135,43 @@ if [ "$inputBack" == "yes" ]; then
     apt-get update -y
     apt-get install -y wget net-tools
 
-    wget -O $INSTALLER $XAMPP_URL
-    chmod a+x $INSTALLER
-    ./$INSTALLER --mode unattended
-    chmod a+x $XAMPP_PATH/lampp
+    echo "Instalando MariaDB..."
+    apt-get install mariadb-server mariadb-client
 
-    echo "STARTING LAMPP (THIS WILL TAKE A WHILE)"
-    $XAMPP_PATH/lampp start
-    sleep 8
-    echo "LAMPP STARTED"
+    echo "Iniciando y habilitando MariaDB..."
+    systemctl start mariadb
+    systemctl enable mariadb
 
-    $XAMPP_PATH/bin/mysqladmin -u root password $MYSQL_PASS 2>/dev/null
-    $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
-    $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
+    #echo "Asegurando MariaDB..."
+    #mysql_secure_installation <<EOF
+#n
+#y
+#y
+#y
+#y
+#EOF
+
+    echo "Asegurando MariaDB..."
+    sudo mysql_secure_installation
+
+    echo "Creand users y permisos de MariaDB..."
+    mysql -u root <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'admin';
+FLUSH PRIVILEGES;
+EOF
+
+    echo "Creando base de datos si no existe..."
+    mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+
+    echo "Importando base de datos..."
+    mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
+
+    echo "Base de datos configurada correctamente."
 
     echo "Instalando dependencias..."
     npm install
 
-    ##############################################################
-    ###  DESHABILITAR APACHE DE XAMPP
-    ##############################################################
-    echo "Deshabilitando Apache de XAMPP para evitar conflictos..."
-    /opt/lampp/lampp stopapache 2>/dev/null
-    sed -i 's/startApache/#startApache/' /opt/lampp/lampp
-    sed -i 's/stopApache/#stopApache/' /opt/lampp/lampp
-    echo "Apache de XAMPP deshabilitado."
-
+    
     ##############################################################
     ### DETECTAR IP DE LA VM
     ##############################################################
