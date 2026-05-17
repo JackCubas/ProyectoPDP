@@ -126,10 +126,10 @@ read inputBack
 
 if [ "$inputBack" == "yes" ]; then
 
-    echo "Instalando y ejecutando servidor backend node js y base de datos"
+   echo "Instalando y ejecutando servidor backend node js y base de datos"
 
     echo "Instalando base de datos..."
-    cd "$PROYECTO/node_js_api_mysql"
+    cd /tmp/ProyectoFigma-main/node_js_api_mysql
     XAMPP_URL="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
     INSTALLER="xampp-installer.run"
     XAMPP_PATH="/opt/lampp"
@@ -141,18 +141,27 @@ if [ "$inputBack" == "yes" ]; then
     apt-get install -y wget net-tools
 
     wget -O $INSTALLER $XAMPP_URL
+
     chmod a+x $INSTALLER
+
     ./$INSTALLER --mode unattended
+
     chmod a+x $XAMPP_PATH/lampp
 
     echo "STARTING LAMPP (THIS WILL TAKE A WHILE)"
+
     $XAMPP_PATH/lampp start
+
+    echo "WAITING FOR LAMPP"
     sleep 8
     echo "LAMPP STARTED"
 
     $XAMPP_PATH/bin/mysqladmin -u root password $MYSQL_PASS 2>/dev/null
+
     $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+
     $XAMPP_PATH/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
+
 
     echo "Instalando dependencias..."
     npm install
