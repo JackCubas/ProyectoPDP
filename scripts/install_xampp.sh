@@ -160,11 +160,11 @@ if [ "$inputBack" == "yes" ]; then
     ##############################################################
     ###  DESHABILITAR APACHE DE XAMPP
     ##############################################################
-    echo "Deshabilitando Apache de XAMPP para evitar conflictos..."
-    /opt/lampp/lampp stopapache 2>/dev/null
-    sed -i 's/startApache/#startApache/' /opt/lampp/lampp
-    sed -i 's/stopApache/#stopApache/' /opt/lampp/lampp
-    echo "Apache de XAMPP deshabilitado."
+    #echo "Deshabilitando Apache de XAMPP para evitar conflictos..."
+    #/opt/lampp/lampp stopapache 2>/dev/null
+    #sed -i 's/startApache/#startApache/' /opt/lampp/lampp
+    #sed -i 's/stopApache/#stopApache/' /opt/lampp/lampp
+    #echo "Apache de XAMPP deshabilitado."
 
     ##############################################################
     ### DETECTAR IP DE LA VM
