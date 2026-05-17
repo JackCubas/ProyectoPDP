@@ -29,8 +29,8 @@
     "node-signpdf": "^3.0.0",
     "async-openssl": "^1.0.3",
     "@signpdf/signpdf": "^3.3.0",
-    "@signpdf/signer-p12": "^3.3.0"
-
+    "@signpdf/signer-p12": "^3.3.0",
+    "pem": "^1.14.8"
   },
   "pdf-parse": "^1.1.1"
 }
