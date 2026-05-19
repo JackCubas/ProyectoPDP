@@ -1,6 +1,7 @@
 # ProyectoPDP
 Proyecto grupal para la asignatura de PDP. Grupo conformado por Rubén Feijoo, Martín Arizaga, Marco Aurelio y Jack Cubas. El objetivo de este proyecto es diseñar e implementar una aplicación de firmas digitales utilizando lenguaje javascript para el front-end y node.js para el back-end, haciendo uso de la arquitectura cliente-servidor.
 
+
 # Descripción del proyecto
 El proyecto consiste en la creación de una aplicación que gestiona firmas digitales. 
 
@@ -15,19 +16,33 @@ Las tecnologías a emplear son las siguientes:
 - Para frontend: Javascript
 - Para backend: Node.js
 
+
+# Enable NAT + Port Forwarding in VirtualBox
+VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
+
+Anhade dos reglas:
+Name:         Protocol:       Host IP:       Host Port:     Guest IP:      Guest Port:
+https         TCP             127.0.0.1      433            VM IP          443
+http          TCP             127.0.0.1      80             VM IP          80
+
+Finalmente, Windows podrá acceder a los siguientes URLs:
+https://localhost
+http://localhost
+
+
+# Enable Bridged Adapter in VirtualBox (recommended for LAN access)
+Esto hara que al VM aparecera como si fuera una maquina verdadero en tu red.
+VM → Settings → Network → Adapter 1 → Bridged Adapter
+
+No se puede acceder desde Windows al URL https://localhost con esta configuracion.
+
+
 # Como entrar en la aplicación una vez installado
 - URL: https://localhost
 - Usuario ADMIN - Correo: steve@gmail.com - Pass: stevePass
 - Usuario FIRMA - Correo: robert@gmail.com - Pass: robertPass
 - Usuario CLIENT 1 - Correo: david1@gmail.com - Pass: david1Pass
 - Usuario CLIENT 2 - Correo: luis@gmail.com - Pass: luisPass
-
-# Enable port forwarding in VirtualBox
-VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
-
-# Enable Bridged Adapter in VirtualBox (recommended for LAN access)
-This makes the VM appear as a real machine on your network.
-VM → Settings → Network → Adapter 1 → Bridged Adapter
 
 
 # Datos originales
