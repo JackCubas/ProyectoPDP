@@ -4049,7 +4049,7 @@ function arraysEqual(a, b) {
 
 //----------------------
 //-----------------------
-app.listen(APIPORT, () => {
+app.listen(APIPORT, '0.0.0.0', () => {
   console.log(`Firma app node js server listening at http://localhost:${APIPORT}`);
 });
 
