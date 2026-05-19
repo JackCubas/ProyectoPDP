@@ -22,6 +22,12 @@ Las tecnologías a emplear son las siguientes:
 - Usuario CLIENT 1 - Correo: david1@gmail.com - Pass: david1Pass
 - Usuario CLIENT 2 - Correo: luis@gmail.com - Pass: luisPass
 
+# Enable port forwarding in VirtualBox
+VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
+
+# Enable Bridged Adapter in VirtualBox (recommended for LAN access)
+This makes the VM appear as a real machine on your network.
+VM → Settings → Network → Adapter 1 → Bridged Adapter
 
 
 # Datos originales
