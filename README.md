@@ -21,17 +21,18 @@ Las tecnologías a emplear son las siguientes:
 VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
 
 Anhade dos reglas:
-Name:         Protocol:       Host IP:       Host Port:     Guest IP:      Guest Port:
-https         TCP             127.0.0.1      433            VM IP          443
-http          TCP             127.0.0.1      80             VM IP          80
+- Name: https   Protocol: TCP   Host IP: 127.0.0.1    Host Port: 433    Guest IP: VM IP    Guest Port: 443
+- Name: http    Protocol: TCP   Host IP: 127.0.0.1    Host Port: 80     Guest IP: VM IP    Guest Port: 80
+                                                   
 
 Finalmente, Windows podrá acceder a los siguientes URLs:
-https://localhost
-http://localhost
+- https://localhost
+- http://localhost
 
 
 # Enable Bridged Adapter in VirtualBox (recommended for LAN access)
 Esto hara que al VM aparecera como si fuera una maquina verdadero en tu red.
+
 VM → Settings → Network → Adapter 1 → Bridged Adapter
 
 No se puede acceder desde Windows al URL https://localhost con esta configuracion.
