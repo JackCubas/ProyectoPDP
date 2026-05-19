@@ -20,9 +20,10 @@ Las tecnologías a emplear son las siguientes:
 # Enable NAT + Port Forwarding in VirtualBox
 VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
 
-Anhade dos reglas:
+Anhade tres reglas:
 - Name: https   Protocol: TCP   Host IP: 127.0.0.1    Host Port: 433    Guest IP: VM IP    Guest Port: 443
 - Name: http    Protocol: TCP   Host IP: 127.0.0.1    Host Port: 80     Guest IP: VM IP    Guest Port: 80
+- Name: nodejs  Protocol: TCP   Host IP: (vacio)      Host Port: 3000   Guest IP: (vacio)  Guest Port: 3000
                                                    
 
 Finalmente, Windows podrá acceder a los siguientes URLs:
