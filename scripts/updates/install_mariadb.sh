@@ -82,6 +82,34 @@ if [ "$inputFront" == "yes" ]; then
     mkdir -p "$FRONTEND_DIR"
     rm -rf "$FRONTEND_DIR"/*
     cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
+
+    REAL_FRONTEND_DIR=$(realpath "$FRONTEND_DIR" 2>/dev/null)
+
+    echo "Instalando frontend en: $REAL_FRONTEND_DIR"
+
+    # Detect if inside /home
+    if [[ "$REAL_FRONTEND_DIR" == /home/* ]]; then
+        echo "Fixing Apache access permissions..."
+        
+        CURRENT="/"
+        IFS='/' read -ra PARTS <<< "$REAL_FRONTEND_DIR"
+
+        for PART in "${PARTS[@]}"; do
+            [[ -z "$PART" ]] && continue   # skip empty (first slash)
+
+            CURRENT="$CURRENT$PART"
+
+            # Check permissions
+            if ! [[ -d "$CURRENT" && ! -x "$CURRENT" ]]; then
+                echo "Fixing traversal permission on: $CURRENT"
+                chmod o+rx "$CURRENT"
+            fi
+
+            CURRENT="$CURRENT/"
+        done   
+
+    fi
+
     chown -R www-data:www-data "$FRONTEND_DIR"
     chmod -R 755 "$FRONTEND_DIR" 
 
