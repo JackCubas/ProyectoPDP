@@ -67,9 +67,22 @@ if [ "$inputFront" == "yes" ]; then
     echo "Instalando Apache..."
     apt install -y apache2
 
-    echo "Copiando frontend..."
-    rm -rf /var/www/html/*
-    cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
+    #echo "Copiando frontend..."
+    #rm -rf /var/www/html/*
+    #cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
+
+    echo "¿Dónde quieres instalar el frontend?"
+    echo "Pulsa ENTER para usar /var/www/html"
+    read -r FRONTEND_DIR
+
+    # Si el usuario no escribe nada, usar el valor por defecto
+    FRONTEND_DIR=${FRONTEND_DIR:-/var/www/html}
+
+    echo "Instalando frontend en: $FRONTEND_DIR"
+    mkdir -p "$FRONTEND_DIR"
+    rm -rf "$FRONTEND_DIR"/*
+    cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
+    
 
     echo "Habilitando SSL..."
     a2enmod ssl
@@ -84,11 +97,11 @@ if [ "$inputFront" == "yes" ]; then
     cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
 <VirtualHost *:443>
     ServerName localhost
-    DocumentRoot /var/www/html
+    DocumentRoot $FRONTEND_DIR
     SSLEngine on
     SSLCertificateFile /etc/apache2/ssl/apache.crt
     SSLCertificateKeyFile /etc/apache2/ssl/apache.key
-    <Directory /var/www/html>
+    <Directory $FRONTEND_DIR>
         AllowOverride All
         Require all granted
     </Directory>
