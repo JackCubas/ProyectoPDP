@@ -82,7 +82,8 @@ if [ "$inputFront" == "yes" ]; then
     mkdir -p "$FRONTEND_DIR"
     rm -rf "$FRONTEND_DIR"/*
     cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
-    
+    chown -R www-data:www-data "$FRONTEND_DIR"
+    chmod -R 755 "$FRONTEND_DIR" 
 
     echo "Habilitando SSL..."
     a2enmod ssl
@@ -108,6 +109,18 @@ if [ "$inputFront" == "yes" ]; then
 </VirtualHost>
 EOF
 
+    cat > /etc/apache2/sites-available/000-default.conf <<EOF
+<VirtualHost *:80>
+    ServerName localhost
+    DocumentRoot $FRONTEND_DIR
+    <Directory $FRONTEND_DIR>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOF
+
+    a2ensite 000-default.conf
     a2ensite localhost-ssl.conf
     systemctl reload apache2
 
