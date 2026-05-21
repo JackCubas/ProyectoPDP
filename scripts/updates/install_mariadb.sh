@@ -254,6 +254,47 @@ fi
 
 
 ############################################
+#############################################
+#########################################
+
+
+#echo "¿Dónde quieres instalar el frontend?"
+#echo "Pulsa ENTER para usar /var/www/html"
+#read -r FRONTEND_DIR
+
+# Si el usuario no escribe nada, usar el valor por defecto
+#FRONTEND_DIR=${FRONTEND_DIR:-/var/www/html}
+
+#echo "Instalando frontend en: $FRONTEND_DIR"
+
+# Crear el directorio si no existe
+#mkdir -p "$FRONTEND_DIR"
+
+# Limpiar contenido previo
+#rm -rf "$FRONTEND_DIR"/*
+
+# Copiar el frontend
+#cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
+
+
+#cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
+#<VirtualHost *:443>
+#    ServerName localhost
+#    DocumentRoot $FRONTEND_DIR
+#    SSLEngine on
+#    SSLCertificateFile /etc/apache2/ssl/apache.crt
+#    SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+#    <Directory $FRONTEND_DIR>
+#        AllowOverride All
+#        Require all granted
+#    </Directory>
+#</VirtualHost>
+#EOF
+
+
+###########################################
+
+
 
 ##############################################################
 ### BLOQUE MARIADB SEGURO E IDEMPOTENTE
@@ -300,3 +341,49 @@ fi
 #rm -f "$SQL_TMP"
 
 #echo "MariaDB configurado de forma segura."
+
+
+
+################################################
+#echo "Instalando Apache..."
+#apt install -y apache2
+
+#echo "Copiando frontend..."
+#rm -rf /var/www/html/*
+#cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
+
+#echo "Habilitando SSL..."
+#a2enmod ssl
+#mkdir -p /etc/apache2/ssl
+
+#openssl req -x509 -nodes -days 365 \
+#-newkey rsa:2048 \
+#-keyout /etc/apache2/ssl/apache.key \
+#-out /etc/apache2/ssl/apache.crt \
+#-subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
+
+# Evitar conflicto con el sitio SSL por defecto
+#a2dissite default-ssl.conf 2>/dev/null
+
+#cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
+#<VirtualHost *:443>
+#    ServerName localhost
+#    DocumentRoot /var/www/html
+#    SSLEngine on
+#    SSLCertificateFile /etc/apache2/ssl/apache.crt
+#    SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+#    <Directory /var/www/html>
+#        AllowOverride All
+#        Require all granted
+#    </Directory>
+#</VirtualHost>
+#EOF
+
+#a2ensite localhost-ssl.conf
+
+# Abrir puerto 443 si UFW está activo
+#ufw allow 443/tcp 2>/dev/null
+
+#systemctl restart apache2
+
+

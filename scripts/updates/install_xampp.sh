@@ -201,3 +201,45 @@ if [ "$inputBack" == "yes" ]; then
 else
     echo "Saltado installacion de backend y base de datos... "
 fi
+
+
+############################################
+#############################################
+#########################################
+
+
+#echo "¿Dónde quieres instalar el frontend?"
+#echo "Pulsa ENTER para usar /var/www/html"
+#read -r FRONTEND_DIR
+
+# Si el usuario no escribe nada, usar el valor por defecto
+#FRONTEND_DIR=${FRONTEND_DIR:-/var/www/html}
+
+#echo "Instalando frontend en: $FRONTEND_DIR"
+
+# Crear el directorio si no existe
+#mkdir -p "$FRONTEND_DIR"
+
+# Limpiar contenido previo
+#rm -rf "$FRONTEND_DIR"/*
+
+# Copiar el frontend
+#cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
+
+
+#cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
+#<VirtualHost *:443>
+#    ServerName localhost
+#    DocumentRoot $FRONTEND_DIR
+#    SSLEngine on
+#    SSLCertificateFile /etc/apache2/ssl/apache.crt
+#    SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+#    <Directory $FRONTEND_DIR>
+#        AllowOverride All
+#        Require all granted
+#    </Directory>
+#</VirtualHost>
+#EOF
+
+
+###########################################
