@@ -185,13 +185,13 @@ if [ "$inputBack" == "yes" ]; then
     node -v
 
     echo "¿Dónde quieres instalar el servidor Node JS?"
-    echo "Pulsa ENTER para usar $PROYECTO"
+    echo "Pulsa ENTER para usar $PROYECTO/node_js_api_mysql"
     read -r BACKEND_DIR
 
     # Si el usuario no escribe nada, usar el valor por defecto
-    BACKEND_DIR=${BACKEND_DIR:-$PROYECTO}
+    BACKEND_DIR=${BACKEND_DIR:-$PROYECTO/node_js_api_mysql}
 
-    REAL_ORIGIN_DIR=$(realpath "$PROYECTO")
+    REAL_ORIGIN_DIR=$(realpath "$PROYECTO/node_js_api_mysql")
     REAL_BACKEND_DIR=$(realpath "$BACKEND_DIR")
 
     # Si el destino es distinto del origen → instalar backend
@@ -202,6 +202,7 @@ if [ "$inputBack" == "yes" ]; then
         cp -r "$PROYECTO/node_js_api_mysql/"* "$BACKEND_DIR/"
     else
         echo "El backend ya está en el directorio de origen. No se copiarán archivos."
+        echo "Continuando instalación usando el backend existente..."
     fi
 
     # Si el backend está dentro de /home/user/documents
