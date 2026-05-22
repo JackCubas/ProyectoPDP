@@ -121,8 +121,8 @@ if [ "$inputFront" == "yes" ]; then
 
         # Reverse Proxy
         ProxyPreserveHost On
-        ProxyPass /api http://localhost:3000/api
-        ProxyPassReverse /api http://localhost:3000/api
+        ProxyPass /api http://localhost:3000
+        ProxyPassReverse /api http://localhost:3000
     </VirtualHost>
 EOF
 
