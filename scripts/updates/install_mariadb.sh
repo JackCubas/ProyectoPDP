@@ -207,7 +207,7 @@ if [ "$inputBack" == "yes" ]; then
 
     # Si el backend está dentro de /home/user/documents
     if [[ "$REAL_BACKEND_DIR" == /home/* ]]; then
-        echo "Ajustando permisos de acceso para Apache..."
+        echo "Ajustando permisos de acceso para Node JS..."
         IFS='/' read -ra PARTS <<< "$REAL_BACKEND_DIR"
         CURRENT="/"
 
