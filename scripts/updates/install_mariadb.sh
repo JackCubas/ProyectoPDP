@@ -191,6 +191,11 @@ if [ "$inputBack" == "yes" ]; then
     # Si el usuario no escribe nada, usar el valor por defecto
     BACKEND_DIR=${BACKEND_DIR:-$PROYECTO}
 
+    echo "Instalando backend en: $BACKEND_DIR"
+    mkdir -p "$BACKEND_DIR"
+    rm -rf "$BACKEND_DIR"/*
+    cp -r "$PROYECTO/node_js_api_mysql/"* "$BACKEND_DIR/"
+
     REAL_BACKEND_DIR=$(realpath "$BACKEND_DIR")
 
     # Si el backend está dentro de /home/user/documents
@@ -206,6 +211,9 @@ if [ "$inputBack" == "yes" ]; then
             CURRENT="$CURRENT/"
         done
     fi
+
+    #echo "Instalando base de datos..."
+    #cd "$BACKEND_DIR/node_js_api_mysql"
 
     echo "Instalando base de datos..."
     cd "$BACKEND_DIR/node_js_api_mysql"
