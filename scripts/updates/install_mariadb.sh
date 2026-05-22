@@ -216,7 +216,7 @@ if [ "$inputBack" == "yes" ]; then
     #cd "$BACKEND_DIR/node_js_api_mysql"
 
     echo "Instalando base de datos..."
-    cd "$BACKEND_DIR/node_js_api_mysql"
+    cd "$BACKEND_DIR"
 
     MYSQL_USER="root"
     MYSQL_PASS="admin"
