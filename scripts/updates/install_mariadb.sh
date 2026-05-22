@@ -13,12 +13,7 @@ fi
 echo "Instalando dependencias básicas..."
 apt install -y curl git build-essential unzip wget
 
-echo "Instalando Node.js 18..."
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-apt install -y nodejs
-
 echo "Versiones instaladas:"
-node -v
 npm -v
 git --version
 
@@ -182,8 +177,38 @@ if [ "$inputBack" == "yes" ]; then
 
     echo "Instalando y ejecutando servidor backend node js y base de datos"
 
+    echo "Instalando Node.js 18..."
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+    apt install -y nodejs
+
+    echo "Version de node installado:"
+    node -v
+
+    echo "¿Dónde quieres instalar el servidor Node JS?"
+    echo "Pulsa ENTER para usar $PROYECTO"
+    read -r BACKEND_DIR
+
+    # Si el usuario no escribe nada, usar el valor por defecto
+    BACKEND_DIR=${BACKEND_DIR:-$PROYECTO}
+
+    REAL_BACKEND_DIR=$(realpath "$BACKEND_DIR")
+
+    # Si el backend está dentro de /home/user/documents
+    if [[ "$REAL_BACKEND_DIR" == /home/* ]]; then
+        echo "Ajustando permisos de acceso para Apache..."
+        IFS='/' read -ra PARTS <<< "$REAL_BACKEND_DIR"
+        CURRENT="/"
+
+        for PART in "${PARTS[@]}"; do
+            [[ -z "$PART" ]] && continue
+            CURRENT="$CURRENT$PART"
+            chmod o+x "$CURRENT"
+            CURRENT="$CURRENT/"
+        done
+    fi
+
     echo "Instalando base de datos..."
-    cd "$PROYECTO/node_js_api_mysql"
+    cd "$BACKEND_DIR/node_js_api_mysql"
 
     MYSQL_USER="root"
     MYSQL_PASS="admin"
