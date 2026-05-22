@@ -67,9 +67,9 @@ if [ "$inputFront" == "yes" ]; then
     #cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
 
     # Habilitar módulos necesarios
-    a2enmod proxy
-    a2enmod proxy_http
-    a2enmod ssl
+    #a2enmod proxy
+    #a2enmod proxy_http
+    #a2enmod ssl
 
     echo "¿Dónde quieres instalar el frontend?"
     echo "Pulsa ENTER para usar /var/www/html"
