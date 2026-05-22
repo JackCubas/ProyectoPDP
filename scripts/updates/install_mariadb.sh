@@ -198,7 +198,7 @@ if [ "$inputBack" == "yes" ]; then
         echo "Instalando backend en: $BACKEND_DIR"
         mkdir -p "$BACKEND_DIR"
         rm -rf "$BACKEND_DIR"/*
-        cp -r "$PROYECTO/node_js_api_mysql/"* "$BACKEND_DIR/"
+        cp -r "$PROYECTO/node_js_api_mysql"/. "$BACKEND_DIR/"
     else
         echo "El backend ya está en el directorio de origen. No se copiarán archivos."
         echo "Continuando instalación usando el backend existente..."
