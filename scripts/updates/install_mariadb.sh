@@ -191,12 +191,18 @@ if [ "$inputBack" == "yes" ]; then
     # Si el usuario no escribe nada, usar el valor por defecto
     BACKEND_DIR=${BACKEND_DIR:-$PROYECTO}
 
-    echo "Instalando backend en: $BACKEND_DIR"
-    mkdir -p "$BACKEND_DIR"
-    rm -rf "$BACKEND_DIR"/*
-    cp -r "$PROYECTO/node_js_api_mysql/"* "$BACKEND_DIR/"
-
+    REAL_ORIGIN_DIR=$(realpath "$PROYECTO")
     REAL_BACKEND_DIR=$(realpath "$BACKEND_DIR")
+
+    # Si el destino es distinto del origen → instalar backend
+    if [[ "$REAL_BACKEND_DIR" != "$REAL_ORIGIN_DIR" ]]; then
+        echo "Instalando backend en: $BACKEND_DIR"
+        mkdir -p "$BACKEND_DIR"
+        rm -rf "$BACKEND_DIR"/*
+        cp -r "$PROYECTO/node_js_api_mysql/"* "$BACKEND_DIR/"
+    else
+        echo "El backend ya está en el directorio de origen. No se copiarán archivos."
+    fi
 
     # Si el backend está dentro de /home/user/documents
     if [[ "$REAL_BACKEND_DIR" == /home/* ]]; then
