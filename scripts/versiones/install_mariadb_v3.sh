@@ -62,7 +62,11 @@ if [ "$inputFront" == "yes" ]; then
     echo "Instalando Apache..."
     apt install -y apache2
 
-    # Habilitar módulos necesarios ANTES de crear los VirtualHost
+    #echo "Copiando frontend..."
+    #rm -rf /var/www/html/*
+    #cp -r "$PROYECTO/cliente_api_mysql/"* /var/www/html/
+
+    # Habilitar módulos necesarios
     a2enmod proxy
     a2enmod proxy_http
     a2enmod ssl
@@ -71,6 +75,7 @@ if [ "$inputFront" == "yes" ]; then
     echo "Pulsa ENTER para usar /var/www/html"
     read -r FRONTEND_DIR
 
+    # Si el usuario no escribe nada, usar el valor por defecto
     FRONTEND_DIR=${FRONTEND_DIR:-/var/www/html}
 
     echo "Instalando frontend en: $FRONTEND_DIR"
@@ -79,25 +84,37 @@ if [ "$inputFront" == "yes" ]; then
     cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
 
     REAL_FRONTEND_DIR=$(realpath "$FRONTEND_DIR" 2>/dev/null)
+
     echo "Instalando frontend en: $REAL_FRONTEND_DIR"
 
-    # Fix permisos si está en /home
+    # Detect if inside /home
     if [[ "$REAL_FRONTEND_DIR" == /home/* ]]; then
         echo "Fixing Apache access permissions..."
+        
         CURRENT="/"
         IFS='/' read -ra PARTS <<< "$REAL_FRONTEND_DIR"
+
         for PART in "${PARTS[@]}"; do
-            [[ -z "$PART" ]] && continue
+            [[ -z "$PART" ]] && continue   # skip empty (first slash)
+
             CURRENT="$CURRENT$PART"
-            chmod o+rx "$CURRENT"
+
+            # Check permissions
+            if ! [[ -d "$CURRENT" && ! -x "$CURRENT" ]]; then
+                echo "Fixing traversal permission on: $CURRENT"
+                chmod o+rx "$CURRENT"
+            fi
+
             CURRENT="$CURRENT/"
-        done
+        done   
+
     fi
 
     chown -R www-data:www-data "$FRONTEND_DIR"
-    chmod -R 755 "$FRONTEND_DIR"
+    chmod -R 755 "$FRONTEND_DIR" 
 
-    echo "Generando certificado SSL..."
+    echo "Habilitando SSL..."
+    a2enmod ssl
     mkdir -p /etc/apache2/ssl
 
     openssl req -x509 -nodes -days 365 \
@@ -106,45 +123,57 @@ if [ "$inputFront" == "yes" ]; then
     -out /etc/apache2/ssl/apache.crt \
     -subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
 
-    # Crear VirtualHost SSL
     cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
-    <VirtualHost *:443>
-        ServerName localhost
-        DocumentRoot $FRONTEND_DIR
-        SSLEngine on
-        SSLCertificateFile /etc/apache2/ssl/apache.crt
-        SSLCertificateKeyFile /etc/apache2/ssl/apache.key
-        <Directory $FRONTEND_DIR>
-            AllowOverride All
-            Require all granted
-        </Directory>
-
-        # Reverse Proxy
-        ProxyPreserveHost On
-        ProxyPass /api http://localhost:3000/api
-        ProxyPassReverse /api http://localhost:3000/api
-    </VirtualHost>
+<VirtualHost *:443>
+    ServerName localhost
+    DocumentRoot $FRONTEND_DIR
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/ssl/apache.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+    <Directory $FRONTEND_DIR>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
 EOF
 
-    # VirtualHost HTTP
     cat > /etc/apache2/sites-available/000-default.conf <<EOF
-    <VirtualHost *:80>
-        ServerName localhost
-        DocumentRoot $FRONTEND_DIR
-        <Directory $FRONTEND_DIR>
-            AllowOverride All
-            Require all granted
-        </Directory>
-    </VirtualHost>
+<VirtualHost *:80>
+    ServerName localhost
+    DocumentRoot $FRONTEND_DIR
+    <Directory $FRONTEND_DIR>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
 EOF
 
     a2ensite 000-default.conf
     a2ensite localhost-ssl.conf
-
     systemctl reload apache2
 
-    echo "Reverse Proxy configurado correctamente."
-    echo "El frontend ahora puede llamar al backend usando /api/..."
+    ##############################################################
+    # CONFIGURAR APACHE COMO REVERSE PROXY PARA EL BACKEND
+    ##############################################################
+
+    #echo "Configurando Apache como Reverse Proxy para el backend..."
+
+    #SSL_CONF="/etc/apache2/sites-available/localhost-ssl.conf"
+
+    # Eliminar configuraciones previas para evitar duplicados
+    #sed -i '/ProxyPass \/api/d' "$SSL_CONF"
+    #sed -i '/ProxyPassReverse \/api/d' "$SSL_CONF"
+
+    # Insertar configuración justo antes de </VirtualHost>
+    #sed -i "/<\/VirtualHost>/i \
+    #    ProxyPreserveHost On\n\
+    #    ProxyPass /api http://localhost:3000/api\n\
+    #    ProxyPassReverse /api http://localhost:3000/api\n" "$SSL_CONF"
+
+    #systemctl reload apache2
+
+    #echo "Reverse Proxy configurado correctamente."
+    #echo "Ahora el frontend puede llamar al backend usando /api/..."
 
 else
     echo "Saltado installacion de frontend... "
