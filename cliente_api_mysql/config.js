@@ -1,5 +1,5 @@
-localStorage.setItem("backendUrl", "http://localhost:3000");
-//localStorage.setItem("backendUrl", "/api");
+//localStorage.setItem("backendUrl", "http://localhost:3000");
+localStorage.setItem("backendUrl", "/api");
 
 
 /*const CONFIG = {
