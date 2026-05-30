@@ -67,11 +67,20 @@ if [ "$inputFront" == "yes" ]; then
     a2enmod proxy_http
     a2enmod ssl
 
-    echo "¿Dónde quieres instalar el frontend?"
-    echo "Pulsa ENTER para usar /var/www/html"
+    BASE="/var/www/html"
+
+    echo "¿Dónde quieres instalar el frontend (dentro de $BASE)?"
+    echo "Pulsa ENTER para usar $BASE"
     read -r FRONTEND_DIR
 
-    FRONTEND_DIR=${FRONTEND_DIR:-/var/www/html}
+    FRONTEND_DIR=${FRONTEND_DIR:-$BASE}
+
+    if [[ "$FRONTEND_DIR" != "$BASE" && "$FRONTEND_DIR" != "$BASE"/* ]]; then
+        FRONTEND_DIR="$BASE/$FRONTEND_DIR"
+    fi
+
+    # Normalize the final path
+    FRONTEND_DIR=$(realpath -m "$FRONTEND_DIR")
 
     echo "Instalando frontend en: $FRONTEND_DIR"
 
@@ -84,21 +93,21 @@ if [ "$inputFront" == "yes" ]; then
 
     cp -r "$PROYECTO/cliente_api_mysql/"* "$FRONTEND_DIR/"
 
-    REAL_FRONTEND_DIR=$(realpath "$FRONTEND_DIR" 2>/dev/null)
-    echo "Instalando frontend en: $REAL_FRONTEND_DIR"
+    #REAL_FRONTEND_DIR=$(realpath "$FRONTEND_DIR" 2>/dev/null)
+    #echo "Instalando frontend en: $REAL_FRONTEND_DIR"
 
     # Fix permisos si está en /home
-    if [[ "$REAL_FRONTEND_DIR" == /home/* ]]; then
-        echo "Fixing Apache access permissions..."
-        CURRENT="/"
-        IFS='/' read -ra PARTS <<< "$REAL_FRONTEND_DIR"
-        for PART in "${PARTS[@]}"; do
-            [[ -z "$PART" ]] && continue
-            CURRENT="$CURRENT$PART"
-            chmod o+rx "$CURRENT"
-            CURRENT="$CURRENT/"
-        done
-    fi
+    #if [[ "$REAL_FRONTEND_DIR" == /home/* ]]; then
+    #    echo "Fixing Apache access permissions..."
+    #    CURRENT="/"
+    #    IFS='/' read -ra PARTS <<< "$REAL_FRONTEND_DIR"
+    #    for PART in "${PARTS[@]}"; do
+    #        [[ -z "$PART" ]] && continue
+    #        CURRENT="$CURRENT$PART"
+    #        chmod o+rx "$CURRENT"
+    #        CURRENT="$CURRENT/"
+    #    done
+    #fi
 
     chown -R www-data:www-data "$FRONTEND_DIR"
     chmod -R 755 "$FRONTEND_DIR"
@@ -112,39 +121,48 @@ if [ "$inputFront" == "yes" ]; then
     -out /etc/apache2/ssl/apache.crt \
     -subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
 
+    echo "¿Cual es el url o ip del backend (el puerto siempre será 3000)?"
+    echo "Pulsa ENTER para usar localhost"
+    read -r BACKEND_URL
+
+    BACKEND_URL=${BACKEND_URL:-http://localhost}
+
+    # Remove trailing slash if present
+    BACKEND_URL="${BACKEND_URL%/}"
+
     # Crear VirtualHost SSL
-    cat > /etc/apache2/sites-available/localhost-ssl.conf <<EOF
+    cat > /etc/apache2/sites-available/https-front-ssl.conf <<EOF
     <VirtualHost *:443>
-        ServerName localhost
-        DocumentRoot $FRONTEND_DIR
+        ServerName https_front
+        DocumentRoot "$FRONTEND_DIR"
         SSLEngine on
         SSLCertificateFile /etc/apache2/ssl/apache.crt
         SSLCertificateKeyFile /etc/apache2/ssl/apache.key
-        <Directory $FRONTEND_DIR>
+        <Directory "$FRONTEND_DIR">
             AllowOverride All
             Require all granted
         </Directory>
 
         # Reverse Proxy
         ProxyPreserveHost On
-        ProxyPass /api http://localhost:3000
-        ProxyPassReverse /api http://localhost:3000
+        ProxyPass /api "$BACKEND_URL:3000"
+        ProxyPassReverse /api "$BACKEND_URL:3000"
     </VirtualHost>
 EOF
 
     # VirtualHost HTTP
-    cat > /etc/apache2/sites-available/000-default.conf <<EOF
-    <VirtualHost *:80>
-        ServerName localhost
-        DocumentRoot $FRONTEND_DIR
-        <Directory $FRONTEND_DIR>
-            AllowOverride All
-            Require all granted
-        </Directory>
-    </VirtualHost>
-EOF
+#    cat > /etc/apache2/sites-available/000-default.conf <<EOF
+#    <VirtualHost *:80>
+#        ServerName localhost
+#        DocumentRoot $FRONTEND_DIR
+#        <Directory $FRONTEND_DIR>
+#            AllowOverride All
+#            Require all granted
+#        </Directory>
+#    </VirtualHost>
+#EOF
 
-    a2ensite 000-default.conf
+    #a2ensite 000-default.conf
     a2ensite localhost-ssl.conf
 
     systemctl reload apache2
@@ -189,7 +207,9 @@ if [ "$inputBack" == "yes" ]; then
     echo "Version de node installado:"
     node -v
 
-    echo "¿Dónde quieres instalar el servidor Node JS?"
+    BASE_BACK="/opt"
+
+    echo "¿Dónde quieres instalar el servidor Node JS (la carpeta será dentro de /opt)?"
     echo "Pulsa ENTER para usar $PROYECTO/node_js_api_mysql"
     read -r BACKEND_DIR
 
@@ -201,6 +221,8 @@ if [ "$inputBack" == "yes" ]; then
 
     # Si el destino es distinto del origen → instalar backend
     if [[ "$REAL_BACKEND_DIR" != "$REAL_ORIGIN_DIR" ]]; then
+
+        BACKEND_DIR="$BASE_BACK/$BACKEND_DIR"
         echo "Instalando backend en: $BACKEND_DIR"
 
         # If directory does not exist, create it
@@ -217,19 +239,61 @@ if [ "$inputBack" == "yes" ]; then
         echo "Continuando instalación usando el backend existente..."
     fi
 
-    # Si el backend está dentro de /home/user/documents
-    if [[ "$REAL_BACKEND_DIR" == /home/* ]]; then
-        echo "Ajustando permisos de acceso para Node JS..."
-        IFS='/' read -ra PARTS <<< "$REAL_BACKEND_DIR"
-        CURRENT="/"
 
-        for PART in "${PARTS[@]}"; do
-            [[ -z "$PART" ]] && continue
-            CURRENT="$CURRENT$PART"
-            chmod o+x "$CURRENT"
-            CURRENT="$CURRENT/"
-        done
-    fi
+    ###########################################################3
+
+#BASE_BACK="/opt"
+#ORIGIN_DIR="$PROYECTO/node_js_api_mysql"
+#REAL_ORIGIN_DIR=$(realpath "$ORIGIN_DIR")
+
+#echo "¿Dónde quieres instalar el servidor Node JS (la carpeta será dentro de $BASE_BACK)?"
+#echo "Pulsa ENTER para usar el backend del repositorio:"
+#echo "    $ORIGIN_DIR"
+#read -r USER_INPUT
+
+# If user presses ENTER → use origin directory
+#if [[ -z "$USER_INPUT" ]]; then
+#    BACKEND_DIR="$ORIGIN_DIR"
+#else
+    # Force installation inside /opt
+#    BACKEND_DIR="$BASE_BACK/$USER_INPUT"
+#fi
+
+# Normalize final path
+#REAL_BACKEND_DIR=$(realpath -m "$BACKEND_DIR")
+
+# Compare normalized paths
+#if [[ "$REAL_BACKEND_DIR" != "$REAL_ORIGIN_DIR" ]]; then
+
+#    echo "Instalando backend en: $REAL_BACKEND_DIR"
+
+#    if [[ ! -d "$REAL_BACKEND_DIR" ]]; then
+#        echo "Directorio no existe. Creándolo..."
+#        mkdir -p "$REAL_BACKEND_DIR"
+#    fi
+
+#    cp -r "$ORIGIN_DIR"/. "$REAL_BACKEND_DIR/"
+
+#else
+#    echo "El backend ya está en el directorio de origen. No se copiarán archivos."
+#    echo "Continuando instalación usando el backend existente..."
+#fi
+
+    ############################################################
+
+    # Si el backend está dentro de /home/user/documents
+    #if [[ "$REAL_BACKEND_DIR" == /home/* ]]; then
+    #    echo "Ajustando permisos de acceso para Node JS..."
+    #    IFS='/' read -ra PARTS <<< "$REAL_BACKEND_DIR"
+    #    CURRENT="/"
+
+    #    for PART in "${PARTS[@]}"; do
+    #        [[ -z "$PART" ]] && continue
+    #        CURRENT="$CURRENT$PART"
+    #        chmod o+x "$CURRENT"
+    #        CURRENT="$CURRENT/"
+    #    done
+    #fi
 
     #echo "Instalando base de datos..."
     #cd "$BACKEND_DIR/node_js_api_mysql"

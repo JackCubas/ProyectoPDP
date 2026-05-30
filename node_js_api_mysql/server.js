@@ -4050,7 +4050,7 @@ function arraysEqual(a, b) {
 //----------------------
 //-----------------------
 app.listen(APIPORT, '0.0.0.0', () => {
-  console.log(`Firma app node js server listening at http://localhost:${APIPORT}`);
+  console.log(`Firma app node js server listening at port:${APIPORT}`);
 });
 
 function emptyOrRows(rows) {
