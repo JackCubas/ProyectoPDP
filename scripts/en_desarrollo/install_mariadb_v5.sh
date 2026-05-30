@@ -163,7 +163,8 @@ EOF
 #EOF
 
     #a2ensite 000-default.conf
-    a2ensite localhost-ssl.conf
+    #a2ensite localhost-ssl.conf
+    a2ensite https-front-ssl.conf
 
     systemctl reload apache2
 
