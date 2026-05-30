@@ -208,76 +208,40 @@ if [ "$inputBack" == "yes" ]; then
     node -v
 
     BASE_BACK="/opt"
+    ORIGIN_DIR="$PROYECTO/node_js_api_mysql"
 
-    echo "¿Dónde quieres instalar el servidor Node JS (la carpeta será dentro de /opt)?"
-    echo "Pulsa ENTER para usar $PROYECTO/node_js_api_mysql"
-    read -r BACKEND_DIR
+    echo "¿Dónde quieres instalar el servidor Node JS (la carpeta será dentro de $BASE_BACK)?"
+    echo "Pulsa ENTER para usar $ORIGIN_DIR"
+    read -r USER_INPUT
 
-    # Si el usuario no escribe nada, usar el valor por defecto
-    BACKEND_DIR=${BACKEND_DIR:-$PROYECTO/node_js_api_mysql}
+    # If user presses ENTER → use origin directory
+    if [[ -z "$USER_INPUT" ]]; then
+        BACKEND_DIR="$ORIGIN_DIR"
+    else
+        # Force installation inside /opt
+        BACKEND_DIR="$BASE_BACK/$USER_INPUT"
+    fi
+    
+    # Normalize final path
+    REAL_BACKEND_DIR=$(realpath -m "$BACKEND_DIR")
+    REAL_ORIGIN_DIR=$(realpath "$ORIGIN_DIR")
 
-    REAL_ORIGIN_DIR=$(realpath "$PROYECTO/node_js_api_mysql")
-    REAL_BACKEND_DIR=$(realpath "$BACKEND_DIR")
-
-    # Si el destino es distinto del origen → instalar backend
+    # Compare normalized paths
     if [[ "$REAL_BACKEND_DIR" != "$REAL_ORIGIN_DIR" ]]; then
 
-        BACKEND_DIR="$BASE_BACK/$BACKEND_DIR"
-        echo "Instalando backend en: $BACKEND_DIR"
+        echo "Instalando backend en: $REAL_BACKEND_DIR"
 
-        # If directory does not exist, create it
-        if [[ ! -d "$BACKEND_DIR" ]]; then
+        if [[ ! -d "$REAL_BACKEND_DIR" ]]; then
             echo "Directorio no existe. Creándolo..."
-            mkdir -p "$BACKEND_DIR"
-            #rm -rf "$BACKEND_DIR"/*          
-        fi 
+            mkdir -p "$REAL_BACKEND_DIR"
+        fi
 
-        cp -r "$PROYECTO/node_js_api_mysql"/. "$BACKEND_DIR/"
+        cp -r "$ORIGIN_DIR"/. "$REAL_BACKEND_DIR/"
 
     else
         echo "El backend ya está en el directorio de origen. No se copiarán archivos."
         echo "Continuando instalación usando el backend existente..."
     fi
-
-
-    ###########################################################3
-
-#BASE_BACK="/opt"
-#ORIGIN_DIR="$PROYECTO/node_js_api_mysql"
-#REAL_ORIGIN_DIR=$(realpath "$ORIGIN_DIR")
-
-#echo "¿Dónde quieres instalar el servidor Node JS (la carpeta será dentro de $BASE_BACK)?"
-#echo "Pulsa ENTER para usar el backend del repositorio:"
-#echo "    $ORIGIN_DIR"
-#read -r USER_INPUT
-
-# If user presses ENTER → use origin directory
-#if [[ -z "$USER_INPUT" ]]; then
-#    BACKEND_DIR="$ORIGIN_DIR"
-#else
-    # Force installation inside /opt
-#    BACKEND_DIR="$BASE_BACK/$USER_INPUT"
-#fi
-
-# Normalize final path
-#REAL_BACKEND_DIR=$(realpath -m "$BACKEND_DIR")
-
-# Compare normalized paths
-#if [[ "$REAL_BACKEND_DIR" != "$REAL_ORIGIN_DIR" ]]; then
-
-#    echo "Instalando backend en: $REAL_BACKEND_DIR"
-
-#    if [[ ! -d "$REAL_BACKEND_DIR" ]]; then
-#        echo "Directorio no existe. Creándolo..."
-#        mkdir -p "$REAL_BACKEND_DIR"
-#    fi
-
-#    cp -r "$ORIGIN_DIR"/. "$REAL_BACKEND_DIR/"
-
-#else
-#    echo "El backend ya está en el directorio de origen. No se copiarán archivos."
-#    echo "Continuando instalación usando el backend existente..."
-#fi
 
     ############################################################
 
