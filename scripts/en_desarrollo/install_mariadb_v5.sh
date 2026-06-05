@@ -54,6 +54,16 @@ PROYECTO="$directorio/ProyectoPDP-intento_refinado1"
 #PROYECTO="$directorio/ProyectoFigma-main"
 
 ##############################################################
+### DETECTAR IP DE LA VM
+##############################################################
+get_vm_ip_project() {
+    ip addr show | awk '/inet / && $2 !~ /^127/ {print $2}' | cut -d/ -f1 | head -n 1
+}
+
+VM_IP_PROJECT=$(get_vm_ip_project)
+echo "IP detectada de la máquina virtual: $VM_IP_PROJECT"
+
+##############################################################
 echo "Quieres instalar el frontend? (yes/no)"
 read inputFront
 
