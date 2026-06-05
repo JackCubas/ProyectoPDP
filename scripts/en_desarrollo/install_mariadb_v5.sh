@@ -132,10 +132,11 @@ if [ "$inputFront" == "yes" ]; then
     -subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
 
     echo "¿Cual es el url o ip del backend (el puerto siempre será 3000)?"
-    echo "Pulsa ENTER para usar la IP detectada""
+    echo "Pulsa ENTER para usar la IP detectada"
     read -r BACKEND_URL
 
-    BACKEND_URL=${BACKEND_URL:-VM_IP_PROJECT}
+    # Valor por defecto: IP detectada con http://
+    BACKEND_URL=${BACKEND_URL:-http://$VM_IP_PROJECT}
 
     # Remove trailing slash if present
     BACKEND_URL="${BACKEND_URL%/}"
@@ -155,8 +156,8 @@ if [ "$inputFront" == "yes" ]; then
 
         # Reverse Proxy
         ProxyPreserveHost On
-        ProxyPass /api "http://$BACKEND_URL:3000"
-        ProxyPassReverse /api "http://$BACKEND_URL:3000"
+        ProxyPass /api "$BACKEND_URL:3000"
+        ProxyPassReverse /api "$BACKEND_URL:3000"
     </VirtualHost>
 EOF
 
