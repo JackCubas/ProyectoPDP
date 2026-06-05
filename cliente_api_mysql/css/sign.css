@@ -1,34 +1,32 @@
+@import url("./style.css");
+
+:root {
+  --signature-accent: #0f766e;
+}
+
 #signature-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-    margin: 0;
+  margin-top: 12px;
 }
 
 .signature-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
-    max-width: 600px;
+  width: min(920px, 100%);
 }
 
-canvas {
-    border: 1px solid #000;
-    background-color: #fff;
-    width: 100%;
-    height: auto;
+.signature-container .controls {
+  margin-top: 16px;
 }
 
-.controls {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
+#savePDF,
+#saveServer {
+  background: linear-gradient(180deg, var(--signature-accent) 0%, #115e59 100%);
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.18);
 }
 
-button, select {
-    padding: 5px 10px;
-    cursor: pointer;
+#savePDF:hover,
+#saveServer:hover {
+  background: linear-gradient(180deg, #115e59 0%, #134e4a 100%);
+}
+
+#delete {
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
 }
