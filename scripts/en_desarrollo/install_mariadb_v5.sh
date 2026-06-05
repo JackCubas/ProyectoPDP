@@ -69,8 +69,12 @@ read inputFront
 
 if [ "$inputFront" == "yes" ]; then
 
-    echo "Instalando Apache..."
-    apt install -y apache2
+    if command -v apache2 >/dev/null 2>&1; then
+        echo "Apache is already installed."
+    else
+        echo "Apache is NOT installed. Installing..."
+        apt install -y apache2
+    fi
 
     # Habilitar módulos necesarios ANTES de crear los VirtualHost
     a2enmod proxy
