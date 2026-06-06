@@ -70,7 +70,8 @@ read inputFront
 if [[ "$inputFront" == "yes" ]]; then
 
     if command -v apache2 >/dev/null 2>&1; then
-        echo "Apache is already installed."
+        echo "Apache is already installed. Reinstalling for newest version."
+        apt install -y apache2
     else
         echo "Apache is NOT installed. Installing..."
         apt install -y apache2
