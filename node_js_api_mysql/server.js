@@ -2182,7 +2182,7 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
       }
 
       if(pdfFile !== null){
-        var modValue = null; 
+        //var modValue = null; 
         sql = `
           UPDATE pdfs 
           SET userId = "${userIdNuevo}", 
@@ -2193,14 +2193,14 @@ app.put('/modify-pdf/:id', fileUpload(), async (req, res) => {
           numPages = ${metadata.numPages},
           sha256 = "${metadata.sha256}",
           uploadTimestamp = "${uploadTs}",
-          validatorId  = "${modValue}",
-          validationTimestamp = "${modValue}",
-          stampUserId = "${modValue}",
-          stampTimestamp = "${modValue}",
-          signUserId = "${modValue}",
-          signTimestamp = "${modValue}",
-          firmaDigitalUserId = "${modValue}",
-          firmaDigitalTimestamp = "${modValue}"
+          validatorId  = NULL,
+          validationTimestamp = NULL,
+          stampUserId = NULL,
+          stampTimestamp = NULL,
+          signUserId = NULL,
+          signTimestamp = NULL,
+          firmaDigitalUserId = NULL,
+          firmaDigitalTimestamp = NULL
           WHERE id = "${id}"
         `;
       }
