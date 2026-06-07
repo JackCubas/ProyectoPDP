@@ -13,8 +13,8 @@ fi
 echo "Instalando dependencias básicas..."
 apt install -y curl git build-essential unzip wget
 
-echo "Versiones instaladas:"
-npm -v
+echo "Version git instalada:"
+#npm -v
 git --version
 
 ##############################################################
@@ -71,10 +71,10 @@ if [[ "$inputFront" == "yes" ]]; then
 
     if command -v apache2 >/dev/null 2>&1; then
         echo "Apache is already installed. Reinstalling for newest version."
-        apt install -y apache2
+        apt install -y apache2 apache2-bin
     else
         echo "Apache is NOT installed. Installing..."
-        apt install -y apache2
+        apt install -y apache2 apache2-bin
     fi
 
     # Habilitar módulos necesarios ANTES de crear los VirtualHost
@@ -368,6 +368,9 @@ EOF
     $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
 
     echo "Base de datos configurada correctamente."
+
+    echo "Version npm instalada:"
+    npm -v
 
     echo "Instalando dependencias..."
     npm install
