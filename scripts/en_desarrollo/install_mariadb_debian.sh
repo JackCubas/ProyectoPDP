@@ -72,12 +72,19 @@ if [[ "$inputFront" == "yes" ]]; then
     if command -v apache2 >/dev/null 2>&1; then
         echo "Apache is already installed. Reinstalling for newest version."
         
-        sudo apt purge -y apache2 apache2-bin apache2-data apache2-utils
-        sudo apt autoremove -y
-        apt install -y apache2 apache2-bin apache2-utils apache2-data
+        #apt purge -y apache2 apache2-bin apache2-data apache2-utils
+        #apt autoremove -y
+        #apt install -y apache2 apache2-bin apache2-utils apache2-data
+
+        apt update
+        apt install -y apache2
     else
         echo "Apache is NOT installed. Installing..."
-        apt install -y apache2 apache2-bin apache2-utils apache2-data
+        
+        #apt install -y apache2 apache2-bin apache2-utils apache2-data
+
+        apt update
+        apt install -y apache2
     fi
 
     # Habilitar módulos necesarios ANTES de crear los VirtualHost
