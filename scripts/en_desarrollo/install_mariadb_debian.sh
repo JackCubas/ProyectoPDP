@@ -435,3 +435,45 @@ fi
 ############################################
 #############################################
 #########################################
+
+
+#echo "Instalando Apache..."
+
+# 1) Verificar si Apache está instalado
+#if ! dpkg -l | grep -q apache2; then
+#    echo "Apache NO está instalado. Instalando..."
+#    apt update
+#    apt install -y apache2 apache2-bin apache2-utils apache2-data
+#else
+#    echo "Apache ya estaba instalado. Reinstalando limpio..."
+#    apt purge -y apache2 apache2-bin apache2-utils apache2-data
+#    apt autoremove -y
+#    apt install -y apache2 apache2-bin apache2-utils apache2-data
+#fi
+
+# 2) Verificar que la estructura /etc/apache2 existe
+#if [[ ! -d /etc/apache2 ]]; then
+#    echo "ERROR: Apache no creó /etc/apache2. Instalación corrupta."
+#    exit 1
+#fi
+
+# 3) Habilitar módulos
+#if command -v a2enmod >/dev/null 2>&1; then
+#    echo "Habilitando módulos con a2enmod..."
+#    a2enmod proxy
+#    a2enmod proxy_http
+#    a2enmod ssl
+#else
+#    echo "a2enmod NO existe. Habilitando módulos manualmente..."
+
+#    CONF="/etc/apache2/apache2.conf"
+
+#    grep -q "mod_proxy.so" $CONF || echo "LoadModule proxy_module /usr/lib/apache2/modules/mod_proxy.so" >> $CONF
+#    grep -q "mod_proxy_http.so" $CONF || echo "LoadModule proxy_http_module /usr/lib/apache2/modules/mod_proxy_http.so" >> $CONF
+#    grep -q "mod_ssl.so" $CONF || echo "LoadModule ssl_module /usr/lib/apache2/modules/mod_ssl.so" >> $CONF
+#fi
+
+# 4) Crear directorios necesarios
+#mkdir -p /etc/apache2/ssl
+#mkdir -p /etc/apache2/sites-available
+#mkdir -p /etc/apache2/sites-enabled
