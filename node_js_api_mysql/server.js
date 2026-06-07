@@ -958,14 +958,14 @@ async function borrarPdfsSignedStampedBBDD(id){
 
   let con;
 
-  var signUserId = null;
-  var signTimestamp = null;
+  //var signUserId = null;
+  //var signTimestamp = null;
 
-  var stampUserId = null;
-  var stampTimestamp = null;
+  //var stampUserId = null;
+  //var stampTimestamp = null;
 
-  var fdUserId = null;
-  var fdTimestamp = null;
+  //var fdUserId = null;
+  //var fdTimestamp = null;
 
   con = mysql.createConnection({
         host: DBHOST,
@@ -977,22 +977,22 @@ async function borrarPdfsSignedStampedBBDD(id){
 
   let sqlSign = `
       UPDATE pdfs 
-      SET signUserId = "${signUserId}", 
-      signTimestamp = "${signTimestamp}"
+      SET signUserId = NULL, 
+      signTimestamp = NULL
       WHERE signUserId = "${id}"
     `;
 
   let sqlStamp = `
       UPDATE pdfs 
-      SET stampUserId = "${stampUserId}", 
-      stampTimestamp = "${stampTimestamp}"
+      SET stampUserId = NULL, 
+      stampTimestamp = NULL
       WHERE stampUserId = "${id}"
     `;
 
   let sqlFD = `
       UPDATE pdfs 
-      SET firmaDigitalUserId = "${fdUserId}", 
-      firmaDigitalTimestamp = "${fdTimestamp}"
+      SET firmaDigitalUserId = NULL, 
+      firmaDigitalTimestamp = NULL
       WHERE firmaDigitalUserId = "${id}"
     `;
   
@@ -2491,13 +2491,13 @@ app.delete('/eliminateDocStamp', async function(req, res) {
       }
       console.log("Connected!");
 
-      var stampUserId = null;
-      var stampTimestamp = null;
+      //var stampUserId = null;
+      //var stampTimestamp = null;
 
       let sql = `
         UPDATE pdfs 
-        SET stampUserId = "${stampUserId}", 
-        stampTimestamp = "${stampTimestamp}"
+        SET stampUserId = NULL, 
+        stampTimestamp = NULL
         WHERE id = "${id}"
       `;
       con.query(sql, function (err, result) {
@@ -2735,13 +2735,13 @@ app.delete('/eliminateDocSign', async function(req, res) {
       }
       console.log("Connected!");
 
-      var signUserId = null;
-      var signTimestamp = null;
+      //var signUserId = null;
+      //var signTimestamp = null;
 
       let sql = `
         UPDATE pdfs 
-        SET signUserId = "${signUserId}", 
-        signTimestamp = "${signTimestamp}"
+        SET signUserId = NULL, 
+        signTimestamp = NULL
         WHERE id = "${id}"
       `;
       con.query(sql, function (err, result) {
