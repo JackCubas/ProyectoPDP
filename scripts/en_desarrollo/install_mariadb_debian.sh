@@ -74,10 +74,10 @@ if [[ "$inputFront" == "yes" ]]; then
         
         sudo apt purge -y apache2 apache2-bin apache2-data apache2-utils
         sudo apt autoremove -y
-        apt install -y apache2 apache2-bin
+        apt install -y apache2 apache2-bin apache2-utils apache2-data
     else
         echo "Apache is NOT installed. Installing..."
-        apt install -y apache2 apache2-bin
+        apt install -y apache2 apache2-bin apache2-utils apache2-data
     fi
 
     # Habilitar módulos necesarios ANTES de crear los VirtualHost
