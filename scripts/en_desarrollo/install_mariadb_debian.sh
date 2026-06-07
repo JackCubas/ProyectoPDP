@@ -78,9 +78,23 @@ if [[ "$inputFront" == "yes" ]]; then
     fi
 
     # Habilitar módulos necesarios ANTES de crear los VirtualHost
-    a2enmod proxy
-    a2enmod proxy_http
-    a2enmod ssl
+    #a2enmod proxy
+    #a2enmod proxy_http
+    #a2enmod ssl
+
+    if command -v a2enmod >/dev/null 2>&1; then
+        echo "Habilitando módulos con a2enmod..."
+        a2enmod proxy
+        a2enmod proxy_http
+        a2enmod ssl
+    else
+        echo "a2enmod NO existe. Habilitando módulos manualmente..."
+
+        # Cargar módulos directamente
+        echo "LoadModule proxy_module /usr/lib/apache2/modules/mod_proxy.so" >> /etc/apache2/apache2.conf
+        echo "LoadModule proxy_http_module /usr/lib/apache2/modules/mod_proxy_http.so" >> /etc/apache2/apache2.conf
+        echo "LoadModule ssl_module /usr/lib/apache2/modules/mod_ssl.so" >> /etc/apache2/apache2.conf
+    fi
 
     BASE="/var/www/html"
 
@@ -180,7 +194,15 @@ EOF
 
     #a2ensite 000-default.conf
     #a2ensite localhost-ssl.conf
-    a2ensite https-front-ssl.conf
+    #a2ensite https-front-ssl.conf
+
+    if command -v a2ensite >/dev/null 2>&1; then
+        echo "Habilitando sitio con a2ensite..."
+        a2ensite https-front-ssl.conf
+    else
+        echo "a2ensite NO existe. Habilitando sitio manualmente..."
+        ln -s /etc/apache2/sites-available/https-front-ssl.conf /etc/apache2/sites-enabled/https-front-ssl.conf
+    fi
 
     systemctl reload apache2
 
