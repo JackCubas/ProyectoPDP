@@ -436,6 +436,8 @@ EOF
     echo "Iniciando backend en segundo plano..."
     nohup npm start > /var/log/backend.log 2>&1 &
     echo "Backend ejecutándose en background (PID: $!)"
+    echo "Para comprobar proceso: ps aux | grep node"
+    echo "Para ver logs: tail -f /var/log/backend.log"
 
 else
     echo "Saltado installacion de backend y base de datos... "
