@@ -344,8 +344,8 @@ if [[ "$inputBack" == "yes" ]]; then
     echo "Detectando binario MariaDB/MySQL..."
     if command -v mariadb >/dev/null 2>&1; then
         DB_BIN="mariadb"
-        #DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('admin')"
-        DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket"
+        DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('admin')"
+        #DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket"
     else
         DB_BIN="mysql"
         DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED BY 'admin'"
