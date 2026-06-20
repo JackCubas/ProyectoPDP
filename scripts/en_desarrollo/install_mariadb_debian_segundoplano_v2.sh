@@ -10,6 +10,17 @@ if [[ "$EUID" -ne 0 ]]; then
   exit 1
 fi
 
+echo "Quieres hacer update y upgrade las funcionalidades de tu sistema operativo? (yes/no)"
+read inputUpdate
+
+if [[ "$inputUpdate" == "yes" ]]; then
+
+    apt upgrade
+    apt update -y
+    apt upgrade -y
+
+fi
+
 echo "Instalando dependencias básicas..."
 apt install -y curl git build-essential unzip wget
 
