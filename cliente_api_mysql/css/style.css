@@ -21,11 +21,17 @@
   box-sizing: border-box;
 }
 
+::selection {
+  background: rgba(37, 99, 235, 0.16);
+  color: var(--text);
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
+  position: relative;
   margin: 0;
   min-height: 100vh;
   padding: 32px 20px 48px;
@@ -36,6 +42,35 @@ body {
     radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
     radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 26%),
     linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: auto;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(12px);
+  opacity: 0.45;
+}
+
+body::before {
+  top: 3rem;
+  right: -6rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+body::after {
+  bottom: -5rem;
+  left: -4rem;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  background: rgba(15, 118, 110, 0.08);
 }
 
 body > h1,
@@ -56,6 +91,14 @@ h1 {
 p {
   margin: 0 0 20px;
   color: var(--muted);
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
 }
 
 main,
@@ -81,6 +124,11 @@ main,
 main,
 .create-blog.content {
   padding: 24px;
+}
+
+main > :first-child,
+.create-blog.content > :first-child {
+  margin-top: 0;
 }
 
 #main-container {
@@ -169,6 +217,23 @@ form {
   width: 100%;
 }
 
+form > p,
+.formgroup,
+.container-fluid {
+  width: 100%;
+}
+
+form > p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.formgroup,
+.container-fluid {
+  display: grid;
+  gap: 8px;
+}
+
 label,
 lable {
   display: block;
@@ -196,6 +261,52 @@ select {
   color: var(--text);
 }
 
+input[type="file"] {
+  padding: 10px 12px;
+  border-style: dashed;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 0 14px;
+  min-height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  font: inherit;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+#loader {
+  width: min(var(--max-width), 100%);
+  margin: 18px auto 0;
+  padding: 14px 16px;
+  text-align: center;
+  color: var(--accent-hover);
+  background: rgba(219, 234, 254, 0.6);
+  border: 1px solid rgba(147, 197, 253, 0.45);
+  border-radius: 999px;
+}
+
+#loader h1 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 textarea {
   min-height: 120px;
   resize: vertical;
@@ -219,6 +330,10 @@ table {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
+}
+
+table + .pagination {
+  margin-top: 18px;
 }
 
 thead {
@@ -258,6 +373,15 @@ tbody tr:last-child td {
   align-items: center;
 }
 
+.pagination .button,
+.pagination a {
+  min-width: 110px;
+}
+
+table, thead, tbody, tr, th, td {
+  word-break: normal;
+}
+
 hr {
   width: min(var(--max-width), 100%);
   margin: 24px auto;
@@ -273,6 +397,16 @@ hr {
 
 .signature-container {
   padding: 20px;
+}
+
+.signature-container::before {
+  content: "Signature workspace";
+  display: block;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 #signature-pad {
@@ -296,6 +430,10 @@ hr {
 .controls select {
   width: auto;
   min-width: 140px;
+}
+
+canvas {
+  max-width: 100%;
 }
 
 @media (max-width: 720px) {
@@ -324,5 +462,9 @@ hr {
   th,
   td {
     font-size: 0.95rem;
+  }
+
+  .signature-container::before {
+    text-align: center;
   }
 }
