@@ -15,10 +15,8 @@ read inputUpdate
 
 if [[ "$inputUpdate" == "yes" ]]; then
 
-    apt upgrade
-    apt update -y
     apt upgrade -y
-
+    apt update -y
 fi
 
 echo "Instalando dependencias básicas..."
