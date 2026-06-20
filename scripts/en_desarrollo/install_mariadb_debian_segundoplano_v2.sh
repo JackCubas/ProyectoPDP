@@ -345,7 +345,7 @@ if [[ "$inputBack" == "yes" ]]; then
     if command -v mariadb >/dev/null 2>&1; then
         DB_BIN="mariadb"
         #DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('admin')"
-        DB_ALTER_USER="ALTER USER 'ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket"
+        DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket"
     else
         DB_BIN="mysql"
         DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED BY 'admin'"
@@ -357,8 +357,17 @@ if [[ "$inputBack" == "yes" ]]; then
     FLUSH PRIVILEGES;
 EOF
 
+echo "Asegurando MariaDB..."
+    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS <<EOF
+    DELETE FROM mysql.user WHERE User='';
+    DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
+    DROP DATABASE IF EXISTS test;
+    DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';
+    FLUSH PRIVILEGES;
+EOF
+
     echo "Creando base de datos si no existe..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"¡
+    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
 
     echo "Importando base de datos..."
     $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
