@@ -353,21 +353,18 @@ if [[ "$inputBack" == "yes" ]]; then
     echo "Detectando binario MariaDB/MySQL..."
     if command -v mariadb >/dev/null 2>&1; then
         DB_BIN="mariadb"
-        DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('admin')"
-        #DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket"
     else
         DB_BIN="mysql"
-        DB_ALTER_USER="ALTER USER 'root'@'localhost' IDENTIFIED BY 'admin'"
     fi
 
-    echo "Preparing MySQL database and user..."
-    sudo $DB_BIN <<EOF
-    $DB_ALTER_USER;
+    echo "Preparando MySQL/MariaDB..."
+    $DB_BIN -u root <<EOF
+    ALTER USER 'root'@'localhost' IDENTIFIED BY 'admin';
     FLUSH PRIVILEGES;
 EOF
 
-echo "Asegurando MariaDB..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS <<EOF
+    echo "Asegurando MariaDB..."
+    $DB_BIN -u root -padmin <<EOF
     DELETE FROM mysql.user WHERE User='';
     DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
     DROP DATABASE IF EXISTS test;
@@ -376,11 +373,13 @@ echo "Asegurando MariaDB..."
 EOF
 
     echo "Creando base de datos si no existe..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
-    #$DB_BIN -u$MYSQL_USER -p$MYSQL_PASS -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO 'root'@'localhost';"
+    $DB_BIN -u root -padmin -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+
+    echo "Otorgando privilegios..."
+    $DB_BIN -u root -padmin -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO 'root'@'localhost' WITH GRANT OPTION;"
 
     echo "Importando base de datos..."
-    $DB_BIN -u$MYSQL_USER -p$MYSQL_PASS $DB_NAME < firma_app.sql
+    $DB_BIN -u root -padmin $DB_NAME < firma_app.sql
 
     echo "Base de datos configurada correctamente."
 
