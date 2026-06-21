@@ -69,9 +69,6 @@ get_vm_ip_project() {
     ip addr show | awk '/inet / && $2 !~ /^127/ {print $2}' | cut -d/ -f1 | head -n 1
 }
 
-VM_IP_PROJECT=$(get_vm_ip_project)
-echo "IP detectada de la máquina virtual: $VM_IP_PROJECT"
-
 ##############################################################
 echo "Quieres instalar el frontend? (yes/no)"
 read inputFront
@@ -168,6 +165,9 @@ if [[ "$inputFront" == "yes" ]]; then
     -keyout /etc/apache2/ssl/apache.key \
     -out /etc/apache2/ssl/apache.crt \
     -subj "/C=ES/ST=Estado/L=Ciudad/O=MiEmpresa/OU=IT/CN=localhost"
+
+    VM_IP_PROJECT=$(get_vm_ip_project)
+    echo "IP detectada de la máquina virtual: $VM_IP_PROJECT"
 
     echo "¿Cual es el url o ip del backend (el puerto siempre será 3000)?"
     echo "Pulsa ENTER para usar la IP detectada"
