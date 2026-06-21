@@ -372,6 +372,10 @@ EOF
     FLUSH PRIVILEGES;
 EOF
 
+    echo "Cambiando bind-address..."
+    sed -i "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
+    systemctl restart $DB_SERVICE
+
     echo "Creando base de datos si no existe..."
     $DB_BIN -u root -padmin -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
 
