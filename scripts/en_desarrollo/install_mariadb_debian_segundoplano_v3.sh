@@ -176,6 +176,10 @@ if [[ "$inputFront" == "yes" ]]; then
     # Valor por defecto: IP detectada con http://
     BACKEND_URL=${BACKEND_URL:-http://$VM_IP_PROJECT}
 
+    if [[ "$BACKEND_URL" != http* ]]; then
+        BACKEND_URL="http://$BACKEND_URL"
+    fi
+
     # Remove trailing slash if present
     BACKEND_URL="${BACKEND_URL%/}"
 
