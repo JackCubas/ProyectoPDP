@@ -733,7 +733,9 @@ function appendDataStamp(data){
 
           if(data.stamp.stampUserId == datosUsuario.id){
             document.getElementById("webeid-sign-button").disabled = false;
-          }else{
+          }
+          
+          if(data.stamp.stampUserId !== datosUsuario.id){
             alert("Solamente el usuario que ha hecho el estampado puede firmar digitalmente el documento");
           }
 
