@@ -585,6 +585,9 @@ const csrfToken = getCookie('CSRF-TOKEN');
   }
 });
 
+document.getElementById("webeid-auth-button").hidden = true;
+document.getElementById("webeid-cert-button").hidden = true;
+
 
 })();
 
