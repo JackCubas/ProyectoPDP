@@ -716,7 +716,7 @@ function appendDataStamp(data){
     var buttons = document.getElementById("button-container");
 
     var buttonCan = document.createElement("button");
-    buttonCan.innerHTML = "Cancel";
+    buttonCan.innerHTML = "Cancelar";
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);
 
@@ -749,7 +749,7 @@ function appendDataStamp(data){
             con.appendChild(e);
 
             var f=document.createElement("div")
-            f.textContent="Stamp User Name: " + data.stamp.nameUser                      
+            f.textContent="Nombre de usuario del estampado: " + data.stamp.nameUser                      
             con.appendChild(f);
 
             var g=document.createElement("div")
@@ -762,12 +762,12 @@ function appendDataStamp(data){
             var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
             initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
-            h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+            h.textContent="Fecha y hora de creación: " + initialTimestampNameAux;                      
             con.appendChild(h);
 
             var k=document.createElement("div");
             var stampTimestampAux = data.stamp.stampTimestamp.slice(0, 19).replace('T', ' ');
-            k.textContent="Stamp DateTime: " + stampTimestampAux;                      
+            k.textContent="Fecha y hora del estampado: " + stampTimestampAux;                      
             con.appendChild(k);
 
         }
@@ -778,12 +778,12 @@ function appendDataStamp(data){
           estaFirmadoDigital = true;
 
           var w=document.createElement("div")
-          w.textContent="Firmado Digital User Name: " + data.firmado_digital.nameUser                      
+          w.textContent="Nombre de usuario de la firma digital: " + data.firmado_digital.nameUser                      
           con.appendChild(w);
 
           var v=document.createElement("div");
           var firmaDigitalTimestampAux = data.firmado_digital.firmaDigitalTimestamp.slice(0, 19).replace('T', ' ');
-          v.textContent="Firmado Digital DateTime: " + firmaDigitalTimestampAux;                      
+          v.textContent="Fecha y hora de la firma digital: " + firmaDigitalTimestampAux;                      
           con.appendChild(v);
 
         }
@@ -793,7 +793,7 @@ function appendDataStamp(data){
           estaFirmadoDigital = false;
 
           var y=document.createElement("div")
-          y.textContent="Firmado Digital User Name: " + "N/A"                      
+          y.textContent="Nombre de usuario de la firma digital: " + "N/A"                      
           con.appendChild(y);
 
           var z=document.createElement("div");

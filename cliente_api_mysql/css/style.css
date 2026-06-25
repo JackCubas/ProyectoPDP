@@ -307,6 +307,11 @@ input[type="checkbox"] {
   text-transform: uppercase;
 }
 
+#loader .loader-text {
+  margin: 0;
+  color: inherit;
+}
+
 textarea {
   min-height: 120px;
   resize: vertical;
@@ -400,7 +405,7 @@ hr {
 }
 
 .signature-container::before {
-  content: "Signature workspace";
+  content: "Espacio de firma";
   display: block;
   margin-bottom: 14px;
   color: var(--muted);

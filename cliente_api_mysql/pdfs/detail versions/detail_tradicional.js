@@ -30,7 +30,7 @@ function appendData(data){
             con.appendChild(e);
 
             var f=document.createElement("div")
-            f.textContent="User Name: " + data[i].nameUser                      
+            f.textContent="Nombre de usuario: " + data[i].nameUser                      
             con.appendChild(f);
         }
 }

@@ -81,7 +81,7 @@ function appendData(data){
 
     var buttons = document.getElementById("button-container");
     var button = document.createElement("button");
-    button.innerHTML = "Cancel";
+    button.innerHTML = "Cancelar";
     button.onclick = onbuttonclicked;
     buttons.appendChild(button);   
 }

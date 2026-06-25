@@ -174,7 +174,7 @@ function appendDataStamp(data){
             con.appendChild(e);
 
             var f=document.createElement("div")
-            f.textContent="Stamp User Name: " + data[i].nameUser                      
+            f.textContent="Nombre de usuario del estampado: " + data[i].nameUser                      
             con.appendChild(f);
 
             var g=document.createElement("div")
@@ -187,12 +187,12 @@ function appendDataStamp(data){
             var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
             initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
-            h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+            h.textContent="Fecha y hora de creación: " + initialTimestampNameAux;                      
             con.appendChild(h);
 
             var k=document.createElement("div");
             var stampTimestampNameAux = data[0].stampTimestamp.slice(0, 19).replace('T', ' ');
-            k.textContent="Stamp DateTime: " + stampTimestampNameAux;                      
+            k.textContent="Fecha y hora del estampado: " + stampTimestampNameAux;                      
             con.appendChild(k);
 
             setElementVisibility("timeStampCheck", true);

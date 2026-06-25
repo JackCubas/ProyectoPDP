@@ -23,7 +23,7 @@ function checkUserHosting() {
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Submit";
+    buttonSub.innerHTML = "Registrarse";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);
 }

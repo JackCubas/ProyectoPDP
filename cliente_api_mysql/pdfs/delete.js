@@ -96,7 +96,7 @@ function appendData(data){
         con.appendChild(e);
 
         var f=document.createElement("div")
-        f.textContent="User Name: " + data[i].nameUser                      
+        f.textContent="Nombre de usuario: " + data[i].nameUser                      
         con.appendChild(f);
 
         var g=document.createElement("div")
@@ -109,19 +109,19 @@ function appendData(data){
         var initialTimestampNameAux2 = initialTimestampNameAux.replace(" ","_").replaceAll(":","-");
         initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
-        h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+        h.textContent="Fecha y hora de creación: " + initialTimestampNameAux;                      
         con.appendChild(h);
     }
 
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Submit";
+    buttonSub.innerHTML = "Enviar";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);  
 
     var buttonCan = document.createElement("button");
-    buttonCan.innerHTML = "Cancel";
+    buttonCan.innerHTML = "Cancelar";
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan); 
 }

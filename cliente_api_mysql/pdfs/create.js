@@ -72,12 +72,12 @@ function appendData(data){
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Submit";
+    buttonSub.innerHTML = "Crear";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);  
 
     var buttonCan = document.createElement("button");
-    buttonCan.innerHTML = "Cancel";
+    buttonCan.innerHTML = "Cancelar";
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);  
 }

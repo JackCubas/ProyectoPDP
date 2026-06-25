@@ -18,7 +18,7 @@ function checkUserHosting() {
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Submit";
+    buttonSub.innerHTML = "Iniciar sesión";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);
 }

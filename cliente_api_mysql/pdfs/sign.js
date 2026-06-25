@@ -400,7 +400,7 @@ function appendDataSign(data){
             con.appendChild(e);
 
             var f=document.createElement("div")
-            f.textContent="Sign User Name: " + data[i].nameUser                      
+            f.textContent="Nombre de usuario de la firma: " + data[i].nameUser                      
             con.appendChild(f);
 
             var g=document.createElement("div")
@@ -412,12 +412,12 @@ function appendDataSign(data){
             initialTimestampName = initialTimestampNameAux2.replaceAll("-","_");
 
             var h=document.createElement("div");
-            h.textContent="Creation DateTime: " + initialTimestampNameAux;                      
+            h.textContent="Fecha y hora de creación: " + initialTimestampNameAux;                      
             con.appendChild(h);
 
             var k=document.createElement("div");
             var signTimestampNameAux = data[0].signTimestamp.slice(0, 19).replace('T', ' ');
-            k.textContent="Sign DateTime: " + signTimestampNameAux;                      
+            k.textContent="Fecha y hora de la firma: " + signTimestampNameAux;                      
             con.appendChild(k);
         }
     }else{

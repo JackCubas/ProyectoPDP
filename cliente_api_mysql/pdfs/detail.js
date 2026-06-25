@@ -86,7 +86,7 @@ function appendData(data){
         con.appendChild(e);
 
         var f=document.createElement("div")
-        f.textContent="User Name: " + data[i].nameUser                      
+        f.textContent="Nombre de usuario: " + data[i].nameUser                      
         con.appendChild(f);
 
         var g=document.createElement("div")
@@ -94,13 +94,13 @@ function appendData(data){
         con.appendChild(g);
 
         var h=document.createElement("div")
-        h.textContent="Creation DateTime: " + data[i].initialUploadTimestamp.slice(0, 19).replace('T', ' ')                      
+        h.textContent="Fecha y hora de creación: " + data[i].initialUploadTimestamp.slice(0, 19).replace('T', ' ')                      
         con.appendChild(h);
     }
 
     var buttons = document.getElementById("button-container");
     var button = document.createElement("button");
-    button.innerHTML = "Cancel";
+    button.innerHTML = "Cancelar";
     button.onclick = onbuttonclicked;
     buttons.appendChild(button);
     console.log("finalizado generacion de ventana");

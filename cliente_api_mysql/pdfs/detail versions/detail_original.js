@@ -30,7 +30,7 @@ function appendData(response){
         window.open(fileURL); 
 
         var con=document.getElementById("main-container")
-        var text = document.createTextNode("This is the retrieved document");
+        var text = document.createTextNode("Este es el documento recuperado");
         con.appendChild(text);
 
         /*
