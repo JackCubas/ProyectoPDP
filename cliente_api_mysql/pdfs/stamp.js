@@ -11,6 +11,13 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
 
 var datosUsuario = null;
 
+function setElementVisibility(elementId, shouldShow) {
+    var element = document.getElementById(elementId);
+    if (element) {
+        element.hidden = !shouldShow;
+    }
+}
+
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
 }
@@ -135,19 +142,19 @@ function appendDataStamp(data){
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Submit";
+    buttonSub.innerHTML = "Guardar";
     buttonSub.id = "submit";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);
     
     var buttonDel = document.createElement("button");
-    buttonDel.innerHTML = "Delete";
+    buttonDel.innerHTML = "Eliminar";
     buttonDel.id = "delete";
     buttonDel.onclick =  deleteDocument;
     buttons.appendChild(buttonDel);
 
     var buttonCan = document.createElement("button");
-    buttonCan.innerHTML = "Cancel";
+    buttonCan.innerHTML = "Cancelar";
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);
 
@@ -188,8 +195,15 @@ function appendDataStamp(data){
             k.textContent="Stamp DateTime: " + stampTimestampNameAux;                      
             con.appendChild(k);
 
-            document.getElementById("timeStampCheck").disabled = true;
-            document.getElementById("submit").disabled = true;
+            setElementVisibility("timeStampCheck", true);
+
+            if(data[0].stampUserId === datosUsuario.id && data[0].atrexists !== 0){
+                setElementVisibility("submit", true);
+            }else{
+                setElementVisibility("submit", false);
+            }
+
+            setElementVisibility("delete", true);
 
         }
     }else{
@@ -199,7 +213,8 @@ function appendDataStamp(data){
         j.textContent="No hay documento estampado";
         con.appendChild(j);
 
-        document.getElementById("delete").disabled = true;
+        setElementVisibility("submit", false);
+        setElementVisibility("delete", false);
     }
     //console.log("finalizado generacion de ventana");
 }
@@ -282,11 +297,11 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            alert("No se ha podido crear documento estampado");
+            console.error("No se ha podido crear documento estampado");
             window.location.href = "table.html?page=" + pageHTML;
         }else{
 
-            alert("Se ha podido crear documento estampado");
+            console.info("Se ha podido crear documento estampado");
             window.location.href = "table.html?page=" + pageHTML;
 
             /*return response.blob().then((data) => {
@@ -319,10 +334,9 @@ async function deleteDocument(){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-        alert("No se ha podido borrar documento estampado");
+        console.error("No se ha podido borrar documento estampado");
     }else{
-        //console.log(response);
-        alert("Documento estampado borrado correctamente");
+        console.info("Documento estampado borrado correctamente");
     }
 
     window.location.href = "table.html?page=" + pageHTML;

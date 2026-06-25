@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-ES">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signature Pad</title>
+    <title>Firma del documento</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <link rel="stylesheet" href="../css/sign.css">
@@ -19,13 +19,13 @@
             <canvas id="signature-pad" width="400" height="200"></canvas>
             <div class="controls">
                 <select id="stroke-style">
-                    <option value="pen">Pen</option>
-                    <option value="brush">Brush</option>
+                    <option value="pen">Bolígrafo</option>
+                    <option value="brush">Pincel</option>
                 </select>
 
-                <button id="clear">Clear</button>
-                <button id="export-png">Export as PNG</button>
-                <button id="export-jpeg">Export as JPEG</button>
+                <button id="clear">Limpiar</button>
+                <button id="export-png">Exportar como PNG</button>
+                <button id="export-jpeg">Exportar como JPEG</button>
             </div>
         </div>
     </div>
@@ -33,9 +33,9 @@
     <hr>
 
     <div id="button-container">
-        <button id="savePDF" onclick="saveSignatureAndInsertIntoPDF()">Save Signature and Insert into PDF</button>
-        <button id="saveServer" onclick="saveToServer()">Save to Server</button>
-        <button id="delete" onclick="deleteDocument()">Delete</button>   
+        <button id="savePDF" onclick="saveSignatureAndInsertIntoPDF()">Guardar firma e insertarla en el PDF</button>
+        <button id="saveServer" onclick="saveToServer()">Guardar en el servidor</button>
+        <button id="delete" onclick="deleteDocument()">Eliminar</button>   
     </div>
     
     <script src="sign.js"></script>

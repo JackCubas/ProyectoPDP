@@ -86,9 +86,9 @@ function buildTable(data, currentPageNum) {
   }*/
 
   var a = document.createElement('a');
-  var linkText = document.createTextNode("Create");
+  var linkText = document.createTextNode("Crear usuario");
   a.appendChild(linkText);
-  a.title = "Create";
+  a.title = "Crear usuario";
   a.href = 'create.html?page=' + currentPageNum;
   a.className = 'button';
   main.appendChild(a);
@@ -109,25 +109,25 @@ function buildTable(data, currentPageNum) {
 
       const buttonDetail = document.createElement('button');
       buttonDetail.id = "detailbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonDetail.textContent = "Detail";
+      buttonDetail.textContent = "Detalle";
       buttonDetail.addEventListener('click', detail);
       cell3.appendChild(buttonDetail);
 
       const buttonEdit = document.createElement('button');
       buttonEdit.id = "editbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonEdit.textContent = "Edit";
+      buttonEdit.textContent = "Editar";
       buttonEdit.addEventListener('click', edit);
       cell3.appendChild(buttonEdit);
 
       const buttonDel = document.createElement('button');
       buttonDel.id = "delbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonDel.textContent = "Delete";
+      buttonDel.textContent = "Eliminar";
       buttonDel.addEventListener('click', del);
       cell3.appendChild(buttonDel);
 
       const buttonStamp = document.createElement('button');
       buttonStamp.id = "stampbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonStamp.textContent = "Stamp";
+      buttonStamp.textContent = "Estampar";
       buttonStamp.addEventListener('click', stamp);
       cell3.appendChild(buttonStamp);
     }
@@ -137,7 +137,7 @@ function buildTable(data, currentPageNum) {
     //cellempty.textContent = "No users have been found"
 
     var newParagraph = document.createElement('p');
-    newParagraph.textContent = 'No users have been found';
+    newParagraph.textContent = 'No se han encontrado usuarios';
     main.append(newParagraph);
   }
 }

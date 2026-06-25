@@ -4,6 +4,13 @@ var URLSERVERdetail = "";
 var URLSERVERretrieve = "";
 var datosUsuario = null;
 
+function setElementVisibility(elementId, shouldShow) {
+    var element = document.getElementById(elementId);
+    if (element) {
+        element.hidden = !shouldShow;
+    }
+}
+
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
 }
@@ -127,7 +134,7 @@ function appendDataStamp(data){
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Submit";
+    buttonSub.innerHTML = "Guardar";
     buttonSub.id = "submit";
     buttonSub.onclick = sendData;
     buttons.appendChild(buttonSub);
@@ -174,10 +181,10 @@ function appendDataStamp(data){
             k.textContent="Stamp DateTime: " + stampTimestampNameAux;                      
             con.appendChild(k);
 
-            document.getElementById("submit").disabled = false;
-
-            if(data[0].stampUserId !== datosUsuario.id || data[0].atrexists === 0){
-                document.getElementById("submit").disabled = true;
+            if(data[0].stampUserId === datosUsuario.id && data[0].atrexists !== 0){
+                setElementVisibility("submit", true);
+            }else{
+                setElementVisibility("submit", false);
             }
         }
     }else{
@@ -187,7 +194,7 @@ function appendDataStamp(data){
         j.textContent="No hay documento estampado";
         con.appendChild(j);
 
-        document.getElementById("submit").disabled = true;
+        setElementVisibility("submit", false);
     }
     //console.log("finalizado generacion de ventana");
 }
@@ -246,11 +253,11 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            alert("No se ha podido hacer firmado digital");
+            console.error("No se ha podido hacer firmado digital");
             window.location.href = "table.html?page=" + pageHTML;
         }else{
 
-            alert("Se ha podido hacer firmado digital");
+            console.info("Se ha podido hacer firmado digital");
             window.location.href = "table.html?page=" + pageHTML;
         } 
 

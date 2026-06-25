@@ -20,7 +20,7 @@ async function sendData(){
 	var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 			
 	if (!allowedExtensions.exec(filePath)) {
-        alert('Invalid file type');
+        console.error('Tipo de archivo no válido');
         fileInput.value = '';
         return false;
     } 
@@ -79,10 +79,10 @@ async function sendData(){
     }
 
     if(result.status === 400 || result.status === 500){
-        alert("No se ha podido crear stamp");
+        console.error("No se ha podido crear stamp");
         window.location.href = "table.html";
     }else{
-        alert("Finalizado procesamiento");
+        console.info("Finalizado procesamiento");
         window.location.href = "table.html";
     }
 

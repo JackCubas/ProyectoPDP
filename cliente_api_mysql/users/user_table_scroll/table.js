@@ -42,38 +42,38 @@ function buildTable(data) {
 
       const button = document.createElement('button');
       button.id = "testbutton" + butID;
-      button.textContent = "Click Me";
+      button.textContent = "Probar";
       button.addEventListener('click', doSmth);
       cell2.appendChild(button);
 
       const buttonDetail = document.createElement('button');
       buttonDetail.id = "detailbutton" + butID;
-      buttonDetail.textContent = "Detail";
+      buttonDetail.textContent = "Detalle";
       buttonDetail.addEventListener('click', detail);
       cell2.appendChild(buttonDetail);
 
       const buttonEdit = document.createElement('button');
       buttonEdit.id = "editbutton" + butID;
-      buttonEdit.textContent = "Edit";
+      buttonEdit.textContent = "Editar";
       buttonEdit.addEventListener('click', edit);
       cell2.appendChild(buttonEdit);
 
       const buttonDel = document.createElement('button');
       buttonDel.id = "delbutton" + butID;
-      buttonDel.textContent = "Delete";
+      buttonDel.textContent = "Eliminar";
       buttonDel.addEventListener('click', del);
       cell2.appendChild(buttonDel);
 
       const buttonStamp = document.createElement('button');
       buttonStamp.id = "stampbutton" + butID;
-      buttonStamp.textContent = "Stamp";
+      buttonStamp.textContent = "Estampar";
       buttonStamp.addEventListener('click', stamp);
       cell2.appendChild(buttonStamp);
     }
   }else{
     const emptyRow = table.insertRow();
     const cellempty = emptyRow.insertCell(0);
-    cellempty.textContent = "No users have been found"
+    cellempty.textContent = "No se han encontrado usuarios"
   }
 
 }
@@ -83,7 +83,7 @@ function doSmth(event) {
   const substringToRemove = "testbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
-  alert("ID: " + idDetail);
+  console.info("ID: " + idDetail);
 }
 
 function detail(event){

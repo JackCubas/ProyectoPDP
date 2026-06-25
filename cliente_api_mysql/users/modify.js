@@ -101,28 +101,28 @@ async function sendData(){
     dniUser = document.getElementById("dniUser").value;
 
     if(nameUser === "" || emailUser === "" || passUser === "" || dniUser === ""){
-        alert("Todos los campos son obligatorios.");
+        console.error("Todos los campos son obligatorios.");
 
     }else if(!emailPattern.test(emailUser)){
-        alert('No es un correo electronico adecuado');
+        console.error('No es un correo electrónico adecuado');
 
         document.getElementById("emailUser").focus();
         document.getElementById("emailUser").value = "";
 
     }else if (nameUser.length>50){
-        alert("El nombre debe tener menos de 51 caracteres.");
+        console.error("El nombre debe tener menos de 51 caracteres.");
 
 		document.getElementById("nameUser").focus();
         document.getElementById("nameUser").value = "";
 
     }else if (nameUser.length<2){ 
-        alert("El nombre debe tener al menos 2 caracteres.");
+        console.error("El nombre debe tener al menos 2 caracteres.");
 
 		document.getElementById("nameUser").focus();
         document.getElementById("nameUser").value = "";
 
     }else if (passUser.length>50){
-        alert("El pass debe tener menos de 51 caracteres.");
+        console.error("La contraseña debe tener menos de 51 caracteres.");
 
 		document.getElementById("passUser").focus();
         document.getElementById("passUserRepeat").focus();
@@ -131,7 +131,7 @@ async function sendData(){
         document.getElementById("passUserRepeat").value = "";
 
     }else if (passUser.length<6){ 
-        alert("El pass debe tener al menos 6 caracteres.");
+        console.error("La contraseña debe tener al menos 6 caracteres.");
 
 		document.getElementById("passUser").focus();
         document.getElementById("passUserRepeat").focus();
@@ -140,7 +140,7 @@ async function sendData(){
         document.getElementById("passUserRepeat").value = "";   
 
     }else if(!dniPattern.test(dniUser)){
-        alert('No es un dni adecuado');
+        console.error('No es un DNI adecuado');
 
         document.getElementById("dniUser").focus();
         document.getElementById("dniUser").value = "";
@@ -169,7 +169,7 @@ async function sendData(){
         })
 
         if(!response.ok){
-            alert("No se ha podido modificar usuario");
+            console.error("No se ha podido modificar usuario");
             window.location.href = "table_pag.html?page=" + pageHTML;
         }else{
 
@@ -179,10 +179,10 @@ async function sendData(){
             //alert('status:', response.status);
 
             if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-                alert("No se ha podido modificar usuario");
+                console.error("No se ha podido modificar usuario");
             }else{
                 //console.log(response);
-                alert("Usuario modificado correctamente");
+                console.info("Usuario modificado correctamente");
             }
         }
 

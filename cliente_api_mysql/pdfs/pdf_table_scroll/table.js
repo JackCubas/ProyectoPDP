@@ -54,38 +54,38 @@ function buildTable(data) {
 
       const buttonDetail = document.createElement('button');
       buttonDetail.id = "detailbutton" + butID;
-      buttonDetail.textContent = "Detail";
+      buttonDetail.textContent = "Detalle";
       buttonDetail.addEventListener('click', detail);
       cell3.appendChild(buttonDetail);
 
       const buttonEdit = document.createElement('button');
       buttonEdit.id = "editbutton" + butID;
-      buttonEdit.textContent = "Edit";
+      buttonEdit.textContent = "Editar";
       buttonEdit.addEventListener('click', edit);
       cell3.appendChild(buttonEdit);
 
       const buttonDel = document.createElement('button');
       buttonDel.id = "delbutton" + butID;
-      buttonDel.textContent = "Delete";
+      buttonDel.textContent = "Eliminar";
       buttonDel.addEventListener('click', del);
       cell3.appendChild(buttonDel);
 
       if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
         const buttonSign = document.createElement('button');
         buttonSign.id = "signbutton" + butID;
-        buttonSign.textContent = "Sign";
+        buttonSign.textContent = "Firmar";
         buttonSign.addEventListener('click', sign);
         cell3.appendChild(buttonSign);
 
         const buttonStamp = document.createElement('button');
         buttonStamp.id = "stampbutton" + butID;
-        buttonStamp.textContent = "Stamp";
+        buttonStamp.textContent = "Estampar";
         buttonStamp.addEventListener('click', stamp);
         cell3.appendChild(buttonStamp);
 
         const buttonFD = document.createElement('button');
         buttonFD.id = "FDbutton" + butID;
-        buttonFD.textContent = "FD";
+        buttonFD.textContent = "Firma digital";
         buttonFD.addEventListener('click', firmadoDigital);
         cell3.appendChild(buttonFD);
       }
@@ -96,7 +96,7 @@ function buildTable(data) {
     //cellempty.textContent = "No documents have been found"
 
     var newParagraph = document.createElement('p');
-    newParagraph.textContent = 'No documents have been found';
+    newParagraph.textContent = 'No se han encontrado documentos';
     main.append(newParagraph);
   }
 }
@@ -162,7 +162,7 @@ function firmadoDigital(event) {
   const substringToRemove = "FDbutton";
   const idFD = idFirmadoDigital.replace(substringToRemove, '');
 
-  alert("Firmado digital: " + idFD);
+  console.info("Firmado digital: " + idFD);
 
   //window.location.href = "firmadoDigital.html?id=" + idFD;
 }

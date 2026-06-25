@@ -84,18 +84,18 @@ function buildTable(data, currentPageNum) {
   const main = document.getElementById("main-container");
 
   var a = document.createElement('a');
-  var linkTexta = document.createTextNode("Create");
+  var linkTexta = document.createTextNode("Crear documento");
   a.appendChild(linkTexta);
-  a.title = "Create";
+  a.title = "Crear documento";
   a.id = "createPDF";
   a.href = 'create.html?page=' + currentPageNum;
   a.className = 'button';
   main.appendChild(a);
 
   var b = document.createElement('a');
-  var linkTextb = document.createTextNode("Filter");
+  var linkTextb = document.createTextNode("Filtrar");
   b.appendChild(linkTextb);
-  b.title = "Filter";
+  b.title = "Filtrar";
   b.id = "filterPDF";
   b.href = "filter.html";
   b.className = 'button';
@@ -106,9 +106,9 @@ function buildTable(data, currentPageNum) {
   }  
 
   var c = document.createElement('a');
-  var linkTextc = document.createTextNode("Stamp Control");
+  var linkTextc = document.createTextNode("Control de estampados");
   c.appendChild(linkTextc);
-  c.title = "Stamp Control";
+  c.title = "Control de estampados";
   c.id = "stampControl";
   c.href = "stampControl.html";
   c.className = 'button';
@@ -131,44 +131,44 @@ function buildTable(data, currentPageNum) {
 
       const buttonDetail = document.createElement('button');
       buttonDetail.id = "detailbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonDetail.textContent = "Detail";
+      buttonDetail.textContent = "Detalle";
       buttonDetail.addEventListener('click', detail);
       cell3.appendChild(buttonDetail);
 
       const buttonEdit = document.createElement('button');
       buttonEdit.id = "editbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonEdit.textContent = "Edit";
+      buttonEdit.textContent = "Editar";
       buttonEdit.addEventListener('click', edit);
       cell3.appendChild(buttonEdit);
 
       const buttonDel = document.createElement('button');
       buttonDel.id = "delbutton" + butID + "-" + currentPageNum + "-" + data.length;
-      buttonDel.textContent = "Delete";
+      buttonDel.textContent = "Eliminar";
       buttonDel.addEventListener('click', del);
       cell3.appendChild(buttonDel);
 
       if((datosUsuario.rolUser === "ADMIN") || (datosUsuario.rolUser === "FIRMA")){
         const buttonSign = document.createElement('button');
         buttonSign.id = "signbutton" + butID + "-" + currentPageNum + "-" + data.length;
-        buttonSign.textContent = "Sign";
+        buttonSign.textContent = "Firmar";
         buttonSign.addEventListener('click', sign);
         cell3.appendChild(buttonSign);
 
         const buttonStamp = document.createElement('button');
         buttonStamp.id = "stampbutton" + butID + "-" + currentPageNum + "-" + data.length;
-        buttonStamp.textContent = "Stamp";
+        buttonStamp.textContent = "Estampar";
         buttonStamp.addEventListener('click', stamp);
         cell3.appendChild(buttonStamp);
 
         const buttonFDATR = document.createElement('button');
         buttonFDATR.id = "FDATRbutton" + butID + "-" + currentPageNum + "-" + data.length;
-        buttonFDATR.textContent = "FD ATR";
+        buttonFDATR.textContent = "Firma digital ATR";
         buttonFDATR.addEventListener('click', firmadoDigitalATR);
         cell3.appendChild(buttonFDATR);
 
         const buttonFDCliente = document.createElement('button');
         buttonFDCliente.id = "FDClientebutton" + butID + "-" + currentPageNum + "-" + data.length;
-        buttonFDCliente.textContent = "FD Cliente";
+        buttonFDCliente.textContent = "Firma digital cliente";
         buttonFDCliente.addEventListener('click', firmadoDigitalCliente);
         cell3.appendChild(buttonFDCliente);
       }
@@ -179,7 +179,7 @@ function buildTable(data, currentPageNum) {
     //cellempty.textContent = "No documents have been found"
 
     var newParagraph = document.createElement('p');
-    newParagraph.textContent = 'No documents have been found';
+    newParagraph.textContent = 'No se han encontrado documentos';
     main.append(newParagraph);
   }
 }

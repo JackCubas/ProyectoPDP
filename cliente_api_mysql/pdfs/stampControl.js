@@ -37,7 +37,7 @@ async function checkUserHosting() {
         console.log(response);
 
          if(response.status === 400 || response.status === 500){
-            alert("No se ha podido encontrar imagen estampado");
+            console.error("No se ha podido encontrar imagen estampado");
             window.location.href = "table.html?page=1";
         }else{
 
@@ -101,7 +101,7 @@ async function deleteStamp(){
     const result = await response.json();
     console.log(result);
 
-    alert("Se ha borrado el estampado");
+    console.info("Se ha borrado el estampado");
 
     window.location.href = "table.html?page=1";
 
@@ -125,7 +125,7 @@ async function createStamp(){
 	var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 			
 	if (!allowedExtensions.exec(filePath)) {
-        alert('Invalid file type');
+        console.error('Tipo de archivo no válido');
         fileInput.value = '';
         return false;
     } 
@@ -184,10 +184,10 @@ async function createStamp(){
     }
 
     if(result.status === 400 || result.status === 500){
-        alert("No se ha podido crear stamp");
+        console.error("No se ha podido crear stamp");
         window.location.href = "table.html?page=1";;
     }else{
-        alert("Finalizado procesamiento");
+        console.info("Finalizado procesamiento");
         window.location.href = "table.html?page=1";;
     }
 

@@ -1,28 +1,28 @@
-<html lang="en">
+<html lang="es-ES">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/style.css">
         <title>PDP</title>
     </head>
     <body>
         <h1>
-            This is the filter page.
+            Filtra los documentos por los criterios que necesites.
         </h1>
         <div class="create-blog content">
             <form id="form" onsubmit="sendData()">
                 <!-- action="/moviesCreate" method="POST"  -->
-                <lable for="emailUser">Email:</lable>
+                <lable for="emailUser">Correo electrónico:</lable>
                 <input type="text" id="emailUser" name="emailUser">
-                <lable for="nameUser">User name:</lable>
+                <lable for="nameUser">Nombre de usuario:</lable>
                 <input type="text" id="nameUser" name="nameUser">
-                <lable for="docName">Document name:</lable>
+                <lable for="docName">Nombre del documento:</lable>
                 <input type="text" id="docName" name="docName">
                 <lable for="estado">Estado:</lable>
                 <input type="text" id="estado" name="estado">
-                <button>Submit</button>
+                <button>Filtrar</button>
             </form>
-            <button onclick="location.href='table.html?page=1'" type="button">Cancel</button>
+            <button onclick="location.href='table.html?page=1'" type="button">Cancelar</button>
         </div>
 
         <main id="main-container">
@@ -31,7 +31,7 @@
 
         <table id="mytable">
             <thead>
-            <tr><th>Doc Name</th><th>User Name</th><th>Estado</th><th>Action</th></tr>
+            <tr><th>Nombre del documento</th><th>Nombre de usuario</th><th>Estado</th><th>Acciones</th></tr>
             </thead>
             <tbody></tbody>
         </table>

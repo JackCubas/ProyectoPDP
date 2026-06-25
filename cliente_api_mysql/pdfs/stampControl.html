@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>
-        This is the user stamp page.
+        Gestión de estampados de documentos.
     </h1>
 
     <main id="main-container">
@@ -19,15 +19,15 @@
 
     <form hidden id="stampSelect" onsubmit="createStamp()" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
         <p>
-        Select a file jpg or png file:
+        Selecciona una imagen JPG o PNG:
         </p>
         <input type="file" id="file" />
     </form>
 
-    <button id="createStamp" onclick=createStamp()>Create Stamp</button>
-    <button id="deleteStamp" onclick=deleteStamp()>Delete</button>
+    <button id="createStamp" onclick=createStamp()>Crear estampado</button>
+    <button id="deleteStamp" onclick=deleteStamp()>Eliminar estampado</button>
 
-    <button onclick="location.href='table.html?page=1'" type="button">Cancel</button>
+    <button onclick="location.href='table.html?page=1'" type="button">Cancelar</button>
 <script src="stampControl.js"></script>
 </body>
 </html>

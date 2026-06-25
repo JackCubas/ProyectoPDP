@@ -102,7 +102,7 @@ async function sendData(){
     var allowedExtensions = /(\.pdf)$/i;
     
     if (!allowedExtensions.exec(filePath)) {
-        alert('Invalid file type');
+        console.error('Tipo de archivo no válido');
         fileInput.value = '';
         return false;
     } else { 
@@ -111,10 +111,10 @@ async function sendData(){
         var file = document.getElementById("file").files[0];
 
         if(projectName === ""){
-            alert("Todos los campos son obligatorios.");
+            console.error("Todos los campos son obligatorios.");
 
         }else if(projectName.length>50){
-            alert("El nombre debe tener menos de 51 caracteres.");
+            console.error("El nombre debe tener menos de 51 caracteres.");
 
 		    document.getElementById("name").focus();
             document.getElementById("name").value = "";
@@ -144,11 +144,11 @@ async function sendData(){
         console.log(result);
 
         if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-            alert("No se ha podido crear documento");
+            console.error("No se ha podido crear documento");
             window.location.href = "table.html?page=" + pageHTML;
         }else{
             //console.log(response);
-            alert("Documento creado correctamente");
+            console.info("Documento creado correctamente");
             window.location.href = "table.html?page=" + newHTML;        
         } 
     }

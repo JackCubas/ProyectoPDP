@@ -6,6 +6,13 @@ var initialTimestampName = "";
 
 var datosUsuario = null;
 
+function setElementVisibility(elementId, shouldShow) {
+    var element = document.getElementById(elementId);
+    if (element) {
+        element.hidden = !shouldShow;
+    }
+}
+
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
 }
@@ -22,7 +29,7 @@ if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
     backendUrl = localStorage.getItem("backendUrl");
 }
 
-document.getElementById("stroke-style").style.display = 'none';
+setElementVisibility("stroke-style", false);
 
 document.addEventListener('DOMContentLoaded', function () {
     var canvas = document.getElementById('signature-pad');
@@ -283,10 +290,9 @@ async function sendData(modifiedPDFBytes){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-        alert("No se ha podido firmar documento");
+        console.error("No se ha podido firmar documento");
     }else{
-        //console.log(response);
-        alert("Documento firmado correctamente");
+        console.info("Documento firmado correctamente");
     } 
 
     window.location.href = "table.html?page=" + pageHTML;
@@ -368,7 +374,7 @@ function appendDataSign(data){
     var buttons = document.getElementById("button-container");
 
     var buttonCan = document.createElement("button");
-    buttonCan.innerHTML = "Cancel";
+    buttonCan.innerHTML = "Cancelar";
     buttonCan.onclick = onbuttonclicked;
     buttons.appendChild(buttonCan);
 
@@ -377,8 +383,9 @@ function appendDataSign(data){
 
     if(data.length !== 0){
 
-        document.getElementById("saveServer").disabled = true;
-        document.getElementById("savePDF").disabled = true;
+        setElementVisibility("saveServer", false);
+        setElementVisibility("savePDF", false);
+        setElementVisibility("delete", true);
 
         for(let i=0;i<data.length;i++){
             console.log(data[i]);
@@ -414,9 +421,10 @@ function appendDataSign(data){
             con.appendChild(k);
         }
     }else{
-        document.getElementById("delete").disabled = true;
+        setElementVisibility("delete", false);
+        setElementVisibility("saveServer", true);
+        setElementVisibility("savePDF", true);
         console.log("No hay documento firmado");
-        //alert("No hay documento firmado");
 
         var j=document.createElement("div");
         j.textContent="No hay documento firmado";
@@ -502,10 +510,9 @@ async function deleteDocument(){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-        alert("No se ha podido borrar documento firmado");
+        console.error("No se ha podido borrar documento firmado");
     }else{
-        //console.log(response);
-        alert("Documento firmado borrado correctamente");
+        console.info("Documento firmado borrado correctamente");
     }
 
     window.location.href = "table.html?page=" + pageHTML;

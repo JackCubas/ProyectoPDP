@@ -1,28 +1,28 @@
-<html lang="en">
+<html lang="es-ES">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/style.css">
-        <title>PDP</title>
+        <title>Iniciar sesión</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.js"></script>
     </head>
     <body>
         <h1>
-            This is the login page.
+            Accede con tu correo y contraseña para continuar.
         </h1>
         <div class="create-blog content">
             <form id="form">
                 <!-- action="/moviesCreate" method="POST"  -->
-                <lable for="emailUser">Email:</lable>
+                <lable for="emailUser">Correo electrónico:</lable>
                 <input type="text" id="emailUser" name="emailUser" maxlength="50" required>
-                <lable for="passUser">Pass:</lable>
+                <lable for="passUser">Contraseña:</lable>
                 <input type="password" id="passUser" name="passUser" maxlength="50" minlength="6" required>
             </form>
             <div id="button-container">
       
             </div>
 
-            <button onclick="location.href='../index.html'" type="button">Cancel</button>
+            <button onclick="location.href='../index.html'" type="button">Cancelar</button>
         </div>
 
         <script src="login.js"></script>

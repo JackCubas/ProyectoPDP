@@ -1,25 +1,25 @@
-<html lang="en">
+<html lang="es-ES">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/style.css">
-        <title>PDP</title>
+        <title>Registro de usuario</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.js"></script>
     </head>
     <body>
         <h1>
-            This is the signup page.
+            Crea una cuenta nueva para acceder a la aplicación.
         </h1>
         <div class="create-blog content">
             <form id="form">
                 <!-- action="/moviesCreate" method="POST"  -->
-                <lable for="nameUser">Name:</lable>
+                <lable for="nameUser">Nombre:</lable>
                 <input type="text" id="nameUser" name="nameUser" maxlength="50" minlength="2" required>
-                <lable for="emailUser">Email:</lable>
+                <lable for="emailUser">Correo electrónico:</lable>
                 <input type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" id="emailUser" name="emailUser" maxlength="50" required>
-                <lable for="passUser">Pass:</lable>
+                <lable for="passUser">Contraseña:</lable>
                 <input type="password" id="passUser" name="passUser" maxlength="50" minlength="6" required>
-                <lable for="passUserRepeat">Repeat Pass:</lable>
+                <lable for="passUserRepeat">Repite la contraseña:</lable>
                 <input type="password" id="passUserRepeat" name="passUserRepeat" maxlength="50" minlength="6" required>
                 <select id="rolUser" name="rolUser">
                     <option value="CLIENT">CLIENT</option>
@@ -31,7 +31,7 @@
             <div id="button-container">
       
             </div>
-            <button onclick="location.href='../index.html'" type="button">Cancel</button>
+            <button onclick="location.href='../index.html'" type="button">Cancelar</button>
         </div>
 
         <script src="signup.js"></script>
