@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Firma Segura APP</title>
 </head>
 <body>
@@ -11,23 +12,26 @@
         Gestión de estampados de documentos.
     </h1>
 
-    <main id="main-container">
-        <!-- main page content -->
-    </main>
+    <div class="create-blog content">
+        <main id="main-container">
+            <!-- main page content -->
+        </main>
 
-    <div hidden id="loader"><h1 class="loader-text">Cargando...</h1></div>
+        <div hidden id="loader"><h1 class="loader-text">Cargando...</h1></div>
 
-    <form hidden id="stampSelect" onsubmit="createStamp()" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
-        <p>
-        Selecciona una imagen JPG o PNG:
-        </p>
-        <input type="file" id="file" />
-    </form>
+        <form hidden id="stampSelect" onsubmit="createStamp()" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+            <p>
+            Selecciona una imagen JPG o PNG:
+            </p>
+            <input type="file" id="file" />
+        </form>
 
-    <button id="createStamp" onclick=createStamp()>Crear estampado</button>
-    <button id="deleteStamp" onclick=deleteStamp()>Eliminar estampado</button>
-
-    <button onclick="location.href='table.html?page=1'" type="button">Cancelar</button>
+        <div class="controls">
+            <button id="createStamp" onclick=createStamp()>Crear estampado</button>
+            <button id="deleteStamp" onclick=deleteStamp()>Eliminar estampado</button>
+            <button onclick="location.href='table.html?page=1'" type="button">Cancelar</button>
+        </div>
+    </div>
 <script src="stampControl.js"></script>
 </body>
 </html>

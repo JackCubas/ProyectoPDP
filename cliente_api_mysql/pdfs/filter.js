@@ -82,43 +82,43 @@ function appendData(data){
 
             const buttonDetail = document.createElement('button');
             buttonDetail.id = "detailbutton" + butID;
-            buttonDetail.textContent = "Detail";
+            buttonDetail.textContent = "Detalle";
             buttonDetail.addEventListener('click', detail);
             cell4.appendChild(buttonDetail);
 
             const buttonEdit = document.createElement('button');
             buttonEdit.id = "editbutton" + butID;
-            buttonEdit.textContent = "Edit";
+            buttonEdit.textContent = "Editar";
             buttonEdit.addEventListener('click', edit);
             cell4.appendChild(buttonEdit);
 
             const buttonDel = document.createElement('button');
             buttonDel.id = "delbutton" + butID;
-            buttonDel.textContent = "Delete";
+            buttonDel.textContent = "Eliminar";
             buttonDel.addEventListener('click', del);
             cell4.appendChild(buttonDel);
 
             const buttonSign = document.createElement('button');
             buttonSign.id = "signbutton" + butID;
-            buttonSign.textContent = "Sign";
+            buttonSign.textContent = "Firmar";
             buttonSign.addEventListener('click', sign);
             cell4.appendChild(buttonSign);
 
             const buttonStamp = document.createElement('button');
             buttonStamp.id = "stampbutton" + butID;
-            buttonStamp.textContent = "Stamp";
+            buttonStamp.textContent = "Estampar";
             buttonStamp.addEventListener('click', stamp);
             cell4.appendChild(buttonStamp);
 
             const buttonFDATR = document.createElement('button');
             buttonFDATR.id = "FDATRbutton" + butID;
-            buttonFDATR.textContent = "FD ATR";
+            buttonFDATR.textContent = "Firma digital ATR";
             buttonFDATR.addEventListener('click', firmadoDigitalATR);
             cell4.appendChild(buttonFDATR);
 
             const buttonFDCliente = document.createElement('button');
             buttonFDCliente.id = "FDClientebutton" + butID;
-            buttonFDCliente.textContent = "FD Cliente";
+            buttonFDCliente.textContent = "Firma digital cliente";
             buttonFDCliente.addEventListener('click', firmadoDigitalCliente);
             cell4.appendChild(buttonFDCliente);
         
@@ -126,7 +126,7 @@ function appendData(data){
     }else{
         
         var newParagraph = document.createElement('p');
-        newParagraph.textContent = 'No documents have been found';
+        newParagraph.textContent = 'No se han encontrado documentos';
         main.append(newParagraph);
     }
 
