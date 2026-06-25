@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-PROJECT_ZIP_URL="https://github.com/JackCubas/ProyectoPDP/archive/refs/heads/intento_refinado1.zip"
+PROJECT_ZIP_URL="https://github.com/JackCubas/ProyectoPDP/archive/refs/heads/multiajuste.zip"
 DEFAULT_BACKEND_DIR="/opt/node_js_api_mysql"
 DEFAULT_FRONTEND_BASE="/var/www/html"
 DEFAULT_FRONTEND_SUBDIR="pdp"
