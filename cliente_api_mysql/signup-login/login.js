@@ -115,7 +115,7 @@ function checkData(data){
     var userDatos = data.user[0];
     console.log(userDatos)
     if(userDatos == "FALSE"){
-        alert("FALSE");
+        alert("Usuario no existe");
         console.log("Usuario no existe");
         localStorage.setItem("usuario", "FALSE");
     }else{
@@ -137,7 +137,7 @@ function checkData(data){
     }
 
     console.log(JSON.parse(localStorage.getItem("usuario")));
-    alert("response"); 
+    //alert("response"); 
     //localStorage.clear();
     window.location.href = "../index.html";
 }
