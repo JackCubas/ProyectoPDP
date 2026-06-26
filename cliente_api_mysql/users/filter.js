@@ -2,6 +2,7 @@ var URLSERVERpdfcriteria = "";
 var emailUser = "";
 var nameUser = "";
 var rolUser = "";
+var dniUser = "";
 
 
 if(localStorage === null || localStorage.getItem("usuario") === null){
@@ -34,10 +35,11 @@ async function sendData(){
     emailUser = document.getElementById("emailUser").value;
     nameUser = document.getElementById("nameUser").value;
     rolUser = document.getElementById("rolUser").value;
+    dniUser = document.getElementById("dniUser").value;
 
     //?color1=red&color2=blue
 
-    return fetch(URLSERVERusercriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&rolUser=' + rolUser)
+    return fetch(URLSERVERusercriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&rolUser=' + rolUser + '&dniUser=' + dniUser)
     .then((response) => { 
             return response.json().then((data) => {
                 //return appendData(data);
@@ -115,7 +117,7 @@ function appendData(data){
 
 
 function checkUserHosting() {
-    return fetch(URLSERVERusercriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&rolUser=' + rolUser)
+    return fetch(URLSERVERusercriteria + '?emailUser=' + emailUser + '&nameUser=' + nameUser + '&rolUser=' + rolUser + '&dniUser=' + dniUser)
         .then((response) => { 
             return response.json().then((data) => {
                 //return appendData(data);
