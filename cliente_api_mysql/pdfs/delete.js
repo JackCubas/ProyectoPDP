@@ -179,10 +179,12 @@ async function sendData(){
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
         console.error("No se ha podido borrar documento");
+        alert("No se ha podido borrar documento");
         window.location.href = "table.html?page=" + pageHTML;
     }else{
         //console.log(response);
         console.info("Documento borrado correctamente");
+        alert("Documento borrado correctamente");
         window.location.href = "table.html?page=" + newHTML;        
     }
 

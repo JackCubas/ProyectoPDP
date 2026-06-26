@@ -297,10 +297,11 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
+            alert("No se ha podido crear documento estampado");
             console.error("No se ha podido crear documento estampado");
             window.location.href = "table.html?page=" + pageHTML;
         }else{
-
+            alert("Se ha podido crear documento estampado");
             console.info("Se ha podido crear documento estampado");
             window.location.href = "table.html?page=" + pageHTML;
 
@@ -334,6 +335,7 @@ async function deleteDocument(){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido borrar documento estampado");
         console.error("No se ha podido borrar documento estampado");
     }else{
         console.info("Documento estampado borrado correctamente");

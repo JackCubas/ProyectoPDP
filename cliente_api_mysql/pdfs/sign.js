@@ -290,8 +290,10 @@ async function sendData(modifiedPDFBytes){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido firmar documento");
         console.error("No se ha podido firmar documento");
     }else{
+        alert("Documento firmado correctamente");
         console.info("Documento firmado correctamente");
     } 
 
@@ -510,8 +512,10 @@ async function deleteDocument(){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+        alert("No se ha podido borrar documento firmado");
         console.error("No se ha podido borrar documento firmado");
     }else{
+        alert("Documento firmado borrado correctamente");
         console.info("Documento firmado borrado correctamente");
     }
 

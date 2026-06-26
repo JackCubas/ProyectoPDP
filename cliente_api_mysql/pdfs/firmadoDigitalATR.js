@@ -253,10 +253,11 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
+            alert("No se ha podido hacer firmado digital");
             console.error("No se ha podido hacer firmado digital");
             window.location.href = "table.html?page=" + pageHTML;
         }else{
-
+            alert("Se ha podido hacer firmado digital");
             console.info("Se ha podido hacer firmado digital");
             window.location.href = "table.html?page=" + pageHTML;
         } 

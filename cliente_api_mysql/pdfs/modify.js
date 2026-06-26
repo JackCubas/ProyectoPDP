@@ -149,6 +149,7 @@ async function sendData(){
     console.log("filename: " + projectName + " filenameOriginal: " + thisDocName + " estado: " + docEstado + " uploadedFile: " + file);
 
     if (file !== undefined && file !== null && !allowedExtensions.exec(filePath)) {
+        alert('Tipo de archivo no válido');
         console.error('Tipo de archivo no válido');
         fileInput.value = '';
         return false;
@@ -156,9 +157,11 @@ async function sendData(){
     }else{
 
         if(projectName === ""){
+            alert('El nombre del proyecto es obligatorio.');
             console.error("Todos los campos son obligatorios.");
 
         }else if(projectName.length>50){
+            alert('El nombre del proyecto debe tener menos de 51 caracteres.');
             console.error("El nombre debe tener menos de 51 caracteres.");
 
 		    document.getElementById("name").focus();
@@ -197,10 +200,12 @@ async function sendData(){
             console.log(result);
 
             if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
+                alert("No se ha podido modificar documento");
                 console.error("No se ha podido modificar documento");
                 window.location.href = "table.html?page=" + pageHTML;
             }else{
                 //console.log(response);
+                alert("Documento modificado correctamente");
                 console.info("Documento modificado correctamente");
                 window.location.href = "table.html?page=" + pageHTML;        
             }
