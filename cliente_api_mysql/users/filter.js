@@ -75,7 +75,7 @@ function appendData(data){
             cell1.innerText = data[i].nameUser;
             cell2.innerText = data[i].rolUser;
 
-            const butID = data[i].pdfId;
+            const butID = data[i].id;
 
             const buttonDetail = document.createElement('button');
             buttonDetail.id = "detailbutton" + butID;
