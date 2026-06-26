@@ -538,6 +538,65 @@ app.get('/users_pag', (req, res) => {
   }
 });
 
+app.get("/clientsByCriteria", cors(), (req, res) => {
+
+  console.log("get all clients by criteria!");
+
+  let connection;
+  var resultRows;
+
+  console.log("email: " + req.query.emailUser + " nameUser: " + req.query.nameUser + " rolUser: " + req.query.rolUser);
+
+  var emailUser = req.query.emailUser || "";
+  var nameUser = req.query.nameUser || "";
+  var rolUser = req.query.rolUser || "";
+
+  try {
+      connection = mysql.createConnection({
+          host: DBHOST,
+          user: DBUSER,
+          password: DBPASS,
+          port     :DBPORT,
+          database: DBNAME
+      });
+
+      connection.connect(function(err) {
+          if (err) throw err;
+
+          var queryBusqueda = `
+          SELECT nameUser, emailUser, id, rolUser 
+          FROM users 
+          WHERE 
+          emailUser like '%${emailUser}%' AND
+          nameUser like '%${nameUser}%'  AND        
+          rolUser like '%${rolUser}%'
+          `
+
+
+          connection.query(queryBusqueda, function (err, result, fields) {
+              if (err) throw err;
+              
+              //console.log(result);
+
+              resultRows = Object.values(JSON.parse(JSON.stringify(result)));
+              console.log(resultRows);
+
+              console.log("Ending connection");
+              connection.end();
+
+              res.json(resultRows);
+          });
+      });
+
+  } catch (error) {
+      console.log("Error al conectar con la base de datos");
+
+      console.log("Ending connection");
+      connection.end();
+  }
+
+});
+
 app.get('/users/:id', (req, res) => {
     console.log("get user!");
 

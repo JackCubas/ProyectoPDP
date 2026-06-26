@@ -1,0 +1,40 @@
+<html lang="es-ES">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/style.css">
+        <title>PDP</title>
+    </head>
+    <body>
+        <h1>
+            Filtra los clientes por los criterios que necesites.
+        </h1>
+        <div class="create-blog content">
+            <form id="form" onsubmit="sendData()">
+                <!-- action="/moviesCreate" method="POST"  -->
+                <lable for="emailUser">Correo electrónico:</lable>
+                <input type="text" id="emailUser" name="emailUser">
+                <lable for="nameUser">Nombre de usuario:</lable>
+                <input type="text" id="nameUser" name="nameUser">
+                <lable for="rolUser">Rol:</lable>
+                <input type="text" id="rolUser" name="rolUser">
+                <button>Filtrar</button>
+            </form>
+            <button onclick="location.href='table_pag.html?page=1'" type="button">Cancelar</button>
+        </div>
+
+        <main id="main-container">
+            
+        </main>
+
+        <table id="mytable">
+            <thead>
+            <tr><th>Nombre de usuario</th><th>Rol</th><th>Acciones</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <script src="filter.js"></script>
+
+    </body>
+</html>

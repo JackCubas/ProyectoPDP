@@ -93,6 +93,15 @@ function buildTable(data, currentPageNum) {
   a.className = 'button';
   main.appendChild(a);
 
+  var b = document.createElement('a');
+  var linkTextb = document.createTextNode("Filtrar");
+  b.appendChild(linkTextb);
+  b.title = "Filtrar";
+  b.id = "filterUser";
+  b.href = "filter.html";
+  b.className = 'button';
+  main.appendChild(b);
+
   const table = document.getElementById("mytable").getElementsByTagName('tbody')[0];
   if(data !== null && data.length > 0){
     for (let i = 0; i < data.length; i++) {
