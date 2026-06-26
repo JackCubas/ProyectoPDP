@@ -489,6 +489,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
   var signButton = document.querySelector("#webeid-sign-button");
   signButton.addEventListener("click", async () => {
       try {
+          console.log("Signing initiated.");
           const {
               certificate,
               supportedSignatureAlgorithms
