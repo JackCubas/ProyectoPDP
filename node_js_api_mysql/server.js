@@ -545,11 +545,12 @@ app.get("/clientsByCriteria", cors(), (req, res) => {
   let connection;
   var resultRows;
 
-  console.log("email: " + req.query.emailUser + " nameUser: " + req.query.nameUser + " rolUser: " + req.query.rolUser);
+  console.log("email: " + req.query.emailUser + " nameUser: " + req.query.nameUser + " rolUser: " + req.query.rolUser + " dniUser: " + req.query.dniUser);
 
   var emailUser = req.query.emailUser || "";
   var nameUser = req.query.nameUser || "";
   var rolUser = req.query.rolUser || "";
+  var dniUser = req.query.dniUser || "";
 
   try {
       connection = mysql.createConnection({
@@ -569,7 +570,8 @@ app.get("/clientsByCriteria", cors(), (req, res) => {
           WHERE 
           emailUser like '%${emailUser}%' AND
           nameUser like '%${nameUser}%'  AND        
-          rolUser like '%${rolUser}%'
+          rolUser like '%${rolUser}%' AND
+          dniUser like '%${dniUser}%'
           `
 
 
