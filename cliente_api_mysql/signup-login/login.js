@@ -31,18 +31,18 @@ async function sendData(){
     var passUser = document.getElementById("passUser").value;
 
      if(emailUser === "" || passUser === ""){
-        alert("Todos los campos son obligatorios.");
+        modalAlert("Todos los campos son obligatorios.");
         console.error("Todos los campos son obligatorios.");
 
     }else if(!emailPattern.test(emailUser)){
-        alert('No es un correo electronico adecuado');
+        modalAlert('No es un correo electronico adecuado');
         console.error('No es un correo electrónico adecuado');
 
         document.getElementById("emailUser").focus();
         document.getElementById("emailUser").value = "";
     
     }else if (passUser.length>50){
-        alert("El pass debe tener menos de 51 caracteres.");
+        modalAlert("El pass debe tener menos de 51 caracteres.");
         console.error("La contraseña debe tener menos de 51 caracteres.");
 
 		document.getElementById("passUser").focus();
@@ -52,7 +52,7 @@ async function sendData(){
         document.getElementById("passUserRepeat").value = "";
 
     }else if (passUser.length<6){ 
-        alert("El pass debe tener al menos 6 caracteres.");
+        modalAlert("El pass debe tener al menos 6 caracteres.");
         console.error("La contraseña debe tener al menos 6 caracteres.");
 
 		document.getElementById("passUser").focus();
@@ -91,12 +91,12 @@ async function sendData(){
         .then((response) => {
 
             if(!response.ok){
-                alert("No se ha podido encontrar usuario");
+                modalAlert("No se ha podido encontrar usuario");
                 console.error("No se ha podido encontrar usuario");
             }else{
 
                 if(response.status === 400 || response.status === 500 || response.status === 204){
-                    alert("No se ha podido encontrar usuario");
+                    modalAlert("No se ha podido encontrar usuario");
                     console.error("No se ha podido encontrar usuario");
                         //window.location.href = "../index.html";
                 }else{
@@ -110,7 +110,7 @@ async function sendData(){
 
         })
         .catch((error) => {
-        alert("Server is down");
+        modalAlert("Server is down");
         console.error('Error:', error);
         console.error("El servidor no responde");   
         });
@@ -122,25 +122,25 @@ function checkData(data){
     var userDatos = data.user[0];
     console.log(userDatos)
     if(userDatos == "FALSE"){
-        alert("Usuario no existe");
+        modalAlert("Usuario no existe");
         console.error("El usuario no existe");
         console.log("Usuario no existe");
         localStorage.setItem("usuario", "FALSE");
     }else{
         if(userDatos.rolUser == "ADMIN"){
-            alert("ADMIN");
+            modalAlert("ADMIN");
             console.log("Usuario ADMIN");
             console.log("Usuario ADMIN");
             localStorage.setItem("usuario", JSON.stringify(userDatos));
         }
         if(userDatos.rolUser == "CLIENT"){
-            alert("CLIENT");
+            modalAlert("CLIENT");
             console.log("Usuario CLIENT");
             console.log("Usuario CLIENT");
             localStorage.setItem("usuario", JSON.stringify(userDatos));
         }
         if(userDatos.rolUser == "FIRMA"){
-            alert("FIRMA");
+            modalAlert("FIRMA");
             console.log("Usuario FIRMA");
             console.log("Usuario FIRMA");
             localStorage.setItem("usuario", JSON.stringify(userDatos));

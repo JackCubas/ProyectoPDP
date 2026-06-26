@@ -162,7 +162,7 @@ function firmadoDigital(event) {
   const substringToRemove = "FDbutton";
   const idFD = idFirmadoDigital.replace(substringToRemove, '');
 
-  alert("Firmado digital: " + idFD);
+  modalAlert("Firmado digital: " + idFD);
   console.info("Firmado digital: " + idFD);
 
   //window.location.href = "firmadoDigital.html?id=" + idFD;

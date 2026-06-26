@@ -29,10 +29,10 @@ function sendData(){
         })
         .then((response) => {
             console.log(response);
-            alert("response"); 
+            modalAlert("response"); 
             return response.json().then((data) => {
                 console.log(data);
-                alert("data");
+                modalAlert("data");
                 return checkData(data);
         }).catch((err) => {
             console.log(err);
@@ -44,22 +44,22 @@ function sendData(){
 function checkData(data){
     var userDatos = data;
     if(userDatos == "FALSE"){
-        alert("FALSE");
+        modalAlert("FALSE");
         console.log("Usuario no existe");
         localStorage.setItem("usuario", "FALSE");
     }else{
         if(userDatos.rolUser == "ADMIN"){
-            alert("ADMIN");
+            modalAlert("ADMIN");
             console.log("Usuario ADMIN");
             localStorage.setItem("usuario", userDatos);
         }
         if(userDatos.rolUser == "CLIENT"){
-            alert("CLIENT");
+            modalAlert("CLIENT");
             console.log("Usuario CLIENT");
             localStorage.setItem("usuario", userDatos);
         }
         if(userDatos.rolUser == "FIRMA"){
-            alert("FIRMA");
+            modalAlert("FIRMA");
             console.log("Usuario FIRMA");
             localStorage.setItem("usuario", userDatos);
         }

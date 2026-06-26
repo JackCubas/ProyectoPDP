@@ -102,7 +102,7 @@ async function sendData(){
     var allowedExtensions = /(\.pdf)$/i;
     
     if (!allowedExtensions.exec(filePath)) {
-        alert('Tipo de archivo no válido');
+        modalAlert('Tipo de archivo no válido');
         console.error('Tipo de archivo no válido');
         fileInput.value = '';
         return false;
@@ -112,11 +112,11 @@ async function sendData(){
         var file = document.getElementById("file").files[0];
 
         if(projectName === ""){
-            alert('Todos los campos son obligatorios.');
+            modalAlert('Todos los campos son obligatorios.');
             console.error("Todos los campos son obligatorios.");
 
         }else if(projectName.length>50){
-            alert('El nombre debe tener menos de 51 caracteres.');
+            modalAlert('El nombre debe tener menos de 51 caracteres.');
             console.error("El nombre debe tener menos de 51 caracteres.");
 
 		    document.getElementById("name").focus();
@@ -148,13 +148,13 @@ async function sendData(){
 
         if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
             
-            alert("No se ha podido crear documento");
+            modalAlert("No se ha podido crear documento");
             console.error("No se ha podido crear documento");
             window.location.href = "table.html?page=" + pageHTML;
 
         }else{
 
-            alert("Documento creado correctamente");
+            modalAlert("Documento creado correctamente");
             console.info("Documento creado correctamente");
             window.location.href = "table.html?page=" + newHTML;        
         

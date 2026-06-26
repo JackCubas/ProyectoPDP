@@ -44,11 +44,11 @@ async function sendData(){
     var rolUser = document.getElementById("rolUser").value;
 
     if(nameUser === "" || emailUser === "" || passUser === "" || passUserRepeat === "" || dniUser === ""){
-        alert("Todos los campos son obligatorios.");
+        modalAlert("Todos los campos son obligatorios.");
         console.error("Todos los campos son obligatorios.");
 
     }else if (passUser !== passUserRepeat) {
-        alert('Ambos pass necesitan ser iguales');
+        modalAlert('Ambos pass necesitan ser iguales');
         console.error('Ambas contraseñas deben coincidir');
 
         document.getElementById("passUser").focus();
@@ -58,28 +58,28 @@ async function sendData(){
         document.getElementById("passUserRepeat").value = "";
 
     }else if(!emailPattern.test(emailUser)){
-        alert('No es un correo electronico adecuado');
+        modalAlert('No es un correo electronico adecuado');
         console.error('No es un correo electrónico adecuado');
 
         document.getElementById("emailUser").focus();
         document.getElementById("emailUser").value = "";
 
     }else if (nameUser.length>50){
-        alert("El nombre debe tener menos de 51 caracteres.");
+        modalAlert("El nombre debe tener menos de 51 caracteres.");
         console.error("El nombre debe tener menos de 51 caracteres.");
 
 		document.getElementById("nameUser").focus();
         document.getElementById("nameUser").value = "";
 
     }else if (nameUser.length<2){ 
-        alert("El nombre debe tener al menos 2 caracteres.");
+        modalAlert("El nombre debe tener al menos 2 caracteres.");
         console.error("El nombre debe tener al menos 2 caracteres.");
 
 		document.getElementById("nameUser").focus();
         document.getElementById("nameUser").value = "";
 
     }else if (passUser.length>50){
-        alert("El pass debe tener menos de 51 caracteres.");
+        modalAlert("El pass debe tener menos de 51 caracteres.");
         console.error("La contraseña debe tener menos de 51 caracteres.");
 
 		document.getElementById("passUser").focus();
@@ -89,7 +89,7 @@ async function sendData(){
         document.getElementById("passUserRepeat").value = "";
 
     }else if (passUser.length<6){ 
-        alert("El pass debe tener al menos 6 caracteres.");
+        modalAlert("El pass debe tener al menos 6 caracteres.");
         console.error("La contraseña debe tener al menos 6 caracteres.");
 
 		document.getElementById("passUser").focus();
@@ -99,7 +99,7 @@ async function sendData(){
         document.getElementById("passUserRepeat").value = "";   
 
     }else if(!dniPattern.test(dniUser)){
-        alert('No es un dni adecuado');
+        modalAlert('No es un dni adecuado');
         console.error('No es un DNI adecuado');
 
         document.getElementById("dniUser").focus();
@@ -147,12 +147,12 @@ async function sendData(){
                 console.log(response);
 
                 if(response.status === 400 || response.status === 500){
-                    alert("No se ha podido crear usuario");
+                    modalAlert("No se ha podido crear usuario");
                     console.error("No se ha podido crear usuario");
                     window.location.href = "../index.html";
                 }else{
                     console.log(response);
-                    alert("Registro completado correctamente");
+                    modalAlert("Registro completado correctamente");
                     console.info("Registro completado correctamente");
                     window.location.href = "../index.html"
                     

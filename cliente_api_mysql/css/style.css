@@ -427,6 +427,69 @@ hr {
   touch-action: none;
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.modal-visible {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-dialog {
+  width: min(520px, 100%);
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--surface-strong);
+  box-shadow: 0 28px 68px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  outline: none;
+}
+
+.modal-title {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal-message {
+  margin: 0 0 22px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-actions button {
+  min-width: 100px;
+}
+
+.modal-ok {
+  background: linear-gradient(180deg, var(--accent) 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.modal-cancel {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
 .controls,
 #button-container {
   align-items: center;

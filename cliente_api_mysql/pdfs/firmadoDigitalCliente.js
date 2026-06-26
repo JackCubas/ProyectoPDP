@@ -449,13 +449,13 @@ const csrfToken = getCookie('CSRF-TOKEN');
       } catch (error) {
 
         if (error.code === "ERR_WEBEID_USER_CANCELLED") {
-          alert("Debe introducir la contraseña de la tarjeta para autenticarse.");
+          modalAlert("Debe introducir la contraseña de la tarjeta para autenticarse.");
           console.error("Debe introducir la contraseña de la tarjeta para autenticarse.");
         } else if (error.code === "ERR_WEBEID_USER_TIMEOUT") {
-          alert("No respondió a tiempo. Intente nuevamente con su tarjeta.");
+          modalAlert("No respondió a tiempo. Intente nuevamente con su tarjeta.");
           console.error("No respondió a tiempo. Intente nuevamente con su tarjeta.");
         } else {
-          alert("Error en la autenticación: " + error.message);
+          modalAlert("Error en la autenticación: " + error.message);
           console.error("Error en la autenticación: " + error.message);
         }
           console.error(error);
@@ -524,7 +524,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
 
             if (!hash) {
               console.error("Server returned null/empty hash for signing:", prepareSigningJson);
-              alert("Signing aborted: server returned an empty hash. Check server logs or try again.");
+              modalAlert("Signing aborted: server returned an empty hash. Check server logs or try again.");
               console.error("La firma se ha cancelado: el servidor devolvió un hash vacío.");
               return;
             }
@@ -554,11 +554,11 @@ const csrfToken = getCookie('CSRF-TOKEN');
           const signResult = await finalizeSigningResponse.json();
 
           if(signResult.status === 400 || signResult.status === 500 || signResult.status === 404){
-            alert("No se ha podido hacer firmado digital");
+            modalAlert("No se ha podido hacer firmado digital");
             console.error("No se ha podido hacer firmado digital");
             window.location.href = "table.html?page=" + pageHTML;
           }else{
-            alert("Se ha podido hacer firmado digital");
+            modalAlert("Se ha podido hacer firmado digital");
             console.log("Signing successful! Response:", signResult);
             console.info("Se ha podido hacer firmado digital");
             window.location.href = "table.html?page=" + pageHTML;
@@ -567,7 +567,7 @@ const csrfToken = getCookie('CSRF-TOKEN');
         } catch (error) {
           console.log("Signing failed! Error:", error);
           try {
-            alert("Signing failed: " + (error && error.message ? error.message : error));
+            modalAlert("Signing failed: " + (error && error.message ? error.message : error));
             console.error("La firma ha fallado: " + (error && error.message ? error.message : error));
           } catch (e) {
             // ignore alert failures
@@ -744,7 +744,7 @@ function appendDataStamp(data){
           }
           
           if(data.stamp.stampUserId !== datosUsuario.id){
-            alert("Solamente el usuario que ha hecho el estampado puede firmar digitalmente el documento");
+            modalAlert("Solamente el usuario que ha hecho el estampado puede firmar digitalmente el documento");
             console.error("Solamente el usuario que ha hecho el estampado puede firmar digitalmente el documento");
           }
 

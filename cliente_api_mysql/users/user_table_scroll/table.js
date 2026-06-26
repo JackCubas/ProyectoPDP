@@ -83,7 +83,7 @@ function doSmth(event) {
   const substringToRemove = "testbutton";
   const idDetail = idDetailString.replace(substringToRemove, '');
 
-  alert("ID: " + idDetail);
+  modalAlert("ID: " + idDetail);
   console.info("ID: " + idDetail);
 }
 
