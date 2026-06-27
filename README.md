@@ -17,6 +17,10 @@ Las tecnologías a emplear son las siguientes:
 - Para backend: Node.js
 
 
+# Requisitos
+Para poder utilizar correctamente algunas funcionalidades de la aplicación, es necesario disponer de la extensión de navegador web eID instalada y habilitada en el navegador. Esta extensión es un requisito previo para poder interactuar con las funciones de firma digital del proyecto.
+
+
 # Enable NAT + Port Forwarding in VirtualBox
 VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
 
