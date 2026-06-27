@@ -188,14 +188,14 @@ async function sendData(){
             console.error("No se permiten caracteres prohibidos.");
 
             document.getElementById("name").focus();
-            document.getElementById("name").value = "";
+            //document.getElementById("name").value = "";
 
         }else if(projectName.length>50){
             modalAlert('El nombre del proyecto debe tener menos de 51 caracteres.');
             console.error("El nombre debe tener menos de 51 caracteres.");
 
 		    document.getElementById("name").focus();
-            document.getElementById("name").value = "";
+            //document.getElementById("name").value = "";
         }else{
          
             if(file === undefined){

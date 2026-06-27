@@ -131,20 +131,20 @@ async function sendData(){
         modalAlert('No es un correo electrónico adecuado');
 
         document.getElementById("emailUser").focus();
-        document.getElementById("emailUser").value = "";
+        //document.getElementById("emailUser").value = "";
 
     }else if(!isValidName(nameUser)){
         modalAlert('No se permiten caracteres prohibidos al nombre.');
         console.error("No se permiten caracteres prohibidos al nombre.");
 
         document.getElementById("nameUser").focus();
-        document.getElementById("nameUser").value = "";
+        //document.getElementById("nameUser").value = "";
 
     }else if (nameUser.length>50){
         modalAlert("El nombre debe tener menos de 51 caracteres.");
 
 		document.getElementById("nameUser").focus();
-        document.getElementById("nameUser").value = "";
+        //document.getElementById("nameUser").value = "";
 
     }else if (nameUser.length<2){ 
         modalAlert("El nombre debe tener al menos 2 caracteres.");
@@ -174,7 +174,7 @@ async function sendData(){
         modalAlert('No es un DNI adecuado');
 
         document.getElementById("dniUser").focus();
-        document.getElementById("dniUser").value = "";
+        //document.getElementById("dniUser").value = "";
 
     }else{
 
