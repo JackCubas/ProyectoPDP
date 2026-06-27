@@ -147,6 +147,11 @@ function checkUserHosting(){
     
 }
 
+function isValidName(str) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 _-]+$/;
+  return regex.test(str);
+}
+
 checkUserHosting();
 
 async function sendData(){
@@ -177,6 +182,10 @@ async function sendData(){
         if(projectName === ""){
             modalAlert('El nombre del proyecto es obligatorio.');
             console.error("Todos los campos son obligatorios.");
+
+        }else if(!isValidName(projectName)){
+            modalAlert('No se permiten caracteres prohibidos.');
+            console.error("No se permiten caracteres prohibidos.");
 
         }else if(projectName.length>50){
             modalAlert('El nombre del proyecto debe tener menos de 51 caracteres.');
