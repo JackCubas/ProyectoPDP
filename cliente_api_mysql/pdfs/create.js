@@ -124,6 +124,9 @@ async function sendData(){
             modalAlert('No se permiten caracteres prohibidos.');
             console.error("No se permiten caracteres prohibidos.");
 
+            document.getElementById("name").focus();
+            document.getElementById("name").value = "";
+
         }else if(projectName.length>50){
             modalAlert('El nombre debe tener menos de 51 caracteres.');
             console.error("El nombre debe tener menos de 51 caracteres.");

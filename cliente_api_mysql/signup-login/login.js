@@ -23,6 +23,11 @@ function checkUserHosting() {
     buttons.appendChild(buttonSub);
 }
 
+function isValidName(str) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 _-]+$/;
+  return regex.test(str);
+}
+
 async function sendData(){
 
     const emailPattern = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/;
@@ -40,6 +45,13 @@ async function sendData(){
 
         document.getElementById("emailUser").focus();
         document.getElementById("emailUser").value = "";
+
+    }else if(!isValidName(nameUser)){
+        modalAlert('No se permiten caracteres prohibidos al nombre.');
+        console.error("No se permiten caracteres prohibidos al nombre.");
+
+        document.getElementById("nameUser").focus();
+        document.getElementById("nameUser").value = "";
     
     }else if (passUser.length>50){
         modalAlert("El pass debe tener menos de 51 caracteres.");

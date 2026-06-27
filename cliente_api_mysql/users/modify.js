@@ -105,6 +105,11 @@ function onbuttonclickedFiltro() {
   }
 }
 
+function isValidName(str) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 _-]+$/;
+  return regex.test(str);
+}
+
 async function sendData(){
 
     //var prodIdHTML = document.getElementById("prodId").value;
@@ -127,6 +132,13 @@ async function sendData(){
 
         document.getElementById("emailUser").focus();
         document.getElementById("emailUser").value = "";
+
+    }else if(!isValidName(nameUser)){
+        modalAlert('No se permiten caracteres prohibidos al nombre.');
+        console.error("No se permiten caracteres prohibidos al nombre.");
+
+        document.getElementById("nameUser").focus();
+        document.getElementById("nameUser").value = "";
 
     }else if (nameUser.length>50){
         modalAlert("El nombre debe tener menos de 51 caracteres.");
