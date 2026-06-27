@@ -1,5 +1,5 @@
 # ProyectoPDP
-Proyecto grupal para la asignatura de PDP. Grupo conformado por Rubén Feijoo, Martín Arizaga, Marco Aurelio y Jack Cubas. El objetivo de este proyecto es diseñar e implementar una aplicación de firmas digitales utilizando lenguaje javascript para el front-end y node.js para el back-end, haciendo uso de la arquitectura cliente-servidor.
+Proyecto grupal para la asignatura de PDP. Grupo conformado por Rubén Feijoo, Martín Arizaga, Marco Aurelio y Jack Cubas. El objetivo de este proyecto es diseñar e implementar una aplicación de firmas digitales utilizando lenguaje javascript para el front-end y node.js para el back-end, haciendo uso de la arquitectura cliente-servidor tal y como se muestra en los videotutoriales disponibles aquí:  https://tristan-3.github.io/Figma-videos/
 
 
 # Descripción del proyecto
@@ -21,10 +21,10 @@ Las tecnologías a emplear son las siguientes:
 Para poder utilizar correctamente algunas funcionalidades de la aplicación, es necesario disponer de la extensión de navegador web eID instalada y habilitada en el navegador. Esta extensión es un requisito previo para poder interactuar con las funciones de firma digital del proyecto.
 
 
-# Enable NAT + Port Forwarding in VirtualBox
+# Habilitar NAT + Port Forwarding en VirtualBox
 VM → Settings → Network → Adapter 1 → NAT → Port Forwarding
 
-Anhade tres reglas:
+Añade estas tres reglas:
 - Name: https   Protocol: TCP   Host IP: 127.0.0.1    Host Port: 433    Guest IP: VM IP    Guest Port: 443
 - Name: http    Protocol: TCP   Host IP: 127.0.0.1    Host Port: 80     Guest IP: VM IP    Guest Port: 80
 - Name: nodejs  Protocol: TCP   Host IP: (vacio)      Host Port: 3000   Guest IP: (vacio)  Guest Port: 3000
@@ -35,7 +35,7 @@ Finalmente, Windows podrá acceder a los siguientes URLs:
 - http://localhost
 
 
-# Enable Bridged Adapter in VirtualBox (recommended for LAN access)
+# Habilitar Bridged Adapter en VirtualBox (recomendado para acceso LAN)
 Esto hara que al VM aparecera como si fuera una maquina verdadero en tu red.
 
 VM → Settings → Network → Adapter 1 → Bridged Adapter
