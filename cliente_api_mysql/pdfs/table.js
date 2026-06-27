@@ -160,11 +160,11 @@ function buildTable(data, currentPageNum) {
         buttonStamp.addEventListener('click', stamp);
         cell3.appendChild(buttonStamp);
 
-        const buttonFDATR = document.createElement('button');
+        /*const buttonFDATR = document.createElement('button');
         buttonFDATR.id = "FDATRbutton" + butID + "-" + currentPageNum + "-" + data.length;
         buttonFDATR.textContent = "Firma digital ATR";
         buttonFDATR.addEventListener('click', firmadoDigitalATR);
-        cell3.appendChild(buttonFDATR);
+        cell3.appendChild(buttonFDATR);*/
 
         const buttonFDCliente = document.createElement('button');
         buttonFDCliente.id = "FDClientebutton" + butID + "-" + currentPageNum + "-" + data.length;
