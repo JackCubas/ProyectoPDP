@@ -361,6 +361,13 @@ th {
   color: #475569;
 }
 
+.pdf-table th:nth-child(3),
+.pdf-table td:nth-child(3) {
+  min-width: 180px;
+  width: 190px;
+  white-space: normal;
+}
+
 tbody tr:hover {
   background: rgba(37, 99, 235, 0.04);
 }
