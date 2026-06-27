@@ -96,6 +96,12 @@ function appendData(data){
             buttonDel.textContent = "Eliminar";
             buttonDel.addEventListener('click', del);
             cell3.appendChild(buttonDel);
+
+            const buttonStamp = document.createElement('button');
+            buttonStamp.id = "stampbutton" + butID;
+            buttonStamp.textContent = "Estampar";
+            buttonStamp.addEventListener('click', stamp);
+            cell3.appendChild(buttonStamp);
         
         }
     }else{
@@ -166,6 +172,16 @@ function del(event){
   //alert("DEL " + idDel);
 
   window.location.href = "delete.html?id=" + idDel + "&page=1&new=1&filter=true";
+}
+
+function stamp(event){
+  console.log("STAMP");
+
+  var idStampString = event.target.id;
+  const substringToRemove = "stampbutton";
+  const idStamp = idStampString.replace(substringToRemove, '');
+
+  window.location.href = "stamp.html?id=" + idStamp + "&page=1&filter=true";
 }
 
 checkUserHosting();
