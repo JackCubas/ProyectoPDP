@@ -194,9 +194,11 @@ function appendDataStamp(data){
             k.textContent="Fecha y hora del estampado: " + stampTimestampNameAux;                      
             con.appendChild(k);
 
-            if(data[0].stampUserId === datosUsuario.id && data[0].atrexists !== 0){
-                setElementVisibility("submit", true);
-            }else{
+            setElementVisibility("submit", false);
+            document.getElementById("submit").disabled = true;
+
+            if(data[0].stampUserId !== datosUsuario.id || data[0].atrexists === 0){
+                document.getElementById("submit").disabled = true;
                 setElementVisibility("submit", false);
             }
         }

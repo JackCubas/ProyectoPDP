@@ -11,13 +11,6 @@ if(datosURL.includes("?") || datosURL.includes("&") || datosURL.includes("=")){
 
 var datosUsuario = null;
 
-function setElementVisibility(elementId, shouldShow) {
-    var element = document.getElementById(elementId);
-    if (element) {
-        element.hidden = !shouldShow;
-    }
-}
-
 if(localStorage === null || localStorage.getItem("usuario") === null){
   window.location.href = "../404.html";
 }
@@ -208,15 +201,8 @@ function appendDataStamp(data){
             k.textContent="Fecha y hora del estampado: " + stampTimestampNameAux;                      
             con.appendChild(k);
 
-            setElementVisibility("timeStampCheck", true);
-
-            if(data[0].stampUserId === datosUsuario.id && data[0].atrexists !== 0){
-                setElementVisibility("submit", true);
-            }else{
-                setElementVisibility("submit", false);
-            }
-
-            setElementVisibility("delete", true);
+            document.getElementById("timeStampCheck").disabled = true;
+            document.getElementById("submit").disabled = true;
 
         }
     }else{
