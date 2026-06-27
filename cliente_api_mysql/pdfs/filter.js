@@ -165,7 +165,7 @@ function detail(event){
 
   //alert("DETAIL " + idDetail);
 
-  window.location.href = "detail.html?id=" + idDetail + "&page=1";
+  window.location.href = "detail.html?id=" + idDetail + "&page=1&filter=true";
 }
 
 function edit(event){
@@ -177,7 +177,7 @@ function edit(event){
 
   //alert("EDIT " + idEdit);
 
-  window.location.href = "modify.html?id=" + idEdit + "&page=1";
+  window.location.href = "modify.html?id=" + idEdit + "&page=1&filter=true";
 }
 
 function del(event){
@@ -190,7 +190,7 @@ function del(event){
 
   //alert("DEL " + idDel);
 
-  window.location.href = "delete.html?id=" + idDel + "&page=1&new=1";
+  window.location.href = "delete.html?id=" + idDel + "&page=1&new=1&filter=true";
 }
 
 function sign(event) {
@@ -200,7 +200,7 @@ function sign(event) {
 
   //alert("Sign: " + idSign);
 
-  window.location.href = "sign.html?id=" + idSign + "&page=1";
+  window.location.href = "sign.html?id=" + idSign + "&page=1&filter=true";
 }
 
 function stamp(event) {
@@ -208,7 +208,7 @@ function stamp(event) {
   const substringToRemove = "stampbutton";
   const idStamp = idStampString.replace(substringToRemove, '');
 
-  window.location.href = "stamp.html?id=" + idStamp + "&page=1";
+  window.location.href = "stamp.html?id=" + idStamp + "&page=1&filter=true";
 }
 
 function firmadoDigitalATR(event) {
@@ -218,7 +218,7 @@ function firmadoDigitalATR(event) {
 
   //alert("Firmado digital: " + idFDATR);
 
-  window.location.href = "firmadoDigitalATR.html?id=" + idFDATR + "&page=1";
+  window.location.href = "firmadoDigitalATR.html?id=" + idFDATR + "&page=1&filter=true";
 }
 
 function firmadoDigitalCliente(event) {
@@ -228,7 +228,7 @@ function firmadoDigitalCliente(event) {
 
   //alert("Firmado digital: " + datosFD[0]);
 
-  window.location.href = "firmadoDigitalCliente.html?id=" + idFDCli + "&page=1";
+  window.location.href = "firmadoDigitalCliente.html?id=" + idFDCli + "&page=1&filter=true";
 }
 
 

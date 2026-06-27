@@ -86,7 +86,6 @@ function appendData(data){
 
     var buttons = document.getElementById("button-container");
 
-
     if(filterTrue === true){
         var buttonFilter = document.createElement("button");
         buttonFilter.innerHTML = "Regresar a filtro";

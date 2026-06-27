@@ -35,6 +35,12 @@ var idHTML = datosURL[0].replace("id=","");
 
 var pageHTML = datosURL[1].replace("page=","");
 
+var filterTrue = "";
+
+if (datosURL.length > 2 && typeof datosURL[2] !== 'undefined' && datosURL[2] !== '' && datosURL[2].includes('true')) {
+    filterTrue = true;
+}
+
 async function returnData() {
 
     //var datosURL = window.location.href.split('?');
@@ -95,7 +101,14 @@ function appendData(data){
     var buttonSub = document.createElement("button");
     buttonSub.innerHTML = "Guardar cambios";
     buttonSub.onclick = sendData;
-    buttons.appendChild(buttonSub);  
+    buttons.appendChild(buttonSub);
+    
+    if(filterTrue === true){
+        var buttonFilter = document.createElement("button");
+        buttonFilter.innerHTML = "Regresar a filtro";
+        buttonFilter.onclick = onbuttonclickedFiltro;
+        buttons.appendChild(buttonFilter);
+    }
 
     var buttonCan = document.createElement("button");
     buttonCan.innerHTML = "Cancelar";
@@ -114,6 +127,11 @@ function onbuttonclicked() {
   }
 }
 
+function onbuttonclickedFiltro() {
+  if (onbuttonclickedFiltro) {
+    history.back();
+  }
+}
 
 function generateWindow(response){
 

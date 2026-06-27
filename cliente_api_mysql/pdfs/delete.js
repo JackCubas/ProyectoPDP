@@ -37,6 +37,11 @@ var newHTML = datosURL[2].replace("new=","");
 console.log("Current page: " + pageHTML);
 console.log("New page: " + newHTML);
 
+var filterTrue = "";
+
+if (datosURL.length > 3 && typeof datosURL[3] !== 'undefined' && datosURL[3] !== '' && datosURL[3].includes('true')) {
+    filterTrue = true;
+}
 
 async function returnData() {
 
@@ -116,9 +121,16 @@ function appendData(data){
     var buttons = document.getElementById("button-container");
 
     var buttonSub = document.createElement("button");
-    buttonSub.innerHTML = "Enviar";
+    buttonSub.innerHTML = "Eliminar";
     buttonSub.onclick = sendData;
-    buttons.appendChild(buttonSub);  
+    buttons.appendChild(buttonSub);
+    
+    if(filterTrue === true){
+        var buttonFilter = document.createElement("button");
+        buttonFilter.innerHTML = "Regresar a filtro";
+        buttonFilter.onclick = onbuttonclickedFiltro;
+        buttons.appendChild(buttonFilter);
+    }
 
     var buttonCan = document.createElement("button");
     buttonCan.innerHTML = "Cancelar";
@@ -130,6 +142,12 @@ function onbuttonclicked() {
   //"location.href='table_pag.html?page=' + pageHTML";
   if (onbuttonclicked) {
     window.location.href = "table.html?page=" + pageHTML;
+  }
+}
+
+function onbuttonclickedFiltro() {
+  if (onbuttonclickedFiltro) {
+    history.back();
   }
 }
 

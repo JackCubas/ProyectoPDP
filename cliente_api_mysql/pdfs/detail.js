@@ -23,6 +23,12 @@ var datosURL = URLString[1].split('&');
 var idHTML = datosURL[0].replace("id=","");
 var pageHTML = datosURL[1].replace("page=","");
 
+var filterTrue = "";
+
+if (datosURL.length > 2 && typeof datosURL[2] !== 'undefined' && datosURL[2] !== '' && datosURL[2].includes('true')) {
+    filterTrue = true;
+}
+
 async function returnData() {
 
     //var datosURL = window.location.href.split('?');
@@ -99,6 +105,14 @@ function appendData(data){
     }
 
     var buttons = document.getElementById("button-container");
+
+    if(filterTrue === true){
+        var buttonFilter = document.createElement("button");
+        buttonFilter.innerHTML = "Regresar a filtro";
+        buttonFilter.onclick = onbuttonclickedFiltro;
+        buttons.appendChild(buttonFilter);
+    }
+
     var button = document.createElement("button");
     button.innerHTML = "Cancelar";
     button.onclick = onbuttonclicked;
@@ -110,6 +124,12 @@ function onbuttonclicked() {
   //"location.href='table_pag.html?page=' + pageHTML";
   if (onbuttonclicked) {
     window.location.href = "table.html?page=" + pageHTML;
+  }
+}
+
+function onbuttonclickedFiltro() {
+  if (onbuttonclickedFiltro) {
+    history.back();
   }
 }
 
