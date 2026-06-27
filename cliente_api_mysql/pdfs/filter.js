@@ -110,11 +110,11 @@ function appendData(data){
             buttonStamp.addEventListener('click', stamp);
             cell4.appendChild(buttonStamp);
 
-            const buttonFDATR = document.createElement('button');
+            /*const buttonFDATR = document.createElement('button');
             buttonFDATR.id = "FDATRbutton" + butID;
             buttonFDATR.textContent = "Firma digital ATR";
             buttonFDATR.addEventListener('click', firmadoDigitalATR);
-            cell4.appendChild(buttonFDATR);
+            cell4.appendChild(buttonFDATR);*/
 
             const buttonFDCliente = document.createElement('button');
             buttonFDCliente.id = "FDClientebutton" + butID;

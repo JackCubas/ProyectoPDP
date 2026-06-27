@@ -89,6 +89,11 @@ function onbuttonclicked() {
   }
 }
 
+function isValidName(str) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 _-]+$/;
+  return regex.test(str);
+}
+
 async function sendData(){
     
     const URLSERVERUpload = backendUrl + "/create-pdf";
@@ -114,6 +119,13 @@ async function sendData(){
         if(projectName === ""){
             modalAlert('Todos los campos son obligatorios.');
             console.error("Todos los campos son obligatorios.");
+
+        }else if(!isValidName(projectName)){
+            modalAlert('No se permiten caracteres prohibidos.');
+            console.error("No se permiten caracteres prohibidos.");
+
+            document.getElementById("name").focus();
+            document.getElementById("name").value = "";
 
         }else if(projectName.length>50){
             modalAlert('El nombre debe tener menos de 51 caracteres.');

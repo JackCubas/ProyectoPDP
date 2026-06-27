@@ -23,6 +23,11 @@ function checkUserHosting() {
     buttons.appendChild(buttonSub);
 }
 
+function isValidName(str) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 _-]+$/;
+  return regex.test(str);
+}
+
 async function sendData(){
 
     const emailPattern = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/;
