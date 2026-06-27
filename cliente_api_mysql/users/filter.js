@@ -1,4 +1,4 @@
-var URLSERVERpdfcriteria = "";
+var URLSERVERusercriteria = "";
 var emailUser = "";
 var nameUser = "";
 var rolUser = "";
@@ -19,7 +19,7 @@ if((datosUsuario.rolUser === "CLIENT")){
 
 if(localStorage !== null && localStorage.getItem("backendUrl") !== null){
   const backendUrl = localStorage.getItem("backendUrl");
-  URLSERVERusercriteria = backendUrl + "/clientsByCriteria";
+  URLSERVERusercriteria = backendUrl + "/usersByCriteria";
 
   //const URLSERVERpdfcriteria = "http://localhost:3000/pdfsByCriteria";
 }

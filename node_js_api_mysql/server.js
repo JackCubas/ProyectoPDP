@@ -538,9 +538,9 @@ app.get('/users_pag', (req, res) => {
   }
 });
 
-app.get("/clientsByCriteria", cors(), (req, res) => {
+app.get("/usersByCriteria", cors(), (req, res) => {
 
-  console.log("get all clients by criteria!");
+  console.log("get all users by criteria!");
 
   let connection;
   var resultRows;
