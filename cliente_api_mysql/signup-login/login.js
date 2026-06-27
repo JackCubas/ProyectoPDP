@@ -45,13 +45,6 @@ async function sendData(){
 
         document.getElementById("emailUser").focus();
         document.getElementById("emailUser").value = "";
-
-    }else if(!isValidName(nameUser)){
-        modalAlert('No se permiten caracteres prohibidos al nombre.');
-        console.error("No se permiten caracteres prohibidos al nombre.");
-
-        document.getElementById("nameUser").focus();
-        document.getElementById("nameUser").value = "";
     
     }else if (passUser.length>50){
         modalAlert("El pass debe tener menos de 51 caracteres.");
