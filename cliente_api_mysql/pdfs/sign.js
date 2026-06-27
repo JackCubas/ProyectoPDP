@@ -155,6 +155,12 @@ var idHTML = datosURL[0].replace("id=","");
 
 var pageHTML = datosURL[1].replace("page=","");
 
+var filterTrue = "";
+
+if (datosURL.length > 2 && typeof datosURL[2] !== 'undefined' && datosURL[2] !== '' && datosURL[2].includes('true')) {
+    filterTrue = true;
+}
+
 // Function to save the signature as an image and insert it into the PDF.
 async function saveSignatureAndInsertIntoPDF() {
     const signatureDataUrl = signaturePad.toDataURL("image/png");
@@ -352,6 +358,12 @@ function onbuttonclicked() {
   }
 }
 
+function onbuttonclickedFiltro() {
+  if (onbuttonclickedFiltro) {
+    history.back();
+  }
+}
+
 async function returnDataSign() {
     const URLSERVERdetail = backendUrl + "/pdfSign/";
     //const URLSERVERdetail = "http://localhost:3000/pdfSign/";
@@ -374,6 +386,13 @@ async function returnDataSign() {
 function appendDataSign(data){
 
     var buttons = document.getElementById("button-container");
+
+    if(filterTrue === true){
+        var buttonFilter = document.createElement("button");
+        buttonFilter.innerHTML = "Regresar a filtro";
+        buttonFilter.onclick = onbuttonclickedFiltro;
+        buttons.appendChild(buttonFilter);
+    }
 
     var buttonCan = document.createElement("button");
     buttonCan.innerHTML = "Cancelar";
