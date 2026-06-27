@@ -218,14 +218,16 @@ async function sendData(){
             console.log(result);
 
             if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-                modalAlert("No se ha podido modificar documento");
+                modalAlert("No se ha podido modificar documento", function() {
+                    window.location.href = "table.html?page=" + pageHTML;
+                });
                 console.error("No se ha podido modificar documento");
-                window.location.href = "table.html?page=" + pageHTML;
             }else{
                 //console.log(response);
-                modalAlert("Documento modificado correctamente");
-                console.info("Documento modificado correctamente");
-                window.location.href = "table.html?page=" + pageHTML;        
+                modalAlert("Documento modificado correctamente", function() {
+                    window.location.href = "table.html?page=" + pageHTML;
+                });
+                console.info("Documento modificado correctamente");      
             }
         }
 

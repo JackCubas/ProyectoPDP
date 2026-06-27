@@ -316,13 +316,15 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            modalAlert("No se ha podido crear documento estampado");
+            modalAlert("No se ha podido crear documento estampado", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.error("No se ha podido crear documento estampado");
-            window.location.href = "table.html?page=" + pageHTML;
         }else{
-            modalAlert("Se ha podido crear documento estampado");
+            modalAlert("Se ha podido crear documento estampado", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.info("Se ha podido crear documento estampado");
-            window.location.href = "table.html?page=" + pageHTML;
 
             /*return response.blob().then((data) => {
                 console.log(data);
@@ -354,11 +356,14 @@ async function deleteDocument(){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-        modalAlert("No se ha podido borrar documento estampado");
+        modalAlert("No se ha podido borrar documento estampado", function() {
+            window.location.href = "table.html?page=" + pageHTML;
+        });
         console.error("No se ha podido borrar documento estampado");
     }else{
         console.info("Documento estampado borrado correctamente");
+        modalAlert("Documento estampado borrado correctamente", function() {
+            window.location.href = "table.html?page=" + pageHTML;
+        });
     }
-
-    window.location.href = "table.html?page=" + pageHTML;
 }

@@ -148,15 +148,17 @@ async function sendData(){
 
         if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
             
-            modalAlert("No se ha podido crear documento");
+            modalAlert("No se ha podido crear documento", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.error("No se ha podido crear documento");
-            window.location.href = "table.html?page=" + pageHTML;
 
         }else{
 
-            modalAlert("Documento creado correctamente");
-            console.info("Documento creado correctamente");
-            window.location.href = "table.html?page=" + newHTML;        
+            modalAlert("Documento creado correctamente", function() {
+                window.location.href = "table.html?page=" + newHTML;
+            });
+            console.info("Documento creado correctamente");      
         
         } 
     }

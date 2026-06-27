@@ -199,14 +199,16 @@ async function sendData(){
             //alert('status:', response.status);
 
             if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-                modalAlert("No se ha podido modificar usuario");
+                modalAlert("No se ha podido modificar usuario", function() {
+                    window.location.href = "table_pag.html?page=" + pageHTML;
+                });
             }else{
                 //console.log(response);
-                modalAlert("Usuario modificado correctamente");
+                modalAlert("Usuario modificado correctamente", function() {
+                    window.location.href = 'table_pag.html?page=' + pageHTML;
+                });
             }
         }
-
-        window.location.href = 'table_pag.html?page=' + pageHTML;
 
     }
 }

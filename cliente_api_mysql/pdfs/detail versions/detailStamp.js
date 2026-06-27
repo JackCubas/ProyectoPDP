@@ -25,9 +25,10 @@ async function checkUserHosting() {
         console.log(response);
 
          if(response.status === 400 || response.status === 500){
-            modalAlert("No se ha podido encontrar imagen estampado");
+            modalAlert("No se ha podido encontrar imagen estampado", function() {
+                window.location.href = "table.html";
+            });
             console.error("No se ha podido encontrar imagen estampado");
-            window.location.href = "table.html";
         }else{
 
             if(response.status === 204){

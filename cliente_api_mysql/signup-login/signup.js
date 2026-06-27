@@ -147,15 +147,16 @@ async function sendData(){
                 console.log(response);
 
                 if(response.status === 400 || response.status === 500){
-                    modalAlert("No se ha podido crear usuario");
+                    modalAlert("No se ha podido crear usuario", function() {
+                        window.location.href = "../index.html";
+                    });
                     console.error("No se ha podido crear usuario");
-                    window.location.href = "../index.html";
                 }else{
                     console.log(response);
-                    modalAlert("Registro completado correctamente");
+                    modalAlert("Registro completado correctamente", function() {
+                        window.location.href = "../index.html";
+                    });
                     console.info("Registro completado correctamente");
-                    window.location.href = "../index.html"
-                    
                 } 
 
             });

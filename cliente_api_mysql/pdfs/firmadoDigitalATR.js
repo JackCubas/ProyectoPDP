@@ -272,13 +272,15 @@ async function sendData(){
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            modalAlert("No se ha podido hacer firmado digital");
+            modalAlert("No se ha podido hacer firmado digital", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.error("No se ha podido hacer firmado digital");
-            window.location.href = "table.html?page=" + pageHTML;
         }else{
-            modalAlert("Se ha podido hacer firmado digital");
+            modalAlert("Se ha podido hacer firmado digital", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.info("Se ha podido hacer firmado digital");
-            window.location.href = "table.html?page=" + pageHTML;
         } 
 
     });

@@ -80,13 +80,15 @@ async function sendData(){
     }
 
     if(result.status === 400 || result.status === 500){
-        modalAlert("No se ha podido crear stamp");
+        modalAlert("No se ha podido crear stamp", function() {
+            window.location.href = "table.html";
+        });
         console.error("No se ha podido crear stamp");
-        window.location.href = "table.html";
     }else{
-        modalAlert("Stamp creado correctamente");
+        modalAlert("Stamp creado correctamente", function() {
+            window.location.href = "table.html";
+        });
         console.info("Finalizado procesamiento");
-        window.location.href = "table.html";
     }
 
     

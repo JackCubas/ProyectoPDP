@@ -296,14 +296,16 @@ async function sendData(modifiedPDFBytes){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-        modalAlert("No se ha podido firmar documento");
+        modalAlert("No se ha podido firmar documento", function() {
+            window.location.href = "table.html?page=" + pageHTML;
+        });
         console.error("No se ha podido firmar documento");
     }else{
-        modalAlert("Documento firmado correctamente");
+        modalAlert("Documento firmado correctamente", function() {
+            window.location.href = "table.html?page=" + pageHTML;
+        });
         console.info("Documento firmado correctamente");
     } 
-
-    window.location.href = "table.html?page=" + pageHTML;
 
 }
 
@@ -531,12 +533,14 @@ async function deleteDocument(){
     console.log(result);
 
     if(result.status === 400 || result.status === 500 || result.hasOwnProperty("error")){
-        modalAlert("No se ha podido borrar documento firmado");
+        modalAlert("No se ha podido borrar documento firmado", function() {
+            window.location.href = "table.html?page=" + pageHTML;
+        });
         console.error("No se ha podido borrar documento firmado");
     }else{
-        modalAlert("Documento firmado borrado correctamente");
+        modalAlert("Documento firmado borrado correctamente", function() {
+            window.location.href = "table.html?page=" + pageHTML;
+        });
         console.info("Documento firmado borrado correctamente");
     }
-
-    window.location.href = "table.html?page=" + pageHTML;
 }

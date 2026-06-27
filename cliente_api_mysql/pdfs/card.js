@@ -418,13 +418,15 @@ certButton.addEventListener("click", async () => {
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            modalAlert("No se ha podido hacer lectura de tarjeta");
+            modalAlert("No se ha podido hacer lectura de tarjeta", function() {
+                window.location.href = "table.html?page=1";
+            });
             console.error("No se ha podido hacer lectura de tarjeta");
-            window.location.href = "table.html?page=1";
         }else{
-            modalAlert("Se ha podido hacer lectura de tarjeta");
+            modalAlert("Se ha podido hacer lectura de tarjeta", function() {
+                window.location.href = "table.html?page=1";
+            });
             console.info("Se ha podido hacer lectura de tarjeta");
-            window.location.href = "table.html?page=1";
         } 
 
     });
@@ -514,13 +516,15 @@ checkUserHosting();
         console.log(response);
 
         if(response.status === 400 || response.status === 500){
-            modalAlert("No se ha podido hacer lectura de tarjeta");
+            modalAlert("No se ha podido hacer lectura de tarjeta", function() {
+                window.location.href = "table.html?page=1";
+            });
             console.error("No se ha podido hacer lectura de tarjeta");
-            window.location.href = "table.html?page=1";
         }else{
-            modalAlert("Se ha podido hacer lectura de tarjeta");
+            modalAlert("Se ha podido hacer lectura de tarjeta", function() {
+                window.location.href = "table.html?page=1";
+            });
             console.info("Se ha podido hacer lectura de tarjeta");
-            window.location.href = "table.html?page=1";
         } 
 
     });

@@ -554,14 +554,16 @@ const csrfToken = getCookie('CSRF-TOKEN');
           const signResult = await finalizeSigningResponse.json();
 
           if(signResult.status === 400 || signResult.status === 500 || signResult.status === 404){
-            modalAlert("No se ha podido hacer firmado digital");
+            modalAlert("No se ha podido hacer firmado digital", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.error("No se ha podido hacer firmado digital");
-            window.location.href = "table.html?page=" + pageHTML;
           }else{
-            modalAlert("Se ha podido hacer firmado digital");
+            modalAlert("Se ha podido hacer firmado digital", function() {
+                window.location.href = "table.html?page=" + pageHTML;
+            });
             console.log("Signing successful! Response:", signResult);
             console.info("Se ha podido hacer firmado digital");
-            window.location.href = "table.html?page=" + pageHTML;
           }
 
         } catch (error) {
