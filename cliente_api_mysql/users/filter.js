@@ -101,7 +101,7 @@ function appendData(data){
     }else{
         
         var newParagraph = document.createElement('p');
-        newParagraph.textContent = 'No se han encontrado documentos';
+        newParagraph.textContent = 'No se han encontrado usuarios';
         main.append(newParagraph);
     }
 
@@ -140,7 +140,7 @@ function detail(event){
 
   //alert("DETAIL " + idDetail);
 
-  window.location.href = "detail.html?id=" + idDetail + "&page=1";
+  window.location.href = "detail.html?id=" + idDetail + "&page=1&filter=true";
 }
 
 function edit(event){
@@ -152,7 +152,7 @@ function edit(event){
 
   //alert("EDIT " + idEdit);
 
-  window.location.href = "modify.html?id=" + idEdit + "&page=1";
+  window.location.href = "modify.html?id=" + idEdit + "&page=1&filter=true";
 }
 
 function del(event){
@@ -165,7 +165,7 @@ function del(event){
 
   //alert("DEL " + idDel);
 
-  window.location.href = "delete.html?id=" + idDel + "&page=1&new=1";
+  window.location.href = "delete.html?id=" + idDel + "&page=1&new=1&filter=true";
 }
 
 checkUserHosting();
